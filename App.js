@@ -31,6 +31,9 @@ class App extends React.Component {
     // get system preference
     const colorScheme = Appearance.getColorScheme();
 
+    // [pmh] hack some system preferences
+    global.rootUrl = "https://covid-vaccine.canada.ca"
+
     // if light or dark
     if (colorScheme !== 'no-preference') {
       this.setState({

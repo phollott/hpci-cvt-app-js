@@ -1,14 +1,14 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import { Icon } from 'react-native-elements';
 import { createStackNavigator } from 'react-navigation-stack';
 
 // screens
 import SettingsScreen from '../screens/SettingsScreen';
 
-// icons
-import SvgCog from '../components/icons/Svg.Cog';
+const SettingsTabBarIcon = ({ focused }) => 
+  <Icon name='cog' type='font-awesome-5' size={20} color={focused ? 'black' : '#d3d3d3'} />
 
-const SettingsTabBarIcon = ({ focused }) => <SvgCog active={focused} />;
 SettingsTabBarIcon.propTypes = {
   // required
   focused: PropTypes.bool.isRequired

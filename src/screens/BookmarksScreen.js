@@ -3,7 +3,7 @@ import { ScrollView, Text } from 'react-native';
 import { useTheme } from 'react-navigation';
 import { gStyle } from '../constants';
 
-const StatsScreen = () => {
+const BookmarksScreen = () => {
   const theme = useTheme();
 
   return (
@@ -11,14 +11,14 @@ const StatsScreen = () => {
       contentContainerStyle={gStyle.contentContainer}
       style={gStyle.container[theme]}
     >
-      <Text style={gStyle.text[theme]}>Stats content area</Text>
+      <Text style={gStyle.text[theme]}>Bookmarks content area</Text>
     </ScrollView>
   );
 };
 
-StatsScreen.navigationOptions = {
+BookmarksScreen.navigationOptions = {
   headerTitleStyle: gStyle.headerTitleStyle,
-  title: 'Stats'
+  title: 'Bookmarks'
 };
 
-export default StatsScreen;
+export default BookmarksScreen;

@@ -1,13 +1,12 @@
 {
   "expo": {
-    "name": "Multi-screen Starter",
-    "description": "react native multi screen application starter with expo",
-    "scheme": "expomultiscreenstarter",
-    "slug": "expomultiscreenstarter",
+    "name": "HPCI CVT App",
+    "description": "HPCI COVID-19 Vaccine and Treatments App",
+    "slug": "hpci-cvt-app",
     "privacy": "public",
     "version": "0.0.2",
     "platforms": ["android", "ios", "web"],
-    "githubUrl": "https://github.com/calebnance/expo-multi-screen-starter",
+    "githubUrl": "https://github.com/phollott/hpci-cvt-app",
     "orientation": "portrait",
     "primaryColor": "#2a2a2a",
     "icon": "src/assets/icon.png",

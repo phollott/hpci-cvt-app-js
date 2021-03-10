@@ -1,14 +1,15 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import { Icon } from 'react-native-elements';
+
 import { createStackNavigator } from 'react-navigation-stack';
 
 // screens
 import HomeScreen from '../screens/HomeScreen';
 
-// icons
-import SvgHome from '../components/icons/Svg.Home';
+const HomeTabBarIcon = ({ focused }) => 
+  <Icon name='home' type='font-awesome-5' size={20} color={focused ? 'black' : '#d3d3d3'} />
 
-const HomeTabBarIcon = ({ focused }) => <SvgHome active={focused} />;
 HomeTabBarIcon.propTypes = {
   // required
   focused: PropTypes.bool.isRequired

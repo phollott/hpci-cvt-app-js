@@ -3,15 +3,15 @@ import { colors } from '../constants';
 
 // navigation stacks
 import HomeStack from './HomeStack';
-import MultiStack from './MultiStack';
-import StatsStack from './StatsStack';
+import ProductsStack from './ProductsStack';
+import BookmarksStack from './BookmarksStack';
 import SettingsStack from './SettingsStack';
 
 const BottomTabNavigator = createBottomTabNavigator(
   {
     HomeStack,
-    MultiStack,
-    StatsStack,
+    ProductsStack,
+    BookmarksStack,
     SettingsStack
   },
   {

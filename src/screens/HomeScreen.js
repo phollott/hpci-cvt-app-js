@@ -10,6 +10,9 @@ import Touch from '../components/Touch';
 const HomeScreen = ({ navigation, screenProps }) => {
   const theme = useTheme();
 
+// [pmh] this method of setting English/French is problematic because it does not force a reload,
+// so if it is not applied early, screens are already loaded, and will have their language set
+
   return (
     <View style={gStyle.container[theme]}>
       <ScrollView contentContainerStyle={gStyle.contentContainer}>
@@ -18,18 +21,20 @@ const HomeScreen = ({ navigation, screenProps }) => {
         <View style={gStyle.spacer64} />
 
         <Touch
-          onPress={() => navigation.navigate('MultiBase')}
-          text="Jump to Multi tab"
+          onPress={() => {
+            global.language = 'en-ca';
+            navigation.navigate('Products');
+          }}
+          text="Jump to English Products Screen"
+        />
+        <Touch
+          onPress={() => {
+            global.language = 'fr-ca';
+            navigation.navigate('Products');
+          }}
+          text="Produits en Francais"
         />
 
-        <Touch
-          onPress={() => screenProps.updateTheme('light')}
-          text="Light theme"
-        />
-        <Touch
-          onPress={() => screenProps.updateTheme('dark')}
-          text="Dark theme"
-        />
       </ScrollView>
     </View>
   );

@@ -3,6 +3,9 @@ import { Image, ScrollView, Text, View } from 'react-native';
 import { useTheme } from 'react-navigation';
 import { gStyle, images } from '../constants';
 
+// components
+import Touch from '../components/Touch';
+
 const headerImage = __DEV__ ? 'rabbitDev' : 'rabbitProd';
 
 const SettingsScreen = () => {
@@ -17,10 +20,16 @@ const SettingsScreen = () => {
 
       <View style={gStyle.spacer16} />
 
-      <Text style={[gStyle.text[theme], gStyle.textPacifico]}>
-        Pacifico font example
-      </Text>
-    </ScrollView>
+      <Touch
+         onPress={() => screenProps.updateTheme('light')}
+         text="Light theme"
+      />
+      <Touch
+        onPress={() => screenProps.updateTheme('dark')}
+        text="Dark theme"
+      />
+
+   </ScrollView>
   );
 };
 
