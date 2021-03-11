@@ -42,6 +42,7 @@ export default class ViewProductResource extends Component {
           originWhitelist={['*']}
           source={{ html: this.state.productResourceHtml }}
           style={{ marginTop: 0 }}
+          scalesPageToFit
         />
       </View>
     );

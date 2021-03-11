@@ -7,7 +7,7 @@ import { gStyle } from '../constants';
 // [pmh] This is just a plaeholder for now, but it will need to trigger bookmarking and
 // unbookmarking in the redux store and local storage at some point in the future
 
-const BookmarkProduct = ({ navigation }) => (
+const BookmarkProduct = () => (
   <TouchableOpacity
     accessible
     accessibilityLabel="bookmark product"

@@ -32,7 +32,7 @@ const ProductDetailsScreen = ({ navigation }) => {
 
 ProductDetailsScreen.navigationOptions = ({ navigation }) => ({
   headerLeft: () => <NavigationBack navigation={navigation} />,
-  headerRight: () => <BookmarkProduct navigation={navigation} />,
+  headerRight: () => <BookmarkProduct />,
   headerTitleStyle: gStyle.headerTitleStyle,
   title: 'Product Details'
 });

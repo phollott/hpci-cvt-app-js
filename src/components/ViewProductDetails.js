@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, ScrollView } from 'react-native';
 import { Card, ListItem } from 'react-native-elements';
+import { gStyle } from '../constants';
 import cheerio from 'react-native-cheerio';
 
 export default class ViewProductDetails extends Component {
@@ -60,7 +61,41 @@ export default class ViewProductDetails extends Component {
           <Text><Text style={{ fontWeight: 'bold' }}>Status: </Text>{this.state.productMaster.status}</Text>
           <Text><Text style={{ fontWeight: 'bold' }}>Date of approval: </Text>{this.state.productMaster.approvalDate}</Text>
         </Card>
-        <Card>
+
+        <ScrollView>
+        {
+          this.state.productResourceList.map( productResource =>
+            <ListItem key={productResource.key} bottomDivider
+              onPress={() => (productResource.link) &&
+                this.props.navigation.navigate('ProductResource', { productResource })}
+            >
+              <ListItem.Content>
+                <ListItem.Title style={{ fontWeight: 'bold' }}>
+                  { productResource.resourceName }
+                </ListItem.Title>
+                <ListItem.Subtitle>{ productResource.description }</ListItem.Subtitle>
+                <Text style={{ fontWeight: 'bold' }}>Publication Status: { productResource.publicationStatus }</Text>
+              </ListItem.Content>
+              { (productResource.link) && <ListItem.Chevron/> }
+            </ListItem>
+          )
+        }
+        </ScrollView>
+      </View>
+    );
+  }
+
+/*
+      <View style={{ flex: 1 }} >
+        <Card style={{ flex: 1 }}>
+          <Card.Title>Product Description</Card.Title>
+          <Text><Text style={{ fontWeight: 'bold' }}>Brand Name: </Text>{this.state.productMaster.brandName}</Text>
+          <Text><Text style={{ fontWeight: 'bold' }}>Company Name: </Text>{this.state.productMaster.companyName}</Text>
+          <Text><Text style={{ fontWeight: 'bold' }}>Ingredient: </Text>{this.state.productMaster.ingredient}</Text>
+          <Text><Text style={{ fontWeight: 'bold' }}>Status: </Text>{this.state.productMaster.status}</Text>
+          <Text><Text style={{ fontWeight: 'bold' }}>Date of approval: </Text>{this.state.productMaster.approvalDate}</Text>
+        </Card>
+        <Card style={{ flex: 1 }}>
           <Card.Title>Product Resources</Card.Title>
           <ScrollView>
           {
@@ -83,9 +118,8 @@ export default class ViewProductDetails extends Component {
           </ScrollView>
         </Card>
       </View>
-    );
-  }
 
+*/
   /* 
    * Scrape the appropriate divs, skipping revision id for each field.
    * There is a more sophisticated way to do this, but this works for now.
