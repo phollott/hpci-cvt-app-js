@@ -6,6 +6,25 @@ import fonts from './fonts';
 export default {
   activeOpacity: 0.7,
 
+  // react-native-elements themes
+  // ///////////////////////////////////////////////////////////////////////////
+  mytheme: {
+    ButtonGroup: {
+      containerStyle: {
+        height: 30, 
+        marginHorizontal: 14 
+      }      
+    },
+    ListItem: {
+      containerStyle: {
+//        marginHorizontal: 14,
+        
+      }
+    },
+    Card: {
+    }
+  },
+
   // containers
   // ///////////////////////////////////////////////////////////////////////////
   container: {

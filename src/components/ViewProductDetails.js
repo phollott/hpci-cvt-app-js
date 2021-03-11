@@ -76,9 +76,7 @@ export default class ViewProductDetails extends Component {
                   <ListItem.Subtitle>{ productResource.description }</ListItem.Subtitle>
                   <Text style={{ fontWeight: 'bold' }}>Publication Status: { productResource.publicationStatus }</Text>
                 </ListItem.Content>
-                { (productResource.link) &&
-                  <ListItem.Chevron/>
-                }
+                { (productResource.link) && <ListItem.Chevron/> }
               </ListItem>
             )
           }
@@ -117,15 +115,14 @@ export default class ViewProductDetails extends Component {
     var resourceRows = prodResourceBlock.find('tr');
     resourceRows.each((i, tr) => {
       if (i===0) {
-        // this is the header row
+        // this is the header row - ignore it
       } else {
-        var resourceForText = $(tr).find('td').eq(1).text();
-        if (resourceForText.includes('Consumers')) {
+        var audience = $(tr).find('td').eq(1).text();
+        if (audience.includes('Consumers')) {
           productResourceList.push({
             key: i,
             link: $(tr).find('td').eq(2).find('a').attr('href'),
-            test: $(tr).find('td').eq(2).html(),
-            resourceFor: $(tr).find('td').eq(1).text().trim(),
+            audience: $(tr).find('td').eq(1).text().trim(),
             resourceName: $(tr).find('td').eq(2).text().trim(),
             description: $(tr).find('td').eq(3).text().trim(),
             publicationStatus: $(tr).find('td').eq(4).text().trim(),

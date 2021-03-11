@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { ScrollView, View, Text } from 'react-native';
-import { ButtonGroup, Card } from 'react-native-elements';
+import { ThemeProvider, ButtonGroup, Card } from 'react-native-elements';
 import cheerio from 'react-native-cheerio';
+import { gStyle } from '../constants';
 //import { useTheme } from 'react-navigation';
-//import { gStyle } from '../constants';
 
 // components
 import ViewProductMasters from './ViewProductMasters';
@@ -33,7 +33,6 @@ export default class ViewCovid19Products extends Component {
   componentDidMount() {
     var url = (global.language === 'en-ca') ? "https://covid-vaccine.canada.ca" : "https://vaccin-covid.canada.ca";
     fetch(url).then((resp)=>{ return resp.text() }).then((text)=>{ 
-
       var productMasterLists = this.scrapeProductMasterLists(text); 
       this.setState(productMasterLists);
     }).catch(error => {
@@ -48,32 +47,33 @@ export default class ViewCovid19Products extends Component {
 
     return (
       <View style={{ flex: 1 }} >
-        <Card style={{ flex: 1 }}>
-          <Card.Title>COVID-19 Vaccines and Treatments</Card.Title>
-          <Text>Select from authorized COVID-19 Vaccines and Treatments, or all unauthorized applications.</Text>
-        </Card>
-        <ButtonGroup
-          onPress = { this.updateIndex }
-          selectedIndex = { selectedIndex }
-          buttons = { buttons }
-          containerStyle = {{ height: 30, marginLeft: 14, marginRight: 14 }}
-        />
-        <ScrollView>
-          { (this.state.selectedIndex === 0) &&
-              <ViewProductMasters
-                productMasters={this.state.authorizedProducts}
-                navigation={this.props.navigation} 
-                width={this.props.width}
-              />
-          }
-          { (this.state.selectedIndex === 1) &&
-              <ViewProductMasters
-                productMasters={this.state.applicationProducts}
-                navigation={this.props.navigation} 
-                width={this.props.width}
-              />
-          }
-        </ScrollView>
+        <ThemeProvider theme={ gStyle.mytheme }>
+          <Card style={{ flex: 1 }}>
+            <Card.Title>COVID-19 Vaccines and Treatments</Card.Title>
+            <Text>Select from authorized COVID-19 Vaccines and Treatments, or all unauthorized applications.</Text>
+          </Card>
+          <ButtonGroup
+            onPress = { this.updateIndex }
+            selectedIndex = { selectedIndex }
+            buttons = { buttons }
+          />
+          <ScrollView>
+            { (this.state.selectedIndex === 0) &&
+                <ViewProductMasters
+                  productMasters={this.state.authorizedProducts}
+                  navigation={this.props.navigation} 
+                  width={this.props.width}
+                />
+            }
+            { (this.state.selectedIndex === 1) &&
+                <ViewProductMasters
+                  productMasters={this.state.applicationProducts}
+                  navigation={this.props.navigation} 
+                  width={this.props.width}
+                />
+            }
+          </ScrollView>
+        </ThemeProvider>
       </View>
     );
   }
@@ -91,7 +91,7 @@ export default class ViewCovid19Products extends Component {
 
         // Scrape the Product Master from each table row:
         var productMaster = {
-          key: i, link: null, brandName: null, companyName: null, type: null, status: null, approvalDate: null
+          key: i, link: null, brandName: null, ingredient: null, companyName: null, type: null, status: null, approvalDate: null
         }
         var productCells = $(product).find('td');
         productCells.each((j, cell) => {
@@ -106,15 +106,17 @@ export default class ViewCovid19Products extends Component {
 
         // Special logic based on retrieving links for authorized products
         if ($(product).find('a').html() != null) {
+          var productName = $(product).find('a').html(); console.log(productName);
+          productMaster.ingredient = productMaster.brandName.replace(productName, '').trim();
+          productMaster.brandName = productName;
           productMaster.link = $(product).find('a').attr('href');
-          productMaster.name = $(product).find('a').html();
           authorizedProducts.push(productMaster);
         } else {
+          // There is no easy way to get ingredient out of brandName for these products
           productMaster.name = $(product).find('td').html();
           applicationProducts.push(productMaster);
         }
-
-        console.log(authorizedProducts);
+//        console.log(applicationProducts);
       });
 
       return {
