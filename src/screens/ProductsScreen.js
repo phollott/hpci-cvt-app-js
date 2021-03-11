@@ -16,12 +16,14 @@ const ProductsScreen = ({ navigation }) => {
   // contentContainerStyle in the View is used by other components - not sure this is necessary
   return (
     <ThemeProvider theme={ gStyle.mytheme }>
-    <View
-      contentContainerStyle={gStyle.contentContainer}
-      style={gStyle.container[theme]}
-    >
-        <ViewCovid19Products navigation={navigation} />
-    </View>
+
+      <View
+        contentContainerStyle={gStyle.contentContainer}
+        style={gStyle.container[theme]}
+      >
+          <ViewCovid19Products navigation={navigation} />
+      </View>
+
     </ThemeProvider>
   )
 };

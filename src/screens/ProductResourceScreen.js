@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { View } from 'react-native';
+import { ThemeProvider } from 'react-native-elements';
 import { useTheme } from 'react-navigation';
 import { gStyle } from '../constants';
 
@@ -10,10 +11,14 @@ import NavigationBack from '../components/NavigationBack';
 const ProductResourceScreen = ({ navigation }) => {
   const theme = useTheme();
 
+  // [pmh] assuming we want to add an RNE theme to each screen
+
   return (
+    <ThemeProvider theme={ gStyle.mytheme }>
 
-    <ViewProductResource navigation={navigation}/>
+      <ViewProductResource navigation={navigation}/>
 
+    </ThemeProvider>
   );
 };
 
