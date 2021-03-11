@@ -8,16 +8,13 @@ export default class ViewProductMasters extends Component {
     this.state = { };
   }
 
-  /* [pmh] the width gets passed down to force the width of the card, has. 
-   * Withhold the link if there is no corresponding Product Detail.
-   */
   render() {
     return (
       <View style={{ width: '100%', justifyContent: 'center' }}>
-        {this.props.productMasters.map( productMaster =>
-          <ListItem key={productMaster.key} bottomDivider topDivider
-            onPress={() => (productMaster.link) 
-              && this.props.navigation.navigate('ProductDetails', { productMaster })}
+        { this.props.productMasters.map( productMaster =>
+          <ListItem key={ productMaster.key } bottomDivider topDivider
+            onPress={() => (productMaster.link) && 
+              this.props.navigation.navigate('ProductDetails', { productMaster })}
           >
             <Icon type='font-awesome-5' reverse size={20} 
               color={ (productMaster.link !== null) ? 'blue': 'orange' }
@@ -25,9 +22,10 @@ export default class ViewProductMasters extends Component {
             />
             <ListItem.Content>
               <ListItem.Title style={{ fontWeight: 'bold' }}>
-                {productMaster.brandName}
+                { productMaster.brandName }
               </ListItem.Title>
-              <ListItem.Subtitle>{productMaster.companyName} ({productMaster.status})</ListItem.Subtitle>
+              <ListItem.Subtitle>{ productMaster.companyName } ({ productMaster.status })</ListItem.Subtitle>
+              <Text>{ productMaster.ingredient }</Text>
             </ListItem.Content>
             { (productMaster.link) && <ListItem.Chevron/> }
           </ListItem>

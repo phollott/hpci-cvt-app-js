@@ -1,6 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView, Text, View } from 'react-native';
+import { ThemeProvider } from 'react-native-elements';
 import { useTheme } from 'react-navigation';
 import { gStyle } from '../constants';
 
@@ -14,29 +15,31 @@ const HomeScreen = ({ navigation, screenProps }) => {
 // so if it is not applied early, screens are already loaded, and will have their language set
 
   return (
-    <View style={gStyle.container[theme]}>
-      <ScrollView contentContainerStyle={gStyle.contentContainer}>
-        <Text style={gStyle.text[theme]}>Home content area</Text>
+    <ThemeProvider theme={ gStyle.mytheme }>
+      <View style={gStyle.container[theme]}>
+        <ScrollView contentContainerStyle={gStyle.contentContainer}>
+          <Text style={gStyle.text[theme]}>Home content area</Text>
 
-        <View style={gStyle.spacer64} />
+          <View style={gStyle.spacer64} />
 
-        <Touch
-          onPress={() => {
-            global.language = 'en-ca';
-            navigation.navigate('Products');
-          }}
-          text="Jump to English Products Screen"
-        />
-        <Touch
-          onPress={() => {
-            global.language = 'fr-ca';
-            navigation.navigate('Products');
-          }}
-          text="Produits en Francais"
-        />
+          <Touch
+            onPress={() => {
+              global.language = 'en-ca';
+              navigation.navigate('Products');
+            }}
+            text="Jump to English Products Screen"
+          />
+          <Touch
+            onPress={() => {
+              global.language = 'fr-ca';
+              navigation.navigate('Products');
+            }}
+            text="Produits en Francais"
+          />
 
-      </ScrollView>
-    </View>
+        </ScrollView>
+      </View>
+    </ThemeProvider>
   );
 };
 

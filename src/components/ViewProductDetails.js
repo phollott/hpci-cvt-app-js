@@ -12,8 +12,8 @@ export default class ViewProductDetails extends Component {
         ingredient: null, status: null, approvalDate: null
       },
       productResourceList: [],
-      productMasterHtml: 'none',
-      productResourceHtml: 'none'
+//      productMasterHtml: 'none',
+//      productResourceHtml: 'none'
     };
   }
 
@@ -26,7 +26,7 @@ export default class ViewProductDetails extends Component {
    */
 
   componentDidMount() {
-    var productMasterIn = this.props.navigation.state.params.productMaster;
+    var productMasterIn = this.props.navigation.state.params.productMaster,
       url = (global.language === 'en-ca') ? "https://covid-vaccine.canada.ca" : "https://vaccin-covid.canada.ca";
     url += productMasterIn.link;
 
@@ -41,8 +41,8 @@ export default class ViewProductDetails extends Component {
       this.setState({
         productMaster: productMaster,
         productResourceList: productResourceList,
-        productMasterHtml: prodMasterBlock.html(),
-        productResourceHtml: prodResourceBlock.html()
+//        productMasterHtml: prodMasterBlock.html(),
+//        productResourceHtml: prodResourceBlock.html()
       });
     }).catch(error => {
       console.log('VPD: could not load url ' + url);

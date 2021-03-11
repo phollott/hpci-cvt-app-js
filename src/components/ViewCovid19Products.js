@@ -19,6 +19,8 @@ export default class ViewCovid19Products extends Component {
     this.updateIndex = this.updateIndex.bind(this);
   }
 
+  // ButtonGroup selected index is local to this screen, so it should remain in the
+  // localstate, whereas the two product collections belong in the redux store
   updateIndex (selectedIndex) {
     this.setState({ selectedIndex });
   }
@@ -29,7 +31,6 @@ export default class ViewCovid19Products extends Component {
    * 3. Extract Vaccine and Treatment Product Masters for Approved and Applied Products
    * 4. Add Approved and Applied Product Masters to Component State
    */
-
   componentDidMount() {
     var url = (global.language === 'en-ca') ? "https://covid-vaccine.canada.ca" : "https://vaccin-covid.canada.ca";
     fetch(url).then((resp)=>{ return resp.text() }).then((text)=>{ 
@@ -47,7 +48,6 @@ export default class ViewCovid19Products extends Component {
 
     return (
       <View style={{ flex: 1 }} >
-        <ThemeProvider theme={ gStyle.mytheme }>
           <Card style={{ flex: 1 }}>
             <Card.Title>COVID-19 Vaccines and Treatments</Card.Title>
             <Text>Select from authorized COVID-19 Vaccines and Treatments, or all unauthorized applications.</Text>
@@ -62,18 +62,15 @@ export default class ViewCovid19Products extends Component {
                 <ViewProductMasters
                   productMasters={this.state.authorizedProducts}
                   navigation={this.props.navigation} 
-                  width={this.props.width}
                 />
             }
             { (this.state.selectedIndex === 1) &&
                 <ViewProductMasters
                   productMasters={this.state.applicationProducts}
                   navigation={this.props.navigation} 
-                  width={this.props.width}
                 />
             }
           </ScrollView>
-        </ThemeProvider>
       </View>
     );
   }
