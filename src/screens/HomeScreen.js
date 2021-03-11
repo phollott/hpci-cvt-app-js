@@ -16,6 +16,7 @@ const HomeScreen = ({ navigation, screenProps }) => {
 
   return (
     <ThemeProvider theme={ gStyle.mytheme }>
+
       <View style={gStyle.container[theme]}>
         <ScrollView contentContainerStyle={gStyle.contentContainer}>
           <Text style={gStyle.text[theme]}>Home content area</Text>
@@ -39,6 +40,7 @@ const HomeScreen = ({ navigation, screenProps }) => {
 
         </ScrollView>
       </View>
+      
     </ThemeProvider>
   );
 };
