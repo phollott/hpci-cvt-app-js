@@ -2,7 +2,8 @@
 // /////////////////////////////////////////////////////////////////////////////
 const darkColor = '#2a2a2a';
 const darkHighlightColor = '#3a3a3a';
-const grey = '#d0ccd0';
+const grey = '#848484';
+const blue = '#0000FF';
 const white20 = 'rgba(255, 255, 255, 0.2)';
 
 export default {
@@ -13,9 +14,10 @@ export default {
   darkColor,
   darkHighlightColor,
   grey,
+  blue,
 
   activeTintColor: {
-    light: darkColor,
+    light: blue,
     dark: grey
   },
   inactiveTintColor: {

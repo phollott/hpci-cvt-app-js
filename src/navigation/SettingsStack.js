@@ -2,12 +2,21 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'react-native-elements';
 import { createStackNavigator } from 'react-navigation-stack';
+import { colors } from '../constants';
 
 // screens
 import SettingsScreen from '../screens/SettingsScreen';
 
-const SettingsTabBarIcon = ({ focused }) => 
-  <Icon name='cog' type='font-awesome-5' size={20} color={focused ? 'black' : '#d3d3d3'} />
+const SettingsTabBarIcon = ({ focused }) => (
+  <Icon
+    name='cog'
+    type='font-awesome-5'
+    size={20}
+    color={
+      focused ? colors.activeTintColor.light : colors.inactiveTintColor.light
+    }
+  />
+);
 
 SettingsTabBarIcon.propTypes = {
   // required
