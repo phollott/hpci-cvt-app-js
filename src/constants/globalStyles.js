@@ -53,6 +53,19 @@ export default {
     justifyContent: 'center'
   },
 
+  // tint color
+  // ///////////////////////////////////////////////////////////////////////////
+  tintColor: {
+    active: {
+      light: colors.blue,
+      dark: colors.grey
+    },
+    inactive: {
+      light: colors.grey,
+      dark: colors.white20
+    }
+  },
+
   // button
   // ///////////////////////////////////////////////////////////////////////////
   btn: {

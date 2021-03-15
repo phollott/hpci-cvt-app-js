@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { colors } from '../constants';
+import { gStyle } from '../constants';
 
 // navigation stacks
 import HomeStack from './HomeStack';
@@ -17,8 +17,8 @@ const BottomTabNavigator = createBottomTabNavigator(
   {
     initialRouteName: 'HomeStack',
     tabBarOptions: {
-      activeTintColor: colors.activeTintColor,
-      inactiveTintColor: colors.inactiveTintColor
+      activeTintColor: gStyle.tintColor.active,
+      inactiveTintColor: gStyle.tintColor.inactive
     }
   }
 );

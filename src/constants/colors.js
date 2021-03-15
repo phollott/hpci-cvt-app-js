@@ -14,14 +14,5 @@ export default {
   darkColor,
   darkHighlightColor,
   grey,
-  blue,
-
-  activeTintColor: {
-    light: blue,
-    dark: grey
-  },
-  inactiveTintColor: {
-    light: grey,
-    dark: white20
-  }
+  blue
 };

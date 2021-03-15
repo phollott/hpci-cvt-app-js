@@ -2,7 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'react-native-elements';
 import { createStackNavigator } from 'react-navigation-stack';
-import { colors } from '../constants';
+import { gStyle } from '../constants';
 
 // screens
 import BookmarksScreen from '../screens/BookmarksScreen';
@@ -13,7 +13,7 @@ const BookmarksTabBarIcon = ({ focused }) => (
     type='font-awesome-5'
     size={20}
     color={
-      focused ? colors.activeTintColor.light : colors.inactiveTintColor.light
+      focused ? gStyle.tintColor.active.light : gStyle.tintColor.inactive.light
     }
   />
 );
