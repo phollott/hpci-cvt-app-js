@@ -2,13 +2,13 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import Svg, { Path } from 'react-native-svg';
 import { useTheme } from 'react-navigation';
-import { colors } from '../../constants';
+import { gStyle } from '../../constants';
 
 const SvgPages = ({ active, size }) => {
   const theme = useTheme();
   const fill = active
-    ? colors.activeTintColor[theme]
-    : colors.inactiveTintColor[theme];
+    ? gStyle.tintColor.active[theme]
+    : gStyle.tintColor.inactive[theme];
 
   return (
     <Svg height={size} width={size} viewBox="0 0 32 32">

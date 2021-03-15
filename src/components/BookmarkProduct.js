@@ -17,9 +17,13 @@ const BookmarkProduct = () => (
     onPress={() => alert('I do nothing, but one day I will change color and bookmark things!')}
     style={{ paddingHorizontal: 16, paddingVertical: 8 }}
   >
-    <Icon type='font-awesome-5' size={20} 
-      color={ (true === true) ? 'blue': 'green' }
-      name={ 'bookmark' } 
+    <Icon
+      name='bookmark'
+      type='font-awesome-5'
+      size={20}
+      color={
+        (true === true) ? gStyle.tintColor.active.light : 'green'  // gStyle.tintColor.inactive.light
+      }
     />
   </TouchableOpacity>
 );
