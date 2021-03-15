@@ -18,11 +18,13 @@ class App extends React.Component {
     };
 
     // is iPad?
+    /* TODO: resolve - this throws an undefined exception on iPad:
     if (device.isPad) {
       ScreenOrientation.allowAsync(
         ScreenOrientation.Orientation.ALL_BUT_UPSIDE_DOWN
       );
     }
+    */
 
     this.updateTheme = this.updateTheme.bind(this);
   }
