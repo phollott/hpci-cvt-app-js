@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { ScrollView, View, Text } from 'react-native';
-import { ThemeProvider, ButtonGroup, Card } from 'react-native-elements';
+import { ButtonGroup, Card, SearchBar } from 'react-native-elements';
 import cheerio from 'react-native-cheerio';
-import { gStyle } from '../constants';
-//import { useTheme } from 'react-navigation';
 
 // components
 import ViewProductMasters from './ViewProductMasters';
@@ -12,11 +10,33 @@ export default class ViewCovid19Products extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      searchText: '',
       selectedIndex: 0,
       authorizedProducts: [],
-      applicationProducts: []
+      filtAuthProd: [],
+      applicationProducts: [],
+      filtApplProd: []
     };
     this.updateIndex = this.updateIndex.bind(this);
+    this.updateSearch = this.updateSearch.bind(this);
+  }
+
+  // SearchBar
+  updateSearch = (searchText) => {
+    var searchLowercase = searchText.toLowerCase();
+    const filteredAuthProducts = this.state.authorizedProducts.filter((item) => {
+      const itemData = item.searchKey
+      return itemData.indexOf(searchLowercase) > -1
+    });
+    const filteredApplProducts = this.state.applicationProducts.filter((item) => {
+      const itemData = item.searchKey
+      return itemData.indexOf(searchLowercase) > -1
+    });
+    this.setState({ 
+      filtAuthProd: filteredAuthProducts,
+      filtApplProd: filteredApplProducts,
+      searchText: searchText
+     });
   }
 
   // ButtonGroup selected index is local to this screen, so it should remain in the
@@ -45,11 +65,17 @@ export default class ViewCovid19Products extends Component {
 //    const theme = useTheme();
     const buttons = ['Authorized Products', 'Other Applications'];
     const { selectedIndex } = this.state;
+    const { searchText } = this.state;
 
     return (
       <View style={{ flex: 1 }} >
+        <SearchBar
+          placeholder="Search for Vaccines and Treatments..."
+          onChangeText={ this.updateSearch }
+          value={ searchText }
+        />
+        <ScrollView>
           <Card style={{ flex: 1 }}>
-            <Card.Title>COVID-19 Vaccines and Treatments</Card.Title>
             <Text>Select from authorized COVID-19 Vaccines and Treatments, or all unauthorized applications.</Text>
           </Card>
           <ButtonGroup
@@ -57,20 +83,21 @@ export default class ViewCovid19Products extends Component {
             selectedIndex = { selectedIndex }
             buttons = { buttons }
           />
-          <ScrollView>
+          <View>
             { (this.state.selectedIndex === 0) &&
                 <ViewProductMasters
-                  productMasters={this.state.authorizedProducts}
+                  productMasters={this.state.filtAuthProd}
                   navigation={this.props.navigation} 
                 />
             }
             { (this.state.selectedIndex === 1) &&
                 <ViewProductMasters
-                  productMasters={this.state.applicationProducts}
+                  productMasters={this.state.filtApplProd}
                   navigation={this.props.navigation} 
                 />
             }
-          </ScrollView>
+          </View>
+        </ScrollView>
       </View>
     );
   }
@@ -101,9 +128,12 @@ export default class ViewCovid19Products extends Component {
           }
         });
 
+        // add a search key to each product for ease of searching
+        productMaster.searchKey = [productMaster.brandName, productMaster.companyName].join('-').toLowerCase();
+
         // Special logic based on retrieving links for authorized products
         if ($(product).find('a').html() != null) {
-          var productName = $(product).find('a').html(); console.log(productName);
+          var productName = $(product).find('a').html();
           productMaster.ingredient = productMaster.brandName.replace(productName, '').trim();
           productMaster.brandName = productName;
           productMaster.link = $(product).find('a').attr('href');
@@ -117,8 +147,8 @@ export default class ViewCovid19Products extends Component {
       });
 
       return {
-        authorizedProducts: authorizedProducts,
-        applicationProducts: applicationProducts
+        authorizedProducts: authorizedProducts,   filtAuthProd: authorizedProducts,
+        applicationProducts: applicationProducts, filtApplProd: applicationProducts
       }
   }
 
