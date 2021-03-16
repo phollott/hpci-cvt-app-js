@@ -2,11 +2,11 @@
   "expo": {
     "name": "HPCI CVT App",
     "description": "HPCI COVID-19 Vaccine and Treatments App",
-    "slug": "hpci-cvt-app",
+    "slug": "hpci-cvt-app-js",
     "privacy": "public",
     "version": "0.0.2",
     "platforms": ["android", "ios", "web"],
-    "githubUrl": "https://github.com/phollott/hpci-cvt-app",
+    "githubUrl": "https://github.com/phollott/hpci-cvt-app-js",
     "orientation": "portrait",
     "primaryColor": "#2a2a2a",
     "icon": "src/assets/icon.png",
