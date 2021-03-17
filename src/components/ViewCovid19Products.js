@@ -128,8 +128,13 @@ export default class ViewCovid19Products extends Component {
           }
         });
 
-        // add a search key to each product for ease of searching
-        productMaster.searchKey = [productMaster.brandName, productMaster.companyName].join('-').toLowerCase();
+       // Add a search key to each product for ease of searching
+        // According to the Design Specification, Search/Filter should take into consideration:
+        // Barcode (UPC), NMI, Meta Tags - eventually, maybe, but not for COVID products
+        // Brand / Trade Name - so we are using brandName
+        // Product Identifiers - if we have a DIN, we should include it in the search key 
+        // Manufacturer - so we are using companyName
+        // Active Ingredient - currently we are only extracting active ingredient for authorized products
 
         // Special logic based on retrieving links for authorized products
         if ($(product).find('a').html() != null) {
@@ -137,10 +142,11 @@ export default class ViewCovid19Products extends Component {
           productMaster.ingredient = productMaster.brandName.replace(productName, '').trim();
           productMaster.brandName = productName;
           productMaster.link = $(product).find('a').attr('href');
+          productMaster.searchKey = [productMaster.brandName, productMaster.companyName, productMaster.ingredient].join('-').toLowerCase();
           authorizedProducts.push(productMaster);
         } else {
           // There is no easy way to get ingredient out of brandName for these products
-          productMaster.name = $(product).find('td').html();
+          productMaster.searchKey = [productMaster.brandName, productMaster.companyName].join('-').toLowerCase();
           applicationProducts.push(productMaster);
         }
 //        console.log(applicationProducts);
