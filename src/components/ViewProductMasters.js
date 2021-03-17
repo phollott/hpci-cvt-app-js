@@ -27,7 +27,7 @@ export default class ViewProductMasters extends Component {
               <ListItem.Subtitle>{ productMaster.companyName } ({ productMaster.status })</ListItem.Subtitle>
               <Text>{ productMaster.ingredient }</Text>
             </ListItem.Content>
-            { (productMaster.link) && <ListItem.Chevron/> }
+            { (productMaster.link) && <ListItem.Chevron color='blue'/> }
           </ListItem>
         )}
       </View>
