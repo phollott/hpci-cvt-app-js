@@ -128,13 +128,7 @@ export default class ViewCovid19Products extends Component {
           }
         });
 
-       // Add a search key to each product for ease of searching
-        // According to the Design Specification, Search/Filter should take into consideration:
-        // Barcode (UPC), NMI, Meta Tags - eventually, maybe, but not for COVID products
-        // Brand / Trade Name - so we are using brandName
-        // Product Identifiers - if we have a DIN, we should include it in the search key 
-        // Manufacturer - so we are using companyName
-        // Active Ingredient - currently we are only extracting active ingredient for authorized products
+        // add a search key to each product for ease of searching
 
         // Special logic based on retrieving links for authorized products
         if ($(product).find('a').html() != null) {

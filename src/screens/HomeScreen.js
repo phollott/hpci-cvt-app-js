@@ -4,8 +4,6 @@ import { ScrollView, Text, View } from 'react-native';
 import { ThemeProvider } from 'react-native-elements';
 import { useTheme } from 'react-navigation';
 import { gStyle } from '../constants';
-
-
 import { useColorScheme } from 'react-native-appearance';
 
 // components
