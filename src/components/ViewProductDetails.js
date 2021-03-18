@@ -76,7 +76,7 @@ export default class ViewProductDetails extends Component {
                 <ListItem.Subtitle>{ productResource.description }</ListItem.Subtitle>
                 <Text style={{ fontWeight: 'bold' }}>Publication Status: { productResource.publicationStatus }</Text>
               </ListItem.Content>
-              { (productResource.link) && <ListItem.Chevron/> }
+              { (productResource.link) && <ListItem.Chevron color='blue'/> }
             </ListItem>
           )
         }
