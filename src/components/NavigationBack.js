@@ -4,10 +4,6 @@ import { TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { gStyle } from '../constants';
 
-// icons
-//import SvgCircleLeft from './icons/Svg.CircleLeft';
-// [mrj] <SvgCircleLeft active /> would not render after react nav 5 upgrade, so replaced with icon
-
 const NavigationBack = ({ navigation, route }) => (
   <TouchableOpacity
     accessible
@@ -19,7 +15,7 @@ const NavigationBack = ({ navigation, route }) => (
     style={{ paddingHorizontal: 16, paddingVertical: 8 }}
   >
     <Icon
-      name='arrow-alt-circle-left'
+      name='chevron-left'
       type='font-awesome-5'
       size={20}
       color={

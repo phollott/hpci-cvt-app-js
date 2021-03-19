@@ -3,13 +3,12 @@
 
 [![made with expo](https://img.shields.io/badge/MADE%20WITH%20EXPO-000.svg?style=for-the-badge&logo=expo&labelColor=4630eb&logoWidth=20)](https://github.com/expo/expo) [![supports iOS and Android](https://img.shields.io/badge/Platforms-Native-4630EB.svg?style=for-the-badge&logo=EXPO&labelColor=000&logoColor=fff)](https://github.com/expo/expo)
 
-### Out of the Box
+### Technical Notes
 
 - Expo SDK 40
-- React Navigation v4 & Theme Support!
+- React Navigation v5
 - iOS 13 Appearance Support (with [react-native-appearance](https://github.com/expo/react-native-appearance))
 - Preloading/caching local assets
-- SVG custom icon usage
 - Checker for the iOS notch: iPhoneX, iPhoneXs, iPhoneXr, iPhoneXs Max
 
 ## Table of Contents
@@ -81,7 +80,6 @@ Run Project Locally: `expo start` or `yarn dev`
 ## assets
 
 - [black rabbit icon](https://thenounproject.com/search/?q=rabbit&i=1211060) was bought (royalty-free license)
-- SVG Icons from [icomoon](https://icomoon.io)
 
 ## device learnings
 
@@ -89,7 +87,20 @@ Run Project Locally: `expo start` or `yarn dev`
 
 ## demo and release notes
 
-### version: 0.0.2 (current)
+### version: 0.0.3 (current)
+
+HC CVT App - prototype
+
+- removed react-native-svg
+- upgraded to [React Navigation v5](https://reactnavigation.org/docs/upgrading-from-4.x/)
+- added search and filtering
+- started review of themes - React Navigation Theme Support / Example Usage ([themes docs](https://reactnavigation.org/docs/themes))
+- implemented navigation stacks for app, added screens
+- introduced cross platform UI toolkit [React Native Elements](https://reactnativeelements.com/)
+
+### version: 0.0.2
+
+this starter originally from expo-multi-screen-starter, by Caleb Nance
 
 - upgraded to [Expo SDK 40](https://blog.expo.io/expo-sdk-40-is-now-available-d4d73e67da33)
 - upgraded to [Expo SDK 39](https://blog.expo.io/expo-sdk-39-is-now-available-4c10aa825e3f)
