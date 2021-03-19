@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import Svg, { Path } from 'react-native-svg';
-import { useTheme } from 'react-navigation';
+import { useTheme } from '@react-navigation/native';
 import { gStyle } from '../../constants';
 
 const SvgStats = ({ active, size }) => {

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, ScrollView } from 'react-native';
 import { Card, ListItem } from 'react-native-elements';
-import { gStyle } from '../constants';
 import cheerio from 'react-native-cheerio';
 
 export default class ViewProductDetails extends Component {
@@ -27,7 +26,7 @@ export default class ViewProductDetails extends Component {
    */
 
   componentDidMount() {
-    var productMasterIn = this.props.navigation.state.params.productMaster,
+    var productMasterIn = this.props.route.params.productMaster,
       url = (global.language === 'en-ca') ? "https://covid-vaccine.canada.ca" : "https://vaccin-covid.canada.ca";
     url += productMasterIn.link;
 

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { ScrollView, View, Text } from 'react-native';
 import { ButtonGroup, Card, SearchBar } from 'react-native-elements';
 import cheerio from 'react-native-cheerio';
+import { gStyle } from '../constants';
 
 // components
 import ViewProductMasters from './ViewProductMasters';
@@ -62,20 +63,22 @@ export default class ViewCovid19Products extends Component {
   }
 
   render() {
-//    const theme = useTheme();
     const buttons = ['Authorized Products', 'Other Applications'];
     const { selectedIndex } = this.state;
     const { searchText } = this.state;
 
     return (
-      <View style={{ flex: 1 }} >
+      <View 
+        style={{ flex: 1 }}
+        contentContainerStyle={gStyle.contentContainer}
+      >
         <SearchBar
           placeholder="Search for Vaccines and Treatments..."
           onChangeText={ this.updateSearch }
           value={ searchText }
         />
         <ScrollView>
-          <Card style={{ flex: 1 }}>
+          <Card>
             <Text>Select from authorized COVID-19 Vaccines and Treatments, or all unauthorized applications.</Text>
           </Card>
           <ButtonGroup

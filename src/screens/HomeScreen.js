@@ -2,14 +2,15 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView, Text, View } from 'react-native';
 import { ThemeProvider } from 'react-native-elements';
-import { useTheme } from 'react-navigation';
+import { useTheme } from '@react-navigation/native';
 import { gStyle } from '../constants';
 import { useColorScheme } from 'react-native-appearance';
 
 // components
 import Touch from '../components/Touch';
 
-const HomeScreen = ({ navigation, screenProps }) => {
+//const HomeScreen = ({ navigation, screenProps }) => {
+  const HomeScreen = ({ navigation }) => {
   const theme = useTheme();
   const colorScheme = useColorScheme();
 
@@ -29,14 +30,16 @@ const HomeScreen = ({ navigation, screenProps }) => {
           <Touch
             onPress={() => {
               global.language = 'en-ca';
-              navigation.navigate('Products');
+              //navigation.navigate('Products');
+              navigation.navigate('ProductsStack', {screen: 'Products'});
             }}
             text="Jump to English Products Screen"
           />
           <Touch
             onPress={() => {
               global.language = 'fr-ca';
-              navigation.navigate('Products');
+              //navigation.navigate('Products');
+              navigation.navigate('ProductsStack', {screen: 'Products'});
             }}
             text="Produits en Francais"
           />
@@ -48,15 +51,10 @@ const HomeScreen = ({ navigation, screenProps }) => {
   );
 };
 
-HomeScreen.navigationOptions = {
-  headerTitleStyle: gStyle.headerTitleStyle,
-  title: 'Home'
-};
-
 HomeScreen.propTypes = {
   // required
-  navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired //,
+  //screenProps: PropTypes.object.isRequired
 };
 
 export default HomeScreen;

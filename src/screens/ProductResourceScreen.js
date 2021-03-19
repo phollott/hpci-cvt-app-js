@@ -1,32 +1,29 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import PropTypes from 'prop-types';
 import { ThemeProvider } from 'react-native-elements';
-import { useTheme } from 'react-navigation';
 import { gStyle } from '../constants';
 
 // components
 import ViewProductResource from '../components/ViewProductResource';
-import NavigationBack from '../components/NavigationBack';
 
-const ProductResourceScreen = ({ navigation }) => {
-  const theme = useTheme();
+const ProductResourceScreen = ({ navigation, route }) => {
+  //const theme = useTheme();
 
   // [pmh] assuming we want to add an RNE theme to each screen
 
   return (
     <ThemeProvider theme={ gStyle.mytheme }>
 
-      <ViewProductResource navigation={navigation}/>
+      <ViewProductResource navigation={navigation} route={route} />
 
     </ThemeProvider>
   );
 };
 
-ProductResourceScreen.navigationOptions = ({ navigation }) => ({
-  headerLeft: () => <NavigationBack navigation={navigation} />,
-  headerRight: () => <View style={{ flex: 1 }} />,
-  headerTitleStyle: gStyle.headerTitleStyle,
-  title: 'Product Resource'
-});
+ProductResourceScreen.propTypes = {
+  // required
+  navigation: PropTypes.object.isRequired,
+  route: PropTypes.object.isRequired
+};
 
 export default ProductResourceScreen;
