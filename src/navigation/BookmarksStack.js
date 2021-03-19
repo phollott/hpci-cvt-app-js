@@ -1,40 +1,25 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
-import { Icon } from 'react-native-elements';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import { gStyle } from '../constants';
 
 // screens
 import BookmarksScreen from '../screens/BookmarksScreen';
 
-const BookmarksTabBarIcon = ({ focused }) => (
-  <Icon
-    name='bookmark'
-    type='font-awesome-5'
-    size={20}
-    color={
-      focused ? gStyle.tintColor.active.light : gStyle.tintColor.inactive.light
-    }
-  />
-);
+const Stack = createStackNavigator();
 
-BookmarksTabBarIcon.propTypes = {
-  // required
-  focused: PropTypes.bool.isRequired
-};
-
-// Stats Stack
-// /////////////////////////////////////////////////////////////////////////////
-const BookmarksStack = createStackNavigator(
-  {
-    Stats: BookmarksScreen
-  },
-  {
-    navigationOptions: {
-      tabBarLabel: 'Bookmarks',
-      tabBarIcon: BookmarksTabBarIcon
-    }
-  }
-);
+const BookmarksStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen 
+        name="Bookmarks" 
+        component={BookmarksScreen}
+        options={{
+          headerTitleStyle: gStyle.headerTitleStyle,
+          title: 'Bookmarks'
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
 
 export default BookmarksStack;

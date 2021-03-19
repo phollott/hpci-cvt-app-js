@@ -19,7 +19,7 @@ export default class ViewProductResource extends Component {
    */
 
   componentDidMount() {
-    var productResourceIn = this.props.navigation.state.params.productResource,
+    var productResourceIn = this.props.route.params.productResource,
       url = (global.language === 'en-ca') ? "https://covid-vaccine.canada.ca" : "https://vaccin-covid.canada.ca";
     url += productResourceIn.link;
     
