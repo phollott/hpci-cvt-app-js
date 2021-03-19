@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { StatusBar } from 'react-native';
-import { ScreenOrientation } from 'expo';
+//import { ScreenOrientation } from 'expo';
 import AppLoading from 'expo-app-loading';
 import { Appearance } from 'react-native-appearance';
 import { device, func } from './src/constants';
 
 // tab navigator
-import Stack from './src/navigation/Stack';
+import MainStack from './src/navigation/Stack';
 
 class App extends React.Component {
   constructor(props) {
@@ -67,8 +67,7 @@ class App extends React.Component {
     return (
       <React.Fragment>
         <StatusBar barStyle={device.iOS ? iOSStatusType : 'light-content'} />
-
-        <Stack
+        <MainStack
           screenProps={{
             updateTheme: this.updateTheme
           }}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ScrollView, Text } from 'react-native';
 import { ThemeProvider } from 'react-native-elements';
-import { useTheme } from 'react-navigation';
+import { useTheme } from '@react-navigation/native';
 import { gStyle } from '../constants';
 
 const BookmarksScreen = () => {
@@ -21,11 +21,6 @@ const BookmarksScreen = () => {
       
     </ThemeProvider>
   );
-};
-
-BookmarksScreen.navigationOptions = {
-  headerTitleStyle: gStyle.headerTitleStyle,
-  title: 'Bookmarks'
 };
 
 export default BookmarksScreen;
