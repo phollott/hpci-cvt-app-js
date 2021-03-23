@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, ScrollView, Linking } from 'react-native';
-import { Card, ListItem } from 'react-native-elements';
+import { Card, ListItem, Icon } from 'react-native-elements';
 import cheerio from 'react-native-cheerio';
 
 export default class ViewProductDetails extends Component {
@@ -68,7 +68,11 @@ export default class ViewProductDetails extends Component {
               onPress={() => (this.linkingProductResource(productResource)) &&
                 this.props.navigation.navigate('ProductResource', { productResource })}
             >
-                <ListItem.Content>
+              <Icon type='font-awesome-5' size={25} 
+                color={ (productResource.resourceType !== 'pending') ? 'blue': 'orange' }
+                name={ (productResource.resourceType === 'external') ? 'globe' : 'file' } 
+              />
+              <ListItem.Content>
                 <ListItem.Title style={{ fontWeight: 'bold' }}>
                   { productResource.resourceName }
                 </ListItem.Title>
@@ -84,17 +88,10 @@ export default class ViewProductDetails extends Component {
     );
   }
 
-  /* Linking to Product Resource: replace
-              <ListItem key={productResource.key} bottomDivider
-              onPress={() => (productResource.link) &&
-                this.props.navigation.navigate('ProductResource', { productResource })}
-            >
-   */
-
   linkingProductResource(productResource) {
     console.log('linkingProductResource')
     if (productResource.link) {
-      if (productResource.link.includes('http:') || productResource.link.includes('https:')) {
+      if (productResource.resourceType === 'external') {
         console.log('external product resource (show in browser): ' + productResource.link);
         Linking.canOpenURL(productResource.link).then( supported => {
           if (supported) {
@@ -143,15 +140,27 @@ export default class ViewProductDetails extends Component {
       } else {
         var audience = $(tr).find('td').eq(1).text();
         if (audience.includes('Consumers')) {
-          productResourceList.push({
+          var productResource = {
             key: i,
             link: $(tr).find('td').eq(2).find('a').attr('href'),
+            resourceType: 'pending',
             audience: $(tr).find('td').eq(1).text().trim(),
             resourceName: $(tr).find('td').eq(2).text().trim(),
             description: $(tr).find('td').eq(3).text().trim(),
             publicationStatus: $(tr).find('td').eq(4).text().trim(),
             revised: $(tr).find('td').eq(0).text().trim()
-          });
+          }
+
+          // determine what type of resource this is:
+          if (productResource.link) {
+            if (productResource.link.includes('http:') || productResource.link.includes('https:')) {
+              productResource.resourceType = 'external';
+            } else {
+              productResource.resourceType = 'internal';
+            }
+          }
+
+          productResourceList.push(productResource);
         }
       }
 //      console.log(productResourceList);
