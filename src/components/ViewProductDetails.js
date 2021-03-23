@@ -70,7 +70,7 @@ export default class ViewProductDetails extends Component {
             >
               <Icon type='font-awesome-5' size={25} 
                 color={ (productResource.resourceType !== 'pending') ? 'blue': 'orange' }
-                name={ (productResource.resourceType === 'external') ? 'globe' : 'file' } 
+                name={ (productResource.resourceType === 'external') ? 'globe' : 'file-alt' } 
               />
               <ListItem.Content>
                 <ListItem.Title style={{ fontWeight: 'bold' }}>
@@ -149,6 +149,13 @@ export default class ViewProductDetails extends Component {
             description: $(tr).find('td').eq(3).text().trim(),
             publicationStatus: $(tr).find('td').eq(4).text().trim(),
             revised: $(tr).find('td').eq(0).text().trim()
+          }
+
+          // [pmh] this is a hack because I'm not sure why these don't render correctly
+          if (productResource.link.includes('?linkID')) {
+            var fixedUrl = (global.language === 'en-ca') ? "https://covid-vaccine.canada.ca" : "https://vaccin-covid.canada.ca";
+            fixedUrl += productResource.link;
+            productResource.link = fixedUrl;
           }
 
           // determine what type of resource this is:

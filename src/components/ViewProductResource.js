@@ -24,8 +24,11 @@ export default class ViewProductResource extends Component {
     url += productResourceIn.link;
     
     fetch(url).then((resp)=>{ return resp.text() }).then((text)=>{ 
+      console.log('page html for [' + url + ']: ' + text)
       var $ = cheerio.load(text),
         prodResourceBlock = $('main');
+
+//      console.log('page html for [' + url + ']: ' + prodResourceBlock.html())
 
       this.setState({
         productResourceHtml: prodResourceBlock.html()
