@@ -7,7 +7,7 @@
     "version": "0.0.3",
     "platforms": ["android", "ios", "web"],
     "githubUrl": "https://github.com/phollott/hpci-cvt-app-js",
-    "orientation": "portrait",
+    "orientation": "default",
     "primaryColor": "#2a2a2a",
     "icon": "src/assets/icon.png",
     "splash": {
