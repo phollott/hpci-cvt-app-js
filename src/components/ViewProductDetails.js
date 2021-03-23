@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView } from 'react-native';
+import { Text, View, ScrollView, Linking } from 'react-native';
 import { Card, ListItem } from 'react-native-elements';
 import cheerio from 'react-native-cheerio';
 
@@ -65,10 +65,10 @@ export default class ViewProductDetails extends Component {
         {
           this.state.productResourceList.map( productResource =>
             <ListItem key={productResource.key} bottomDivider
-              onPress={() => (productResource.link) &&
+              onPress={() => (this.linkingProductResource(productResource)) &&
                 this.props.navigation.navigate('ProductResource', { productResource })}
             >
-              <ListItem.Content>
+                <ListItem.Content>
                 <ListItem.Title style={{ fontWeight: 'bold' }}>
                   { productResource.resourceName }
                 </ListItem.Title>
@@ -84,41 +84,32 @@ export default class ViewProductDetails extends Component {
     );
   }
 
-/*
-      <View style={{ flex: 1 }} >
-        <Card style={{ flex: 1 }}>
-          <Card.Title>Product Description</Card.Title>
-          <Text><Text style={{ fontWeight: 'bold' }}>Brand Name: </Text>{this.state.productMaster.brandName}</Text>
-          <Text><Text style={{ fontWeight: 'bold' }}>Company Name: </Text>{this.state.productMaster.companyName}</Text>
-          <Text><Text style={{ fontWeight: 'bold' }}>Ingredient: </Text>{this.state.productMaster.ingredient}</Text>
-          <Text><Text style={{ fontWeight: 'bold' }}>Status: </Text>{this.state.productMaster.status}</Text>
-          <Text><Text style={{ fontWeight: 'bold' }}>Date of approval: </Text>{this.state.productMaster.approvalDate}</Text>
-        </Card>
-        <Card style={{ flex: 1 }}>
-          <Card.Title>Product Resources</Card.Title>
-          <ScrollView>
-          {
-            this.state.productResourceList.map( productResource =>
+  /* Linking to Product Resource: replace
               <ListItem key={productResource.key} bottomDivider
-                onPress={() => (productResource.link) &&
-                  this.props.navigation.navigate('ProductResource', { productResource })}
-              >
-                <ListItem.Content>
-                  <ListItem.Title style={{ fontWeight: 'bold' }}>
-                    { productResource.resourceName }
-                  </ListItem.Title>
-                  <ListItem.Subtitle>{ productResource.description }</ListItem.Subtitle>
-                  <Text style={{ fontWeight: 'bold' }}>Publication Status: { productResource.publicationStatus }</Text>
-                </ListItem.Content>
-                { (productResource.link) && <ListItem.Chevron/> }
-              </ListItem>
-            )
-          }
-          </ScrollView>
-        </Card>
-      </View>
+              onPress={() => (productResource.link) &&
+                this.props.navigation.navigate('ProductResource', { productResource })}
+            >
+   */
 
-*/
+  linkingProductResource(productResource) {
+    console.log('linkingProductResource')
+    if (productResource.link) {
+      if (productResource.link.includes('http:') || productResource.link.includes('https:')) {
+        console.log('external product resource (show in browser): ' + productResource.link);
+        Linking.canOpenURL(productResource.link).then( supported => {
+          if (supported) {
+            Linking.openURL(productResource.link);
+          }
+        })
+      } else {
+        console.log('internal product resource (show in WebView): ' + productResource.link);
+        return true;  
+      }
+    }
+    // if there is no link or we have displayed an external link in the browser, return false to short-circuit the logic
+    return false;
+  }
+
   /* 
    * Scrape the appropriate divs, skipping revision id for each field.
    * There is a more sophisticated way to do this, but this works for now.
@@ -163,7 +154,7 @@ export default class ViewProductDetails extends Component {
           });
         }
       }
-      console.log(productResourceList);
+//      console.log(productResourceList);
     });
 
     return productResourceList;
