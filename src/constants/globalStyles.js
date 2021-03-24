@@ -22,6 +22,10 @@ export default {
       }
     },
     Card: {
+      containerStyle: {
+        marginHorizontal: 0,
+        marginTop: 0
+      }      
     }
   },
 
