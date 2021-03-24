@@ -16,22 +16,31 @@ export default class ViewProductResource extends Component {
    * 1. Determine the appropriate url to use to load Product Resource data (EN/FR)
    * 2. Fetch an HTML Page and load it into Cheerio
    * 3. Extract Product Resource details
+   * 
+   * Rendering does not work as expected for Resources that contain ?linkID in link
    */
 
   componentDidMount() {
-    var productResourceIn = this.props.route.params.productResource,
+    var productResource = this.props.route.params.productResource,
       url = (global.language === 'en-ca') ? "https://covid-vaccine.canada.ca" : "https://vaccin-covid.canada.ca";
-    url += productResourceIn.link;
+    url += productResource.link;
     
     fetch(url).then((resp)=>{ return resp.text() }).then((text)=>{ 
-      console.log('page html for [' + url + ']: ' + text)
       var $ = cheerio.load(text),
         prodResourceBlock = $('main');
-
 //      console.log('page html for [' + url + ']: ' + prodResourceBlock.html())
 
+      var $$ = cheerio.load("<h3>Consumer Information</h3>")
+      if (productResource.resourceName === 'Consumer Information') {
+        console.log('this is consumer information, so let us slice')
+        $('div').has('details.span-8').each((i, detail) => {
+          $$('body').append($(detail).html())
+        });
+      }
+
       this.setState({
-        productResourceHtml: prodResourceBlock.html()
+        productResourceHtml: prodResourceBlock.html(),
+        highlyExperimentalLettuceSlice: $$.html()
       });
     }).catch(error => {
       console.log('VPR: could not load url ' + url);
