@@ -78,6 +78,7 @@ export default class ViewProductDetails extends Component {
                 </ListItem.Title>
                 <ListItem.Subtitle>{ productResource.description }</ListItem.Subtitle>
                 <Text style={{ fontWeight: 'bold' }}>Publication Status: { productResource.publicationStatus }</Text>
+                <Text>{ productResource.originalLink }</Text>
               </ListItem.Content>
               { (productResource.link) && <ListItem.Chevron color='blue'/> }
             </ListItem>
@@ -143,6 +144,7 @@ export default class ViewProductDetails extends Component {
           var productResource = {
             key: i,
             link: $(tr).find('td').eq(2).find('a').attr('href'),
+            originalLink: $(tr).find('td').eq(2).find('a').attr('href'),
             resourceType: 'pending',
             audience: $(tr).find('td').eq(1).text().trim(),
             resourceName: $(tr).find('td').eq(2).text().trim(),
