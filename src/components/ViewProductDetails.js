@@ -151,15 +151,16 @@ export default class ViewProductDetails extends Component {
             revised: $(tr).find('td').eq(0).text().trim()
           }
 
-          // [pmh] this is a hack because I'm not sure why these don't render correctly
-          if (productResource.link.includes('?linkID')) {
-            var fixedUrl = (global.language === 'en-ca') ? "https://covid-vaccine.canada.ca" : "https://vaccin-covid.canada.ca";
-            fixedUrl += productResource.link;
-            productResource.link = fixedUrl;
-          }
-
           // determine what type of resource this is:
           if (productResource.link) {
+
+            // [pmh] this is a hack because I'm not sure why these don't render correctly
+            if (productResource.link.includes('?linkID')) {  
+              var fixedUrl = (global.language === 'en-ca') ? "https://covid-vaccine.canada.ca" : "https://vaccin-covid.canada.ca";
+              fixedUrl += productResource.link;
+              productResource.link = fixedUrl;
+            }
+
             if (productResource.link.includes('http:') || productResource.link.includes('https:')) {
               productResource.resourceType = 'external';
             } else {
