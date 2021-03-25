@@ -30,9 +30,9 @@ export default class ViewProductResource extends Component {
         prodResourceBlock = $('main');
 //      console.log('page html for [' + url + ']: ' + prodResourceBlock.html())
 
-      var $$ = cheerio.load("<h3>Consumer Information</h3>")
       if (productResource.resourceName === 'Consumer Information') {
         console.log('this is consumer information, so let us slice')
+        var $$ = cheerio.load('<table>' + $('table').html() + '</table>');
         $('div').has('details.span-8').each((i, detail) => {
           $$('body').append($(detail).html())
         });
@@ -54,7 +54,7 @@ export default class ViewProductResource extends Component {
           originWhitelist={['*']}
           source={{ html: this.state.productResourceHtml }}
           style={{ marginTop: 0 }}
-          scalesPageToFit
+          scalesPageToFit={false}
         />
       </View>
     );
