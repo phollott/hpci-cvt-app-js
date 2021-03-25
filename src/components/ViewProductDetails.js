@@ -11,9 +11,7 @@ export default class ViewProductDetails extends Component {
         brandName: null, companyName: null, 
         ingredient: null, status: null, approvalDate: null
       },
-      productResourceList: [],
-//      productMasterHtml: 'none',
-//      productResourceHtml: 'none'
+      productResourceList: []
     };
   }
 
@@ -41,9 +39,8 @@ export default class ViewProductDetails extends Component {
       this.setState({
         productMaster: productMaster,
         productResourceList: productResourceList,
-//        productMasterHtml: prodMasterBlock.html(),
-//        productResourceHtml: prodResourceBlock.html()
       });
+      
     }).catch(error => {
       console.log('VPD: could not load url ' + url);
     });      
@@ -70,7 +67,7 @@ export default class ViewProductDetails extends Component {
             >
               <Icon type='font-awesome-5' size={25} 
                 color={ (productResource.resourceType !== 'pending') ? 'blue': 'orange' }
-                name={ (productResource.resourceType === 'external') ? 'globe' : 'file-alt' } 
+                name={ (productResource.resourceType === 'internal') ? 'file-alt' : 'globe' } 
               />
               <ListItem.Content>
                 <ListItem.Title style={{ fontWeight: 'bold' }}>
@@ -78,7 +75,6 @@ export default class ViewProductDetails extends Component {
                 </ListItem.Title>
                 <ListItem.Subtitle>{ productResource.description }</ListItem.Subtitle>
                 <Text style={{ fontWeight: 'bold' }}>Publication Status: { productResource.publicationStatus }</Text>
-                <Text>{ productResource.originalLink }</Text>
               </ListItem.Content>
               { (productResource.link) && <ListItem.Chevron color='blue'/> }
             </ListItem>
