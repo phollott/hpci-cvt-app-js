@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
 import { ScrollView, View, Text } from 'react-native';
 import { ButtonGroup, Card, SearchBar } from 'react-native-elements';
-import cheerio from 'react-native-cheerio';
+import { connect } from 'react-redux';
 import { gStyle } from '../constants';
 
 // components
 import ViewProductMasters from './ViewProductMasters';
 
-export default class ViewCovid19Products extends Component {
+const internalState = {
+  searchText: '',
+  selectedIndex: 0,
+  filtAuthProd: [],
+  filtApplProd: []
+};
+
+class ViewCovid19Products extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      searchText: '',
-      selectedIndex: 0,
-      authorizedProducts: [],
-      filtAuthProd: [],
-      applicationProducts: [],
-      filtApplProd: []
-    };
+    this.state = internalState;
     this.updateIndex = this.updateIndex.bind(this);
     this.updateSearch = this.updateSearch.bind(this);
   }
@@ -25,11 +25,11 @@ export default class ViewCovid19Products extends Component {
   // SearchBar
   updateSearch = (searchText) => {
     var searchLowercase = searchText.toLowerCase();
-    const filteredAuthProducts = this.state.authorizedProducts.filter((item) => {
+    const filteredAuthProducts = this.props.authorizedProducts.filter((item) => {
       const itemData = item.searchKey
       return itemData.indexOf(searchLowercase) > -1
     });
-    const filteredApplProducts = this.state.applicationProducts.filter((item) => {
+    const filteredApplProducts = this.props.applicationProducts.filter((item) => {
       const itemData = item.searchKey
       return itemData.indexOf(searchLowercase) > -1
     });
@@ -40,33 +40,26 @@ export default class ViewCovid19Products extends Component {
      });
   }
 
-  // ButtonGroup selected index is local to this screen, so it should remain in the
-  // localstate, whereas the two product collections belong in the redux store
+  // ButtonGroup selected index is local to this screen, so it should remain in the localstate
   updateIndex (selectedIndex) {
     this.setState({ selectedIndex });
   }
 
   /*************************************************************************************
-   * 1. Determine the appropriate url to use to load Product Master data (EN/FR)
-   * 2. Fetch an HTML Page and load it into Cheerio
-   * 3. Extract Vaccine and Treatment Product Masters for Approved and Applied Products
-   * 4. Add Approved and Applied Product Masters to Component State
+   * 1. Extract from redux store Vaccine and Treatment Product Masters for Approved and Applied Products
+   * 2. Add filtered Approved and Applied Product Masters to Component State
    */
   componentDidMount() {
-    var url = (global.language === 'en-ca') ? "https://covid-vaccine.canada.ca" : "https://vaccin-covid.canada.ca";
-    fetch(url).then((resp)=>{ return resp.text() }).then((text)=>{ 
-      var productMasterLists = this.scrapeProductMasterLists(text); 
-      this.setState(productMasterLists);
-    }).catch(error => {
-      console.log('VC19P: could not load url ' + url);
-    });      
+    this.setState({
+      filtAuthProd: this.props.authorizedProducts,
+      filtApplProd: this.props.applicationProducts
+    });
   }
 
   render() {
     const buttons = ['Authorized Products', 'Other Applications'];
     const { selectedIndex } = this.state;
     const { searchText } = this.state;
-
     return (
       <View 
         style={{ flex: 1 }}
@@ -104,55 +97,69 @@ export default class ViewCovid19Products extends Component {
       </View>
     );
   }
-
-   /*************************************************************************************
-   * 1. Using supplied response text, fetch an HTML Page and load it into Cheerio
-   * 2. Extract Vaccine and Treatment Product Masters for Approved and Applied Products
-   * 3. Add Approved and Applied Product Masters to Component State
-   */
-  scrapeProductMasterLists (responseText) {
-      var $ = cheerio.load(responseText);
-      var productRows = $('.view-vaccine-table table tbody').find('tr');
-      var authorizedProducts = [], applicationProducts = [];
-      productRows.each((i, product) => {
-
-        // Scrape the Product Master from each table row:
-        var productMaster = {
-          key: i, link: null, brandName: null, ingredient: null, companyName: null, type: null, status: null, approvalDate: null
-        }
-        var productCells = $(product).find('td');
-        productCells.each((j, cell) => {
-          switch (j) {
-            case 0: productMaster.brandName = $(cell).text().trim(); break;
-            case 1: productMaster.companyName = $(cell).text().trim(); break;
-            case 2: productMaster.type = $(cell).text().trim(); break;
-            case 3: productMaster.status = $(cell).text().trim(); break;
-            case 4: productMaster.approvalDate = $(cell).text().trim(); break;
-          }
-        });
-
-        // add a search key to each product for ease of searching
-
-        // Special logic based on retrieving links for authorized products
-        if ($(product).find('a').html() != null) {
-          var productName = $(product).find('a').html();
-          productMaster.ingredient = productMaster.brandName.replace(productName, '').trim();
-          productMaster.brandName = productName;
-          productMaster.link = $(product).find('a').attr('href');
-          productMaster.searchKey = [productMaster.brandName, productMaster.companyName, productMaster.ingredient].join('-').toLowerCase();
-          authorizedProducts.push(productMaster);
-        } else {
-          // There is no easy way to get ingredient out of brandName for these products
-          productMaster.searchKey = [productMaster.brandName, productMaster.companyName].join('-').toLowerCase();
-          applicationProducts.push(productMaster);
-        }
-//        console.log(applicationProducts);
-      });
-
-      return {
-        authorizedProducts: authorizedProducts,   filtAuthProd: authorizedProducts,
-        applicationProducts: applicationProducts, filtApplProd: applicationProducts
-      }
-  }
-
 }
+
+const mapStateToProps = (state) => {
+
+  var authorizedProducts = [], applicationProducts = [];
+
+  // TODO: **** get bus req for both filters!
+  
+  // Authorized Products:
+  const authProducts = state.products.filter(item => {
+    return item.language == state.settings.language 
+      && item.resources.length > 0
+      && -1 < item.resources.findIndex(resource => { return resource.resource_link.includes('href=') } )
+  });
+  
+  authProducts.forEach((product, i) => {
+    var productMaster = {
+      key: i, 
+      nid: product.nid,
+      link: null,                               // TODO: **** determine how to get link, product-details link is not in api! -> link still used to determine if there are product details
+      brandName: product.brand_name, 
+      ingredient: product.ingredient, 
+      companyName: product.company_name, 
+      type: 'Vaccine',                          // TODO: **** determine if Vaccine or Treatment, type is not in api!
+      status: product.status, 
+      approvalDate: product.date_of_approval,
+    };
+    productMaster.link = typeof product.body_text !== "undefined" && product.body_text !== null 
+      ? product.body_text.match(/href="([^"]*)/)[1] : null;    // TODO: **** hack! is body_text okay to use? this is the What you should know link
+    productMaster.searchKey = [productMaster.brandName, productMaster.companyName, productMaster.ingredient].join('-').toLowerCase();
+    authorizedProducts.push(productMaster);
+  });
+  
+  // Application Products:
+  const applProducts = state.products.filter(item => {
+    return item.language == state.settings.language
+      && item.body_text === null
+      && item.resources.length === 0
+      && !item.title.toLowerCase().startsWith('demo vaccine')
+      && !item.title.toLowerCase().startsWith('test')
+  });
+  
+  applProducts.forEach((product, i) => {
+    var productMaster = {
+      key: i, 
+      nid: product.nid,
+      link: null, 
+      brandName: product.brand_name, 
+      ingredient: product.ingredient, 
+      companyName: product.company_name, 
+      type: 'Vaccine',                          // TODO: **** determine if Vaccine or Treatment, type is not in api!
+      status: product.status, 
+      approvalDate: product.date_of_approval
+    };
+    productMaster.searchKey = [productMaster.brandName, productMaster.companyName].join('-').toLowerCase();
+    applicationProducts.push(productMaster);
+  });
+  
+  return {
+    settings: state.settings,
+    authorizedProducts: authorizedProducts,
+    applicationProducts: applicationProducts
+  };
+};
+
+export default connect(mapStateToProps)(ViewCovid19Products);
