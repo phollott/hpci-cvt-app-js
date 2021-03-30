@@ -1,49 +1,22 @@
 import React, { Component } from 'react';
 import { Text, View, ScrollView, Linking } from 'react-native';
 import { Card, ListItem, Icon } from 'react-native-elements';
-import cheerio from 'react-native-cheerio';
+import { connect } from 'react-redux';
+import { lang, covidVaccinePortal, portailVaccinCovid } from '../constants/constants';
 
-export default class ViewProductDetails extends Component {
+
+class ViewProductDetails extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      productMaster: {
-        brandName: null, companyName: null, 
-        ingredient: null, status: null, approvalDate: null
-      },
-      productResourceList: []
-    };
   }
 
   /*************************************************************************************
-   * 1. Determine the appropriate url to use to load Product Detail data (EN/FR)
-   * 2. Fetch an HTML Page and load it into Cheerio
-   * 3. Extract Product Master and Product Resource details
-   * 4. Add Approved and Applied Product Masters to Component State
+   * 1. Extract from redux store Product Master and Product Resource details
+   * 
    * [pmh] we have the Product Master from the previous screen, but reload it anyway 
    */
 
   componentDidMount() {
-    var productMasterIn = this.props.route.params.productMaster,
-      url = (global.language === 'en-ca') ? "https://covid-vaccine.canada.ca" : "https://vaccin-covid.canada.ca";
-    url += productMasterIn.link;
-
-    fetch(url).then((resp)=>{ return resp.text() }).then((text)=>{ 
-      var $ = cheerio.load(text),
-        prodMasterBlock = $('section.block-views-blockvaccine-information-revisions-block-1'),
-        prodResourceBlock = $('section.block-views-blockvaccine-resources-revisions-block-1')
-
-      var productMaster = this.scrapeProductMaster($, prodMasterBlock);
-      var productResourceList = this.scrapeProductResources($, prodResourceBlock);
-
-      this.setState({
-        productMaster: productMaster,
-        productResourceList: productResourceList,
-      });
-      
-    }).catch(error => {
-      console.log('VPD: could not load url ' + url);
-    });      
   }
 
   render() {
@@ -51,16 +24,15 @@ export default class ViewProductDetails extends Component {
       <View style={{ flex: 1 }} >
         <Card style={{ flex: 1 }}>
           <Card.Title>Product Description</Card.Title>
-          <Text><Text style={{ fontWeight: 'bold' }}>Brand Name: </Text>{this.state.productMaster.brandName}</Text>
-          <Text><Text style={{ fontWeight: 'bold' }}>Company Name: </Text>{this.state.productMaster.companyName}</Text>
-          <Text><Text style={{ fontWeight: 'bold' }}>Ingredient: </Text>{this.state.productMaster.ingredient}</Text>
-          <Text><Text style={{ fontWeight: 'bold' }}>Status: </Text>{this.state.productMaster.status}</Text>
-          <Text><Text style={{ fontWeight: 'bold' }}>Date of approval: </Text>{this.state.productMaster.approvalDate}</Text>
+          <Text><Text style={{ fontWeight: 'bold' }}>Brand Name: </Text>{this.props.productMaster.brandName}</Text>
+          <Text><Text style={{ fontWeight: 'bold' }}>Company Name: </Text>{this.props.productMaster.companyName}</Text>
+          <Text><Text style={{ fontWeight: 'bold' }}>Ingredient: </Text>{this.props.productMaster.ingredient}</Text>
+          <Text><Text style={{ fontWeight: 'bold' }}>Status: </Text>{this.props.productMaster.status}</Text>
+          <Text><Text style={{ fontWeight: 'bold' }}>Date of approval: </Text>{this.props.productMaster.approvalDate}</Text>
         </Card>
-
         <ScrollView>
         {
-          this.state.productResourceList.map( productResource =>
+          this.props.productResourceList.map( productResource =>
             <ListItem key={productResource.key} bottomDivider
               onPress={() => (this.linkingProductResource(productResource)) &&
                 this.props.navigation.navigate('ProductResource', { productResource })}
@@ -103,76 +75,91 @@ export default class ViewProductDetails extends Component {
     // if there is no link or we have displayed an external link in the browser, return false to short-circuit the logic
     return false;
   }
+}
 
-  /* 
-   * Scrape the appropriate divs, skipping revision id for each field.
-   * There is a more sophisticated way to do this, but this works for now.
-   */
-  scrapeProductMaster($, prodMasterBlock) {
-    var productMaster = {
-      brandName: null, companyName: null, ingredient: null, status: null, approvalDate: null
-    };
+const mapStateToProps = (state, ownProps) => {
 
-    var viewRows = prodMasterBlock.find('div.views-row').find('div');
-    viewRows.each((i, div) => {
-      switch (i) {
-        case 2: productMaster.brandName = $(div).text().trim(); break;
-        case 5: productMaster.companyName = $(div).text().trim(); break;
-        case 8: productMaster.ingredient = $(div).text().trim(); break;
-        case 11: productMaster.status = $(div).text().trim(); break;
-        case 14: productMaster.approvalDate = $(div).text().trim(); break;
+  var productMaster, productResourceList = [];
+
+  // selected product nid
+  const nid = ownProps.route.params.productMaster.nid;  //console.log('mapStateToProps ownProps', ownProps);
+
+  // TODO: **** get bus req for both filters!
+  // TODO: improve parsing
+
+  // Product Master:
+  const product = state.products.filter(item => {
+    return item.nid == nid
+      && item.language == state.settings.language
+  })[0]; // expect 1 product
+
+  // include derived props from component's ownProps 
+  productMaster = {
+    key: ownProps.route.params.productMaster.key, 
+    nid: product.nid,
+    link: ownProps.route.params.productMaster.link,
+    brandName: product.brand_name, 
+    ingredient: product.ingredient, 
+    companyName: product.company_name, 
+    type: ownProps.route.params.productMaster.type,
+    status: product.status, 
+    approvalDate: (typeof product.date_of_approval !== "undefined" && product.date_of_approval !== null)
+      ? product.date_of_approval.match(/<time [^>]+>([^<]+)<\/time>/)[1]  // extract time text between > and <
+      : "",
+    searchKey: ownProps.route.params.productMaster.searchKey
+  };
+  productMaster.approvalDate = productMaster.approvalDate.substring(0, productMaster.approvalDate.indexOf(" - "));
+
+  product.resources.forEach((resource, i) => {
+    if (resource.audience.includes("Consumers")) {
+      let isDescription = typeof resource.description !== "undefined" && resource.description !== null;
+      let isResourceLinkAnAnchor = typeof resource.resource_link !== "undefined" && resource.resource_link !== null && resource.resource_link.indexOf("<a") > -1;
+      var productResource = {
+        key: i,
+        id: resource.id,
+        link: isResourceLinkAnAnchor ? resource.resource_link.match(/href="([^"]*)/)[1] : null,  // link or null (check to display right chevron errors if text)
+        resourceType: "pending",
+        audience: resource.audience.toString(),
+        resourceName: isResourceLinkAnAnchor ? resource.resource_link.match(/<a [^>]+>([^<]+)<\/a>/)[1] : "",  // extract anchor text between > and <
+        description: isDescription ? resource.description.replace(/(<([^>]+)>)/ig, "").trim() : "",  // strip html, trim
+        publicationStatus: 
+          resource.various_dates.toLowerCase() === "yes" 
+            ? "Various" 
+            : (typeof resource.date !== "undefined" && resource.date !== null)
+              ? resource.date.match(/<time [^>]+>([^<]+)<\/time>/)[1]  // extract time text between > and <
+              : "Pending"
+      };
+      if (!productResource.publicationStatus.includes("Various") && !productResource.publicationStatus.includes("Pending")) {
+        productResource.publicationStatus = productResource.publicationStatus.substring(0, productResource.publicationStatus.indexOf(" - "));
       }
-    });
-    console.log(productMaster);
-    return productMaster;
-  }
 
-  scrapeProductResources($, prodResourceBlock) {
-    var productResourceList = [];
+      // determine what type of resource this is:
+      if (productResource.link) {
 
-    var resourceRows = prodResourceBlock.find('tr');
-    resourceRows.each((i, tr) => {
-      if (i===0) {
-        // this is the header row - ignore it
-      } else {
-        var audience = $(tr).find('td').eq(1).text();
-        if (audience.includes('Consumers')) {
-          var productResource = {
-            key: i,
-            link: $(tr).find('td').eq(2).find('a').attr('href'),
-            originalLink: $(tr).find('td').eq(2).find('a').attr('href'),
-            resourceType: 'pending',
-            audience: $(tr).find('td').eq(1).text().trim(),
-            resourceName: $(tr).find('td').eq(2).text().trim(),
-            description: $(tr).find('td').eq(3).text().trim(),
-            publicationStatus: $(tr).find('td').eq(4).text().trim(),
-            revised: $(tr).find('td').eq(0).text().trim()
-          }
+        // [pmh] this is a hack because I'm not sure why these don't render correctly
+        if (productResource.link.includes("?linkID")) {  
+          var fixedUrl = (state.settings.language === lang.english) ? covidVaccinePortal : portailVaccinCovid;
+          fixedUrl += productResource.link;
+          productResource.link = fixedUrl;
+        }
 
-          // determine what type of resource this is:
-          if (productResource.link) {
-
-            // [pmh] this is a hack because I'm not sure why these don't render correctly
-            if (productResource.link.includes('?linkID')) {  
-              var fixedUrl = (global.language === 'en-ca') ? "https://covid-vaccine.canada.ca" : "https://vaccin-covid.canada.ca";
-              fixedUrl += productResource.link;
-              productResource.link = fixedUrl;
-            }
-
-            if (productResource.link.includes('http:') || productResource.link.includes('https:')) {
-              productResource.resourceType = 'external';
-            } else {
-              productResource.resourceType = 'internal';
-            }
-          }
-
-          productResourceList.push(productResource);
+        if (productResource.link.includes("http:") || productResource.link.includes("https:")) {
+          productResource.resourceType = "external";
+        } else {
+          productResource.resourceType = "internal";
         }
       }
-//      console.log(productResourceList);
-    });
 
-    return productResourceList;
-  }
+      productResourceList.push(productResource);
+    }
+  });
 
-}
+  //console.log('productMaster: ', productMaster);  //console.log('productResourceList', productResourceList);
+  return {
+    settings: state.settings,
+    productMaster: productMaster,
+    productResourceList: productResourceList
+  };
+};
+
+export default connect(mapStateToProps)(ViewProductDetails);

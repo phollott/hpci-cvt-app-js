@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import { ScrollView, Text, View } from 'react-native';
 import { ThemeProvider } from 'react-native-elements';
 import { useTheme } from '@react-navigation/native';
+import { useDispatch } from 'react-redux'
+import { setLanguage } from '../redux/actions/settingsActions'
 import { gStyle } from '../constants';
+import { lang } from '../constants/constants';
 import { useColorScheme } from 'react-native-appearance';
 
 // components
@@ -14,8 +17,9 @@ import Touch from '../components/Touch';
   const theme = useTheme();
   const colorScheme = useColorScheme();
 
-// [pmh] this method of setting English/French is problematic because it does not force a reload,
-// so if it is not applied early, screens are already loaded, and will have their language set
+  const dispatch = useDispatch();
+  const setLang = lang => dispatch(setLanguage(lang));
+
 // [pmh] this method of uapplying dark mode should work with RNE, but is untested
 
   return (
@@ -29,7 +33,8 @@ import Touch from '../components/Touch';
 
           <Touch
             onPress={() => {
-              global.language = 'en-ca';
+              setLang(lang.english);
+              global.language = 'en-ca';  // TODO: fix - this remains for ViewProductResource
               //navigation.navigate('Products');
               navigation.navigate('ProductsStack', {screen: 'Products'});
             }}
@@ -37,6 +42,7 @@ import Touch from '../components/Touch';
           />
           <Touch
             onPress={() => {
+              setLang(lang.french);
               global.language = 'fr-ca';
               //navigation.navigate('Products');
               navigation.navigate('ProductsStack', {screen: 'Products'});
