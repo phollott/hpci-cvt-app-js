@@ -111,7 +111,7 @@ const mapStateToProps = (state, ownProps) => {
   productMaster.approvalDate = productMaster.approvalDate.substring(0, productMaster.approvalDate.indexOf(" - "));
 
   product.resources.forEach((resource, i) => {
-    if (resource.audience.includes("Consumers")) {
+    if (resource.audience.includes("Consumers")) {  // TODO: review... if ever french, may need to check for consommateurs
       let isDescription = typeof resource.description !== "undefined" && resource.description !== null;
       let isResourceLinkAnAnchor = typeof resource.resource_link !== "undefined" && resource.resource_link !== null && resource.resource_link.indexOf("<a") > -1;
       var productResource = {

@@ -34,8 +34,6 @@ import Touch from '../components/Touch';
           <Touch
             onPress={() => {
               setLang(lang.english);
-              global.language = 'en-ca';  // TODO: fix - this remains for ViewProductResource
-              //navigation.navigate('Products');
               navigation.navigate('ProductsStack', {screen: 'Products'});
             }}
             text="Jump to English Products Screen"
@@ -43,8 +41,6 @@ import Touch from '../components/Touch';
           <Touch
             onPress={() => {
               setLang(lang.french);
-              global.language = 'fr-ca';
-              //navigation.navigate('Products');
               navigation.navigate('ProductsStack', {screen: 'Products'});
             }}
             text="Produits en Francais"
