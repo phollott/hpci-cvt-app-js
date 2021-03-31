@@ -11,7 +11,7 @@ import ViewCovid19Products from '../components/ViewCovid19Products';
 const ProductsScreen = ({ navigation }) => {
   // use hook to get language and set as key so react creates a new component instance when language gets changed
   const language = useSelector(state => state.settings.language);
-
+  const productsScreenKey = language + "ProductsScreen";
   //const theme = useTheme();
 
   // There are two different approaches to themes at play here, and both live in globalStyles
@@ -20,7 +20,7 @@ const ProductsScreen = ({ navigation }) => {
   return (
     <ThemeProvider theme={ gStyle.mytheme }>
 
-      <ViewCovid19Products navigation={navigation} key={language}/>
+      <ViewCovid19Products navigation={navigation} key={productsScreenKey}/>
       
     </ThemeProvider>
   )

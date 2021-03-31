@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
-//import { Card, ListItem } from 'react-native-elements';
+import { View, StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview';
 import cheerio from 'react-native-cheerio';
+import { connect } from 'react-redux';
+import { lang, covidVaccinePortal, portailVaccinCovid } from '../constants/constants';
 
-export default class ViewProductResource extends Component {
+class ViewProductResource extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      productResourceHtml: 'none'
+      productResourceHtml: 'loading...'
     };
   }
 
@@ -22,7 +23,7 @@ export default class ViewProductResource extends Component {
 
   componentDidMount() {
     var productResource = this.props.route.params.productResource,
-      url = (global.language === 'en-ca') ? "https://covid-vaccine.canada.ca" : "https://vaccin-covid.canada.ca",
+      url = (this.props.settings.language === lang.english) ? covidVaccinePortal : portailVaccinCovid,
       cssUrl = url + '/info/GCWeb/css/theme.min.css';
     url += productResource.link;
 
@@ -31,12 +32,13 @@ export default class ViewProductResource extends Component {
         $$ = cheerio.load('<html><head><link href="' + cssUrl + '" rel="stylesheet"/></head></html>'),
         prodResourceBlock = $('main');
 
-      $$('body').append($('main').html());
+      // note: removing container class so margins can be set (not all pages have this class, so this also makes for consistent margins)
+      $$('body').append($('main').removeClass('container').html());
       
-//      console.log('page html for [' + url + ']: ' + prodResourceBlock.html())
+      //console.log('page html for [' + url + ']: ' + prodResourceBlock.html())
 
-      if (productResource.resourceName === 'Consumer Information') {
-        console.log('this is consumer information, so let us slice')
+      if (productResource.resourceName === 'Consumer Information' || productResource.resourceName.toLowerCase().includes('consommateurs')) {
+        //console.log('this is consumer information, so let us slice')
         var $$$ = cheerio.load('<html><head><link href="' + cssUrl + '" rel="stylesheet"/></head></html>');
         $$$('body').append('<table class="table table-hover table-bordered table-responsive">' 
           + $('table').html() + '</table><hr/>');
@@ -49,21 +51,45 @@ export default class ViewProductResource extends Component {
         productResourceHtml: $$.html(),
         highlyExperimentalLettuceSlice: $$$.html()
       });
+
     }).catch(error => {
+      // TODO
+      // for testing...
+      this.setState({productResourceHtml: "<p>Unable to load: <a href='" + url + "'>" + url + "</a></p>"});
       console.log('VPR: could not load url ' + url);
     });
   }
 
   render() {
     return (
-      <View style={{ flex: 1}}>
-        <WebView style={{ flex: 1 }}
+      <View style={ styles.container }>
+        <WebView style={ styles.resourceContainer }
           originWhitelist={['*']}
           source={{ html: this.state.productResourceHtml }}
-          style={{ marginTop: 0 }}
         />
       </View>
     );
   }
-
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+  resourceContainer: {
+    flex: 1,
+    marginLeft: 2,
+    marginRight: 2,
+    marginTop: 0,
+    marginBottom: 0
+  }
+});
+
+const mapStateToProps = (state) => {
+  //console.log('state.settings: ', state.settings);
+  return {
+    settings: state.settings
+  };
+};
+
+export default connect(mapStateToProps)(ViewProductResource);
