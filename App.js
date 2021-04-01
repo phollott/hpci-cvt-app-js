@@ -8,6 +8,7 @@ import initialState from './src/redux/store/initialState';
 import rootReducer from './src/redux/store/store';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
+import he from 'he';
 
 // tab navigator
 import MainStack from './src/navigation/Stack';
@@ -40,7 +41,10 @@ class App extends React.Component {
 
   loadInitialStateAsync = async () => {
     try {
-      initialState.products = await fetchProductsAsync();
+      //initialState.products = await fetchProductsAsync();
+      const products = await fetchProductsAsync();
+      initialState.products = JSON.parse(he.decode(JSON.stringify(products)));
+      // [mrj] TODO: using he to decode html entities, but may want to review other ways to parse
     }
     catch (error) {
       // [mrj] TODO: consider offline and get bookmarks from storage?
