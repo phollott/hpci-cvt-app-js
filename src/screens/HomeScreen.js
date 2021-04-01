@@ -43,7 +43,7 @@ import Touch from '../components/Touch';
               setLang(lang.french);
               navigation.navigate('ProductsStack', {screen: 'Products'});
             }}
-            text="Produits en Francais"
+            text="Produits en Français"
           />
 
         </ScrollView>
