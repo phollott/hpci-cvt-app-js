@@ -22,15 +22,24 @@ class ViewProductResource extends Component {
    */
 
   componentDidMount() {
+    const cvtPortal = (this.props.settings.language === lang.english) ? covidVaccinePortal : portailVaccinCovid;
     var productResource = this.props.route.params.productResource,
-      url = (this.props.settings.language === lang.english) ? covidVaccinePortal : portailVaccinCovid,
+      url = cvtPortal,
       cssUrl = url + '/info/GCWeb/css/theme.min.css';
     url += productResource.link;
 
     fetch(url).then((resp)=>{ return resp.text() }).then((text)=>{ 
       var $ = cheerio.load(text),
-        $$ = cheerio.load('<html><head><link href="' + cssUrl + '" rel="stylesheet"/></head></html>'),
-        prodResourceBlock = $('main');
+        $$ = cheerio.load('<html><head><link href="' + cssUrl + '" rel="stylesheet"/></head></html>');
+
+      $('a').each((i, elem) => {
+        var href = $(elem).attr("href");
+        if (typeof href !== "undefined" && !href.startsWith("http") && !href.startsWith("#")) {
+          $(elem).attr("href", cvtPortal + "/info/" + href).html();
+        }
+      });
+
+      var prodResourceBlock = $('main');
 
       // note: removing container class so margins can be set (not all pages have this class, so this also makes for consistent margins)
       $$('body').append($('main').removeClass('container').html());
