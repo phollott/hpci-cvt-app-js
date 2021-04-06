@@ -3,12 +3,14 @@ import { StatusBar } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { Appearance } from 'react-native-appearance';
 import { device, func } from './src/constants';
+import { lang } from './src/constants/constants';
 import { fetchProductsAsync } from './src/api/covid19Products';
 import initialState from './src/redux/store/initialState';
 import rootReducer from './src/redux/store/store';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import he from 'he';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // tab navigator
 import MainStack from './src/navigation/Stack';
@@ -23,6 +25,7 @@ class App extends React.Component {
     };
 
     this.updateTheme = this.updateTheme.bind(this);
+    this.getLanguagePreference = this.getLanguagePreference.bind(this);
     this.loadInitialStateAsync = this.loadInitialStateAsync.bind(this);
     this.loadResourcesAsync = this.loadResourcesAsync.bind(this);
   }
@@ -39,17 +42,30 @@ class App extends React.Component {
     }
   }
 
+  getLanguagePreference = async () => {
+    try {
+      // if(value !== null), user has selected language
+      return value = await AsyncStorage.getItem('language');
+    } catch (error) {
+      console.log('Unable to get language preference.', error);
+      return null;
+    }
+  }
+
   loadInitialStateAsync = async () => {
     try {
-      //initialState.products = await fetchProductsAsync();
       const products = await fetchProductsAsync();
-      initialState.products = JSON.parse(he.decode(JSON.stringify(products)));
-      // [mrj] TODO: using he to decode html entities, but may want to review other ways to parse
+      initialState.products = JSON.parse(he.decode(JSON.stringify(products)));    // [mrj] TODO: using he to decode html entities, but may want to review other ways to parse
+
+      const langPref = await this.getLanguagePreference();                        // [mrj] TODO: internationalization (en/fr), e.g. https://www.reactnative.guide/13-internationalization/13.1-framework-intro.html
+      if (langPref !== null && (langPref === lang.english || langPref === lang.french)) {
+        initialState.settings.language = langPref;
+      }
     }
     catch (error) {
       // [mrj] TODO: consider offline and get bookmarks from storage?
       initialState.settings.isOnline = false;
-      console.log('Could not fetch Covid-19 Products from api', error);
+      console.log('Could not fetch Covid-19 Products from api.', error);
     }
   }
   
