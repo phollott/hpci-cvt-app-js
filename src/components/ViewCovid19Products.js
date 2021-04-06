@@ -120,12 +120,19 @@ const mapStateToProps = (state) => {
       brandName: product.brand_name, 
       ingredient: product.ingredient, 
       companyName: product.company_name, 
-      type: 'Vaccine',                          // TODO: **** determine if Vaccine or Treatment, type is not in api!
+      type: 'Treatment',                        // TODO: **** determine if Vaccine or Treatment, type is not in api!
       status: product.status, 
       approvalDate: product.date_of_approval,
     };
-    productMaster.link = typeof product.body_text !== "undefined" && product.body_text !== null 
-      ? product.body_text.match(/href="([^"]*)/)[1] : null;    // TODO: **** hack! is body_text okay to use? this is the What you should know link
+    if (typeof product.body_text !== "undefined" && product.body_text !== null) {
+      productMaster.link = product.body_text.match(/href="([^"]*)/)[1];                             // TODO: **** hack! is body_text okay to use? this is the What you should know link
+      if (product.body_text.includes('/vaccines/') || product.body_text.includes('/vaccins/')) {    // TODO: **** using body_text is a hack, type is not in api!
+        productMaster.type = 'Vaccine';
+      } 
+      else if (product.body_text.includes('/treatments/') || product.body_text.includes('/traitements/')) {
+        productMaster.type = 'Treatment';
+      }
+    }
     productMaster.searchKey = [productMaster.brandName, productMaster.companyName, productMaster.ingredient].join('-').toLowerCase();
     authorizedProducts.push(productMaster);
   });
@@ -147,7 +154,7 @@ const mapStateToProps = (state) => {
       brandName: product.brand_name, 
       ingredient: product.ingredient, 
       companyName: product.company_name, 
-      type: 'Vaccine',                          // TODO: **** determine if Vaccine or Treatment, type is not in api!
+      type: 'Treatment',                          // TODO: **** determine if Vaccine or Treatment, type is not in api!
       status: product.status, 
       approvalDate: product.date_of_approval
     };
