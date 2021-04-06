@@ -8,6 +8,7 @@ import { setLanguage } from '../redux/actions/settingsActions'
 import { gStyle } from '../constants';
 import { lang } from '../constants/constants';
 import { useColorScheme } from 'react-native-appearance';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // components
 import Touch from '../components/Touch';
@@ -19,6 +20,14 @@ import Touch from '../components/Touch';
 
   const dispatch = useDispatch();
   const setLang = lang => dispatch(setLanguage(lang));
+
+  const storeLanguagePreference = async (value) => {
+    try {
+      await AsyncStorage.setItem('language', value)
+    } catch (error) {
+      console.log('Unable to store language preference.', error);
+    }
+  }
 
 // [pmh] this method of uapplying dark mode should work with RNE, but is untested
 
@@ -34,6 +43,7 @@ import Touch from '../components/Touch';
           <Touch
             onPress={() => {
               setLang(lang.english);
+              storeLanguagePreference(lang.english);
               navigation.navigate('ProductsStack', {screen: 'Products'});
             }}
             text="Jump to English Products Screen"
@@ -41,6 +51,7 @@ import Touch from '../components/Touch';
           <Touch
             onPress={() => {
               setLang(lang.french);
+              storeLanguagePreference(lang.french);
               navigation.navigate('ProductsStack', {screen: 'Products'});
             }}
             text="Produits en Français"
