@@ -3,6 +3,7 @@ import { ScrollView, View, Text } from 'react-native';
 import { ButtonGroup, Card, SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { gStyle } from '../constants';
+import { lang } from '../constants/constants';
 
 // components
 import ViewProductMasters from './ViewProductMasters';
@@ -107,30 +108,28 @@ const mapStateToProps = (state) => {
   
   // Authorized Products:
   const authProducts = state.products.filter(item => {
-    return item.language == state.settings.language 
-      && item.resources.length > 0
-      && -1 < item.resources.findIndex(resource => { return resource.resource_link.includes('href=') } )
+    return item.language == state.settings.language
+      && (item.status.toLowerCase().includes('authorized') || item.status.toLowerCase().includes('autorisé'))
   });
   
   authProducts.forEach((product, i) => {
     var productMaster = {
       key: i, 
       nid: product.nid,
-      link: null,                               // TODO: **** determine how to get link, product-details link is not in api! -> link still used to determine if there are product details
+      link: true,
       brandName: product.brand_name, 
       ingredient: product.ingredient, 
       companyName: product.company_name, 
-      type: 'Treatment',                        // TODO: **** determine if Vaccine or Treatment, type is not in api!
+      type: 'Vaccine',                                                                                           // TODO: **** determine if Vaccine or Treatment, type is not in api!
       status: product.status, 
       approvalDate: product.date_of_approval,
     };
     if (typeof product.body_text !== "undefined" && product.body_text !== null) {
-      productMaster.link = product.body_text.match(/href="([^"]*)/)[1];                             // TODO: **** hack! is body_text okay to use? this is the What you should know link
-      if (product.body_text.includes('/vaccines/') || product.body_text.includes('/vaccins/')) {    // TODO: **** using body_text is a hack, type is not in api!
-        productMaster.type = 'Vaccine';
-      } 
+      if (product.body_text.includes('/vaccines/') || product.body_text.includes('/vaccins/')) {                 // TODO: **** using body_text is a hack, type is not in api!
+        productMaster.type = lang.english === state.settings.language ? 'Vaccine' : 'Vaccin';
+      }
       else if (product.body_text.includes('/treatments/') || product.body_text.includes('/traitements/')) {
-        productMaster.type = 'Treatment';
+        productMaster.type = lang.english === state.settings.language ? 'Treatment' : 'Traitement';
       }
     }
     productMaster.searchKey = [productMaster.brandName, productMaster.companyName, productMaster.ingredient].join('-').toLowerCase();
@@ -140,9 +139,9 @@ const mapStateToProps = (state) => {
   // Application Products:
   const applProducts = state.products.filter(item => {
     return item.language == state.settings.language
-      && item.body_text === null
-      && item.resources.length === 0
-      && !item.title.toLowerCase().startsWith('demo vaccine')
+      && !item.status.toLowerCase().includes('authorized') && !item.status.toLowerCase().includes('autorisé')
+      && !item.title.toLowerCase().startsWith('demo vaccine')                                                    //  TODO: **** hack! sigh
+      && !item.title.toLowerCase().startsWith('new product')
       && !item.title.toLowerCase().startsWith('test')
   });
   
@@ -154,10 +153,13 @@ const mapStateToProps = (state) => {
       brandName: product.brand_name, 
       ingredient: product.ingredient, 
       companyName: product.company_name, 
-      type: 'Treatment',                          // TODO: **** determine if Vaccine or Treatment, type is not in api!
+      type: lang.english === state.settings.language ? 'Treatment' : 'Traitement',                               // TODO: **** determine if Vaccine or Treatment, type is not in api!
       status: product.status, 
       approvalDate: product.date_of_approval
     };
+    if (product.brand_name.toLowerCase().includes('vaccin')) {
+      productMaster.type = lang.english === state.settings.language ? 'Vaccine' : 'Vaccin';                      // TODO: **** determine if Vaccine or Treatment, type is not in api!
+    }
     productMaster.searchKey = [productMaster.brandName, productMaster.companyName].join('-').toLowerCase();
     applicationProducts.push(productMaster);
   });
