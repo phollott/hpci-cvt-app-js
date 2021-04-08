@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Linking } from 'react-native';
 import { WebView } from 'react-native-webview';
 import cheerio from 'react-native-cheerio';
 import { connect } from 'react-redux';
 import { lang, covidVaccinePortal, portailVaccinCovid } from '../constants/constants';
 
 class ViewProductResource extends Component {
+  webview = null;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -38,7 +40,7 @@ class ViewProductResource extends Component {
           $(elem).attr("href", cvtPortal + "/info/" + href).html();
         }
       });
-
+      
       var prodResourceBlock = $('main');
 
       // note: removing container class so margins can be set (not all pages have this class, so this also makes for consistent margins)
@@ -75,10 +77,37 @@ class ViewProductResource extends Component {
         <WebView style={ styles.resourceContainer }
           originWhitelist={['*']}
           source={{ html: this.state.productResourceHtml }}
+          ref={ (ref) => (this.webview = ref) }
+          onNavigationStateChange={ this.handleWebViewNavigationStateChange }
         />
       </View>
     );
   }
+
+  handleWebViewNavigationStateChange = (newNavState) => {
+    // newNavState looks something like this: { url?: string; title?: string; loading?: boolean; canGoBack?: boolean; canGoForward?: boolean; }
+    const { url } = newNavState;
+    if (!url || url == 'about:blank') return;
+    if (url.startsWith('http')) {
+      //console.log( "handleWebViewNavigationStateChange url: ", url );
+      
+      // open url within ext browser, not within webview
+      const redirectTo = 'window.location = "about:blank"';
+      this.webview.injectJavaScript(redirectTo);
+
+      // delay nav to ProductDetails, and open url in browser
+      setTimeout(() => {
+        this.props.navigation.navigate('ProductDetails');
+      }, 500);
+
+      Linking.canOpenURL(url).then( supported => {
+        if (supported) {
+          Linking.openURL(url);
+        }
+      });
+    }
+  };
+
 }
 
 const styles = StyleSheet.create({
