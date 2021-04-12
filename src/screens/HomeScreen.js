@@ -1,31 +1,39 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView, Text, View } from 'react-native';
-import { ThemeProvider } from 'react-native-elements';
+import { Card, ThemeProvider } from 'react-native-elements';
 import { useTheme } from '@react-navigation/native';
-import { useDispatch } from 'react-redux'
-import { setLanguage } from '../redux/actions/settingsActions'
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { setLanguage } from '../redux/actions/settingsActions';
 import { gStyle } from '../constants';
 import { lang } from '../constants/constants';
 import { useColorScheme } from 'react-native-appearance';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import i18n, {t} from 'i18n-js';
 
 // components
 import Touch from '../components/Touch';
 
 //const HomeScreen = ({ navigation, screenProps }) => {
-  const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({ navigation }) => {
   const theme = useTheme();
   const colorScheme = useColorScheme();
+
+  // use hook to get language and set as key so react creates a new component instance when language gets changed
+  const language = useSelector(state => state.settings.language);
+  const homeScreenKey = language + "HomeScreen";
 
   const dispatch = useDispatch();
   const setLang = lang => dispatch(setLanguage(lang));
 
-  const storeLanguagePreference = async (value) => {
+  const setLanguagePreference = async (value) => {
     try {
-      await AsyncStorage.setItem('language', value)
+      i18n.locale = value;                            // t
+      setLang(value);                                 // redux
+      await AsyncStorage.setItem('language', value);  // persist
     } catch (error) {
-      console.log('Unable to store language preference.', error);
+      console.log('Unable to set language preference.', error);
     }
   }
 
@@ -34,29 +42,28 @@ import Touch from '../components/Touch';
   return (
     <ThemeProvider theme={ gStyle.mytheme } useDark={ colorScheme === 'dark' }>
 
-      <View style={gStyle.container[theme]}>
+      <View style={gStyle.container[theme]} key={homeScreenKey}>
         <ScrollView contentContainerStyle={gStyle.contentContainer}>
-          <Text style={gStyle.text[theme]}>Home content area</Text>
-
+          <View style={{ width: '100%', justifyContent: 'center' }}>
+            <Card>
+              <Text style={gStyle.text[theme], {fontSize: 16}}>{ t('home.introText') }</Text>
+            </Card>
+          </View>
           <View style={gStyle.spacer64} />
-
           <Touch
             onPress={() => {
-              setLang(lang.english);
-              storeLanguagePreference(lang.english);
+              setLanguagePreference(lang.english);
               navigation.navigate('ProductsStack', {screen: 'Products'});
             }}
-            text="Jump to English Products Screen"
+            text={ t('home.products.touchText', {locale: 'en'}) }
           />
           <Touch
             onPress={() => {
-              setLang(lang.french);
-              storeLanguagePreference(lang.french);
+              setLanguagePreference(lang.french);
               navigation.navigate('ProductsStack', {screen: 'Products'});
             }}
-            text="Produits en Français"
+            text={ t('home.products.touchText', {locale: 'fr'}) }
           />
-
         </ScrollView>
       </View>
       

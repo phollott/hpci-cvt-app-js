@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, ScrollView, Linking } from 'react-native';
 import { Card, ListItem, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
+import { t } from 'i18n-js';
 import { lang, covidVaccinePortal, portailVaccinCovid } from '../constants/constants';
 
 
@@ -23,12 +24,12 @@ class ViewProductDetails extends Component {
     return (
       <View style={{ flex: 1 }} >
         <Card style={{ flex: 1 }}>
-          <Card.Title>Product Description</Card.Title>
-          <Text><Text style={{ fontWeight: 'bold' }}>Brand Name: </Text>{this.props.productMaster.brandName}</Text>
-          <Text><Text style={{ fontWeight: 'bold' }}>Company Name: </Text>{this.props.productMaster.companyName}</Text>
-          <Text><Text style={{ fontWeight: 'bold' }}>Ingredient: </Text>{this.props.productMaster.ingredient}</Text>
-          <Text><Text style={{ fontWeight: 'bold' }}>Status: </Text>{this.props.productMaster.status}</Text>
-          <Text><Text style={{ fontWeight: 'bold' }}>Date of approval: </Text>{this.props.productMaster.approvalDate}</Text>
+          <Card.Title>{this.props.productMaster.title}</Card.Title>
+          <Text><Text style={{ fontWeight: 'bold' }}>{ t('productDetails.card.brandNameLabel') }</Text>{this.props.productMaster.brandName}</Text>
+          <Text><Text style={{ fontWeight: 'bold' }}>{ t('productDetails.card.companyNameLabel') }</Text>{this.props.productMaster.companyName}</Text>
+          <Text><Text style={{ fontWeight: 'bold' }}>{ t('productDetails.card.ingredientLabel') }</Text>{this.props.productMaster.ingredient}</Text>
+          <Text><Text style={{ fontWeight: 'bold' }}>{ t('productDetails.card.statusLabel') }</Text>{this.props.productMaster.status}</Text>
+          <Text><Text style={{ fontWeight: 'bold' }}>{ t('productDetails.card.approvalDateLabel') }</Text>{this.props.productMaster.approvalDate}</Text>
         </Card>
         <ScrollView>
         {
@@ -46,7 +47,7 @@ class ViewProductDetails extends Component {
                   { productResource.resourceName }
                 </ListItem.Title>
                 <ListItem.Subtitle>{ productResource.description }</ListItem.Subtitle>
-                <Text style={{ fontWeight: 'bold' }}>Publication Status: { productResource.publicationStatus }</Text>
+                <Text style={{ fontWeight: 'bold' }}>{ t('productDetails.listItem.publicationStatusLabel') }{ productResource.publicationStatus }</Text>
               </ListItem.Content>
               { (productResource.link) && <ListItem.Chevron color='blue'/> }
             </ListItem>
@@ -58,7 +59,6 @@ class ViewProductDetails extends Component {
   }
 
   linkingProductResource(productResource) {
-    console.log('linkingProductResource')
     if (productResource.link) {
       if (productResource.resourceType === 'external') {
         console.log('external product resource (show in browser): ' + productResource.link);
@@ -80,6 +80,7 @@ class ViewProductDetails extends Component {
 const mapStateToProps = (state, ownProps) => {
 
   var productMaster, productResourceList = [];
+  var language = state.settings.language.startsWith('fr') ? 'Français' : 'English';
 
   // selected product nid
   const nid = ownProps.route.params.productMaster.nid;  //console.log('mapStateToProps ownProps', ownProps);
@@ -90,7 +91,7 @@ const mapStateToProps = (state, ownProps) => {
   // Product Master:
   const product = state.products.filter(item => {
     return item.nid == nid
-      && item.language == state.settings.language
+      && item.language == language
   })[0]; // expect 1 product
 
   // include derived props from component's ownProps 
@@ -98,6 +99,7 @@ const mapStateToProps = (state, ownProps) => {
     key: ownProps.route.params.productMaster.key, 
     nid: product.nid,
     link: ownProps.route.params.productMaster.link,
+    title: product.title,
     brandName: product.brand_name, 
     ingredient: product.ingredient, 
     companyName: product.company_name, 
@@ -109,6 +111,9 @@ const mapStateToProps = (state, ownProps) => {
     searchKey: ownProps.route.params.productMaster.searchKey
   };
   productMaster.approvalDate = productMaster.approvalDate.substring(0, productMaster.approvalDate.indexOf(" - "));
+  if (productMaster.approvalDate.indexOf(",") > -1) {
+    productMaster.approvalDate = productMaster.approvalDate.substring(productMaster.approvalDate.indexOf(",") + 1).trim();
+  }
 
   product.resources.forEach((resource, i) => {
     if (resource.audience.includes("Consumers")) {  // TODO: review... if ever french, may need to check for consommateurs
@@ -124,13 +129,18 @@ const mapStateToProps = (state, ownProps) => {
         description: isDescription ? resource.description.replace(/(<([^>]+)>)/ig, "").trim() : "",  // strip html, trim
         publicationStatus: 
           resource.various_dates.toLowerCase() === "yes" 
-            ? "Various" 
+            ? t('productDetails.listItem.publicationStatus.various') 
             : (typeof resource.date !== "undefined" && resource.date !== null)
               ? resource.date.match(/<time [^>]+>([^<]+)<\/time>/)[1]  // extract time text between > and <
-              : "Pending"
+              : t('productDetails.listItem.publicationStatus.pending') 
       };
-      if (!productResource.publicationStatus.includes("Various") && !productResource.publicationStatus.includes("Pending")) {
+      if (!productResource.publicationStatus.includes( t('productDetails.listItem.publicationStatus.various') ) 
+        && !productResource.publicationStatus.includes( t('productDetails.listItem.publicationStatus.pending') )
+      ){
         productResource.publicationStatus = productResource.publicationStatus.substring(0, productResource.publicationStatus.indexOf(" - "));
+        if (productResource.publicationStatus.indexOf(",") > -1) {
+          productResource.publicationStatus = productResource.publicationStatus.substring(productResource.publicationStatus.indexOf(",") + 1).trim();
+        }
       }
 
       // determine what type of resource this is:

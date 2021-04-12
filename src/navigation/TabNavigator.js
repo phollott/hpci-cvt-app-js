@@ -2,6 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'react-native-elements';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { t } from 'i18n-js';
 import { gStyle } from '../constants';
 // navigation stacks
 import HomeStack from './HomeStack';
@@ -75,7 +76,7 @@ const TabNavigator = () => {
         name="HomeStack"
         component={HomeStack}
         options={{
-          tabBarLabel: "Home",
+          tabBarLabel: t('tab.screen.homeLabel'),
           tabBarIcon: HomeTabBarIcon
         }}
       />
@@ -83,7 +84,7 @@ const TabNavigator = () => {
         name="ProductsStack"
         component={ProductsStack}
         options={{
-          tabBarLabel: "CVT Products",
+          tabBarLabel: t('tab.screen.productsLabel'),
           tabBarIcon: ProductsTabBarIcon
         }}
       />
@@ -91,7 +92,7 @@ const TabNavigator = () => {
         name="BookmarksStack"
         component={BookmarksStack}
         options={{
-          tabBarLabel: "Bookmarks",
+          tabBarLabel: t('tab.screen.bookmarksLabel'),
           tabBarIcon: BookmarksTabBarIcon
         }}
       />

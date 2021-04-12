@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { t } from 'i18n-js';
 import { gStyle } from '../constants';
 
 import NavigationBack from '../components/NavigationBack';
@@ -23,7 +24,7 @@ const ProductsStack = () => {
         component={ProductsScreen}
         options={{
           headerTitleStyle: gStyle.headerTitleStyle,
-          title: 'COVID-19 Health Products'
+          title: t('stack.screen.productsTitle')
         }}
       />
       <Stack.Screen 
@@ -31,7 +32,7 @@ const ProductsStack = () => {
         component={ProductDetailsScreen}
         options={({ navigation, route }) => ({
           headerTitleStyle: gStyle.headerTitleStyle,
-          title: 'Product Details',
+          title: t('stack.screen.productDetailsTitle'),
           headerLeft: () => <NavigationBack navigation={navigation} route={route} />,
           headerRight: () => <BookmarkProduct />
         })}
@@ -41,7 +42,7 @@ const ProductsStack = () => {
         component={ProductResourceScreen}
         options={({ navigation, route }) => ({
           headerTitleStyle: gStyle.headerTitleStyle,
-          title: 'Product Resource',
+          title: t('stack.screen.productResourceTitle'),
           headerLeft: () => <NavigationBack navigation={navigation} route={route} />,
           headerRight: () => <View style={{ flex: 1 }} />
         })}
