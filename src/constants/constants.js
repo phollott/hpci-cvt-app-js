@@ -1,7 +1,7 @@
 export const lang = {
-    english : 'English',
-    french : 'Français',
-    default : 'English'
+    english : 'en',
+    french : 'fr',
+    default : 'en'
 };
 
 export const covidVaccinePortal = "https://covid-vaccine.canada.ca";

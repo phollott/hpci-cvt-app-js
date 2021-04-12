@@ -11,6 +11,8 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import he from 'he';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Localization from 'expo-localization';
+import * as I18n from './src/config/i18n';
 
 // tab navigator
 import MainStack from './src/navigation/Stack';
@@ -23,6 +25,8 @@ class App extends React.Component {
       isLoading: true,
       theme: 'light'
     };
+
+    I18n.setLocale(Localization.locale);
 
     this.updateTheme = this.updateTheme.bind(this);
     this.getLanguagePreference = this.getLanguagePreference.bind(this);
@@ -44,10 +48,8 @@ class App extends React.Component {
 
   getLanguagePreference = async () => {
     try {
-      // if(value !== null), user has selected language
       return value = await AsyncStorage.getItem('language');
     } catch (error) {
-      console.log('Unable to get language preference.', error);
       return null;
     }
   }
@@ -57,9 +59,14 @@ class App extends React.Component {
       const products = await fetchProductsAsync();
       initialState.products = JSON.parse(he.decode(JSON.stringify(products)));    // [mrj] TODO: using he to decode html entities, but may want to review other ways to parse
 
-      const langPref = await this.getLanguagePreference();                        // [mrj] TODO: internationalization (en/fr), e.g. https://www.reactnative.guide/13-internationalization/13.1-framework-intro.html
+      const langPref = await this.getLanguagePreference();
       if (langPref !== null && (langPref === lang.english || langPref === lang.french)) {
-        initialState.settings.language = langPref;
+        // user has selected language
+        initialState.settings.language = langPref;  // redux (createStore)
+        I18n.setLocale(langPref);
+      } else {
+        // user has never selected language (or error), default to device locale (or en if not en or fr)
+        initialState.settings.language = I18n.getCurrentLocale();
       }
     }
     catch (error) {

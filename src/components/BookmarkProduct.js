@@ -14,7 +14,7 @@ const BookmarkProduct = () => (
     accessibilityComponentType="button"
     accessibilityTraits="button"
     activeOpacity={gStyle.activeOpacity}
-    onPress={() => alert('I do nothing, but one day I will change color and bookmark things!')}
+    onPress={() => alert('I do nothing, but one day I will change color and bookmark things!\n\nJe ne fais rien, mais un jour je changerai de couleur et ajouterai des choses à mes favoris!')}
     style={{ paddingHorizontal: 16, paddingVertical: 8 }}
   >
     <Icon

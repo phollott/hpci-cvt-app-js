@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { ScrollView, View, Text } from 'react-native';
 import { ButtonGroup, Card, SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux';
+import { t } from 'i18n-js';
 import { gStyle } from '../constants';
 import { lang } from '../constants/constants';
 
@@ -58,7 +59,7 @@ class ViewCovid19Products extends Component {
   }
 
   render() {
-    const buttons = ['Authorized Products', 'Other Applications'];
+    const buttons = [ t('products.buttons.authorized'), t('products.buttons.application') ];
     const { selectedIndex } = this.state;
     const { searchText } = this.state;
     return (
@@ -67,13 +68,13 @@ class ViewCovid19Products extends Component {
         contentContainerStyle={gStyle.contentContainer}
       >
         <SearchBar
-          placeholder="Search for Vaccines and Treatments..."
+          placeholder={ t('products.searchBar.placeholder') }
           onChangeText={ this.updateSearch }
           value={ searchText }
         />
         <ScrollView>
           <Card>
-            <Text>Select from authorized COVID-19 Vaccines and Treatments, or all unauthorized applications.</Text>
+            <Text>{ t('products.card.instructionText') }</Text>
           </Card>
           <ButtonGroup
             onPress = { this.updateIndex }
@@ -103,12 +104,13 @@ class ViewCovid19Products extends Component {
 const mapStateToProps = (state) => {
 
   var authorizedProducts = [], applicationProducts = [];
+  var language = state.settings.language.startsWith('fr') ? 'Français' : 'English';
 
   // TODO: **** get bus req for both filters!
-  
+
   // Authorized Products:
   const authProducts = state.products.filter(item => {
-    return item.language == state.settings.language
+    return item.language == language
       && (item.status.toLowerCase().includes('authorized') || item.status.toLowerCase().includes('autorisé'))
   });
   
@@ -138,7 +140,7 @@ const mapStateToProps = (state) => {
   
   // Application Products:
   const applProducts = state.products.filter(item => {
-    return item.language == state.settings.language
+    return item.language == language
       && !item.status.toLowerCase().includes('authorized') && !item.status.toLowerCase().includes('autorisé')
       && !item.title.toLowerCase().startsWith('demo vaccine')                                                    //  TODO: **** hack! sigh
       && !item.title.toLowerCase().startsWith('new product')
