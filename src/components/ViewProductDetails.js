@@ -1,23 +1,58 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, Linking } from 'react-native';
+import { Text, View, ScrollView, Linking, StyleSheet } from 'react-native';
 import { Card, ListItem, Icon } from 'react-native-elements';
+import { Table, Row, Rows } from 'react-native-table-component';
 import { connect } from 'react-redux';
 import { t } from 'i18n-js';
 import { lang, covidVaccinePortal, portailVaccinCovid } from '../constants/constants';
-
+import cheerio from 'react-native-cheerio';
 
 class ViewProductDetails extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      tableHead: ['DIN', 'Strength', 'Dosage Form', 'Route of Administration'],
+      tableData: [ ['...', '...', '...', '...']]
+    }
   }
 
   /*************************************************************************************
    * 1. Extract from redux store Product Master and Product Resource details
    * 
    * [pmh] we have the Product Master from the previous screen, but reload it anyway 
+   * [pmh] table styles should live with the other global styles
    */
 
+   styles = StyleSheet.create({
+    container: { flex: 1, padding: 4, backgroundColor: '#fff' },
+    head: { height: 24, backgroundColor: '#f1f8ff' },
+    text: { margin: 4, fontSize: 8 }
+  });
+
+
   componentDidMount() {
+    this.props.productResourceList.forEach((resource, i) => {
+      if (resource.resourceName === 'Consumer Information' || resource.resourceName.toLowerCase().includes('consommateurs')) {
+        const cvtPortal = (this.props.settings.language === lang.english) ? covidVaccinePortal : portailVaccinCovid;
+        var pmiUrl = cvtPortal + resource.link;            
+        fetch(pmiUrl).then((resp)=>{ return resp.text() }).then((text)=>{ 
+          var $ = cheerio.load(text), tableData = [];
+          $('tbody').first().find('tr').map((i, row) => {
+            var tableCells = [];
+            $(row).find('td').map((j, div) => {
+              switch (j) {
+                case 0: case 3: case 4: case 5: 
+                  tableCells.push($(div).text().trim()); break;
+              }
+            });
+            tableData.push(tableCells);
+          });
+          this.setState({
+            tableData: tableData
+          });
+        });
+      }
+    });      
   }
 
   render() {
@@ -31,6 +66,10 @@ class ViewProductDetails extends Component {
           <Text><Text style={{ fontWeight: 'bold' }}>{ t('productDetails.card.approvalDateLabel') }</Text>{this.props.productMaster.approvalDate}</Text>
         </Card>
         <ScrollView>
+          <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+            <Row data={this.state.tableHead} style={this.styles.head} textStyle={this.styles.text}/>
+            <Rows data={this.state.tableData} textStyle={this.styles.text} />
+          </Table>
         {
           this.props.productResourceList.map( productResource =>
             <ListItem key={productResource.key} bottomDivider
