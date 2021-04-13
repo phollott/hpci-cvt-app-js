@@ -34,6 +34,7 @@ class ViewProductResource extends Component {
       var $ = cheerio.load(text),
         $$ = cheerio.load('<html><head><link href="' + cssUrl + '" rel="stylesheet"/></head></html>');
 
+      // make links external
       $('a').each((i, elem) => {
         var href = $(elem).attr("href");
         if (typeof href !== "undefined" && !href.startsWith("http") && !href.startsWith("#")) {
@@ -41,6 +42,21 @@ class ViewProductResource extends Component {
         }
       });
       
+      // make the Summary Reports header an external link
+      $('h3:contains("Summary Reports"), h3:contains("Rapports sommaires")').each((i, elem) => {
+        $(elem).replaceWith('<h3><a href="' + url + '">' + $(elem).text() + '</a></h3>');
+        //console.log('h3: ', $(elem).text());
+        $(elem).html();
+      });
+
+      // remove the divs immediately before and after Summary Reports header (expecting: <main><div/><h3/><div/>)
+      $('h3:contains("Summary Reports"), h3:contains("Rapports sommaires")').siblings('div').each((i, elem) => {
+        if (i === 0 || i === 1) {        
+          //console.log('div sibling: ', i + ' --> ' + $(elem).toString());
+          $(elem).remove().html();
+        }
+      });
+
       var prodResourceBlock = $('main');
 
       // note: removing container class so margins can be set (not all pages have this class, so this also makes for consistent margins)
