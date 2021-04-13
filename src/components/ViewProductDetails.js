@@ -23,14 +23,6 @@ class ViewProductDetails extends Component {
    * [pmh] table styles should live with the other global styles
    */
 
-   styles = StyleSheet.create({
-    container: { flex: 1, padding: 4, backgroundColor: '#fff' },
-    head: { height: 24, backgroundColor: '#2289DC' },
-    headText: { margin: 4, fontSize: 8, fontWeight: 'bold', color: 'white' },
-    text: { margin: 4, fontSize: 8 }
-  });
-
-
   componentDidMount() {
     this.props.productResourceList.forEach((resource, i) => {
       if (resource.resourceName === 'Consumer Information' || resource.resourceName.toLowerCase().includes('consommateurs')) {
@@ -57,6 +49,14 @@ class ViewProductDetails extends Component {
   }
 
   render() {
+    const styles = StyleSheet.create({
+      container: { flex: 1, padding: 4, backgroundColor: '#fff' },
+      head: { height: 24, backgroundColor: '#2289DC' },
+      headText: { margin: 4, fontSize: 8, fontWeight: 'bold', color: 'white' },
+      text: { margin: 4, fontSize: 8 }
+    });
+    console.log('hello')
+    console.log(this.props.theme)
     return (
       <View style={{ flex: 1 }} >
         <Card style={{ flex: 1 }}>
@@ -67,9 +67,9 @@ class ViewProductDetails extends Component {
           <Text><Text style={{ fontWeight: 'bold' }}>{ t('productDetails.card.approvalDateLabel') }</Text>{this.props.productMaster.approvalDate}</Text>
         </Card>
         <ScrollView>
-          <Table borderStyle={{borderWidth: 1, borderColor: 'blue'}}>
-            <Row data={this.state.tableHead} style={this.styles.head} textStyle={this.styles.headText}/>
-            <Rows data={this.state.tableData} textStyle={this.styles.text} />
+          <Table borderStyle={{borderWidth: 1, borderColor: '#97B7D2'}}>
+            <Row data={this.state.tableHead} style={styles.head} textStyle={styles.headText}/>
+            <Rows data={this.state.tableData} textStyle={styles.text} />
           </Table>
         {
           this.props.productResourceList.map( productResource =>
