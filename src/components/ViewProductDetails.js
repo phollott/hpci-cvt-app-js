@@ -25,7 +25,8 @@ class ViewProductDetails extends Component {
 
    styles = StyleSheet.create({
     container: { flex: 1, padding: 4, backgroundColor: '#fff' },
-    head: { height: 24, backgroundColor: '#f1f8ff' },
+    head: { height: 24, backgroundColor: '#2289DC' },
+    headText: { margin: 4, fontSize: 8, fontWeight: 'bold', color: 'white' },
     text: { margin: 4, fontSize: 8 }
   });
 
@@ -66,8 +67,8 @@ class ViewProductDetails extends Component {
           <Text><Text style={{ fontWeight: 'bold' }}>{ t('productDetails.card.approvalDateLabel') }</Text>{this.props.productMaster.approvalDate}</Text>
         </Card>
         <ScrollView>
-          <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
-            <Row data={this.state.tableHead} style={this.styles.head} textStyle={this.styles.text}/>
+          <Table borderStyle={{borderWidth: 1, borderColor: 'blue'}}>
+            <Row data={this.state.tableHead} style={this.styles.head} textStyle={this.styles.headText}/>
             <Rows data={this.state.tableData} textStyle={this.styles.text} />
           </Table>
         {

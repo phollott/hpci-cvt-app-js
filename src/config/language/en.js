@@ -55,6 +55,12 @@ export default {
       statusLabel: "Status: ",
       approvalDateLabel: "Date of Approval: "
     },
+    tableHead: {
+      din: 'DIN',
+      strength: 'Strength', 
+      dosageForm: 'Dosage Form',
+      administrationRoute: 'Route of Administration'
+    },
     listItem: {
       publicationStatusLabel: "Publication Status: ",
       publicationStatus: {
