@@ -26,7 +26,7 @@ export default {
         marginHorizontal: 0,
         marginTop: 0
       }      
-    }
+    }  
   },
 
   // containers
