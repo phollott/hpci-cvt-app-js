@@ -5,7 +5,7 @@ export default {
   },
   tab: {
     screen: {
-      homeLabel: "Maison",
+      homeLabel: "Accueil",
       productsLabel: "Produits VTC",
       bookmarksLabel: "Favoris"
     }

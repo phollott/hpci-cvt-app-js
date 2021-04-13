@@ -2,6 +2,8 @@ import i18n from 'i18n-js';
 import en from './language/en';
 import fr from './language/fr';
 
+// config for i18n
+
 // fallback to another language with the key present when the value is missing (e.g. en-CA -> en)
 i18n.fallbacks = true;
 
@@ -34,12 +36,14 @@ en.js:
     },
     ...
   }
+  ----
+  import { t } from 'i18n-js';
 
   //home.welcome and home.name with interpolated value - en locale
   console.log( t('home.welcome') + ' ' + t('home.name', {language: 'English'}) );
   > Hello CVT App (English)
 
-  //show french home.settings.language.touchText - en locale
+  //show french home.settings.language.touchText with en locale
   console.log( t('home.settings.language.touchText', {locale: 'fr'}) );
   > Français (Canada)
 
