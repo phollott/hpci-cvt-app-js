@@ -55,6 +55,12 @@ export default {
       statusLabel: "État: ",
       approvalDateLabel: "Date d'approbation: "
     },
+    tableHead: {
+      din: 'DIN',
+      strength: 'Concentration', 
+      dosageForm: 'Form posologique',
+      administrationRoute: 'Voie d\'administration'
+    },
     listItem: {
       publicationStatusLabel: "Statut de publication: ",
       publicationStatus: {
