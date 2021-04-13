@@ -11,7 +11,7 @@ class ViewProductDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tableHead: ['DIN', 'Strength', 'Dosage Form', 'Route of Administration'],
+      tableHead: [t('productDetails.tableHead.din'), t('productDetails.tableHead.strength'), t('productDetails.tableHead.dosageForm'), t('productDetails.tableHead.administrationRoute')],
       tableData: [ ['...', '...', '...', '...']]
     }
   }
