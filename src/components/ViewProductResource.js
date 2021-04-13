@@ -3,6 +3,7 @@ import { View, StyleSheet, Linking } from 'react-native';
 import { WebView } from 'react-native-webview';
 import cheerio from 'react-native-cheerio';
 import { connect } from 'react-redux';
+import { t } from 'i18n-js';
 import { lang, covidVaccinePortal, portailVaccinCovid } from '../constants/constants';
 
 class ViewProductResource extends Component {
@@ -11,7 +12,7 @@ class ViewProductResource extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      productResourceHtml: 'loading...'
+      productResourceHtml: t('common.message.loading')
     };
   }
 
