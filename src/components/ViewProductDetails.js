@@ -24,8 +24,7 @@ class ViewProductDetails extends Component {
     return (
       <View style={{ flex: 1 }} >
         <Card style={{ flex: 1 }}>
-          <Card.Title>{this.props.productMaster.title}</Card.Title>
-          <Text><Text style={{ fontWeight: 'bold' }}>{ t('productDetails.card.brandNameLabel') }</Text>{this.props.productMaster.brandName}</Text>
+          <Card.Title style={{ marginBottom: 8 }}>{this.props.productMaster.brandName}</Card.Title>
           <Text><Text style={{ fontWeight: 'bold' }}>{ t('productDetails.card.companyNameLabel') }</Text>{this.props.productMaster.companyName}</Text>
           <Text><Text style={{ fontWeight: 'bold' }}>{ t('productDetails.card.ingredientLabel') }</Text>{this.props.productMaster.ingredient}</Text>
           <Text><Text style={{ fontWeight: 'bold' }}>{ t('productDetails.card.statusLabel') }</Text>{this.props.productMaster.status}</Text>
