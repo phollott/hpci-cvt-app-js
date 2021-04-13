@@ -3,6 +3,11 @@ export default {
     locale: "en",
     name: "English"
   },
+  common: {
+    message: {
+      loading: "Loading, please wait..."
+    }
+  },
   tab: {
     screen: {
       homeLabel: "Home",

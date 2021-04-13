@@ -3,6 +3,11 @@ export default {
     locale: "fr",
     name: "Français"
   },
+  common: {
+    message: {
+      loading: "Chargement en course, veuillez patienter..."
+    }
+  },
   tab: {
     screen: {
       homeLabel: "Accueil",
