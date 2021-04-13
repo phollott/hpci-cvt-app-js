@@ -45,8 +45,7 @@ export default {
   },
   productDetails: {
     card: {
-      brandNameLabel: "Brand name: ",
-      companyNameLabel: "Company name: ",
+      companyNameLabel: "Company Name: ",
       ingredientLabel: "Ingredient: ",
       statusLabel: "Status: ",
       approvalDateLabel: "Date of Approval: "
