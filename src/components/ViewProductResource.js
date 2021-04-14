@@ -35,6 +35,11 @@ class ViewProductResource extends Component {
       var $ = cheerio.load(text),
         $$ = cheerio.load('<html><head><link href="' + cssUrl + '" rel="stylesheet"/></head></html>');
 
+      // make background color and color of table header light blue and white
+      $('main > table > thead > tr > th').each((i, elem) => {
+          $(elem).attr("style", "background-color: #2289DC; color: white;").html();
+      });
+
       // make links external
       $('a').each((i, elem) => {
         var href = $(elem).attr("href");
