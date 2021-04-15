@@ -17,7 +17,8 @@ export default {
   },
   stack: {
     screen: {
-      homeTitle: "COVID-19 Vaccines and Treatments",
+      homeTitle: "Home",
+      menuTitle: "Menu",
       productsTitle: "COVID-19 Health Products",
       productDetailsTitle: "Product Description",
       productResourceTitle: "Product Resource",
@@ -25,8 +26,11 @@ export default {
     }
   },
   home: {
-    introText: "Information on vaccines and treatments authorized for COVID-19, as well as those currently under review."
-             + " Health Canada is committed to providing up-to-date information related to vaccines and treatments for COVID-19.",
+    introCard: {
+      title: "COVID-19 Vaccines and Treatments",
+      text: "Information on vaccines and treatments authorized for COVID-19, as well as those currently under review."
+          + " Health Canada is committed to providing up-to-date information related to vaccines and treatments for COVID-19."
+    },
     products: {
       touchText: "English Products"
     },

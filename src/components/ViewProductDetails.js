@@ -40,7 +40,9 @@ class ViewProductDetails extends Component {
             });
             tableData.push(tableCells);
           });
+          // set tableHead in case language was changed
           this.setState({
+            tableHead: [t('productDetails.tableHead.din'), t('productDetails.tableHead.strength'), t('productDetails.tableHead.dosageForm'), t('productDetails.tableHead.administrationRoute')],      
             tableData: tableData
           });
         });

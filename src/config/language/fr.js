@@ -17,7 +17,8 @@ export default {
   },
   stack: {
     screen: {
-      homeTitle: "Vaccins et traitements pour la COVID-19",
+      homeTitle: "Accueil",
+      menuTitle: "Menu",
       productsTitle: "Produits de santé COVID-19",
       productDetailsTitle: "Description du produit",
       productResourceTitle: "Ressource",
@@ -25,8 +26,11 @@ export default {
     }
   },
   home: {
-    introText: "Renseignements sur les vaccins et traitements autorisés pour la COVID-19, ainsi que ceux dont l’examen est actuellement en cours."
-             + " Santé Canada s’engage à fournir l’information actualisée sur les vaccins et traitements pour la COVID-19.",
+    introCard: {
+      title: "Vaccins et traitements pour la COVID-19",
+      text: "Renseignements sur les vaccins et traitements autorisés pour la COVID-19, ainsi que ceux dont l’examen est actuellement en cours."
+          + " Santé Canada s’engage à fournir l’information actualisée sur les vaccins et traitements pour la COVID-19."
+    },
     products: {
       touchText: "Produits en Français"
     },

@@ -79,7 +79,7 @@ Run Project Locally: `expo start` or `yarn dev`
 
 ## assets
 
-- [black rabbit icon](https://thenounproject.com/search/?q=rabbit&i=1211060) was bought (royalty-free license)
+- [COVID Alert Logo](https://en.wikipedia.org/wiki/File:COVID_Alert_Logo.png)
 
 ## device learnings
 
@@ -91,6 +91,7 @@ Run Project Locally: `expo start` or `yarn dev`
 
 HC CVT App - prototype
 
+- added user preference for en-CA/fr-CA
 - removed react-native-svg
 - upgraded to [React Navigation v5](https://reactnavigation.org/docs/upgrading-from-4.x/)
 - added search and filtering

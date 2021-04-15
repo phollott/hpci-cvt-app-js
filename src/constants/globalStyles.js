@@ -110,6 +110,10 @@ export default {
     height: 16,
     width: '100%'
   },
+  spacer32: {
+    height: 32,
+    width: '100%'
+  },
   spacer64: {
     height: 64,
     width: '100%'
