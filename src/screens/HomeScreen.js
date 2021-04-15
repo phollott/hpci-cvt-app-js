@@ -1,19 +1,12 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { ScrollView, Text, View } from 'react-native';
-import { Card, ThemeProvider } from 'react-native-elements';
+import { Image, ScrollView, Text, View } from 'react-native';
+import { Button, Card, Icon, ThemeProvider } from 'react-native-elements';
 import { useTheme } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { setLanguage } from '../redux/actions/settingsActions';
-import { gStyle } from '../constants';
-import { lang } from '../constants/constants';
+import { gStyle, images } from '../constants';
 import { useColorScheme } from 'react-native-appearance';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import i18n, {t} from 'i18n-js';
-
-// components
-import Touch from '../components/Touch';
+import {t} from 'i18n-js';
 
 //const HomeScreen = ({ navigation, screenProps }) => {
 const HomeScreen = ({ navigation }) => {
@@ -22,48 +15,51 @@ const HomeScreen = ({ navigation }) => {
 
   // use hook to get language and set as key so react creates a new component instance when language gets changed
   const language = useSelector(state => state.settings.language);
-  const homeScreenKey = language + "HomeScreen";
+  const homeViewKey = language + "HomeView";
 
-  const dispatch = useDispatch();
-  const setLang = lang => dispatch(setLanguage(lang));
-
-  const setLanguagePreference = async (value) => {
-    try {
-      i18n.locale = value;                            // t
-      setLang(value);                                 // redux
-      await AsyncStorage.setItem('language', value);  // persist
-    } catch (error) {
-      console.log('Unable to set language preference.', error);
-    }
-  }
+  const titleLogo = 'covidAlertLogo';
 
 // [pmh] this method of uapplying dark mode should work with RNE, but is untested
 
   return (
     <ThemeProvider theme={ gStyle.mytheme } useDark={ colorScheme === 'dark' }>
 
-      <View style={gStyle.container[theme]} key={homeScreenKey}>
+      <View style={gStyle.container[theme]} key={homeViewKey}>
         <ScrollView contentContainerStyle={gStyle.contentContainer}>
           <View style={{ width: '100%', justifyContent: 'center' }}>
             <Card>
-              <Text style={gStyle.text[theme], {fontSize: 16}}>{ t('home.introText') }</Text>
+              <Card.Title style={gStyle.text[theme], {fontSize: 18}}>{ t('home.introCard.title') }</Card.Title>
+              <View style={{ flex: 1 }}>
+                <Image
+                  style={{ alignSelf: 'center', height: 120, width: 120 }}
+                  source={images[titleLogo]}
+                />
+                <View style={gStyle.spacer16} />
+              </View>
+              <Text style={gStyle.text[theme], {fontSize: 16}}>{ t('home.introCard.text') }</Text>
             </Card>
           </View>
-          <View style={gStyle.spacer64} />
-          <Touch
+          <View style={gStyle.spacer32} />
+          <Button
             onPress={() => {
-              setLanguagePreference(lang.english);
               navigation.navigate('ProductsStack', {screen: 'Products'});
             }}
-            text={ t('home.products.touchText', {locale: 'en'}) }
+            icon={        
+              <Icon
+                name='shield-virus'
+                type='font-awesome-5'
+                size={40}
+                color={ gStyle.tintColor.active.light }
+                style={{ paddingRight: 8 }}
+              />
+            }
+            title={ t('tab.screen.productsLabel') }
+            containerStyle={ gStyle.container.light }
+            titleStyle={{ color: "black" }}
+            raised={true}
+            type="outline"
           />
-          <Touch
-            onPress={() => {
-              setLanguagePreference(lang.french);
-              navigation.navigate('ProductsStack', {screen: 'Products'});
-            }}
-            text={ t('home.products.touchText', {locale: 'fr'}) }
-          />
+          <View style={gStyle.spacer32} />
         </ScrollView>
       </View>
       

@@ -11,14 +11,14 @@ const BookmarksScreen = () => {
 
   // use hook to get language and set as key so react creates a new component instance when language gets changed
   const language = useSelector(state => state.settings.language);
-  const bookmarksScreenKey = language + "BookmarksScreen";
+  const bookmarksViewKey = language + "BookmarksView";
 
   // [pmh] assuming we want to add an RNE theme to each screen
 
   return (
     <ThemeProvider theme={ gStyle.mytheme }>
 
-      <View style={gStyle.container[theme]} key={bookmarksScreenKey}>
+      <View style={gStyle.container[theme]} key={bookmarksViewKey}>
         <ScrollView
           contentContainerStyle={gStyle.contentContainer}
         >

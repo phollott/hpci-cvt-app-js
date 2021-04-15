@@ -2,19 +2,23 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 //import { useTheme } from '@react-navigation/native';
 import { ThemeProvider } from 'react-native-elements';
+import { useSelector } from 'react-redux';
 import { gStyle } from '../constants';
 
 // components
 import ViewProductDetails from '../components/ViewProductDetails';
 
 const ProductDetailsScreen = ({ navigation, route }) => {
+  // use hook to get language and set as key so react creates a new component instance when language gets changed
+  const language = useSelector(state => state.settings.language);
+  const viewProductDetailsKey = language + "ViewProductDetails";
 // [pmh] I think it might be possible to just use RNE ThemeProvider and skip useTheme() 
 // const theme = useTheme();
 
   return (
     <ThemeProvider theme={ gStyle.mytheme }>
 
-      <ViewProductDetails navigation={navigation} route={route} />
+      <ViewProductDetails navigation={navigation} route={route} key={viewProductDetailsKey} />
 
     </ThemeProvider>
   );
