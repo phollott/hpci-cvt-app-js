@@ -14,7 +14,7 @@ const HomeMenu = ({ navigation, route }) => (
     onPress={() => {
       navigation.navigate('HomeStack', {screen: 'Menu'})
     }}
-    style={{ paddingLeft: 16, paddingRight: 8, paddingVertical: 8 }}
+    style={{ paddingHorizontal: 16, paddingVertical: 8 }}
   >
     <Icon
       name='bars'
