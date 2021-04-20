@@ -88,7 +88,7 @@ class ViewProductResource extends Component {
     }).catch(error => {
       // TODO
       // for testing...
-      this.setState({productResourceHtml: "<p>Unable to load: <a href='" + url + "'>" + url + "</a></p>"});
+      this.setState({productResourceHtml: "<p>" + t('common.message.error.loading') + ": <a href='" + url + "'>" + url + "</a></p>"});
       console.log('VPR: could not load url ' + url);
     });
   }
