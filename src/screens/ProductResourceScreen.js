@@ -10,7 +10,7 @@ import ViewProductResource from '../components/ViewProductResource';
 const ProductResourceScreen = ({ navigation, route }) => {
   // use hook to get language and set as key so react creates a new component instance when language gets changed
   const language = useSelector(state => state.settings.language);
-  const viewProductResourceKey = language + "viewProductResource";
+  const viewProductResourceKey = language + "ViewProductResource";
   //const theme = useTheme();
 
   // [pmh] assuming we want to add an RNE theme to each screen

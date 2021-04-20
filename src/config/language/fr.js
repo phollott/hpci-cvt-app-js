@@ -5,7 +5,10 @@ export default {
   },
   common: {
     message: {
-      loading: "Chargement en course, veuillez patienter..."
+      loading: "Chargement en course, veuillez patienter...",
+      error: {
+        loading: "Incapable de charger"
+      }
     }
   },
   tab: {
@@ -18,7 +21,7 @@ export default {
   stack: {
     screen: {
       homeTitle: "Accueil",
-      menuTitle: "Menu",
+      languageTitle: "Modifier la langue",
       productsTitle: "Produits de santé COVID-19",
       productDetailsTitle: "Description du produit",
       productResourceTitle: "Ressource",
@@ -30,6 +33,13 @@ export default {
       title: "Vaccins et traitements pour la COVID-19",
       text: "Renseignements sur les vaccins et traitements autorisés pour la COVID-19, ainsi que ceux dont l’examen est actuellement en cours."
           + " Santé Canada s’engage à fournir l’information actualisée sur les vaccins et traitements pour la COVID-19."
+    },
+    menu: {
+      homeLabel: "Accueil",
+      settingsLabel: "Paramètres",
+      languageLabel: "Langue...",
+      privacyLabel: "Confidentialité",
+      aboutLabel: "À propos"
     },
     products: {
       touchText: "Produits en Français"

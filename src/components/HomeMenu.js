@@ -1,10 +1,11 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
+import { DrawerActions } from '@react-navigation/native';
 import { Icon } from 'react-native-elements';
 import { gStyle } from '../constants';
 
-const HomeMenu = ({ navigation, route }) => (
+const HomeMenu = ({ navigation }) => (
   <TouchableOpacity
     accessible
     accessibilityLabel="menu"
@@ -12,7 +13,7 @@ const HomeMenu = ({ navigation, route }) => (
     accessibilityTraits="button"
     activeOpacity={gStyle.activeOpacity}
     onPress={() => {
-      navigation.navigate('HomeStack', {screen: 'Menu'})
+      navigation.dispatch(DrawerActions.toggleDrawer());
     }}
     style={{ paddingHorizontal: 16, paddingVertical: 8 }}
   >
@@ -29,8 +30,7 @@ const HomeMenu = ({ navigation, route }) => (
 
 HomeMenu.propTypes = {
   // required
-  navigation: PropTypes.object.isRequired,
-  route: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired
 };
 
 export default HomeMenu;

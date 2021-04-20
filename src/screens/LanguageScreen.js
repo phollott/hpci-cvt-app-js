@@ -15,14 +15,13 @@ import i18n, {t} from 'i18n-js';
 // components
 import Touch from '../components/Touch';
 
-const MenuScreen = ({ navigation }) => {
-//const MenuScreen = () => {  
+const LanguageScreen = ({ navigation }) => { 
   const theme = useTheme();
   const colorScheme = useColorScheme();
 
   // use hook to get language and set as key so react creates a new component instance when language gets changed
   const language = useSelector(state => state.settings.language);
-  const menuViewKey = language + "MenuView";
+  const languageViewKey = language + "LanguageView";
 
   const dispatch = useDispatch();
   const setLang = lang => dispatch(setLanguage(lang));
@@ -37,33 +36,32 @@ const MenuScreen = ({ navigation }) => {
     }
   }
 
-// [pmh] this method of uapplying dark mode should work with RNE, but is untested
+// [mrj] hack: double navigation is used to ensure the product resource webview and this screen are re-rendered after language is changed
 
-// [mrj] this menu screen and settings is not done.  For now, it just shows the en/fr buttons and works like before... 
-//       though I also added the navigation goBack to keep this menu screen from appearing when Home is selected (wip)
+// [pmh] this method of uapplying dark mode should work with RNE, but is untested
 
   return (
     <ThemeProvider theme={ gStyle.mytheme } useDark={ colorScheme === 'dark' }>
 
-      <View style={gStyle.container[theme]} key={menuViewKey}>
+      <View style={gStyle.container[theme]} key={languageViewKey}>
         <ScrollView contentContainerStyle={gStyle.contentContainer}>
-          <View style={{ width: '75%', justifyContent: 'center' }}>
+          <View style={{ width: '90%', justifyContent: 'center' }}>
             <View style={gStyle.spacer32} />
             <Touch
               onPress={() => {
                 setLanguagePreference(lang.english);
-                navigation.goBack();
                 navigation.navigate('ProductsStack', {screen: 'Products'});
+                navigation.navigate('HomeStack', {screen: 'Language'});
               }}
-              text={ t('home.products.touchText', {locale: 'en'}) }
+              text={ t('home.settings.language.touchText', {locale: 'en'}) }
             />
             <Touch
               onPress={() => {
                 setLanguagePreference(lang.french);
-                navigation.goBack();
                 navigation.navigate('ProductsStack', {screen: 'Products'});
+                navigation.navigate('HomeStack', {screen: 'Language'});
               }}
-              text={ t('home.products.touchText', {locale: 'fr'}) }
+              text={ t('home.settings.language.touchText', {locale: 'fr'}) }
             />
             </View>
           <View style={gStyle.spacer32} />
@@ -74,10 +72,9 @@ const MenuScreen = ({ navigation }) => {
   );
 };
 
-MenuScreen.propTypes = {
+LanguageScreen.propTypes = {
   // required
-  navigation: PropTypes.object.isRequired //,
-  //screenProps: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired
 };
 
-export default MenuScreen;
+export default LanguageScreen;

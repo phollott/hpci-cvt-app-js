@@ -5,7 +5,10 @@ export default {
   },
   common: {
     message: {
-      loading: "Loading, please wait..."
+      loading: "Loading, please wait...",
+      error: {
+        loading: "Unable to load"
+      }
     }
   },
   tab: {
@@ -18,7 +21,7 @@ export default {
   stack: {
     screen: {
       homeTitle: "Home",
-      menuTitle: "Menu",
+      languageTitle: "Choose Language",
       productsTitle: "COVID-19 Health Products",
       productDetailsTitle: "Product Description",
       productResourceTitle: "Product Resource",
@@ -30,6 +33,13 @@ export default {
       title: "COVID-19 Vaccines and Treatments",
       text: "Information on vaccines and treatments authorized for COVID-19, as well as those currently under review."
           + " Health Canada is committed to providing up-to-date information related to vaccines and treatments for COVID-19."
+    },
+    menu: {
+      homeLabel: "Home",
+      settingsLabel: "Settings",
+      languageLabel: "Language...",
+      privacyLabel: "Privacy",
+      aboutLabel: "About"
     },
     products: {
       touchText: "English Products"
