@@ -59,9 +59,6 @@ const HorizontalLine = () => (
 const MenuDrawer = (props) => {
   return (
     <DrawerContentScrollView {...props}>
-      <DrawerItemList
-        {...props} 
-      />
       <DrawerItem
         label = { t('home.menu.settingsLabel') }
         icon = {SettingsIcon}
@@ -93,6 +90,9 @@ const MenuDrawer = (props) => {
           alert( t('home.introCard.title') );
           closeDrawer(props.navigation);
         }}
+      />
+      <DrawerItemList
+        {...props} 
       />
     </DrawerContentScrollView>
   );

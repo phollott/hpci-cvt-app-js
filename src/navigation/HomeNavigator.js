@@ -10,10 +10,10 @@ import MenuDrawer from './MenuDrawer';
 // screens
 import HomeScreen from '../screens/HomeScreen';
 
-// HomeIcon
-const HomeIcon = () => (
+// CloseIcon
+const CloseIcon = () => (
   <Icon
-    name='home'
+    name='times'
     type='font-awesome-5'
     size={20}
     color={ gStyle.tintColor.active.light }
@@ -42,8 +42,8 @@ const HomeNavigator = () => {
         name = "Home" 
         component = {HomeScreen}
         options = {{
-          title: t('home.menu.homeLabel'),
-          drawerIcon: HomeIcon
+          title: t('home.menu.closeLabel'),
+          drawerIcon: CloseIcon
         }}
       />
     </Drawer.Navigator>
