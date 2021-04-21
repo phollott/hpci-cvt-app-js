@@ -35,11 +35,11 @@ export default {
           + " Health Canada is committed to providing up-to-date information related to vaccines and treatments for COVID-19."
     },
     menu: {
-      homeLabel: "Home",
       settingsLabel: "Settings",
       languageLabel: "Language...",
       privacyLabel: "Privacy",
-      aboutLabel: "About"
+      aboutLabel: "About",
+      closeLabel: "Close"
     },
     products: {
       touchText: "English Products"

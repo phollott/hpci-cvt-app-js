@@ -35,11 +35,11 @@ export default {
           + " Santé Canada s’engage à fournir l’information actualisée sur les vaccins et traitements pour la COVID-19."
     },
     menu: {
-      homeLabel: "Accueil",
       settingsLabel: "Paramètres",
       languageLabel: "Langue...",
       privacyLabel: "Confidentialité",
-      aboutLabel: "À propos"
+      aboutLabel: "À propos",
+      closeLabel: "Fermer"
     },
     products: {
       touchText: "Produits en Français"
