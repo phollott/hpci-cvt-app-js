@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, ScrollView, Linking, StyleSheet } from 'react-native';
 import { Card, ListItem, Icon } from 'react-native-elements';
-import { Table, Row, Rows } from 'react-native-table-component';
+import { Table, TableWrapper, Row, Rows } from 'react-native-table-component';
 import { connect } from 'react-redux';
 import { t } from 'i18n-js';
 import { lang, covidVaccinePortal, portailVaccinCovid } from '../constants/constants';
@@ -12,6 +12,7 @@ class ViewProductDetails extends Component {
     super(props);
     this.state = {
       tableHead: [t('productDetails.tableHead.din'), t('productDetails.tableHead.strength'), t('productDetails.tableHead.dosageForm'), t('productDetails.tableHead.administrationRoute')],
+      tableLeft: ['...'],
       tableData: [ ['...', '...', '...', '...'] ]
     }
   }
@@ -40,7 +41,6 @@ class ViewProductDetails extends Component {
             });
             tableData.push(tableCells);
           });
-          // set tableHead in case language was changed
           this.setState({
             tableHead: [t('productDetails.tableHead.din'), t('productDetails.tableHead.strength'), t('productDetails.tableHead.dosageForm'), t('productDetails.tableHead.administrationRoute')],      
             tableData: tableData
@@ -54,8 +54,9 @@ class ViewProductDetails extends Component {
     const styles = StyleSheet.create({
       container: { flex: 1, padding: 4, backgroundColor: '#fff' },
       head: { height: 20, backgroundColor: '#2289DC' },
+      wrapper: { flexDirection: 'row'},
       headText: { margin: 4, fontSize: 8, fontWeight: 'bold', color: 'white' },
-      text: { margin: 4, fontSize: 8 }
+      text: { margin: 4, fontSize: 9 }      
     });
     return (
       <View style={{ flex: 1 }} >
@@ -68,8 +69,10 @@ class ViewProductDetails extends Component {
         </Card>
         <ScrollView style={{ backgroundColor: 'white' }}>
           <Table borderStyle={{borderWidth: 1, borderColor: '#97B7D2'}}>
-            <Row data={this.state.tableHead} style={styles.head} textStyle={styles.headText}/>
-            <Rows data={this.state.tableData} textStyle={styles.text} />
+            <Row data={this.state.tableHead} flexArr={[1, 2, 2, 2]} style={styles.head} textStyle={styles.headText}/>
+            <TableWrapper style={styles.wrapper}>
+              <Rows data={this.state.tableData} flexArr={[1, 2, 2, 2]} textStyle={styles.text}/>
+            </TableWrapper>
           </Table>
         {
           this.props.productResourceList.map( productResource =>
