@@ -81,7 +81,7 @@ class ViewProductDetails extends Component {
                 this.props.navigation.navigate('ProductResource', { productResource })}
             >
               <Icon type='font-awesome-5' size={25} 
-                color={ (productResource.resourceType !== 'pending') ? 'blue': 'orange' }
+                color={ (productResource.resourceType !== 'pending') ? '#26374A': '#FF9F40' }
                 name={ (productResource.resourceType === 'internal') ? 'file-alt' : 'globe' } 
               />
               <ListItem.Content>
