@@ -17,7 +17,7 @@ export default class ViewProductMasters extends Component {
               this.props.navigation.navigate('ProductDetails', { productMaster })}
           >
             <Icon type='font-awesome-5' reverse size={20} 
-              color={ (productMaster.link !== null) ? 'blue': 'orange' }
+              color={ (productMaster.link !== null) ? '#26374A': '#FF9F40' }
               name={ (productMaster.type === 'Vaccine' || productMaster.type === 'Vaccin') ? 'syringe' : 'pills' } 
             />
             <ListItem.Content>
