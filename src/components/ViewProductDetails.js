@@ -56,7 +56,7 @@ class ViewProductDetails extends Component {
       head: { height: 20, backgroundColor: '#2289DC' },
       wrapper: { flexDirection: 'row'},
       headText: { margin: 4, fontSize: 8, fontWeight: 'bold', color: 'white' },
-      text: { margin: 4, fontSize: 8 }      
+      text: { margin: 4, fontSize: 9 }      
     });
     return (
       <View style={{ flex: 1 }} >
