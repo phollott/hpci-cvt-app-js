@@ -41,9 +41,6 @@ export default {
       aboutLabel: "À propos",
       closeLabel: "Fermer"
     },
-    products: {
-      touchText: "Produits en Français"
-    },
     settings: {
       language: {
         touchText: "Français (Canada)"
