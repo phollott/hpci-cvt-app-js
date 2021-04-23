@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, ScrollView, Linking, StyleSheet } from 'react-native';
-import { Card, ListItem, Icon } from 'react-native-elements';
+import { Card, ListItem, Icon, Badge } from 'react-native-elements';
 import { Table, TableWrapper, Row, Rows } from 'react-native-table-component';
 import { connect } from 'react-redux';
 import { t } from 'i18n-js';
@@ -88,6 +88,8 @@ class ViewProductDetails extends Component {
                 <ListItem.Title style={{ fontWeight: 'bold' }}>
                   { productResource.resourceName }
                 </ListItem.Title>
+                { (false) && <Badge value={'New'} status='success' containerStyle={{ marginLeft: -42, marginTop: -20 }} /> }
+                { (false) && <Badge value={'Update'} status='warning' containerStyle={{ marginLeft: -50, marginTop: -20 }} /> }
                 <ListItem.Subtitle>{ productResource.description }</ListItem.Subtitle>
                 <Text style={{ fontWeight: 'bold' }}>{ t('productDetails.listItem.publicationStatusLabel') }{ productResource.publicationStatus }</Text>
               </ListItem.Content>
