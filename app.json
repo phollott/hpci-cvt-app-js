@@ -1,5 +1,6 @@
 {
   "expo": {
+    "owner": "hpci-cvt",
     "name": "HPCI CVT App",
     "description": "HPCI COVID-19 Vaccine and Treatments App",
     "slug": "hpci-cvt-app-js",
