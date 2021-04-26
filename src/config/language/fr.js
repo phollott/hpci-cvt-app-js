@@ -69,7 +69,7 @@ export default {
     tableHead: {
       din: 'DIN',
       strength: 'Concentration', 
-      dosageForm: 'Form posologique',
+      dosageForm: 'Forme posologique',
       administrationRoute: 'Voie d\'administration'
     },
     listItem: {
