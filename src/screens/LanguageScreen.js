@@ -11,8 +11,6 @@ import { lang } from '../constants/constants';
 import { useColorScheme } from 'react-native-appearance';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n, {t} from 'i18n-js';
-
-// components
 import Touch from '../components/Touch';
 
 const LanguageScreen = ({ navigation }) => { 
@@ -54,6 +52,7 @@ const LanguageScreen = ({ navigation }) => {
                 navigation.navigate('HomeStack', {screen: 'Language'});
               }}
               text={ t('home.settings.language.touchText', {locale: 'en'}) }
+              rIconName={ (language === lang.english) ? 'check' : null }
             />
             <Touch
               onPress={() => {
@@ -62,6 +61,7 @@ const LanguageScreen = ({ navigation }) => {
                 navigation.navigate('HomeStack', {screen: 'Language'});
               }}
               text={ t('home.settings.language.touchText', {locale: 'fr'}) }
+              rIconName={ (language === lang.french) ? 'check' : null }
             />
             </View>
           <View style={gStyle.spacer32} />

@@ -1,12 +1,13 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { Image, ScrollView, Text, View } from 'react-native';
-import { Button, Card, Icon, ThemeProvider } from 'react-native-elements';
+import { Button, Card, ThemeProvider } from 'react-native-elements';
 import { useTheme } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import { gStyle, images } from '../constants';
 import { useColorScheme } from 'react-native-appearance';
 import {t} from 'i18n-js';
+import { gStyle, images } from '../constants';
+import Icon from '../components/Icon';
 
 //const HomeScreen = ({ navigation, screenProps }) => {
 const HomeScreen = ({ navigation }) => {
@@ -44,14 +45,8 @@ const HomeScreen = ({ navigation }) => {
             onPress={() => {
               navigation.navigate('ProductsStack', {screen: 'Products'});
             }}
-            icon={        
-              <Icon
-                name='shield-virus'
-                type='font-awesome-5'
-                size={40}
-                color={ gStyle.tintColor.active.light }
-                style={{ paddingRight: 8 }}
-              />
+            icon={
+              <Icon name='shield-virus' size={40} style={{paddingRight: 8}} />
             }
             title={ t('home.button.products.title') }
             containerStyle={ gStyle.container.light }

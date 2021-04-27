@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { Icon } from 'react-native-elements';
 import { t } from 'i18n-js';
 import { colors, gStyle } from '../constants';
+import Icon from '../components/Icon';
 
 // menu drawer (items)
 import MenuDrawer from './MenuDrawer';
@@ -10,15 +10,8 @@ import MenuDrawer from './MenuDrawer';
 // screens
 import HomeScreen from '../screens/HomeScreen';
 
-// CloseIcon
 const CloseIcon = () => (
-  <Icon
-    name='times'
-    type='font-awesome-5'
-    size={20}
-    color={ gStyle.tintColor.active.light }
-    style={{ minWidth: 26 }}
-  />
+  <Icon name='times' color={colors.grey} style={{ minWidth: 26 }} />
 );
 
 const Drawer = createDrawerNavigator();
@@ -35,7 +28,7 @@ const HomeNavigator = () => {
       }}
       drawerContentOptions = {{
         activeBackgroundColor: colors.white,
-        activeTintColor: gStyle.tintColor.active.light
+        activeTintColor: gStyle.tintColor.inactive.light
       }}
     >
       <Drawer.Screen 

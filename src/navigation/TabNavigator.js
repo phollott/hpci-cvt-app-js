@@ -1,6 +1,5 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from 'react-native-elements';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { t } from 'i18n-js';
 import { gStyle } from '../constants';
@@ -8,17 +7,11 @@ import { gStyle } from '../constants';
 import HomeStack from './HomeStack';
 import ProductsStack from './ProductsStack';
 import BookmarksStack from './BookmarksStack';
+import Icon from '../components/Icon';
 
 // HomeTabBarIcon
 const HomeTabBarIcon = ({ focused }) => (
-  <Icon
-    name='home'
-    type='font-awesome-5'
-    size={20}
-    color={
-      focused ? gStyle.tintColor.active.light : gStyle.tintColor.inactive.light
-    }
-  />
+  <Icon name='home' focused={focused} />
 );
 
 HomeTabBarIcon.propTypes = {
@@ -28,14 +21,7 @@ HomeTabBarIcon.propTypes = {
 
 // ProductsTabBarIcon
 const ProductsTabBarIcon = ({ focused }) => (
-  <Icon
-    name='shield-virus'
-    type='font-awesome-5'
-    size={20}
-    color={
-      focused ? gStyle.tintColor.active.light : gStyle.tintColor.inactive.light
-    }
-  />
+  <Icon name='shield-virus' focused={focused} />
 );
 
 ProductsTabBarIcon.propTypes = {
@@ -45,14 +31,7 @@ ProductsTabBarIcon.propTypes = {
 
 // BookmarksTabBarIcon
 const BookmarksTabBarIcon = ({ focused }) => (
-  <Icon
-    name='bookmark'
-    type='font-awesome-5'
-    size={20}
-    color={
-      focused ? gStyle.tintColor.active.light : gStyle.tintColor.inactive.light
-    }
-  />
+  <Icon name='bookmark' focused={focused} />
 );
 
 BookmarksTabBarIcon.propTypes = {

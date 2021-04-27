@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Text, View, ScrollView, Linking, StyleSheet } from 'react-native';
-import { Card, ListItem, Icon, Badge } from 'react-native-elements';
+import { Card, ListItem, Badge } from 'react-native-elements';
 import { Table, TableWrapper, Row, Rows } from 'react-native-table-component';
 import { connect } from 'react-redux';
 import { t } from 'i18n-js';
 import { lang, covidVaccinePortal, portailVaccinCovid } from '../constants/constants';
 import { selectProductByID } from '../redux/selectors/productSelector';
 import cheerio from 'react-native-cheerio';
+import Icon from './Icon';
 
 class ViewProductDetails extends Component {
   constructor(props) {
@@ -81,9 +82,9 @@ class ViewProductDetails extends Component {
               onPress={() => (this.linkingProductResource(productResource)) &&
                 this.props.navigation.navigate('ProductResource', { productResource })}
             >
-              <Icon type='font-awesome-5' size={25} 
+              <Icon size={25}
+                name={ (productResource.resourceType === 'internal') ? 'file-alt' : 'globe' }
                 color={ (productResource.resourceType !== 'pending') ? '#26374A': '#FF9F40' }
-                name={ (productResource.resourceType === 'internal') ? 'file-alt' : 'globe' } 
               />
               <ListItem.Content>
                 <ListItem.Title style={{ fontWeight: 'bold' }}>
