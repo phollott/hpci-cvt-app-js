@@ -1,48 +1,21 @@
 import * as React from 'react';
 import { View } from 'react-native';
-import { Icon } from 'react-native-elements';
 import { DrawerActions } from '@react-navigation/native';
 import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { t } from 'i18n-js';
-import { colors, gStyle } from '../constants';
+import { colors } from '../constants';
+import Icon from '../components/Icon';
 
-// SettingsIcon
-const SettingsIcon = ({ focused }) => (
-  <Icon
-    name='cog'
-    type='font-awesome-5'
-    size={20}
-    color={
-      focused ? gStyle.tintColor.active.light : gStyle.tintColor.inactive.light
-    }
-    style={{ minWidth: 26 }}
-  />
+const SettingsIcon = () => (
+  <Icon name='cog' color={colors.grey} style={{ minWidth: 26 }} />
 );
 
-// GlobeIcon
-const GlobeIcon = ({ focused }) => (
-  <Icon
-    name='globe'
-    type='font-awesome-5'
-    size={20}
-    color={
-      focused ? gStyle.tintColor.active.light : gStyle.tintColor.inactive.light
-    }
-    style={{ minWidth: 26 }}
-  />
+const GlobeIcon = () => (
+  <Icon name='globe' color={colors.grey} style={{ minWidth: 26 }} />
 );
 
-// AboutIcon
-const AboutIcon = ({ focused }) => (
-  <Icon
-    name='info'
-    type='font-awesome-5'
-    size={20}
-    color={
-      focused ? gStyle.tintColor.active.light : gStyle.tintColor.inactive.light
-    }
-    style={{ minWidth: 26 }}
-  />
+const AboutIcon = () => (
+  <Icon name='info' color={colors.grey} style={{ minWidth: 26 }} />
 );
 
 const HorizontalLine = () => (
@@ -50,8 +23,7 @@ const HorizontalLine = () => (
     style={{
       borderBottomColor: colors.grey,
       borderBottomWidth: 1,
-      marginHorizontal: 20,
-      marginVertical: 20
+      margin: 20
     }}
   />
 );

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
-import { Icon } from 'react-native-elements';
 import { gStyle } from '../constants';
+import Icon from './Icon';
 
 const NavigationBack = ({ navigation, route }) => (
   <TouchableOpacity
@@ -14,14 +14,7 @@ const NavigationBack = ({ navigation, route }) => (
     onPress={() => navigation.goBack(route.key)}
     style={{ paddingHorizontal: 16, paddingVertical: 8 }}
   >
-    <Icon
-      name='chevron-left'
-      type='font-awesome-5'
-      size={20}
-      color={
-        (true === true) ? gStyle.tintColor.active.light : gStyle.tintColor.inactive.light
-      }
-    />
+    <Icon name='chevron-left' />
   </TouchableOpacity>
 );
 

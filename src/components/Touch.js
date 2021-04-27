@@ -1,23 +1,30 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { gStyle } from '../constants';
+import Icon from './Icon';
 
-const Touch = ({ accessible, onPress, style, text, textStyle }) => (
+const Touch = ({ accessible, onPress, style, text, textStyle, rIconName }) => (
   <TouchableOpacity
     accessible={accessible}
     activeOpacity={gStyle.activeOpacity}
     onPress={onPress}
     style={style}
   >
-    <Text style={textStyle}>{text}</Text>
+    <View style={{flexDirection:"row"}}>
+      <Text style={textStyle}>{text}</Text>
+      { (rIconName !== null) &&
+          <Icon name={rIconName} color={gStyle.text.dark.color} style={{paddingLeft: 20}} />
+      }
+    </View>
   </TouchableOpacity>
 );
 
 Touch.defaultProps = {
   accessible: true,
   style: gStyle.btn,
-  textStyle: gStyle.btnText
+  textStyle: gStyle.btnText,
+  rIconName: null
 };
 
 Touch.propTypes = {

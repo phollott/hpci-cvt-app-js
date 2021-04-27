@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
-import { ListItem, Icon } from 'react-native-elements';
+import { ListItem } from 'react-native-elements';
+import Icon from './Icon';
 
 export default class ViewProductMasters extends Component {
   constructor(props) {
@@ -16,9 +17,9 @@ export default class ViewProductMasters extends Component {
             onPress={() => (productMaster.link) && 
               this.props.navigation.navigate('ProductDetails', { productMaster })}
           >
-            <Icon type='font-awesome-5' reverse size={20} 
+            <Icon reverse
+              name={ (productMaster.type === 'Vaccine' || productMaster.type === 'Vaccin') ? 'syringe' : 'pills' }
               color={ (productMaster.link !== null) ? '#26374A': '#FF9F40' }
-              name={ (productMaster.type === 'Vaccine' || productMaster.type === 'Vaccin') ? 'syringe' : 'pills' } 
             />
             <ListItem.Content>
               <ListItem.Title style={{ fontWeight: 'bold' }}>
