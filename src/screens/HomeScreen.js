@@ -53,7 +53,7 @@ const HomeScreen = ({ navigation }) => {
                 style={{ paddingRight: 8 }}
               />
             }
-            title={ t('tab.screen.productsLabel') }
+            title={ t('home.button.products.title') }
             containerStyle={ gStyle.container.light }
             titleStyle={{ color: "black" }}
             raised={true}

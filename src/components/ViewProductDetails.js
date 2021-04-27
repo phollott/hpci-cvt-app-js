@@ -5,6 +5,7 @@ import { Table, TableWrapper, Row, Rows } from 'react-native-table-component';
 import { connect } from 'react-redux';
 import { t } from 'i18n-js';
 import { lang, covidVaccinePortal, portailVaccinCovid } from '../constants/constants';
+import { selectProductByID } from '../redux/selectors/productSelector';
 import cheerio from 'react-native-cheerio';
 
 class ViewProductDetails extends Component {
@@ -124,19 +125,9 @@ class ViewProductDetails extends Component {
 const mapStateToProps = (state, ownProps) => {
 
   var productMaster, productResourceList = [];
-  var language = state.settings.language.startsWith('fr') ? 'Français' : 'English';
-
-  // selected product nid
-  const nid = ownProps.route.params.productMaster.nid;  //console.log('mapStateToProps ownProps', ownProps);
-
-  // TODO: **** get bus req for both filters!
-  // TODO: improve parsing
-
+  
   // Product Master:
-  const product = state.products.filter(item => {
-    return item.nid == nid
-      && item.language == language
-  })[0]; // expect 1 product
+  const product = selectProductByID(state, ownProps.route.params.productMaster.nid);
 
   // include derived props from component's ownProps 
   productMaster = {

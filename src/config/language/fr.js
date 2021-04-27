@@ -14,7 +14,7 @@ export default {
   tab: {
     screen: {
       homeLabel: "Accueil",
-      productsLabel: "Produits VTC",
+      productsLabel: "Produits",
       bookmarksLabel: "Favoris"
     }
   },
@@ -33,6 +33,11 @@ export default {
       title: "Vaccins et traitements pour la COVID-19",
       text: "Renseignements sur les vaccins et traitements autorisés pour la COVID-19, ainsi que ceux dont l’examen est actuellement en cours."
           + " Santé Canada s’engage à fournir l’information actualisée sur les vaccins et traitements pour la COVID-19."
+    },
+    button: {
+      products: {
+        title: "Vaccins et traitements"
+      }
     },
     menu: {
       settingsLabel: "Paramètres",

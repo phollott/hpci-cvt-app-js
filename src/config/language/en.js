@@ -14,7 +14,7 @@ export default {
   tab: {
     screen: {
       homeLabel: "Home",
-      productsLabel: "CVT Products",
+      productsLabel: "Products",
       bookmarksLabel: "Bookmarks"
     }
   },
@@ -33,6 +33,11 @@ export default {
       title: "COVID-19 Vaccines and Treatments",
       text: "Information on vaccines and treatments authorized for COVID-19, as well as those currently under review."
           + " Health Canada is committed to providing up-to-date information related to vaccines and treatments for COVID-19."
+    },
+    button: {
+      products: {
+        title: "Vaccines and Treatments"
+      }
     },
     menu: {
       settingsLabel: "Settings",
