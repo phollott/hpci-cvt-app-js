@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { t } from 'i18n-js';
 import { gStyle } from '../constants';
 import { lang } from '../constants/constants';
+import { selectAuthorizedProducts, selectUnauthorizedProducts } from '../redux/selectors/productSelector';
 
 // components
 import ViewProductMasters from './ViewProductMasters';
@@ -104,17 +105,9 @@ class ViewCovid19Products extends Component {
 const mapStateToProps = (state) => {
 
   var authorizedProducts = [], applicationProducts = [];
-  var language = state.settings.language.startsWith('fr') ? 'Français' : 'English';
-
-  // TODO: **** get bus req for both filters!
 
   // Authorized Products:
-  const authProducts = state.products.filter(item => {
-    return item.language == language
-      && (item.status.toLowerCase().includes('authorized') || item.status.toLowerCase().includes('autorisé'))
-  });
-  
-  authProducts.forEach((product, i) => {
+  selectAuthorizedProducts(state).forEach((product, i) => {
     var productMaster = {
       key: i, 
       nid: product.nid,
@@ -139,15 +132,7 @@ const mapStateToProps = (state) => {
   });
   
   // Application Products:
-  const applProducts = state.products.filter(item => {
-    return item.language == language
-      && !item.status.toLowerCase().includes('authorized') && !item.status.toLowerCase().includes('autorisé')
-      && !item.title.toLowerCase().startsWith('demo vaccine')                                                    //  TODO: **** hack! sigh
-      && !item.title.toLowerCase().startsWith('new product')
-      && !item.title.toLowerCase().startsWith('test')
-  });
-  
-  applProducts.forEach((product, i) => {
+  selectUnauthorizedProducts(state).forEach((product, i) => {
     var productMaster = {
       key: i, 
       nid: product.nid,
