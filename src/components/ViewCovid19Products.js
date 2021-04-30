@@ -4,8 +4,9 @@ import { ButtonGroup, Card, SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { t } from 'i18n-js';
 import { gStyle } from '../constants';
-import { lang } from '../constants/constants';
 import { selectAuthorizedProducts, selectUnauthorizedProducts } from '../redux/selectors/productSelector';
+
+import { productMaster } from '../services';
 
 // components
 import ViewProductMasters from './ViewProductMasters';
@@ -103,52 +104,16 @@ class ViewCovid19Products extends Component {
 }
 
 const mapStateToProps = (state) => {
-
   var authorizedProducts = [], applicationProducts = [];
 
   // Authorized Products:
   selectAuthorizedProducts(state).forEach((product, i) => {
-    var productMaster = {
-      key: i, 
-      nid: product.nid,
-      link: true,
-      brandName: product.brand_name, 
-      ingredient: product.ingredient, 
-      companyName: product.company_name, 
-      type: 'Vaccine',                                                                                           // TODO: **** determine if Vaccine or Treatment, type is not in api!
-      status: product.status, 
-      approvalDate: product.date_of_approval,
-    };
-    if (typeof product.body_text !== "undefined" && product.body_text !== null) {
-      if (product.body_text.includes('/vaccines/') || product.body_text.includes('/vaccins/')) {                 // TODO: **** using body_text is a hack, type is not in api!
-        productMaster.type = lang.english === state.settings.language ? 'Vaccine' : 'Vaccin';
-      }
-      else if (product.body_text.includes('/treatments/') || product.body_text.includes('/traitements/')) {
-        productMaster.type = lang.english === state.settings.language ? 'Treatment' : 'Traitement';
-      }
-    }
-    productMaster.searchKey = [productMaster.brandName, productMaster.companyName, productMaster.ingredient].join('-').toLowerCase();
-    authorizedProducts.push(productMaster);
+    authorizedProducts.push(productMaster.mapAuthorizedProduct(product, i));
   });
   
   // Application Products:
   selectUnauthorizedProducts(state).forEach((product, i) => {
-    var productMaster = {
-      key: i, 
-      nid: product.nid,
-      link: null, 
-      brandName: product.brand_name, 
-      ingredient: product.ingredient, 
-      companyName: product.company_name, 
-      type: lang.english === state.settings.language ? 'Treatment' : 'Traitement',                               // TODO: **** determine if Vaccine or Treatment, type is not in api!
-      status: product.status, 
-      approvalDate: product.date_of_approval
-    };
-    if (product.brand_name.toLowerCase().includes('vaccin')) {
-      productMaster.type = lang.english === state.settings.language ? 'Vaccine' : 'Vaccin';                      // TODO: **** determine if Vaccine or Treatment, type is not in api!
-    }
-    productMaster.searchKey = [productMaster.brandName, productMaster.companyName].join('-').toLowerCase();
-    applicationProducts.push(productMaster);
+    applicationProducts.push(productMaster.mapUnauthorizedProduct(product, i));
   });
   
   return {
