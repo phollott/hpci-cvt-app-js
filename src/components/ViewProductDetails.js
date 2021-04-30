@@ -4,10 +4,12 @@ import { Card, ListItem, Badge } from 'react-native-elements';
 import { Table, TableWrapper, Row, Rows } from 'react-native-table-component';
 import { connect } from 'react-redux';
 import { t } from 'i18n-js';
-import { lang, covidVaccinePortal, portailVaccinCovid } from '../constants/constants';
 import { selectProductByID } from '../redux/selectors/productSelector';
 import cheerio from 'react-native-cheerio';
 import Icon from './Icon';
+import { lang, covidVaccinePortal, portailVaccinCovid } from '../constants/constants';
+
+import { productResource } from '../services';
 
 class ViewProductDetails extends Component {
   constructor(props) {
@@ -90,8 +92,8 @@ class ViewProductDetails extends Component {
                 <ListItem.Title style={{ fontWeight: 'bold' }}>
                   { productResource.resourceName }
                 </ListItem.Title>
-                { (false) && <Badge value={'New'} status='success' containerStyle={{ marginLeft: -42, marginTop: -20 }} /> }
-                { (false) && <Badge value={'Update'} status='warning' containerStyle={{ marginLeft: -50, marginTop: -20 }} /> }
+                { productResource.isNew && <Badge value={'New'} status='success' containerStyle={{ marginLeft: -42, marginTop: -20 }} /> }
+                { productResource.isUpdated && <Badge value={'Update'} status='warning' containerStyle={{ marginLeft: -50, marginTop: -20 }} /> }
                 <ListItem.Subtitle>{ productResource.description }</ListItem.Subtitle>
                 <Text style={{ fontWeight: 'bold' }}>{ t('productDetails.listItem.publicationStatusLabel') }{ productResource.publicationStatus }</Text>
               </ListItem.Content>
@@ -107,14 +109,14 @@ class ViewProductDetails extends Component {
   linkingProductResource(productResource) {
     if (productResource.link) {
       if (productResource.resourceType === 'external') {
-        console.log('external product resource (show in browser): ' + productResource.link);
+        //console.log('external product resource (show in browser): ' + productResource.link);
         Linking.canOpenURL(productResource.link).then( supported => {
           if (supported) {
             Linking.openURL(productResource.link);
           }
         })
       } else {
-        console.log('internal product resource (show in WebView): ' + productResource.link);
+        //console.log('internal product resource (show in WebView): ' + productResource.link);
         return true;  
       }
     }
@@ -124,79 +126,16 @@ class ViewProductDetails extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-
   var productMaster, productResourceList = [];
   
   // Product Master:
+  productMaster = ownProps.route.params.productMaster;
+
+  // Product Resources:
   const product = selectProductByID(state, ownProps.route.params.productMaster.nid);
-
-  // include derived props from component's ownProps 
-  productMaster = {
-    key: ownProps.route.params.productMaster.key, 
-    nid: product.nid,
-    link: ownProps.route.params.productMaster.link,
-    title: product.title,
-    brandName: product.brand_name, 
-    ingredient: product.ingredient, 
-    companyName: product.company_name, 
-    type: ownProps.route.params.productMaster.type,
-    status: product.status, 
-    approvalDate: (typeof product.date_of_approval !== "undefined" && product.date_of_approval !== null)
-      ? product.date_of_approval.match(/<time [^>]+>([^<]+)<\/time>/)[1]  // extract time text between > and <
-      : "",
-    searchKey: ownProps.route.params.productMaster.searchKey
-  };
-  productMaster.approvalDate = productMaster.approvalDate.substring(0, productMaster.approvalDate.indexOf(" - "));
-  if (productMaster.approvalDate.indexOf(",") > -1) {
-    productMaster.approvalDate = productMaster.approvalDate.substring(productMaster.approvalDate.indexOf(",") + 1).trim();
-  }
-
   product.resources.forEach((resource, i) => {
-    if (resource.audience.includes("Consumers")) {  // TODO: review... if ever french, may need to check for consommateurs
-      let isDescription = typeof resource.description !== "undefined" && resource.description !== null;
-      let isResourceLinkAnAnchor = typeof resource.resource_link !== "undefined" && resource.resource_link !== null && resource.resource_link.indexOf("<a") > -1;
-      var productResource = {
-        key: i,
-        id: resource.id,
-        link: isResourceLinkAnAnchor ? resource.resource_link.match(/href="([^"]*)/)[1] : null,  // link or null (check to display right chevron errors if text)
-        resourceType: "pending",
-        audience: resource.audience.toString(),
-        resourceName: isResourceLinkAnAnchor ? resource.resource_link.match(/<a [^>]+>([^<]+)<\/a>/)[1] : "",  // extract anchor text between > and <
-        description: isDescription ? resource.description.replace(/(<([^>]+)>)/ig, "").trim() : "",  // strip html, trim
-        publicationStatus: 
-          resource.various_dates.toLowerCase() === "yes" 
-            ? t('productDetails.listItem.publicationStatus.various') 
-            : (typeof resource.date !== "undefined" && resource.date !== null)
-              ? resource.date.match(/<time [^>]+>([^<]+)<\/time>/)[1]  // extract time text between > and <
-              : t('productDetails.listItem.publicationStatus.pending') 
-      };
-      if (!productResource.publicationStatus.includes( t('productDetails.listItem.publicationStatus.various') ) 
-        && !productResource.publicationStatus.includes( t('productDetails.listItem.publicationStatus.pending') )
-      ){
-        productResource.publicationStatus = productResource.publicationStatus.substring(0, productResource.publicationStatus.indexOf(" - "));
-        if (productResource.publicationStatus.indexOf(",") > -1) {
-          productResource.publicationStatus = productResource.publicationStatus.substring(productResource.publicationStatus.indexOf(",") + 1).trim();
-        }
-      }
-
-      // determine what type of resource this is:
-      if (productResource.link) {
-
-        // [pmh] this is a hack because I'm not sure why these don't render correctly
-        if (productResource.link.includes("?linkID")) {  
-          var fixedUrl = (state.settings.language === lang.english) ? covidVaccinePortal : portailVaccinCovid;
-          fixedUrl += productResource.link;
-          productResource.link = fixedUrl;
-        }
-
-        if (productResource.link.includes("http:") || productResource.link.includes("https:")) {
-          productResource.resourceType = "external";
-        } else {
-          productResource.resourceType = "internal";
-        }
-      }
-
-      productResourceList.push(productResource);
+    if (resource.audience.includes("Consumers")) {
+      productResourceList.push(productResource.mapProductResource(resource, i, state.settings.language));
     }
   });
 
