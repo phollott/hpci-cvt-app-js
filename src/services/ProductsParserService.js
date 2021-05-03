@@ -1,5 +1,9 @@
 import {t} from 'i18n-js';
 import { lang, covidVaccinePortal, portailVaccinCovid } from '../constants/constants';
+import cheerio from 'react-native-cheerio';
+
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
+const WINDOW_IN_DAYS = 7;
 
 // TODO: **** review bus req for each once api is available; priorities: product nid and type, resource updated date, etc.
 
@@ -117,8 +121,16 @@ const getProductResourceType = link => {
   return resourceType;
 }
 
-const isProductResourceNew = resource => {    
+const isProductResourceNew = resource => {
   // TODO
+  //  This is not very well tested, and I would not be surprised if it is off by one
+  if (resource.date) {
+    var $ = cheerio.load(resource.date),
+      dtraw = new Date($('time').attr('datetime')),
+      dtutc = Date.UTC(dtraw.getFullYear(), dtraw.getMonth()+1, dtraw.getDate()),
+      dtdif = Math.floor((Date.now() - dtutc) / MS_PER_DAY);
+    return (dtdif <= WINDOW_IN_DAYS);
+  }
   return false;
 }
 
