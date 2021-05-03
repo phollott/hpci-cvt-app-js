@@ -63,7 +63,7 @@ class ViewProductDetails extends Component {
       text: { margin: 4, fontSize: 9 }      
     });
     return (
-      <View style={{ flex: 1 }} >
+      <View style={{ flex: 1 }}>
         <Card style={{ flex: 1 }}>
           <Card.Title style={{ marginBottom: 8 }}>{this.props.productMaster.brandName}</Card.Title>
           <Text><Text style={{ fontWeight: 'bold' }}>{ t('productDetails.card.companyNameLabel') }</Text>{this.props.productMaster.companyName}</Text>
@@ -72,12 +72,14 @@ class ViewProductDetails extends Component {
           <Text><Text style={{ fontWeight: 'bold' }}>{ t('productDetails.card.approvalDateLabel') }</Text>{this.props.productMaster.approvalDate}</Text>
         </Card>
         <ScrollView style={{ backgroundColor: 'white' }}>
+        { this.state.tableData[0][0] != "..." &&
           <Table borderStyle={{borderWidth: 1, borderColor: '#97B7D2'}}>
             <Row data={this.state.tableHead} flexArr={[1, 2, 2, 2]} style={styles.head} textStyle={styles.headText}/>
             <TableWrapper style={styles.wrapper}>
               <Rows data={this.state.tableData} flexArr={[1, 2, 2, 2]} textStyle={styles.text}/>
             </TableWrapper>
           </Table>
+        }
         {
           this.props.productResourceList.map( productResource =>
             <ListItem key={productResource.key} bottomDivider
@@ -133,13 +135,8 @@ const mapStateToProps = (state, ownProps) => {
 
   // Product Resources:
   const product = selectProductByID(state, ownProps.route.params.productMaster.nid);
-  product.resources.forEach((resource, i) => {
-    if (resource.audience.includes("Consumers")) {
-      productResourceList.push(productResource.mapProductResource(resource, i, state.settings.language));
-    }
-  });
+  productResourceList.push(...productResource.mapProductResources(product, state.settings.language));
 
-  //console.log('productMaster: ', productMaster);  //console.log('productResourceList', productResourceList);
   return {
     settings: state.settings,
     productMaster: productMaster,

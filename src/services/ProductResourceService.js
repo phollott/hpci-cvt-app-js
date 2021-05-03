@@ -10,18 +10,30 @@ let productResource = (resource, id) => {
     resourceName: ProductsParserService.getProductResourceName(resource),
     description: ProductsParserService.getProductResourceDescription(resource),
     publicationStatus: ProductsParserService.getProductResourcePublicationStatus(resource),
-    isNew: ProductsParserService.isProductResourceNew(resource),
-    isUpdated: ProductsParserService.isProductResourceUpdated(resource)
+    isNew: false,
+    isUpdated: false
   };
 }
 
-const mapProductResource = (resource, id, language) => {
+const mapProductResource = (product, resource, id, language) => {
   let aResource = productResource(resource, id);
   aResource.link = ProductsParserService.getProductResourceLink(resource, language);
   aResource.resourceType = ProductsParserService.getProductResourceType(aResource.link);
+  aResource.isNew = ProductsParserService.isProductResourceNew(resource);
+  aResource.isUpdated = ProductsParserService.isProductResourceUpdated(product, resource);
   return aResource;
 }
 
+const mapProductResources = (product, language) => {
+  var resourceList = [];
+  product.resources.forEach((resource, i) => {
+    if (resource.audience.includes("Consumers")) {
+      resourceList.push(mapProductResource(product, resource, i, language));
+    }
+  });
+  return resourceList;
+}
+
 export default {
-  mapProductResource
+  mapProductResources
 };
