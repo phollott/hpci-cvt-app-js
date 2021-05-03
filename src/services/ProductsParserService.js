@@ -24,18 +24,10 @@ const isValidProduct = product => {
 const getProductType = product => {
   // productType: Vaccine or Treatment
   let productType = "Vaccine";
-  if (isAuthorizedProduct(product)) {
-    if (typeof product.body_text !== "undefined" && product.body_text !== null) {
-      if (product.body_text.includes('/vaccines/') || product.body_text.includes('/vaccins/')) {    // TODO: **** determine type -> using body_text is a hack, type is not in api!
-        productType = "Vaccine";
-      }
-      else if (product.body_text.includes('/treatments/') || product.body_text.includes('/traitements/')) {
-        productType = "Treatment";
-      }
-    }
-  }
-  else {
-    productType = product.brand_name.toLowerCase().includes('vaccin') ? "Vaccine" : "Treatment";
+  if (typeof product.field_product_type !== "undefined" && product.field_product_type !== null) {
+    // e.g. "field_product_type": "<a href=\"https://covid-vaccine-stage.hpfb-dgpsa.ca/taxonomy/term/16\" hreflang=\"en\">Vaccine</a>"
+    productType = product.field_product_type.replace(/(<([^>]+)>)/ig, "").trim();    // strip html, trim
+    productType = productType.toLowerCase().startsWith("vaccin") ? "Vaccine" : "Treatment"
   }
   return productType;
 }
@@ -125,11 +117,24 @@ const getProductResourceType = link => {
   return resourceType;
 }
 
-const isProductResourceNew = resource => {    // TODO not in api atm
+const isProductResourceNew = resource => {    
+  // TODO
   return false;
 }
 
-const isProductResourceUpdated = resource => {    // TODO not in api atm
+const isProductResourceUpdated = (product, resource) => {
+  // TODO 
+  //   api updated: Updated Date is with product in product.field_vaccine_resources (look for div with field--name-field-updated-date)
+  //   e.g. see "nid" : "26" and look deep within field_vaccine_resources:
+  /*
+  <div class="field field--name-field-updated-date field--type-datetime field--label-above">
+    <div class="field--label">Updated Date</div>
+      <div class="field--item"><time datetime="2021-03-03T12:12:12Z">Wed, 03/03/2021 - 12:12</time>
+    </div>
+  </div>
+  //   note: the above is from nid 26, en version, and is not in fr version (20210430 snapshot from staging)
+  */
+  //console.log("product's field_vaccine_resources: ", product.field_vaccine_resources);
   return false;
 }
 
