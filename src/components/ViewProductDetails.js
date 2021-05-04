@@ -94,10 +94,11 @@ class ViewProductDetails extends Component {
                 <ListItem.Title style={{ fontWeight: 'bold' }}>
                   { productResource.resourceName }
                 </ListItem.Title>
-                { productResource.isNew && <Badge value={'New'} status='success' containerStyle={{ marginLeft: -42, marginTop: -20 }} /> }
-                { productResource.isUpdated && <Badge value={'Update'} status='warning' containerStyle={{ marginLeft: -50, marginTop: -20 }} /> }
                 <ListItem.Subtitle>{ productResource.description }</ListItem.Subtitle>
-                <Text style={{ fontWeight: 'bold' }}>{ t('productDetails.listItem.publicationStatusLabel') }{ productResource.publicationStatus }</Text>
+                <Text style={{ fontWeight: 'bold' }}>{ t('productDetails.listItem.publicationStatusLabel') }{ productResource.publicationStatus }
+                  { productResource.isNew && !productResource.isUpdated && <Badge value={'New'} status='success' containerStyle={{ marginLeft: 2, marginTop: -3 }} /> }
+                  { productResource.isUpdated && <Badge value={'Updated'} status='warning' containerStyle={{ marginLeft: 2, marginTop: -3 }} /> }  
+                </Text>
               </ListItem.Content>
               { (productResource.link) && <ListItem.Chevron color='blue'/> }
             </ListItem>

@@ -3,7 +3,7 @@ import { lang, covidVaccinePortal, portailVaccinCovid } from '../constants/const
 import cheerio from 'react-native-cheerio';
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
-const WINDOW_IN_DAYS = 7;
+const WINDOW_IN_DAYS = 35;
 
 // TODO: **** review bus req for each once api is available; priorities: product nid and type, resource updated date, etc.
 
@@ -124,30 +124,54 @@ const getProductResourceType = link => {
 const isProductResourceNew = resource => {
   // TODO
   //  This is not very well tested, and I would not be surprised if it is off by one
+  var isResourceNew = false;
   if (resource.date) {
     var $ = cheerio.load(resource.date),
       dtraw = new Date($('time').attr('datetime')),
       dtutc = Date.UTC(dtraw.getFullYear(), dtraw.getMonth()+1, dtraw.getDate()),
       dtdif = Math.floor((Date.now() - dtutc) / MS_PER_DAY);
-    return (dtdif <= WINDOW_IN_DAYS);
+    isResourceNew = (dtdif <= WINDOW_IN_DAYS);
+    console.log('New Date Difference for : ' + resource.description + ' : ' + dtdif + ' : ' + isResourceNew);   
   }
-  return false;
+  return isResourceNew;
 }
 
 const isProductResourceUpdated = (product, resource) => {
-  // TODO 
-  //   api updated: Updated Date is with product in product.field_vaccine_resources (look for div with field--name-field-updated-date)
-  //   e.g. see "nid" : "26" and look deep within field_vaccine_resources:
-  /*
-  <div class="field field--name-field-updated-date field--type-datetime field--label-above">
-    <div class="field--label">Updated Date</div>
-      <div class="field--item"><time datetime="2021-03-03T12:12:12Z">Wed, 03/03/2021 - 12:12</time>
-    </div>
-  </div>
-  //   note: the above is from nid 26, en version, and is not in fr version (20210430 snapshot from staging)
-  */
-  //console.log("product's field_vaccine_resources: ", product.field_vaccine_resources);
-  return false;
+  // TODO
+  //  This is not very well tested, and I would not be surprised if it is off by one
+  var isResourceUpdated = false;
+  if (product.field_vaccine_resources) {
+    var $ = cheerio.load(product.field_vaccine_resources);
+    $('div.paragraph--type--vaccine-resources').map( (i, el_outer) => {
+      var match = null, dtraw = null;
+      $(el_outer).find('div.field').map( (j, el_inner) => {
+
+        // Inner loop is iterates over all of the Resource Details
+        var fieldItem = $(el_inner).find('div.field--item').html();
+        switch ($(el_inner).find('div.field--label').text()) {
+          case 'Updated Date':
+            dtraw = new Date($(fieldItem).attr('datetime'));
+            break;
+          case 'Resource link':
+            if (fieldItem === resource.resource_link) {
+              match = true;
+            };
+            break;
+        }
+      });
+
+      // At this point, we have iterated over the Resource Details
+      if (match && dtraw) {
+        var dtutc = Date.UTC(dtraw.getFullYear(), dtraw.getMonth()+1, dtraw.getDate()),
+          dtdif = Math.floor((Date.now() - dtutc) / MS_PER_DAY);
+        if (dtdif <= WINDOW_IN_DAYS) {
+          isResourceUpdated = true;
+        }
+        console.log('Updated Date Difference for : ' + resource.description + ' : ' + dtdif + ' : ' + isResourceUpdated);   
+      }
+    });
+  }
+  return isResourceUpdated;
 }
 
 export default {
