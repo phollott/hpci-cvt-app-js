@@ -9,7 +9,7 @@ import { setLanguage } from '../redux/actions/settingsActions';
 import { gStyle } from '../constants';
 import { lang } from '../constants/constants';
 import { useColorScheme } from 'react-native-appearance';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { storage } from '../services';
 import i18n, {t} from 'i18n-js';
 import Touch from '../components/Touch';
 
@@ -26,9 +26,9 @@ const LanguageScreen = ({ navigation }) => {
 
   const setLanguagePreference = async (value) => {
     try {
-      i18n.locale = value;                            // t
-      setLang(value);                                 // redux
-      await AsyncStorage.setItem('language', value);  // persist
+      i18n.locale = value;                    // t
+      setLang(value);                         // redux
+      await storage.save('language', value);  // persist
     } catch (error) {
       console.log('Unable to set language preference.', error);
     }

@@ -5,12 +5,12 @@ import { Appearance } from 'react-native-appearance';
 import { device, func } from './src/constants';
 import { lang } from './src/constants/constants';
 import { fetchProductsAsync } from './src/api/covid19Products';
+import { storage } from './src/services';
 import initialState from './src/redux/store/initialState';
 import rootReducer from './src/redux/store/store';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import he from 'he';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Localization from 'expo-localization';
 import * as I18n from './src/config/i18n';
 
@@ -48,7 +48,7 @@ class App extends React.Component {
 
   getLanguagePreference = async () => {
     try {
-      return value = await AsyncStorage.getItem('language');
+      return value = await storage.retrieve('language');
     } catch (error) {
       return null;
     }
