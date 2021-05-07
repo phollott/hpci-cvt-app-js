@@ -5,7 +5,7 @@ import cheerio from 'react-native-cheerio';
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 const WINDOW_IN_DAYS = 35;
 
-// TODO: **** review bus req for each once api is available; priorities: product nid and type, resource updated date, etc.
+// TODO: **** review bus req for each once api is available
 
 ////
 // Product (product: store's products.product)
@@ -131,7 +131,7 @@ const isProductResourceNew = resource => {
       dtutc = Date.UTC(dtraw.getFullYear(), dtraw.getMonth()+1, dtraw.getDate()),
       dtdif = Math.floor((Date.now() - dtutc) / MS_PER_DAY);
     isResourceNew = (dtdif <= WINDOW_IN_DAYS);
-    console.log('New Date Difference for : ' + resource.description + ' : ' + dtdif + ' : ' + isResourceNew);   
+    //console.log('New Date Difference for : ' + resource.description + ' : ' + dtdif + ' : ' + isResourceNew);   
   }
   return isResourceNew;
 }
@@ -167,7 +167,7 @@ const isProductResourceUpdated = (product, resource) => {
         if (dtdif <= WINDOW_IN_DAYS) {
           isResourceUpdated = true;
         }
-        console.log('Updated Date Difference for : ' + resource.description + ' : ' + dtdif + ' : ' + isResourceUpdated);   
+        //console.log('Updated Date Difference for : ' + resource.description + ' : ' + dtdif + ' : ' + isResourceUpdated);   
       }
     });
   }

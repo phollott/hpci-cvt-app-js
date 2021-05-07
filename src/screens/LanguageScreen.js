@@ -30,11 +30,11 @@ const LanguageScreen = ({ navigation }) => {
       setLang(value);                         // redux
       await storage.save('language', value);  // persist
     } catch (error) {
-      console.log('Unable to set language preference.', error);
+      console.log('Unable to set language preference. ', error);
     }
   }
 
-// [mrj] hack: double navigation is used to ensure the product resource webview and this screen are re-rendered after language is changed
+// [mrj] hack: navigation is used to ensure the tab stacks, product resource webview and this screen are re-rendered after language is changed
 
 // [pmh] this method of uapplying dark mode should work with RNE, but is untested
 
@@ -49,6 +49,7 @@ const LanguageScreen = ({ navigation }) => {
               onPress={() => {
                 setLanguagePreference(lang.english);
                 navigation.navigate('ProductsStack', {screen: 'Products'});
+                navigation.navigate('BookmarksStack', {screen: 'Bookmarks'});
                 navigation.navigate('HomeStack', {screen: 'Language'});
               }}
               text={ t('home.settings.language.touchText', {locale: 'en'}) }
@@ -58,6 +59,7 @@ const LanguageScreen = ({ navigation }) => {
               onPress={() => {
                 setLanguagePreference(lang.french);
                 navigation.navigate('ProductsStack', {screen: 'Products'});
+                navigation.navigate('BookmarksStack', {screen: 'Bookmarks'});
                 navigation.navigate('HomeStack', {screen: 'Language'});
               }}
               text={ t('home.settings.language.touchText', {locale: 'fr'}) }

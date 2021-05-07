@@ -22,3 +22,9 @@ export function selectProductByID(state, nid) {
       && product.language == selectLanguageText(state)
   })[0]; // expect 1 product
 };
+
+export function selectProductsByID(state, nid) {
+  return state.products.filter(product => {
+    return product.nid == nid
+  }); // both en and fr for nid
+};

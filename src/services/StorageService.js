@@ -8,7 +8,6 @@ class StorageService {
     if (!this.instance) {
       this.instance = this;
       this.keyValueStore = new KeyValueStore();
-      console.log('boogoboo');
     }
     return this.instance;
   }
@@ -23,6 +22,10 @@ class StorageService {
 
   delete(key) {
     return this.keyValueStore.delete(key);
+  }
+
+  retrieveKeys() {
+    return this.keyValueStore.retrieveKeys();
   }
 
   saveMulti(keyValuePairs) {
