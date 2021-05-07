@@ -34,7 +34,7 @@ const ProductsStack = () => {
           headerTitleStyle: gStyle.headerTitleStyle,
           title: t('stack.screen.productDetailsTitle'),
           headerLeft: () => <NavigationBack navigation={navigation} route={route} />,
-          headerRight: () => <BookmarkProduct />
+          headerRight: () => <BookmarkProduct navigation={navigation} route={route} />
         })}
       />
       <Stack.Screen 

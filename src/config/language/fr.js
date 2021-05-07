@@ -4,9 +4,22 @@ export default {
     name: "Français"
   },
   common: {
+    alert: {
+      title: "Alerte",
+      button: {
+        ok: "OK",
+        cancel: "Annuler"
+      }
+    },
+    badge: {
+      new: "Nouveau",
+      updated: "Modifié"
+    },
     message: {
+      bookmarked: "%{brandName} a été ajouté à vos favoris.",
       loading: "Chargement en course, veuillez patienter...",
       error: {
+        bookmarked: "Impossible d'ajouter le favoris actuellement.",
         loading: "Incapable de charger"
       }
     }
@@ -41,10 +54,15 @@ export default {
     },
     menu: {
       settingsLabel: "Paramètres",
+      removeLabel: "Supprimer les données",
       languageLabel: "Langue...",
       privacyLabel: "Confidentialité",
       aboutLabel: "À propos",
-      closeLabel: "Fermer"
+      closeLabel: "Fermer",
+      removeAlert: {
+        title: "Supprimer les données",
+        text: "Supprimer les paramètres et les favoris?"
+      }
     },
     settings: {
       language: {
@@ -86,6 +104,17 @@ export default {
     }
   },
   bookmarks: {
-    introText: "Liste de favoris"
+    introText: "Vous n'avez ajouté aucun favori.",
+    products: {
+      searchBar: {
+        placeholder: "Rechercher des vaccins et des traitements..."
+      },
+      card: {
+        instructionText: "Choisissez parmi les vaccins et traitements COVID-19 autorisés."
+      },
+      buttons: {
+        authorized: "Produits autorisées"
+      }
+    }
   }
 };

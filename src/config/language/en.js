@@ -4,9 +4,22 @@ export default {
     name: "English"
   },
   common: {
+    alert: {
+      title: "Alert",
+      button: {
+        ok: "OK",
+        cancel: "Cancel"
+      }
+    },
+    badge: {
+      new: "New",
+      updated: "Updated"
+    },
     message: {
+      bookmarked: "%{brandName} was added to your bookmarks.",
       loading: "Loading, please wait...",
       error: {
+        bookmarked: "Unable to create bookmark at this time.",
         loading: "Unable to load"
       }
     }
@@ -41,10 +54,15 @@ export default {
     },
     menu: {
       settingsLabel: "Settings",
+      removeLabel: "Remove Data",
       languageLabel: "Language...",
       privacyLabel: "Privacy",
       aboutLabel: "About",
-      closeLabel: "Close"
+      closeLabel: "Close",
+      removeAlert: {
+        title: "Remove Data",
+        text: "Remove settings and bookmarks?"
+      }
     },
     settings: {
       language: {
@@ -86,6 +104,17 @@ export default {
     }
   },
   bookmarks: {
-    introText: "Bookmarks content"
+    introText: "You have not added any bookmarks.",
+    products: {
+      searchBar: {
+        placeholder: "Search for Vaccines and Treatments..."
+      },
+      card: {
+        instructionText: "Select from authorized COVID-19 Vaccines and Treatments."
+      },
+      buttons: {
+        authorized: "Authorized Products"
+      }
+    }
   }
 };

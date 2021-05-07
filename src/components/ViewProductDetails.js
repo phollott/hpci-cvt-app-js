@@ -96,8 +96,8 @@ class ViewProductDetails extends Component {
                 </ListItem.Title>
                 <ListItem.Subtitle>{ productResource.description }</ListItem.Subtitle>
                 <Text style={{ fontWeight: 'bold' }}>{ t('productDetails.listItem.publicationStatusLabel') }{ productResource.publicationStatus }
-                  { productResource.isNew && !productResource.isUpdated && <Badge value={'New'} status='success' containerStyle={{ marginLeft: 2, marginTop: -3 }} /> }
-                  { productResource.isUpdated && <Badge value={'Updated'} status='warning' containerStyle={{ marginLeft: 2, marginTop: -3 }} /> }  
+                  { productResource.isNew && !productResource.isUpdated && <Badge value={t('common.badge.new')} status='success' containerStyle={{ marginLeft: 2, marginTop: -3 }} /> }
+                  { productResource.isUpdated && <Badge value={t('common.badge.updated')} status='warning' containerStyle={{ marginLeft: 2, marginTop: -3 }} /> }  
                 </Text>
               </ListItem.Content>
               { (productResource.link) && <ListItem.Chevron color='blue'/> }
@@ -129,14 +129,20 @@ class ViewProductDetails extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  var productMaster, productResourceList = [];
+  var productMaster, product, productResourceList = [];
   
   // Product Master:
   productMaster = ownProps.route.params.productMaster;
 
   // Product Resources:
-  const product = selectProductByID(state, ownProps.route.params.productMaster.nid);
-  productResourceList.push(...productResource.mapProductResources(product, state.settings.language));
+  const key = productMaster.key.toString();
+  if (!key.startsWith('bookmark-product')) {
+    product = selectProductByID(state, ownProps.route.params.productMaster.nid);
+    productResourceList.push(...productResource.mapProductResources(product, state.settings.language));
+  }
+  else {
+    productResourceList.push(...productResource.mapProductResources(ownProps.route.params.product, state.settings.language));
+  }
 
   return {
     settings: state.settings,

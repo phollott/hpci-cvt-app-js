@@ -13,6 +13,10 @@ export class KeyValueStore {
     return AsyncStorage.removeItem(key);
   }
 
+  retrieveKeys() {
+    return AsyncStorage.getAllKeys();
+  }
+
   // keyValuePairs ex: [['key1','value1'],['key2','value2']]
   saveMulti(keyValuePairs) {
     return AsyncStorage.multiSet(keyValuePairs);
