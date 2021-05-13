@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { t } from 'i18n-js';
 import { gStyle } from '../constants';
 import { selectAuthorizedProducts, selectUnauthorizedProducts } from '../redux/selectors/productSelector';
-
 import { productMaster } from '../services';
 
 // components
@@ -64,42 +63,56 @@ class ViewCovid19Products extends Component {
     const buttons = [ t('products.buttons.authorized'), t('products.buttons.application') ];
     const { selectedIndex } = this.state;
     const { searchText } = this.state;
-    return (
-      <View 
-        style={{ flex: 1 }}
-        contentContainerStyle={gStyle.contentContainer}
-      >
-        <SearchBar
-          placeholder={ t('products.searchBar.placeholder') }
-          onChangeText={ this.updateSearch }
-          value={ searchText }
-        />
-        <ScrollView>
-          <Card>
-            <Text>{ t('products.card.instructionText') }</Text>
-          </Card>
-          <ButtonGroup
-            onPress = { this.updateIndex }
-            selectedIndex = { selectedIndex }
-            buttons = { buttons }
+    if (this.props.settings.isOnline) {
+      return (
+        <View
+          style={{ flex: 1 }}
+          contentContainerStyle={gStyle.contentContainer}
+        >
+          <SearchBar
+            placeholder={ t('products.searchBar.placeholder') }
+            onChangeText={ this.updateSearch }
+            value={ searchText }
           />
-          <View>
-            { (this.state.selectedIndex === 0) &&
-                <ViewProductMasters
-                  productMasters={this.state.filtAuthProd}
-                  navigation={this.props.navigation} 
-                />
-            }
-            { (this.state.selectedIndex === 1) &&
-                <ViewProductMasters
-                  productMasters={this.state.filtApplProd}
-                  navigation={this.props.navigation} 
-                />
-            }
+          <View style={gStyle.spacer8} />
+          <ScrollView>
+            <Card>
+              <Text>{ t('products.card.instructionText') }</Text>
+            </Card>
+            <ButtonGroup
+              onPress = { this.updateIndex }
+              selectedIndex = { selectedIndex }
+              buttons = { buttons }
+            />
+            <View>
+              { (this.state.selectedIndex === 0) &&
+                  <ViewProductMasters
+                    productMasters={this.state.filtAuthProd}
+                    navigation={this.props.navigation}
+                  />
+              }
+              { (this.state.selectedIndex === 1) &&
+                  <ViewProductMasters
+                    productMasters={this.state.filtApplProd}
+                    navigation={this.props.navigation}
+                  />
+              }
+            </View>
+          </ScrollView>
+        </View>
+      );
+    } else {
+      return (
+        <View>
+          <View style={gStyle.spacer32} />
+          <View contentContainerStyle={gStyle.contentContainer}>
+            <Card>
+              <Text style={{fontSize: 16}}>{ t('products.card.offlineText') }</Text>
+            </Card>
           </View>
-        </ScrollView>
-      </View>
-    );
+        </View>
+      );
+    }
   }
 }
 
@@ -118,8 +131,8 @@ const mapStateToProps = (state) => {
   
   return {
     settings: state.settings,
-    authorizedProducts: authorizedProducts,
-    applicationProducts: applicationProducts
+    authorizedProducts: authorizedProducts.sort((a, b) => (a.brandName > b.brandName) ? 1 : -1),
+    applicationProducts: applicationProducts.sort((a, b) => (a.brandName > b.brandName) ? 1 : -1)
   };
 };
 

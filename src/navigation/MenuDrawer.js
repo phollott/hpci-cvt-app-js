@@ -87,6 +87,7 @@ const closeDrawer = (navigation) => {
   navigation.dispatch(DrawerActions.closeDrawer());
 }
 
+// [mrj] TODO: ****remove this 'feature' at some point.
 const showRemoveAlert = (props) => {
   try {
     Confirm.alert(

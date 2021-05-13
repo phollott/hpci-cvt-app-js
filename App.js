@@ -29,7 +29,10 @@ class App extends React.Component {
     I18n.setLocale(Localization.locale);
 
     this.updateTheme = this.updateTheme.bind(this);
-    this.getLanguagePreference = this.getLanguagePreference.bind(this);
+    this.retrieveLanguagePreference = this.retrieveLanguagePreference.bind(this);
+    this.saveBookmark = this.saveBookmark.bind(this);
+    this.retrieveBookmarks = this.retrieveBookmarks.bind(this);
+    this.fetchProducts = this.fetchProducts.bind(this);
     this.loadInitialStateAsync = this.loadInitialStateAsync.bind(this);
     this.loadResourcesAsync = this.loadResourcesAsync.bind(this);
   }
@@ -46,7 +49,13 @@ class App extends React.Component {
     }
   }
 
-  getLanguagePreference = async () => {
+  updateTheme(themeType) {
+    this.setState({
+      theme: themeType
+    });
+  }
+
+  retrieveLanguagePreference = async () => {
     try {
       return value = await storage.retrieve('language');
     } catch (error) {
@@ -54,38 +63,83 @@ class App extends React.Component {
     }
   }
 
+  saveBookmark = async (bookmark) => {
+    try {
+      var key = 'bookmark-product'.concat(bookmark.nid + '-' + bookmark.language.toLowerCase().substring(0,2));
+      await storage.save(key, JSON.stringify(bookmark));
+    } catch (error) {
+      console.log('Unable to sync bookmark with product. ', error);
+    }
+  }
+
+  retrieveBookmarks = async (syncWithProduct) => {
+    let keys = [], storedBookmarks = [], bookmarks = [];
+    try {
+      keys = await storage.retrieveKeys();
+      if (keys.length > 0) {
+        keys = keys.filter((key) => {
+          return key.startsWith('bookmark-product');
+        });
+        storedBookmarks = keys !== null ? await storage.retrieveMulti(keys) : [];
+        storedBookmarks.map((storedBookmark) => {
+          let bookmark = JSON.parse(storedBookmark[1]);
+          if (syncWithProduct) {
+            let product = initialState.products.filter(product => {
+              return product.language == bookmark.language
+                && product.nid == bookmark.nid 
+            });
+            if (product.length === 1) {
+              bookmarks.push(product[0]);
+              // update storage async
+              this.saveBookmark(product[0]);
+            } else {
+              bookmarks.push(bookmark);
+            }
+          } else {
+            bookmarks.push(bookmark);
+          }
+        });
+      }
+    } catch (error) {
+      console.log('Unable to get bookmarks from storage. ', error);
+    }
+    return bookmarks;
+  }
+
+  fetchProducts = async() => {
+    let products = [];
+    try {
+      products = await fetchProductsAsync();
+      products = JSON.parse(he.decode(JSON.stringify(products)));    // using he to decode html entities, but may want to review other ways to parse
+    } catch (error) {
+      console.log('Could not fetch Covid-19 Products from api. ', error);
+    }
+    return products;
+  }
+
   loadInitialStateAsync = async () => {
     try {
-      const products = await fetchProductsAsync();
-      initialState.products = JSON.parse(he.decode(JSON.stringify(products)));    // [mrj] TODO: using he to decode html entities, but may want to review other ways to parse
+      initialState.products = await this.fetchProducts();
+      initialState.settings.isOnline = initialState.products.length > 0;
+      initialState.bookmarks = await this.retrieveBookmarks(initialState.settings.isOnline);
 
-      const langPref = await this.getLanguagePreference();
+      let langPref = await this.retrieveLanguagePreference();
       if (langPref !== null && (langPref === lang.english || langPref === lang.french)) {
         // user has selected language
-        initialState.settings.language = langPref;  // redux (createStore)
+        initialState.settings.language = langPref;
         I18n.setLocale(langPref);
       } else {
         // user has never selected language (or error), default to device locale (or en if not en or fr)
         initialState.settings.language = I18n.getCurrentLocale();
       }
-    }
-    catch (error) {
-      // [mrj] TODO: consider offline and get bookmarks from storage?
-      initialState.settings.isOnline = false;
-      console.log('Could not fetch Covid-19 Products from api.', error);
+    } catch (error) {
+      console.log('Unhandled error occured while loading initial state. ', error);
     }
   }
   
   loadResourcesAsync = async () => {
-    // fetch products and load assets
     return this.loadInitialStateAsync().then(() => { return func.loadAssetsAsync });
   };
-
-  updateTheme(themeType) {
-    this.setState({
-      theme: themeType
-    });
-  }
 
   render() {
     const { isLoading, theme } = this.state;

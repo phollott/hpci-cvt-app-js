@@ -33,7 +33,8 @@ const BookmarksScreen = ({ navigation, route }) => {
 
 BookmarksScreen.propTypes = {
   // required
-  navigation: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired,
+  route: PropTypes.object.isRequired
 };
 
 export default BookmarksScreen;

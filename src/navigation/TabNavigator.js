@@ -31,7 +31,7 @@ ProductsTabBarIcon.propTypes = {
 
 // BookmarksTabBarIcon
 const BookmarksTabBarIcon = ({ focused }) => (
-  <Icon name='bookmark' focused={focused} />
+  <Icon name='bookmark' focused={focused} solid />
 );
 
 BookmarksTabBarIcon.propTypes = {

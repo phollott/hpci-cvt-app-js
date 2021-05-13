@@ -5,7 +5,7 @@ import { t } from 'i18n-js';
 import { gStyle } from '../constants';
 
 import NavigationBack from '../components/NavigationBack';
-import RemoveBookmark from '../components/RemoveBookmark';
+import BookmarkTouch from '../components/BookmarkTouch';
 
 // screens
 import BookmarksScreen from '../screens/BookmarksScreen';
@@ -34,7 +34,7 @@ const BookmarksStack = () => {
           headerTitleStyle: gStyle.headerTitleStyle,
           title: t('stack.screen.productDetailsTitle'),
           headerLeft: () => <NavigationBack navigation={navigation} route={route} />,
-          headerRight: () => <RemoveBookmark />
+          headerRight: () => <BookmarkTouch navigation={navigation} route={route} />
         })}
       />
       <Stack.Screen 
