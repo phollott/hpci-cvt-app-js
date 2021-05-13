@@ -4,6 +4,7 @@ import { Card, ListItem, Badge } from 'react-native-elements';
 import { Table, TableWrapper, Row, Rows } from 'react-native-table-component';
 import { connect } from 'react-redux';
 import { t } from 'i18n-js';
+import { selectBookmarkByID } from '../redux/selectors/bookmarkSelector';
 import { selectProductByID } from '../redux/selectors/productSelector';
 import cheerio from 'react-native-cheerio';
 import Icon from './Icon';
@@ -136,12 +137,13 @@ const mapStateToProps = (state, ownProps) => {
 
   // Product Resources:
   const key = productMaster.key.toString();
-  if (!key.startsWith('bookmark-product')) {
+  if (key.startsWith('bookmark-product')) {
+    product = selectBookmarkByID(state, ownProps.route.params.productMaster.nid);
+  } else {
     product = selectProductByID(state, ownProps.route.params.productMaster.nid);
-    productResourceList.push(...productResource.mapProductResources(product, state.settings.language));
   }
-  else {
-    productResourceList.push(...productResource.mapProductResources(ownProps.route.params.product, state.settings.language));
+  if (typeof product !== 'undefined') {
+    productResourceList.push(...productResource.mapProductResources(product, state.settings.language));
   }
 
   return {

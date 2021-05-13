@@ -1,5 +1,6 @@
 import { vaccineAPI1Url } from '../config/routes';
 
+// TODO: basic authentication
 export const fetchProductsAsync = async () => {
   try {
     let response = await fetch(vaccineAPI1Url);

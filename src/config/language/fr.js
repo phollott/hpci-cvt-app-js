@@ -16,10 +16,12 @@ export default {
       updated: "Modifié"
     },
     message: {
-      bookmarked: "%{brandName} a été ajouté à vos favoris.",
       loading: "Chargement en course, veuillez patienter...",
       error: {
-        bookmarked: "Impossible d'ajouter le favoris actuellement.",
+        bookmark: {
+          add: "Impossible d'ajouter le favoris actuellement.",
+          remove: "Impossible de supprimer le favoris actuellement."
+        },
         loading: "Incapable de charger"
       }
     }
@@ -72,10 +74,11 @@ export default {
   },
   products: {
     searchBar: {
-      placeholder: "Rechercher des vaccins et des traitements..."
+      placeholder: ""
     },
     card: {
-      instructionText: "Choisissez parmi les vaccins et traitements COVID-19 autorisés, ou toutes les demandes non autorisées."
+      instructionText: "Sélectionner un vaccin ou traitement pour en savoir plus.",
+      offlineText: "Actuellement en mode hors-ligne, seuls les produits favoris sont disponibles."
     },
     buttons: {
       authorized: "Produits autorisées",
@@ -107,10 +110,10 @@ export default {
     introText: "Vous n'avez ajouté aucun favori.",
     products: {
       searchBar: {
-        placeholder: "Rechercher des vaccins et des traitements..."
+        placeholder: ""
       },
       card: {
-        instructionText: "Choisissez parmi les vaccins et traitements COVID-19 autorisés."
+        instructionText: "Sélectionner le produit de votre choix pour en savoir plus."
       },
       buttons: {
         authorized: "Produits autorisées"

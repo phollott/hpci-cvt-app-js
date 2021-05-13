@@ -1,3 +1,7 @@
+// Bookmarks action types
+export const ADD_BOOKMARK = 'ADD_BOOKMARK';
+export const REMOVE_BOOKMARK = 'REMOVE_BOOKMARK';
+
 // Settings action types
 export const SET_LANGUAGE = 'SET_LANGUAGE';
 export const SET_IS_ONLINE = 'SET_IS_ONLINE';

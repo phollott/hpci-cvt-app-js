@@ -7,12 +7,11 @@ import { t } from 'i18n-js';
 import { gStyle } from '../constants';
 import Alert from './Alert';
 import Icon from './Icon';
-import { addBookmark, removeBookmark } from '../redux/actions/bookmarkActions';
-import { selectProductsByID } from '../redux/selectors/productSelector';
-import { selectBookmarkExists } from '../redux/selectors/bookmarkSelector';
+import { removeBookmark } from '../redux/actions/bookmarkActions';
+import { selectBookmarkExists, selectBookmarksByID } from '../redux/selectors/bookmarkSelector';
 import { storage } from '../services';
 
-const BookmarkProduct = ({ navigation, route }) => {
+const BookmarkTouch = ({ navigation, route }) => {
   
   const state = useSelector(state => state);
   const isBookmark = useSelector(state => {
@@ -20,7 +19,6 @@ const BookmarkProduct = ({ navigation, route }) => {
   });
 
   const dispatch = useDispatch();
-  const addBookmarkProduct = bookmarks => dispatch(addBookmark(bookmarks));
   const removeBookmarkProduct = nid => dispatch(removeBookmark(nid));
 
   return (
@@ -34,23 +32,12 @@ const BookmarkProduct = ({ navigation, route }) => {
         var productMaster = route.params.productMaster;
         if (productMaster) {
           try {
-            var products = selectProductsByID(state, productMaster.nid);
+            var products = selectBookmarksByID(state, productMaster.nid);
             if (products.length === 2
               && 'enfr'.includes(products[0].language.toLowerCase().substring(0,2))
               && 'enfr'.includes(products[1].language.toLowerCase().substring(0,2)) )
             {
-              if (!isBookmark) {
-                // dispatch en and fr products to state store bookmarks
-                addBookmarkProduct(products);
-
-                // save en and fr bookmarks to storage
-                var bookmarks = [];
-                // key format: bookmark-product + nid + '-' + lang, ex.: bookmark-product16-en, bookmark-product16-fr
-                bookmarks.push([ 'bookmark-product'.concat(productMaster.nid + '-' + products[0].language.toLowerCase().substring(0,2)), JSON.stringify(products[0]) ]);
-                bookmarks.push([ 'bookmark-product'.concat(productMaster.nid + '-' + products[1].language.toLowerCase().substring(0,2)), JSON.stringify(products[1]) ]);
-                await storage.saveMulti(bookmarks);
-
-              } else {
+              if (isBookmark) {
                 // dispatch removal of en and fr products from state store bookmarks
                 removeBookmarkProduct(products[0].nid);
 
@@ -59,12 +46,12 @@ const BookmarkProduct = ({ navigation, route }) => {
               }
               //console.log(await storage.retrieveMulti(['bookmark-product'+productMaster.nid+'-en', 'bookmark-product'+productMaster.nid+'-fr']));
 
-              // [mrj] hack: navigation is used to ensure the bookmarks screen is re-rendered after bookmark is added or removed
+              // [mrj] hack: navigation is used to ensure screens are re-rendered after bookmark is removed
+              navigation.navigate('ProductsStack', {screen: 'Products'});
               navigation.navigate('BookmarksStack', {
-                screen: 'Bookmarks', 
-                params: { bookmarkAction: (isBookmark ? '-remove' : '-add-'.concat(productMaster.nid)).concat('-' + (new Date()).getTime().toString()) }
+                screen: 'Bookmarks',
+                params: { bookmarkAction: ('-remove-').concat((new Date()).getTime().toString()) }
               });
-              navigation.navigate('ProductsStack', {screen: 'ProductDetails'});
             } else {
               throw isBookmark ? 'Unable to remove bookmark.' : 'Unable to create bookmark.'; 
             }
@@ -89,10 +76,10 @@ const BookmarkProduct = ({ navigation, route }) => {
   )
 };
 
-BookmarkProduct.propTypes = {
+BookmarkTouch.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
   route: PropTypes.object.isRequired
 };
 
-export default BookmarkProduct;
+export default BookmarkTouch;

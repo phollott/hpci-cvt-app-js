@@ -16,10 +16,12 @@ export default {
       updated: "Updated"
     },
     message: {
-      bookmarked: "%{brandName} was added to your bookmarks.",
       loading: "Loading, please wait...",
       error: {
-        bookmarked: "Unable to create bookmark at this time.",
+        bookmark: {
+          add: "Unable to create bookmark at this time.",
+          remove: "Unable to remove bookmark at this time."
+        },
         loading: "Unable to load"
       }
     }
@@ -72,10 +74,11 @@ export default {
   },
   products: {
     searchBar: {
-      placeholder: "Search for Vaccines and Treatments..."
+      placeholder: ""
     },
     card: {
-      instructionText: "Select from authorized COVID-19 Vaccines and Treatments, or all unauthorized applications."
+      instructionText: "Select a Vaccine or Treatment product to learn more.",
+      offlineText: "Currently in offline mode (no internet access is detected). Only bookmarked products are available."
     },
     buttons: {
       authorized: "Authorized Products",
@@ -107,10 +110,10 @@ export default {
     introText: "You have not added any bookmarks.",
     products: {
       searchBar: {
-        placeholder: "Search for Vaccines and Treatments..."
+        placeholder: ""
       },
       card: {
-        instructionText: "Select from authorized COVID-19 Vaccines and Treatments."
+        instructionText: "Select one of your bookmarked products to learn more."
       },
       buttons: {
         authorized: "Authorized Products"
