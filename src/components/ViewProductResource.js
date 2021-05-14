@@ -146,7 +146,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  //console.log('state.settings: ', state.settings);
   return {
     settings: state.settings
   };

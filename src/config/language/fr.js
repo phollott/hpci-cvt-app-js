@@ -46,7 +46,7 @@ export default {
   home: {
     introCard: {
       title: "Vaccins et traitements pour la COVID-19",
-      text: "Renseignements sur les vaccins et traitements autorisés pour la COVID-19, ainsi que ceux dont l’examen est actuellement en cours."
+      text: "Renseignements sur les vaccins et traitements autorisés pour la COVID-19."
           + " Santé Canada s’engage à fournir l’information actualisée sur les vaccins et traitements pour la COVID-19."
     },
     button: {
@@ -81,8 +81,8 @@ export default {
       offlineText: "Actuellement en mode hors-ligne, seuls les produits favoris sont disponibles."
     },
     buttons: {
-      authorized: "Produits autorisées",
-      application: "Autres demandes reçues"
+      left: "Vaccins",
+      right: "Traitements"
     }
   },
   productDetails: {
@@ -116,7 +116,8 @@ export default {
         instructionText: "Sélectionner le produit de votre choix pour en savoir plus."
       },
       buttons: {
-        authorized: "Produits autorisées"
+        left: "Vaccins",
+        right: "Traitements"
       }
     }
   }
