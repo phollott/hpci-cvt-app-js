@@ -15,21 +15,13 @@ let productMaster = (product, id) => {
   };
 }
 
-const mapAuthorizedProduct = (product, id) => {
-  let authorizedProduct = productMaster(product, id);
-  authorizedProduct.showLink = true;
-  authorizedProduct.searchKey = [authorizedProduct.brandName, authorizedProduct.companyName, authorizedProduct.ingredient].join('-').toLowerCase();
-  return authorizedProduct;
-}
-
-const mapUnauthorizedProduct = (product, id) => {
-  let unauthorizedProduct = productMaster(product, id);
-  unauthorizedProduct.showLink = false;
-  unauthorizedProduct.searchKey = [unauthorizedProduct.brandName, unauthorizedProduct.companyName].join('-').toLowerCase();
-  return unauthorizedProduct;
+const mapProduct = (product, id) => {
+  let prod = productMaster(product, id);
+  prod.showLink = true;
+  prod.searchKey = [prod.brandName, prod.companyName, prod.ingredient].join('-').toLowerCase();
+  return prod;
 }
 
 export default {
-  mapAuthorizedProduct,
-  mapUnauthorizedProduct
+  mapProduct
 };

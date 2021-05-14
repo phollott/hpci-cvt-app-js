@@ -1,5 +1,5 @@
 import {t} from 'i18n-js';
-import { lang, covidVaccinePortal, portailVaccinCovid } from '../constants/constants';
+import { lang, covidVaccinePortal, portailVaccinCovid, productType } from '../constants/constants';
 import cheerio from 'react-native-cheerio';
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
@@ -14,26 +14,15 @@ const isAuthorizedProduct = product => {
   return (product.status.toLowerCase().includes('authorized') || product.status.toLowerCase().includes('autorisé'));
 }
 
-const isUnauthorizedProduct = product => {
-  return (!product.status.toLowerCase().includes('authorized') && !product.status.toLowerCase().includes('autorisé'));
-}
-
-const isValidProduct = product => {
-  return (!product.title.toLowerCase().startsWith('demo vaccine')                                   //  TODO: **** hack! sigh
-    && !product.title.toLowerCase().startsWith('new product')
-    && !product.title.toLowerCase().startsWith('test')
-  );
-}
-
 const getProductType = product => {
   // productType: Vaccine or Treatment
-  let productType = "Vaccine";
+  let prodType = "Vaccine";
   if (typeof product.field_product_type !== "undefined" && product.field_product_type !== null) {
     // e.g. "field_product_type": "<a href=\"https://covid-vaccine-stage.hpfb-dgpsa.ca/taxonomy/term/16\" hreflang=\"en\">Vaccine</a>"
-    productType = product.field_product_type.replace(/(<([^>]+)>)/ig, "").trim();    // strip html, trim
-    productType = productType.toLowerCase().startsWith("vaccin") ? "Vaccine" : "Treatment"
+    prodType = product.field_product_type.replace(/(<([^>]+)>)/ig, "").trim();    // strip html, trim
+    prodType = prodType.toLowerCase().startsWith("vaccin") ? productType.vaccine : productType.treatment
   }
-  return productType;
+  return prodType;
 }
 
 const getProductDateOfApproval = product => {
@@ -176,8 +165,6 @@ const isProductResourceUpdated = (product, resource) => {
 
 export default {
   isAuthorizedProduct,
-  isUnauthorizedProduct,
-  isValidProduct,
   getProductType,
   getProductDateOfApproval,
   isProductResourceLinkAnAnchor,

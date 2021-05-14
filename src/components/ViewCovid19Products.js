@@ -4,7 +4,8 @@ import { ButtonGroup, Card, SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { t } from 'i18n-js';
 import { gStyle } from '../constants';
-import { selectAuthorizedProducts, selectUnauthorizedProducts } from '../redux/selectors/productSelector';
+import { productType } from '../constants/constants';
+import { selectProducts } from '../redux/selectors/productSelector';
 import { productMaster } from '../services';
 
 // components
@@ -13,8 +14,8 @@ import ViewProductMasters from './ViewProductMasters';
 const internalState = {
   searchText: '',
   selectedIndex: 0,
-  filtAuthProd: [],
-  filtApplProd: []
+  filtVaccineProd: [],
+  filtTreatmentProd: []
 };
 
 class ViewCovid19Products extends Component {
@@ -28,17 +29,17 @@ class ViewCovid19Products extends Component {
   // SearchBar
   updateSearch = (searchText) => {
     var searchLowercase = searchText.toLowerCase();
-    const filteredAuthProducts = this.props.authorizedProducts.filter((item) => {
+    const filteredVaccineProducts = this.props.vaccineProducts.filter((item) => {
       const itemData = item.searchKey
       return itemData.indexOf(searchLowercase) > -1
     });
-    const filteredApplProducts = this.props.applicationProducts.filter((item) => {
+    const filteredTreatmentProducts = this.props.treatmentProducts.filter((item) => {
       const itemData = item.searchKey
       return itemData.indexOf(searchLowercase) > -1
     });
     this.setState({ 
-      filtAuthProd: filteredAuthProducts,
-      filtApplProd: filteredApplProducts,
+      filtVaccineProd: filteredVaccineProducts,
+      filtTreatmentProd: filteredTreatmentProducts,
       searchText: searchText
      });
   }
@@ -49,18 +50,18 @@ class ViewCovid19Products extends Component {
   }
 
   /*************************************************************************************
-   * 1. Extract from redux store Vaccine and Treatment Product Masters for Approved and Applied Products
-   * 2. Add filtered Approved and Applied Product Masters to Component State
+   * 1. Extract from redux store Vaccine and Treatment Product Masters for Approved Products
+   * 2. Add filtered Vaccine and Treatment Product Masters to Component State
    */
   componentDidMount() {
     this.setState({
-      filtAuthProd: this.props.authorizedProducts,
-      filtApplProd: this.props.applicationProducts
+      filtVaccineProd: this.props.vaccineProducts,
+      filtTreatmentProd: this.props.treatmentProducts
     });
   }
 
   render() {
-    const buttons = [ t('products.buttons.authorized'), t('products.buttons.application') ];
+    const buttons = [ t('products.buttons.left'), t('products.buttons.right') ];
     const { selectedIndex } = this.state;
     const { searchText } = this.state;
     if (this.props.settings.isOnline) {
@@ -87,13 +88,13 @@ class ViewCovid19Products extends Component {
             <View>
               { (this.state.selectedIndex === 0) &&
                   <ViewProductMasters
-                    productMasters={this.state.filtAuthProd}
+                    productMasters={this.state.filtVaccineProd}
                     navigation={this.props.navigation}
                   />
               }
               { (this.state.selectedIndex === 1) &&
                   <ViewProductMasters
-                    productMasters={this.state.filtApplProd}
+                    productMasters={this.state.filtTreatmentProd}
                     navigation={this.props.navigation}
                   />
               }
@@ -117,22 +118,21 @@ class ViewCovid19Products extends Component {
 }
 
 const mapStateToProps = (state) => {
-  var authorizedProducts = [], applicationProducts = [];
+  var vaccineProducts = [], treatmentProducts = [];
 
-  // Authorized Products:
-  selectAuthorizedProducts(state).forEach((product, i) => {
-    authorizedProducts.push(productMaster.mapAuthorizedProduct(product, i));
+  selectProducts(state).forEach((prod, i) => {
+    let product = productMaster.mapProduct(prod, i);
+    if ( product.type === productType.vaccine ) {
+      vaccineProducts.push(product);
+    } else {
+      treatmentProducts.push(product);
+    }
   });
-  
-  // Application Products:
-  selectUnauthorizedProducts(state).forEach((product, i) => {
-    applicationProducts.push(productMaster.mapUnauthorizedProduct(product, i));
-  });
-  
+
   return {
     settings: state.settings,
-    authorizedProducts: authorizedProducts.sort((a, b) => (a.brandName > b.brandName) ? 1 : -1),
-    applicationProducts: applicationProducts.sort((a, b) => (a.brandName > b.brandName) ? 1 : -1)
+    vaccineProducts: vaccineProducts.sort((a, b) => (a.brandName > b.brandName) ? 1 : -1),
+    treatmentProducts: treatmentProducts.sort((a, b) => (a.brandName > b.brandName) ? 1 : -1)
   };
 };
 

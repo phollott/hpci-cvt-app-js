@@ -4,6 +4,7 @@ import { ButtonGroup, Card, SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { t } from 'i18n-js';
 import { gStyle } from '../constants';
+import { productType } from '../constants/constants';
 import { selectBookmarks } from '../redux/selectors/bookmarkSelector';
 import { productMaster } from '../services';
 
@@ -13,7 +14,8 @@ import ViewProductMasters from './ViewProductMasters';
 const internalState = {
   searchText: '',
   selectedIndex: 0,
-  filtAuthProd: []
+  filtVaccineProd: [],
+  filtTreatmentProd: []
 };
 
 class ViewBookmarkedProducts extends Component {
@@ -27,12 +29,17 @@ class ViewBookmarkedProducts extends Component {
   // SearchBar
   updateSearch = (searchText) => {
     var searchLowercase = searchText.toLowerCase();
-    const filteredAuthProducts = this.props.authorizedProducts.filter((item) => {
+    const filteredVaccineProducts = this.props.vaccineProducts.filter((item) => {
+      const itemData = item.searchKey
+      return itemData.indexOf(searchLowercase) > -1
+    });
+    const filteredTreatmentProducts = this.props.treatmentProducts.filter((item) => {
       const itemData = item.searchKey
       return itemData.indexOf(searchLowercase) > -1
     });
     this.setState({ 
-      filtAuthProd: filteredAuthProducts,
+      filtVaccineProd: filteredVaccineProducts,
+      filtTreatmentProd: filteredTreatmentProducts,
       searchText: searchText
      });
   }
@@ -44,19 +51,21 @@ class ViewBookmarkedProducts extends Component {
 
   /*************************************************************************************
    * 1. Extract from redux store bookmarked Vaccine and Treatment Product Masters for Approved Products
-   * 2. Add filtered Approved Product Masters to Component State
+   * 2. Add filtered Vaccine and Treatment Product Masters to Component State
    */
   componentDidMount() {
     this.setState({
-      filtAuthProd: this.props.authorizedProducts
+      filtVaccineProd: this.props.vaccineProducts,
+      filtTreatmentProd: this.props.treatmentProducts,
+      selectedIndex: this.props.vaccineProducts.length === 0 && this.props.treatmentProducts.length > 0 ? 1 : 0
     });
   }
 
   render() {
-    const buttons = [ t('bookmarks.products.buttons.authorized') ];
+    const buttons = [  t('bookmarks.products.buttons.left'), t('bookmarks.products.buttons.right') ];
     const { selectedIndex } = this.state;
     const { searchText } = this.state;
-    if (this.props.authorizedProducts.length > 0) {
+    if (this.props.vaccineProducts.length > 0 || this.props.treatmentProducts.length > 0) {
       return (
         <View 
           style={{ flex: 1 }}
@@ -81,10 +90,16 @@ class ViewBookmarkedProducts extends Component {
             />
             <View>
               { (this.state.selectedIndex === 0) &&
-                <ViewProductMasters
-                  productMasters={this.state.filtAuthProd}
-                  navigation={this.props.navigation} 
-                />
+                  <ViewProductMasters
+                    productMasters={this.state.filtVaccineProd}
+                    navigation={this.props.navigation}
+                  />
+              }
+              { (this.state.selectedIndex === 1) &&
+                  <ViewProductMasters
+                    productMasters={this.state.filtTreatmentProd}
+                    navigation={this.props.navigation}
+                  />
               }
             </View>
           </ScrollView>
@@ -106,16 +121,22 @@ class ViewBookmarkedProducts extends Component {
 }
 
 const mapStateToProps = (state) => {
-  var authorizedProducts = [];
+  var vaccineProducts = [], treatmentProducts = [];
 
   // Bookmarks:  (bookmark.key to match storage's)
   selectBookmarks(state).forEach((bookmark) => {
-    authorizedProducts.push(productMaster.mapAuthorizedProduct(bookmark, 'bookmark-product'.concat(bookmark.nid + '-' + state.settings.language)));
+    let product = productMaster.mapProduct(bookmark, 'bookmark-product'.concat(bookmark.nid + '-' + state.settings.language));
+    if ( product.type === productType.vaccine ) {
+      vaccineProducts.push(product);
+    } else {
+      treatmentProducts.push(product);
+    }
   });
 
   return {
-    authorizedProducts: authorizedProducts.sort((a, b) => (a.brandName > b.brandName) ? 1 : -1),
-    settings: state.settings
+    settings: state.settings,
+    vaccineProducts: vaccineProducts.sort((a, b) => (a.brandName > b.brandName) ? 1 : -1),
+    treatmentProducts: treatmentProducts.sort((a, b) => (a.brandName > b.brandName) ? 1 : -1)
   };
 };
 

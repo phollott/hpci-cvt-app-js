@@ -46,7 +46,7 @@ export default {
   home: {
     introCard: {
       title: "COVID-19 Vaccines and Treatments",
-      text: "Information on vaccines and treatments authorized for COVID-19, as well as those currently under review."
+      text: "Information on vaccines and treatments authorized for COVID-19."
           + " Health Canada is committed to providing up-to-date information related to vaccines and treatments for COVID-19."
     },
     button: {
@@ -81,8 +81,8 @@ export default {
       offlineText: "Currently in offline mode (no internet access is detected). Only bookmarked products are available."
     },
     buttons: {
-      authorized: "Authorized Products",
-      application: "Other Applications"
+      left: "Vaccines",
+      right: "Treatments"
     }
   },
   productDetails: {
@@ -116,7 +116,8 @@ export default {
         instructionText: "Select one of your bookmarked products to learn more."
       },
       buttons: {
-        authorized: "Authorized Products"
+        left: "Vaccines",
+        right: "Treatments"
       }
     }
   }

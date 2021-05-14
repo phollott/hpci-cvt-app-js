@@ -16,12 +16,12 @@ let productResource = (resource, id) => {
 }
 
 const mapProductResource = (product, resource, id, language) => {
-  let aResource = productResource(resource, id);
-  aResource.link = ProductsParserService.getProductResourceLink(resource, language);
-  aResource.resourceType = ProductsParserService.getProductResourceType(aResource.link);
-  aResource.isNew = ProductsParserService.isProductResourceNew(resource);
-  aResource.isUpdated = ProductsParserService.isProductResourceUpdated(product, resource);
-  return aResource;
+  let res = productResource(resource, id);
+  res.link = ProductsParserService.getProductResourceLink(resource, language);
+  res.resourceType = ProductsParserService.getProductResourceType(res.link);
+  res.isNew = ProductsParserService.isProductResourceNew(resource);
+  res.isUpdated = ProductsParserService.isProductResourceUpdated(product, resource);
+  return res;
 }
 
 const mapProductResources = (product, language) => {
