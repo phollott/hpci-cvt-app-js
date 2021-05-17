@@ -3,7 +3,7 @@ import { lang, covidVaccinePortal, portailVaccinCovid, productType } from '../co
 import cheerio from 'react-native-cheerio';
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
-const WINDOW_IN_DAYS = 35;
+const WINDOW_IN_DAYS = 60;
 
 // TODO: **** review bus req for each once api is available
 
@@ -36,6 +36,31 @@ const getProductDateOfApproval = product => {
     }
   }
   return approvalDate;
+}
+
+  // TODO
+  //  This is not very well tested, and I would not be surprised if it is inaccurate
+  //  Needs more testing with more up-to-date data
+const isProductNew = productApprovalDate => {
+  let dtraw = new Date(productApprovalDate),
+    dtutc = Date.UTC(dtraw.getFullYear(), dtraw.getMonth()+1, dtraw.getDate()),
+    dtdif = Math.floor((Date.now() - dtutc) / MS_PER_DAY);
+  return (dtdif <= WINDOW_IN_DAYS);
+}
+
+  // TODO
+  //  This is not very well tested, and I would not be surprised if it is inaccurate
+  //  Needs more testing with more up-to-date data
+const isProductUpdated = product => {
+  console.log ('-----> ' + product.brand_name)
+  let isProductResourceChanged = false;
+  product.resources.forEach(res => { //isProductResourceNew(res) || 
+    if (isProductResourceUpdated(product, res)) {
+      isProductResourceChanged = true;
+      console.log('UPDATED: ' + res.resource_link);
+    }
+  });
+  return isProductResourceChanged;
 }
 
 ////
@@ -167,6 +192,8 @@ export default {
   isAuthorizedProduct,
   getProductType,
   getProductDateOfApproval,
+  isProductNew,
+  isProductUpdated,
   isProductResourceLinkAnAnchor,
   getProductResourceDescription,
   getProductResourceLink,
