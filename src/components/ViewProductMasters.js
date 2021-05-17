@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
-import { ListItem } from 'react-native-elements';
+import { ListItem, Badge } from 'react-native-elements';
+import { t } from 'i18n-js';
 import Icon from './Icon';
+
+import { productMaster } from '../services';
 
 export default class ViewProductMasters extends Component {
   constructor(props) {
@@ -27,7 +30,10 @@ export default class ViewProductMasters extends Component {
                 { productMaster.brandName }
               </ListItem.Title>
               <ListItem.Subtitle>{ productMaster.ingredient }</ListItem.Subtitle>
-              <Text>{ productMaster.companyName } ({ productMaster.status })</Text>
+              <Text>{ productMaster.companyName } ({ productMaster.status })
+                { productMaster.isNew && !productMaster.isUpdated && <Badge value={t('common.badge.new')} status='success' containerStyle={{ marginLeft: 2, marginTop: -3 }} /> }
+                { productMaster.isUpdated && <Badge value={t('common.badge.updated')} status='warning' containerStyle={{ marginLeft: 2, marginTop: -3 }} /> }  
+              </Text>
             </ListItem.Content>
             { productMaster.showLink && <ListItem.Chevron color='blue'/> }
           </ListItem>

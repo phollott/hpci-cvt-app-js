@@ -19,6 +19,8 @@ const mapProduct = (product, id) => {
   let prod = productMaster(product, id);
   prod.showLink = true;
   prod.searchKey = [prod.brandName, prod.companyName, prod.ingredient].join('-').toLowerCase();
+  prod.isNew = ProductsParserService.isProductNew(prod.approvalDate);
+  prod.isUpdated = ProductsParserService.isProductUpdated(product);
   return prod;
 }
 
