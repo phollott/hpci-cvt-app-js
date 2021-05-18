@@ -3,7 +3,7 @@ import { lang, covidVaccinePortal, portailVaccinCovid, productType } from '../co
 import cheerio from 'react-native-cheerio';
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
-const WINDOW_IN_DAYS = 60;
+const WINDOW_IN_DAYS = 14;
 
 // TODO: **** review bus req for each once api is available
 
@@ -40,24 +40,26 @@ const getProductDateOfApproval = product => {
 
   // TODO
   //  This is not very well tested, and I would not be surprised if it is inaccurate
-  //  Needs more testing with more up-to-date data
 const isProductNew = productApprovalDate => {
   let dtraw = new Date(productApprovalDate),
     dtutc = Date.UTC(dtraw.getFullYear(), dtraw.getMonth()+1, dtraw.getDate()),
     dtdif = Math.floor((Date.now() - dtutc) / MS_PER_DAY);
-  return (dtdif <= WINDOW_IN_DAYS);
+//    if (dtdif <= WINDOW_IN_DAYS) console.log ('NEW PRODUCT -----> ' + product.brand_name)
+    return (dtdif <= WINDOW_IN_DAYS);
 }
 
   // TODO
   //  This is not very well tested, and I would not be surprised if it is inaccurate
-  //  Needs more testing with more up-to-date data
 const isProductUpdated = product => {
-  console.log ('-----> ' + product.brand_name)
+//  console.log ('-----> ' + product.brand_name)
   let isProductResourceChanged = false;
-  product.resources.forEach(res => { //isProductResourceNew(res) || 
-    if (isProductResourceUpdated(product, res)) {
+  let resources = product.resources.filter((res, ind, arr) => {
+    return (res.audience.indexOf('Consumers') !== -1);
+  });
+  resources.forEach(res => {  
+    if (isProductResourceNew(res) || isProductResourceUpdated(product, res)) {
       isProductResourceChanged = true;
-      console.log('UPDATED: ' + res.resource_link);
+//      console.log('NEW OR UPDATED: ' + res.resource_link);
     }
   });
   return isProductResourceChanged;
@@ -138,14 +140,16 @@ const getProductResourceType = link => {
 const isProductResourceNew = resource => {
   // TODO
   //  This is not very well tested, and I would not be surprised if it is off by one
-  var isResourceNew = false;
+var isResourceNew = false;
   if (resource.date) {
+//    console.log ('NEW Res --> ' + resource.resource_link)
     var $ = cheerio.load(resource.date),
       dtraw = new Date($('time').attr('datetime')),
-      dtutc = Date.UTC(dtraw.getFullYear(), dtraw.getMonth()+1, dtraw.getDate()),
+      dtutc = Date.UTC(dtraw.getFullYear(), dtraw.getMonth(), dtraw.getDate()),
       dtdif = Math.floor((Date.now() - dtutc) / MS_PER_DAY);
     isResourceNew = (dtdif <= WINDOW_IN_DAYS);
-    //console.log('New Date Difference for : ' + resource.description + ' : ' + dtdif + ' : ' + isResourceNew);   
+//    console.log($('time').attr('datetime'));
+//    console.log('New Date Difference: ' + Date.now() + '-' + dtutc + '=' + dtdif + ' : ' + isResourceNew);   
   }
   return isResourceNew;
 }
@@ -176,7 +180,7 @@ const isProductResourceUpdated = (product, resource) => {
 
       // At this point, we have iterated over the Resource Details
       if (match && dtraw) {
-        var dtutc = Date.UTC(dtraw.getFullYear(), dtraw.getMonth()+1, dtraw.getDate()),
+        var dtutc = Date.UTC(dtraw.getFullYear(), dtraw.getMonth(), dtraw.getDate()),
           dtdif = Math.floor((Date.now() - dtutc) / MS_PER_DAY);
         if (dtdif <= WINDOW_IN_DAYS) {
           isResourceUpdated = true;
