@@ -31,7 +31,9 @@ class ViewProductDetails extends Component {
 
   componentDidMount() {
     this.props.productResourceList.forEach((resource, i) => {
-      if (resource.resourceName === 'Consumer Information' || resource.resourceName.toLowerCase().includes('consommateurs')) {
+      if ( this.props.settings.isOnline
+        && (resource.resourceName === 'Consumer Information' || resource.resourceName.toLowerCase().includes('consommateurs')))
+      {
         const cvtPortal = (this.props.settings.language === lang.english) ? covidVaccinePortal : portailVaccinCovid;
         var url = cvtPortal + resource.link;            
         fetch(url).then((resp)=>{ return resp.text() }).then((text)=>{ 
@@ -73,7 +75,7 @@ class ViewProductDetails extends Component {
           <Text><Text style={{ fontWeight: 'bold' }}>{ t('productDetails.card.approvalDateLabel') }</Text>{this.props.productMaster.approvalDate}</Text>
         </Card>
         <ScrollView style={{ backgroundColor: 'white' }}>
-        { this.state.tableData[0][0] != "..." &&
+        { this.state.tableData[0][0] != "..." && this.props.settings.isOnline &&
           <Table borderStyle={{borderWidth: 1, borderColor: '#97B7D2'}}>
             <Row data={this.state.tableHead} flexArr={[1, 2, 2, 2]} style={styles.head} textStyle={styles.headText}/>
             <TableWrapper style={styles.wrapper}>
@@ -101,7 +103,7 @@ class ViewProductDetails extends Component {
                   { productResource.isUpdated && <Badge value={t('common.badge.updated')} status='warning' containerStyle={{ marginLeft: 2, marginTop: -3 }} /> }  
                 </Text>
               </ListItem.Content>
-              { (productResource.link) && <ListItem.Chevron color='blue'/> }
+              { (productResource.link && this.props.settings.isOnline) && <ListItem.Chevron color='blue'/> }
             </ListItem>
           )
         }
@@ -111,7 +113,7 @@ class ViewProductDetails extends Component {
   }
 
   linkingProductResource(productResource) {
-    if (productResource.link) {
+    if (productResource.link && this.props.settings.isOnline) {
       if (productResource.resourceType === 'external') {
         //console.log('external product resource (show in browser): ' + productResource.link);
         Linking.canOpenURL(productResource.link).then( supported => {
