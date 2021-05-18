@@ -11,7 +11,9 @@ let productMaster = (product, id) => {
     status: product.status, 
     approvalDate: ProductsParserService.getProductDateOfApproval(product),
     showLink: false,
-    searchKey: ''
+    searchKey: '',
+    isNew: false,
+    isUpdated: false
   };
 }
 
