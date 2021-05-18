@@ -4,8 +4,6 @@ import { ListItem, Badge } from 'react-native-elements';
 import { t } from 'i18n-js';
 import Icon from './Icon';
 
-import { productMaster } from '../services';
-
 export default class ViewProductMasters extends Component {
   constructor(props) {
     super(props);
