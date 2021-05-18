@@ -154,8 +154,8 @@ const isProductResourceUpdated = (product, resource) => {
   // TODO
   //  This is not very well tested, and I would not be surprised if it is off by one
   var isResourceUpdated = false;
-  if (product.field_vaccine_resources) {
-    var $ = cheerio.load(product.field_vaccine_resources);
+  if (product.field_vaccine_resources_export_1) {
+    var $ = cheerio.load(product.field_vaccine_resources_export_1);
     $('div.paragraph--type--vaccine-resources').map( (i, el_outer) => {
       var match = null, dtraw = null;
       $(el_outer).find('div.field').map( (j, el_inner) => {
