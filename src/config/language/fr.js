@@ -92,7 +92,7 @@ export default {
       statusLabel: "État: ",
       approvalDateLabel: "Date d'approbation: "
     },
-    tableHead: {
+    metadata: {
       din: 'DIN',
       strength: 'Concentration', 
       dosageForm: 'Forme posologique',

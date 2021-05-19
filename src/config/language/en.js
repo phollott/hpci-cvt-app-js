@@ -92,7 +92,7 @@ export default {
       statusLabel: "Status: ",
       approvalDateLabel: "Date of Approval: "
     },
-    tableHead: {
+    metadata: {
       din: 'DIN',
       strength: 'Strength', 
       dosageForm: 'Dosage Form',

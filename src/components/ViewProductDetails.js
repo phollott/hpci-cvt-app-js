@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, ScrollView, Linking, StyleSheet } from 'react-native';
 import { Card, ListItem, Badge } from 'react-native-elements';
-import { Table, TableWrapper, Row, Rows } from 'react-native-table-component';
 import { connect } from 'react-redux';
 import { t } from 'i18n-js';
 import { selectBookmarkByID } from '../redux/selectors/bookmarkSelector';
@@ -16,9 +15,7 @@ class ViewProductDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tableHead: [t('productDetails.tableHead.din'), t('productDetails.tableHead.strength'), t('productDetails.tableHead.dosageForm'), t('productDetails.tableHead.administrationRoute')],
-      tableLeft: ['...'],
-      tableData: [ ['...', '...', '...', '...'] ]
+      productMetadata: [ ]
     }
   }
 
@@ -26,63 +23,89 @@ class ViewProductDetails extends Component {
    * 1. Extract from redux store Product Master and Product Resource details
    * 
    * [pmh] we have the Product Master from the previous screen, but reload it anyway 
-   * [pmh] Table styles should live with the other global styles
    */
 
-  componentDidMount() {
-    this.props.productResourceList.forEach((resource, i) => {
-      if ( this.props.settings.isOnline
-        && (resource.resourceName === 'Consumer Information' || resource.resourceName.toLowerCase().includes('consommateurs')))
-      {
-        const cvtPortal = (this.props.settings.language === lang.english) ? covidVaccinePortal : portailVaccinCovid;
-        var url = cvtPortal + resource.link;            
-        fetch(url).then((resp)=>{ return resp.text() }).then((text)=>{ 
-          var $ = cheerio.load(text), tableData = [];
-          $('tbody').first().find('tr').map((i, row) => {
-            var tableCells = [];
-            $(row).find('td').map((j, div) => {
-              switch (j) {
-                case 0: case 3: case 4: case 5: 
-                  tableCells.push($(div).text().trim()); break;
-              }
-            });
-            tableData.push(tableCells);
-          });
-          this.setState({
-            tableHead: [t('productDetails.tableHead.din'), t('productDetails.tableHead.strength'), t('productDetails.tableHead.dosageForm'), t('productDetails.tableHead.administrationRoute')],      
-            tableData: tableData
-          });
-        });
+   componentDidMount() {
+    let consumerInformationResource = this.props.productResourceList.find((resource, ind, arr) => { 
+      if (resource.resourceName === 'Consumer Information' || resource.resourceName.toLowerCase().includes('consommateurs')) {
+        return resource;
       }
-    });      
+    });
+
+    if (consumerInformationResource) {
+      const cvtPortal = (this.props.settings.language === lang.english) ? covidVaccinePortal : portailVaccinCovid;
+      var url = cvtPortal + consumerInformationResource.link;            
+      fetch(url).then((resp)=>{ return resp.text() }).then((text)=>{ 
+        var $ = cheerio.load(text), productMetadata = [];
+        var productInfo = { 'din': null, 'name': null, 'ingredient': null, 'strength': null, 'dosageForm': null, 'routeOfAdmin': null };
+        $('tbody').first().find('tr').map((i, row) => {
+          $(row).find('td').map((j, div) => {
+            switch (j) {
+              case 0: productInfo.din = $(div).text().trim(); break;
+              case 1: productInfo.name = $(div).text().trim(); break;
+              case 2: productInfo.ingredient = $(div).text().trim(); break;
+              case 3: productInfo.strength = $(div).text().trim(); break;
+              case 4: productInfo.dosageForm = $(div).text().trim(); break;
+              case 5: productInfo.routeOfAdmin = $(div).text().trim(); break;
+            }
+          });
+          productMetadata.push(productInfo);
+        });
+
+        this.setState({
+          productMetadata: productMetadata
+        });
+      });
+    }
   }
 
   render() {
-    const styles = StyleSheet.create({
-      container: { flex: 1, padding: 4, backgroundColor: '#fff' },
-      head: { height: 20, backgroundColor: '#2289DC' },
-      wrapper: { flexDirection: 'row'},
-      headText: { margin: 4, fontSize: 8, fontWeight: 'bold', color: 'white' },
-      text: { margin: 4, fontSize: 9 }      
-    });
     return (
       <View style={{ flex: 1 }}>
-        <Card style={{ flex: 1 }}>
-          <Card.Title style={{ marginBottom: 8 }}>{this.props.productMaster.brandName}</Card.Title>
-          <Text><Text style={{ fontWeight: 'bold' }}>{ t('productDetails.card.companyNameLabel') }</Text>{this.props.productMaster.companyName}</Text>
-          <Text><Text style={{ fontWeight: 'bold' }}>{ t('productDetails.card.ingredientLabel') }</Text>{this.props.productMaster.ingredient}</Text>
-          <Text><Text style={{ fontWeight: 'bold' }}>{ t('productDetails.card.statusLabel') }</Text>{this.props.productMaster.status}</Text>
-          <Text><Text style={{ fontWeight: 'bold' }}>{ t('productDetails.card.approvalDateLabel') }</Text>{this.props.productMaster.approvalDate}</Text>
-        </Card>
         <ScrollView style={{ backgroundColor: 'white' }}>
-        { this.state.tableData[0][0] != "..." && this.props.settings.isOnline &&
-          <Table borderStyle={{borderWidth: 1, borderColor: '#97B7D2'}}>
-            <Row data={this.state.tableHead} flexArr={[1, 2, 2, 2]} style={styles.head} textStyle={styles.headText}/>
-            <TableWrapper style={styles.wrapper}>
-              <Rows data={this.state.tableData} flexArr={[1, 2, 2, 2]} textStyle={styles.text}/>
-            </TableWrapper>
-          </Table>
-        }
+        <Card style={{ flex: 1 }}>
+          <Card.Title style={{ fontWeight: 'bold', marginBottom: 8 }}>{this.props.productMaster.brandName}</Card.Title>
+          <View style={{ padding: 3 }}>
+            <Text style={{ fontWeight: 'bold' }}>{this.props.productMaster.companyName}</Text>
+            <Text style={{ fontSize: 9 }}>{ t('productDetails.card.companyNameLabel') }</Text>
+          </View>
+          <View style={{ padding: 3 }}>
+            <Text style={{ fontWeight: 'bold' }}>{this.props.productMaster.ingredient}</Text>
+            <Text style={{ fontSize: 9 }}>{ t('productDetails.card.ingredientLabel') }</Text>
+          </View>
+          <View style={{ padding: 3 }}>
+            <Text style={{ fontWeight: 'bold' }}>{this.props.productMaster.status}</Text>
+            <Text style={{ fontSize: 9 }}>{ t('productDetails.card.statusLabel') }</Text>
+          </View>
+          <View style={{ padding: 3 }}>
+            <Text style={{ fontWeight: 'bold' }}>{this.props.productMaster.approvalDate}</Text>
+            <Text style={{ fontSize: 9 }}>{ t('productDetails.card.approvalDateLabel') }</Text>
+          </View>
+          {
+            this.state.productMetadata.map((product, key) => {
+              return (
+                <View>
+                  <View style={{ padding: 3 }}>
+                    <Text style={{ fontWeight: 'bold' }}>{ product.din }</Text>
+                    <Text style={{ fontSize: 9 }}>{ t('productDetails.metadata.din') }</Text>
+                  </View>
+                  <View style={{ padding: 3, marginLeft: 20 }}>
+                    <Text style={{ fontWeight: 'bold' }}>{ product.strength }</Text>
+                    <Text style={{ fontSize: 9 }}>{ t('productDetails.metadata.strength') }</Text>
+                  </View>
+                  <View style={{ padding: 3, marginLeft: 20 }}>
+                    <Text style={{ fontWeight: 'bold' }}>{ product.dosageForm }</Text>
+                    <Text style={{ fontSize: 9 }}>{ t('productDetails.metadata.dosageForm') }</Text>
+                  </View>
+                  <View style={{ padding: 3, marginLeft: 20 }}>
+                    <Text style={{ fontWeight: 'bold' }}>{ product.routeOfAdmin }</Text>
+                    <Text style={{ fontSize: 9 }}>{ t('productDetails.metadata.administrationRoute') }</Text>
+                  </View>
+                </View>
+              );
+            })
+          }
+        </Card>
         {
           this.props.productResourceList.map( productResource =>
             <ListItem key={productResource.key} bottomDivider
@@ -103,7 +126,7 @@ class ViewProductDetails extends Component {
                   { productResource.isUpdated && <Badge value={t('common.badge.updated')} status='warning' containerStyle={{ marginLeft: 2, marginTop: -3 }} /> }  
                 </Text>
               </ListItem.Content>
-              { (productResource.link && this.props.settings.isOnline) && <ListItem.Chevron color='blue'/> }
+              { (productResource.link) && <ListItem.Chevron color='blue'/> }
             </ListItem>
           )
         }
@@ -113,7 +136,7 @@ class ViewProductDetails extends Component {
   }
 
   linkingProductResource(productResource) {
-    if (productResource.link && this.props.settings.isOnline) {
+    if (productResource.link) {
       if (productResource.resourceType === 'external') {
         //console.log('external product resource (show in browser): ' + productResource.link);
         Linking.canOpenURL(productResource.link).then( supported => {
