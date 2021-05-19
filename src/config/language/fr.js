@@ -87,10 +87,10 @@ export default {
   },
   productDetails: {
     card: {
-      companyNameLabel: "Entreprise: ",
-      ingredientLabel: "Ingrédient: ",
-      statusLabel: "État: ",
-      approvalDateLabel: "Date d'approbation: "
+      companyNameLabel: "Entreprise",
+      ingredientLabel: "Ingrédient",
+      statusLabel: "État",
+      approvalDateLabel: "Date d'approbation"
     },
     metadata: {
       din: 'DIN',
