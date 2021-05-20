@@ -122,14 +122,14 @@ class ViewProductDetails extends Component {
                 <ListItem.Title style={{ fontWeight: 'bold' }}>
                   { productResource.resourceName }
                 </ListItem.Title>
-                <ListItem.Subtitle>{ productResource.description }</ListItem.Subtitle>
+                <Text style={{ fontSize: 10 }}>{ productResource.description }</Text>
                 { !this.props.settings.isOnline && 
                   <Text>{productResource.link.startsWith('/info')
                     ? '\n'+((this.props.settings.language === lang.english ? covidVaccinePortal : portailVaccinCovid) + productResource.link)
                     : '\n'+productResource.link}
                   </Text>
                 }
-                <Text style={{ fontWeight: 'bold' }}>{ t('productDetails.listItem.publicationStatusLabel') }{ productResource.publicationStatus }
+                <Text style={{ fontSize: 12, fontWeight: 'bold' }}>{ t('productDetails.listItem.publicationStatusLabel') }{ productResource.publicationStatus }
                   { productResource.isNew && !productResource.isUpdated && <Badge value={t('common.badge.new')} status='success' containerStyle={{ marginLeft: 2, marginTop: -3 }} /> }
                   { productResource.isUpdated && <Badge value={t('common.badge.updated')} status='warning' containerStyle={{ marginLeft: 2, marginTop: -3 }} /> }  
                 </Text>
