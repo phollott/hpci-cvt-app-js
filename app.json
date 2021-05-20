@@ -19,7 +19,10 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["src/assets/**/*"],
+    "assetBundlePatterns": [
+      "src/assets/**/*",
+      "node_modules/@expo/vector-icons/**/*"
+    ],
     "android": {
       "versionCode": 3
     },
