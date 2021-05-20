@@ -39,8 +39,8 @@ class ViewProductDetails extends Component {
         var url = cvtPortal + consumerInformationResource.link;            
         fetch(url).then((resp)=>{ return resp.text() }).then((text)=>{ 
           var $ = cheerio.load(text), productMetadata = [];
-          var productInfo = { 'din': null, 'name': null, 'ingredient': null, 'strength': null, 'dosageForm': null, 'routeOfAdmin': null };
           $('tbody').first().find('tr').map((i, row) => {
+            var productInfo = { 'din': null, 'name': null, 'ingredient': null, 'strength': null, 'dosageForm': null, 'routeOfAdmin': null };
             $(row).find('td').map((j, div) => {
               switch (j) {
                 case 0: productInfo.din = $(div).text().trim(); break;
