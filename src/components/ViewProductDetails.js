@@ -111,6 +111,7 @@ class ViewProductDetails extends Component {
         {
           this.props.productResourceList.map( productResource =>
             <ListItem key={productResource.key} bottomDivider
+              containerStyle={ (productResource.isNew || productResource.isUpdated) ? { backgroundColor: '#C1D699' } : { } }
               onPress={() => (this.linkingProductResource(productResource)) &&
                 this.props.navigation.navigate('ProductResource', { productResource })}
             >
@@ -121,6 +122,8 @@ class ViewProductDetails extends Component {
               <ListItem.Content>
                 <ListItem.Title style={{ fontWeight: 'bold' }}>
                   { productResource.resourceName }
+                  { productResource.isNew && !productResource.isUpdated && <Badge value={t('common.badge.new')} status='success' /> }
+                  { productResource.isUpdated && <Badge value={t('common.badge.updated')} status='warning' /> }  
                 </ListItem.Title>
                 <Text style={{ fontSize: 10 }}>{ productResource.description }</Text>
                 { !this.props.settings.isOnline && 
@@ -129,10 +132,7 @@ class ViewProductDetails extends Component {
                     : '\n'+productResource.link}
                   </Text>
                 }
-                <Text style={{ fontSize: 12, fontWeight: 'bold' }}>{ t('productDetails.listItem.publicationStatusLabel') }{ productResource.publicationStatus }
-                  { productResource.isNew && !productResource.isUpdated && <Badge value={t('common.badge.new')} status='success' containerStyle={{ marginLeft: 2, marginTop: -3 }} /> }
-                  { productResource.isUpdated && <Badge value={t('common.badge.updated')} status='warning' containerStyle={{ marginLeft: 2, marginTop: -3 }} /> }  
-                </Text>
+                <Text style={{ fontSize: 12, fontWeight: 'bold' }}>{ t('productDetails.listItem.publicationStatusLabel') }{ productResource.publicationStatus }</Text>
               </ListItem.Content>
               { (productResource.link && this.props.settings.isOnline) && <ListItem.Chevron color='blue'/> }
             </ListItem>

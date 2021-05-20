@@ -27,13 +27,12 @@ export default class ViewProductMasters extends Component {
             <ListItem.Content>
               <ListItem.Title style={{ fontWeight: 'bold' }}>
                 { productMaster.brandName }
+                { productMaster.isNew && !productMaster.isUpdated && <Badge value={t('common.badge.new')} status='success' /> }
+                { productMaster.isUpdated && <Badge value={t('common.badge.updated')} status='warning' /> }  
               </ListItem.Title>
               <ListItem.Subtitle>{ productMaster.ingredient }</ListItem.Subtitle>
               <Text style={{ fontSize: 12 }}>{ productMaster.companyName }</Text>
-              <Text style={{ fontSize: 12 }}>({ productMaster.status })
-                { productMaster.isNew && !productMaster.isUpdated && <Badge value={t('common.badge.new')} status='success' containerStyle={{ marginLeft: 2, marginTop: -3 }} /> }
-                { productMaster.isUpdated && <Badge value={t('common.badge.updated')} status='warning' containerStyle={{ marginLeft: 2, marginTop: -3 }} /> }  
-              </Text>
+              <Text style={{ fontSize: 12 }}>({ productMaster.status })</Text>
             </ListItem.Content>
             { productMaster.showLink && <ListItem.Chevron color='blue'/> }
           </ListItem>
