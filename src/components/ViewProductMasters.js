@@ -15,6 +15,7 @@ export default class ViewProductMasters extends Component {
       <View style={{ width: '100%', justifyContent: 'center' }}>
         { this.props.productMasters.map( productMaster =>
           <ListItem key={ productMaster.key } bottomDivider topDivider
+            containerStyle={ (productMaster.isNew || productMaster.isUpdated) ? { backgroundColor: '#C1D699' } : { } }
             onPress={() => 
               productMaster.showLink && this.props.navigation.navigate('ProductDetails', { productMaster })
             }
@@ -28,7 +29,8 @@ export default class ViewProductMasters extends Component {
                 { productMaster.brandName }
               </ListItem.Title>
               <ListItem.Subtitle>{ productMaster.ingredient }</ListItem.Subtitle>
-              <Text>{ productMaster.companyName } ({ productMaster.status })
+              <Text style={{ fontSize: 12 }}>{ productMaster.companyName }</Text>
+              <Text style={{ fontSize: 12 }}>({ productMaster.status })
                 { productMaster.isNew && !productMaster.isUpdated && <Badge value={t('common.badge.new')} status='success' containerStyle={{ marginLeft: 2, marginTop: -3 }} /> }
                 { productMaster.isUpdated && <Badge value={t('common.badge.updated')} status='warning' containerStyle={{ marginLeft: 2, marginTop: -3 }} /> }  
               </Text>
