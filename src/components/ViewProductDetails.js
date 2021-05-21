@@ -16,7 +16,8 @@ class ViewProductDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      productMetadata: []
+      productMetadata: [],
+      ConsumerAccordionHtml: ''
     }
   }
 
@@ -39,8 +40,11 @@ class ViewProductDetails extends Component {
         var url = cvtPortal + consumerInformationResource.link;            
         fetch(url).then((resp)=>{ return resp.text() }).then((text)=>{ 
           var $ = cheerio.load(text), productMetadata = [];
+          
+          // Extract Product Metadata from COVID Portal Consumer Information
           $('tbody').first().find('tr').map((i, row) => {
-            var productInfo = { 'din': null, 'name': null, 'ingredient': null, 'strength': null, 'dosageForm': null, 'routeOfAdmin': null };
+            var noMatch = true
+              , productInfo = { 'din': null, 'name': null, 'ingredient': null, 'strength': null, 'dosageForm': null, 'routeOfAdmin': null };
             $(row).find('td').map((j, div) => {
               switch (j) {
                 case 0: productInfo.din = $(div).text().trim(); break;
@@ -51,10 +55,30 @@ class ViewProductDetails extends Component {
                 case 5: productInfo.routeOfAdmin = $(div).text().trim(); break;
               }
             });
-            productMetadata.push(productInfo);
+
+            // If two Products are identical, just add the DIN to the existing Product instead of adding it to the Product Metadata array
+            productMetadata.forEach((prodInfo, ind) => {
+              existProduct = [prodInfo.name, prodInfo.ingredient, prodInfo.strength, prodInfo.dosageForm, prodInfo.routeOfAdmin].join('|');
+              matchProduct = [productInfo.name, productInfo.ingredient, productInfo.strength, productInfo.dosageForm, productInfo.routeOfAdmin].join('|');
+              if (existProduct === matchProduct) {
+                prodInfo.din += (', ' + productInfo.din);
+                noMatch = false;
+              }
+            });
+            if (noMatch) {
+              productMetadata.push(productInfo);            
+            }
           });
+
+          //Extract Accordion data from COVID Portal Consumer Information
+          var $$ = cheerio.load('');
+          $('details').parent().map((i, detail) => {
+            $$('body').append($(detail).html());
+          });
+
           this.setState({
-            productMetadata: productMetadata
+            productMetadata: productMetadata,
+            consumerAccordionHtml: $$.html()
           });
         });
       }
@@ -91,15 +115,15 @@ class ViewProductDetails extends Component {
                     <Text style={{ fontWeight: 'bold' }}>{ product.din }</Text>
                     <Text style={{ fontSize: 9 }}>{ t('productDetails.metadata.din') }</Text>
                   </View>
-                  <View style={{ padding: 3, marginLeft: 20 }}>
+                  <View style={{ padding: 3 }}>
                     <Text style={{ fontWeight: 'bold' }}>{ product.strength }</Text>
                     <Text style={{ fontSize: 9 }}>{ t('productDetails.metadata.strength') }</Text>
                   </View>
-                  <View style={{ padding: 3, marginLeft: 20 }}>
+                  <View style={{ padding: 3 }}>
                     <Text style={{ fontWeight: 'bold' }}>{ product.dosageForm }</Text>
                     <Text style={{ fontSize: 9 }}>{ t('productDetails.metadata.dosageForm') }</Text>
                   </View>
-                  <View style={{ padding: 3, marginLeft: 20 }}>
+                  <View style={{ padding: 3 }}>
                     <Text style={{ fontWeight: 'bold' }}>{ product.routeOfAdmin }</Text>
                     <Text style={{ fontSize: 9 }}>{ t('productDetails.metadata.administrationRoute') }</Text>
                   </View>
