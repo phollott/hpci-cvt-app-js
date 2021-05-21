@@ -12,6 +12,9 @@ import { lang, covidVaccinePortal, portailVaccinCovid } from '../constants/const
 
 import { productResource } from '../services';
 
+// components
+import ViewLabelledText from './ViewLabelledText';
+
 class ViewProductDetails extends Component {
   constructor(props) {
     super(props);
@@ -91,42 +94,18 @@ class ViewProductDetails extends Component {
         <ScrollView style={{ backgroundColor: 'white' }}>
         <Card style={{ flex: 1 }}>
           <Card.Title style={{ color: gStyle.tintColor.active.light, fontSize: 18, fontWeight: 'bold', marginBottom: 8 }}>{this.props.productMaster.brandName}</Card.Title>
-          <View style={{ padding: 3 }}>
-            <Text style={{ fontWeight: 'bold' }}>{this.props.productMaster.companyName}</Text>
-            <Text style={{ fontSize: 9 }}>{ t('productDetails.card.companyNameLabel') }</Text>
-          </View>
-          <View style={{ padding: 3 }}>
-            <Text style={{ fontWeight: 'bold' }}>{this.props.productMaster.ingredient}</Text>
-            <Text style={{ fontSize: 9 }}>{ t('productDetails.card.ingredientLabel') }</Text>
-          </View>
-          <View style={{ padding: 3 }}>
-            <Text style={{ fontWeight: 'bold' }}>{this.props.productMaster.status}</Text>
-            <Text style={{ fontSize: 9 }}>{ t('productDetails.card.statusLabel') }</Text>
-          </View>
-          <View style={{ padding: 3 }}>
-            <Text style={{ fontWeight: 'bold' }}>{this.props.productMaster.approvalDate}</Text>
-            <Text style={{ fontSize: 9 }}>{ t('productDetails.card.approvalDateLabel') }</Text>
-          </View>
+          <ViewLabelledText text={ this.props.productMaster.companyName} label={ t('productDetails.card.companyNameLabel') } />
+          <ViewLabelledText text={ this.props.productMaster.ingredient } label={ t('productDetails.card.ingredientLabel') } />
+          <ViewLabelledText text={ this.props.productMaster.status } label={ t('productDetails.card.statusLabel') } />
+          <ViewLabelledText text={ this.props.productMaster.approvalDate } label={ t('productDetails.card.approvalDateLabel') } />
           {
             this.state.productMetadata.map((product, key) => {
               return (
                 <View key={'productMetadata' + key}>
-                  <View style={{ padding: 3 }}>
-                    <Text style={{ fontWeight: 'bold' }}>{ product.din }</Text>
-                    <Text style={{ fontSize: 9 }}>{ t('productDetails.metadata.din') }</Text>
-                  </View>
-                  <View style={{ padding: 3 }}>
-                    <Text style={{ fontWeight: 'bold' }}>{ product.strength }</Text>
-                    <Text style={{ fontSize: 9 }}>{ t('productDetails.metadata.strength') }</Text>
-                  </View>
-                  <View style={{ padding: 3 }}>
-                    <Text style={{ fontWeight: 'bold' }}>{ product.dosageForm }</Text>
-                    <Text style={{ fontSize: 9 }}>{ t('productDetails.metadata.dosageForm') }</Text>
-                  </View>
-                  <View style={{ padding: 3 }}>
-                    <Text style={{ fontWeight: 'bold' }}>{ product.routeOfAdmin }</Text>
-                    <Text style={{ fontSize: 9 }}>{ t('productDetails.metadata.administrationRoute') }</Text>
-                  </View>
+                  <ViewLabelledText text={ product.din } label={ t('productDetails.metadata.din') } />
+                  <ViewLabelledText text={ product.strength } label={ t('productDetails.metadata.strength') } />
+                  <ViewLabelledText text={ product.dosageForm } label={ t('productDetails.metadata.dosageForm') } />
+                  <ViewLabelledText text={ product.routeOfAdmin } label={ t('productDetails.metadata.administrationRoute') } />
                 </View>
               );
             })
