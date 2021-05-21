@@ -42,10 +42,10 @@ class ViewProductDetails extends Component {
           var $ = cheerio.load(text), productMetadata = [];
           
           // Extract Product Metadata from COVID Portal Consumer Information
-          $('tbody').first().find('tr').map((i, row) => {
+          $('tbody').first().find('tr').each((i, row) => {
             var noMatch = true
               , productInfo = { 'din': null, 'name': null, 'ingredient': null, 'strength': null, 'dosageForm': null, 'routeOfAdmin': null };
-            $(row).find('td').map((j, div) => {
+            $(row).find('td').each((j, div) => {
               switch (j) {
                 case 0: productInfo.din = $(div).text().trim(); break;
                 case 1: productInfo.name = $(div).text().trim(); break;
@@ -72,7 +72,7 @@ class ViewProductDetails extends Component {
 
           //Extract Accordion data from COVID Portal Consumer Information
           var $$ = cheerio.load('');
-          $('details').parent().map((i, detail) => {
+          $('details').parent().each((i, detail) => {
             $$('body').append($(detail).html());
           });
 
