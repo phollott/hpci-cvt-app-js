@@ -127,9 +127,9 @@ class ViewProductDetails extends Component {
                 </ListItem.Title>
                 <Text style={{ fontSize: 10 }}>{ productResource.description }</Text>
                 { !this.props.settings.isOnline && 
-                  <Text>{productResource.link.startsWith('/info')
-                    ? '\n'+((this.props.settings.language === lang.english ? covidVaccinePortal : portailVaccinCovid) + productResource.link)
-                    : '\n'+productResource.link}
+                  <Text style={{ fontSize: 10 }}>{productResource.link.startsWith('/info')
+                    ? '\n'+((this.props.settings.language === lang.english ? covidVaccinePortal : portailVaccinCovid) + productResource.link)+'\n'
+                    : '\n'+productResource.link+'\n'}
                   </Text>
                 }
                 <Text style={{ fontSize: 12, fontWeight: 'bold' }}>{ t('productDetails.listItem.publicationStatusLabel') }{ productResource.publicationStatus }</Text>
