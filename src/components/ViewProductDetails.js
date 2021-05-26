@@ -9,7 +9,10 @@ import cheerio from 'react-native-cheerio';
 import Icon from './Icon';
 import { gStyle } from '../constants';
 import { lang, covidVaccinePortal, portailVaccinCovid } from '../constants/constants';
+import HTML from 'react-native-render-html';
+import { List, Divider } from 'react-native-paper';
 
+// services
 import { productResource } from '../services';
 
 // components
@@ -20,7 +23,7 @@ class ViewProductDetails extends Component {
     super(props);
     this.state = {
       productMetadata: [],
-      ConsumerAccordionHtml: ''
+      consumerInformation: []
     }
   }
 
@@ -42,7 +45,7 @@ class ViewProductDetails extends Component {
         const cvtPortal = (this.props.settings.language === lang.english) ? covidVaccinePortal : portailVaccinCovid;
         var url = cvtPortal + consumerInformationResource.link;            
         fetch(url).then((resp)=>{ return resp.text() }).then((text)=>{ 
-          var $ = cheerio.load(text), productMetadata = [];
+          var $ = cheerio.load(text), productMetadata = [], consumerInformation = [];
           
           // Extract Product Metadata from COVID Portal Consumer Information
           $('tbody').first().find('tr').each((i, row) => {
@@ -74,14 +77,18 @@ class ViewProductDetails extends Component {
           });
 
           //Extract Accordion data from COVID Portal Consumer Information
-          var $$ = cheerio.load('');
-          $('details').parent().each((i, detail) => {
-            $$('body').append($(detail).html());
+          $('details.span-8').parent().each((i, detail) => {
+            const accordionItem = {
+              summary: $(detail).find('summary').text(),
+              html: $(detail).find('div').html(),
+              key: $(detail).find('div').attr('class')
+            };
+            consumerInformation.push(accordionItem);
           });
 
           this.setState({
             productMetadata: productMetadata,
-            consumerAccordionHtml: $$.html()
+            consumerInformation: consumerInformation
           });
         });
       }
@@ -90,8 +97,7 @@ class ViewProductDetails extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <ScrollView style={{ backgroundColor: 'white' }}>
+      <ScrollView style={{ backgroundColor: 'white' }}>
         <Card style={{ flex: 1 }}>
           <Card.Title style={{ color: gStyle.tintColor.active.light, fontSize: 18, fontWeight: 'bold', marginBottom: 8 }}>{this.props.productMaster.brandName}</Card.Title>
           <ViewLabelledText text={ this.props.productMaster.companyName} label={ t('productDetails.card.companyNameLabel') } />
@@ -111,38 +117,59 @@ class ViewProductDetails extends Component {
             })
           }
         </Card>
-        {
-          this.props.productResourceList.map( productResource =>
-            <ListItem key={productResource.key} bottomDivider
-              containerStyle={ (productResource.isNew || productResource.isUpdated) ? { backgroundColor: '#C1D699' } : { } }
-              onPress={() => (this.linkingProductResource(productResource)) &&
-                this.props.navigation.navigate('ProductResource', { productResource })}
-            >
-              <Icon size={25}
-                name={ (productResource.resourceType === 'internal') ? 'file-alt' : 'globe' }
-                color={ (productResource.resourceType !== 'pending') ? '#26374A': '#FF9F40' }
-              />
-              <ListItem.Content>
-                <ListItem.Title style={{ fontWeight: 'bold' }}>
-                  { productResource.resourceName }
-                  { productResource.isNew && !productResource.isUpdated && <Badge value={t('common.badge.new')} status='success' /> }
-                  { productResource.isUpdated && <Badge value={t('common.badge.updated')} status='warning' /> }  
-                </ListItem.Title>
-                <Text style={{ fontSize: 10 }}>{ productResource.description }</Text>
-                { !this.props.settings.isOnline && 
-                  <Text style={{ fontSize: 10 }}>{productResource.link.startsWith('/info')
-                    ? '\n'+((this.props.settings.language === lang.english ? covidVaccinePortal : portailVaccinCovid) + productResource.link)+'\n'
-                    : '\n'+productResource.link+'\n'}
-                  </Text>
-                }
-                <Text style={{ fontSize: 12, fontWeight: 'bold' }}>{ t('productDetails.listItem.publicationStatusLabel') }{ productResource.publicationStatus }</Text>
-              </ListItem.Content>
-              { (productResource.link && this.props.settings.isOnline) && <ListItem.Chevron color='blue'/> }
-            </ListItem>
-          )
-        }
-        </ScrollView>
-      </View>
+        <List.AccordionGroup>
+          <List.Accordion title='Frequently Asked Questions' id='faq'
+            left={props => <List.Icon {...props} icon='comment-question-outline' />}>
+            <List.AccordionGroup>
+              {
+                this.state.consumerInformation.map( accordionItem =>
+                <View>
+                  <Divider/>
+                  <List.Accordion title={ accordionItem.summary } id={ accordionItem.key } titleStyle={{ fontWeight: 'bold' }}>
+                    <HTML source= {{ html: accordionItem.html }} containerStyle={{ marginHorizontal: 20 }}/>
+                  </List.Accordion>
+                </View>
+                )
+              }
+            </List.AccordionGroup>
+          </List.Accordion>
+          <Divider/>
+          <List.Accordion title='Additional Resources' id='adr'
+            left={props => <List.Icon {...props} icon='file-document-outline' />}>
+            {
+              this.props.productResourceList.map( productResource =>
+                <ListItem key={productResource.key} bottomDivider
+                  containerStyle={ (productResource.isNew || productResource.isUpdated) ? { backgroundColor: '#C1D699' } : { } }
+                  onPress={() => (this.linkingProductResource(productResource)) &&
+                    this.props.navigation.navigate('ProductResource', { productResource })}
+                >
+                  <Icon size={25}
+                    name={ (productResource.resourceType === 'internal') ? 'file-alt' : 'globe' }
+                    color={ (productResource.resourceType !== 'pending') ? '#26374A': '#FF9F40' }
+                  />
+                  <ListItem.Content>
+                    <ListItem.Title style={{ fontWeight: 'bold' }}>
+                      { productResource.resourceName }
+                      { productResource.isNew && !productResource.isUpdated && <Badge value={t('common.badge.new')} status='success' /> }
+                      { productResource.isUpdated && <Badge value={t('common.badge.updated')} status='warning' /> }  
+                    </ListItem.Title>
+                    <Text style={{ fontSize: 10 }}>{ productResource.description }</Text>
+                    { !this.props.settings.isOnline && 
+                      <Text style={{ fontSize: 10 }}>{productResource.link.startsWith('/info')
+                        ? '\n'+((this.props.settings.language === lang.english ? covidVaccinePortal : portailVaccinCovid) + productResource.link)+'\n'
+                        : '\n'+productResource.link+'\n'}
+                      </Text>
+                    }
+                    <Text style={{ fontSize: 12, fontWeight: 'bold' }}>{ t('productDetails.listItem.publicationStatusLabel') }{ productResource.publicationStatus }</Text>
+                  </ListItem.Content>
+                  { (productResource.link && this.props.settings.isOnline) && <ListItem.Chevron color='blue'/> }
+                </ListItem>
+              )
+            }
+          </List.Accordion>
+          <Divider/>
+        </List.AccordionGroup>
+      </ScrollView>
     );
   }
 
