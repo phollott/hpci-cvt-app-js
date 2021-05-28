@@ -211,7 +211,7 @@ const mapStateToProps = (state, ownProps) => {
   }
 
   const consumerInformationResource = productResourceList.shift();
-//  productResourceList.push(consumerInformationResource);
+  productResourceList.push(consumerInformationResource);
 
   return {
     settings: state.settings,
