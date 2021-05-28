@@ -81,7 +81,7 @@ class ViewProductDetails extends Component {
             const accordionItem = {
               summary: $(detail).find('summary').text(),
               html: $(detail).find('div').html(),
-              key: i
+              key: 'cons-' + i
             };
             consumerInformation.push(accordionItem);
           });
