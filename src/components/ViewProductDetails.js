@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, Linking } from 'react-native';
-import { Card, ListItem, Badge } from 'react-native-elements';
+import { View, ScrollView, Text, Linking } from 'react-native';
+import { Card, ListItem, Badge, Tooltip} from 'react-native-elements';
 import { connect } from 'react-redux';
 import { t } from 'i18n-js';
 import { selectBookmarkByID } from '../redux/selectors/bookmarkSelector';
@@ -81,10 +81,11 @@ class ViewProductDetails extends Component {
             const accordionItem = {
               summary: $(detail).find('summary').text(),
               html: $(detail).find('div').html(),
-              key: $(detail).find('div').attr('class')
+              key: i
             };
             consumerInformation.push(accordionItem);
           });
+//          console.log('Consumer Information: ' + consumerInformation)
 
           this.setState({
             productMetadata: productMetadata,
@@ -118,14 +119,14 @@ class ViewProductDetails extends Component {
           }
         </Card>
         <List.AccordionGroup>
-          <List.Accordion title='Frequently Asked Questions' id='faq'
-            left={props => <List.Icon {...props} icon='comment-question-outline' />}>
+          <List.Accordion title='Frequently Asked Questions' id='faq' titleStyle={{ fontWeight: 'bold' }}
+            left={props => <List.Icon {...props} icon='comment-question-outline' style={{ marginHorizontal: 0 }}/>}>
             <List.AccordionGroup>
               {
                 this.state.consumerInformation.map( accordionItem =>
                 <View>
                   <Divider/>
-                  <List.Accordion title={ accordionItem.summary } id={ accordionItem.key } titleStyle={{ fontWeight: 'bold' }}>
+                  <List.Accordion title={ accordionItem.summary } id={ accordionItem.key }>
                     <HTML source= {{ html: accordionItem.html }} containerStyle={{ marginHorizontal: 20 }}/>
                   </List.Accordion>
                 </View>
@@ -134,41 +135,41 @@ class ViewProductDetails extends Component {
             </List.AccordionGroup>
           </List.Accordion>
           <Divider/>
-          <List.Accordion title='Additional Resources' id='adr'
-            left={props => <List.Icon {...props} icon='file-document-outline' />}>
-            {
+        </List.AccordionGroup>
+        {
               this.props.productResourceList.map( productResource =>
                 <ListItem key={productResource.key} bottomDivider
                   containerStyle={ (productResource.isNew || productResource.isUpdated) ? { backgroundColor: '#C1D699' } : { } }
                   onPress={() => (this.linkingProductResource(productResource)) &&
                     this.props.navigation.navigate('ProductResource', { productResource })}
                 >
-                  <Icon size={25}
-                    name={ (productResource.resourceType === 'internal') ? 'file-alt' : 'globe' }
+                  <Icon size={22} style={{ marginHorizontal: 2 }}
+                    name={ (productResource.resourceType === 'infernal') ? 'file-alt' : 'globe' }
                     color={ (productResource.resourceType !== 'pending') ? '#26374A': '#FF9F40' }
                   />
                   <ListItem.Content>
-                    <ListItem.Title style={{ fontWeight: 'bold' }}>
-                      { productResource.resourceName }
+                    <ListItem.Title style={{ fontWeight: 'bold', fontSize: 16 }}>
+                      { productResource.resourceName + ' '}
+                      <Tooltip popover={<Text>{ productResource.description }</Text>}
+                        height={200} width={250} >
+                        <Icon size={15} name='info-circle' color='blue'/>
+                      </Tooltip>
                       { productResource.isNew && !productResource.isUpdated && <Badge value={t('common.badge.new')} status='success' /> }
                       { productResource.isUpdated && <Badge value={t('common.badge.updated')} status='warning' /> }  
                     </ListItem.Title>
-                    <Text style={{ fontSize: 10 }}>{ productResource.description }</Text>
+                    { (false) && <Text style={{ fontSize: 10 }}>{  }</Text> }
                     { !this.props.settings.isOnline && 
                       <Text style={{ fontSize: 10 }}>{productResource.link.startsWith('/info')
                         ? '\n'+((this.props.settings.language === lang.english ? covidVaccinePortal : portailVaccinCovid) + productResource.link)+'\n'
                         : '\n'+productResource.link+'\n'}
                       </Text>
                     }
-                    <Text style={{ fontSize: 12, fontWeight: 'bold' }}>{ t('productDetails.listItem.publicationStatusLabel') }{ productResource.publicationStatus }</Text>
+                    <ListItem.Subtitle style={{ fontSize: 12, fontWeight: 'bold' }}>{ t('productDetails.listItem.publicationStatusLabel') }{ productResource.publicationStatus }</ListItem.Subtitle>
                   </ListItem.Content>
                   { (productResource.link && this.props.settings.isOnline) && <ListItem.Chevron color='blue'/> }
                 </ListItem>
               )
             }
-          </List.Accordion>
-          <Divider/>
-        </List.AccordionGroup>
       </ScrollView>
     );
   }
@@ -208,6 +209,9 @@ const mapStateToProps = (state, ownProps) => {
   if (typeof product !== 'undefined') {
     productResourceList.push(...productResource.mapProductResources(product, state.settings.language));
   }
+
+  const consumerInformationResource = productResourceList.shift();
+//  productResourceList.push(consumerInformationResource);
 
   return {
     settings: state.settings,
