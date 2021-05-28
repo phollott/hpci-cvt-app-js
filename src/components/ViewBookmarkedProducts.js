@@ -9,6 +9,7 @@ import { selectBookmarks } from '../redux/selectors/bookmarkSelector';
 import { productMaster } from '../services';
 
 // components
+import ViewCardText from './ViewCardText';
 import ViewProductMasters from './ViewProductMasters';
 
 const internalState = {
@@ -89,32 +90,34 @@ class ViewBookmarkedProducts extends Component {
               buttons = { buttons }
             />
             <View>
-              { (this.state.selectedIndex === 0) &&
+              { (this.state.selectedIndex === 0 && this.state.filtVaccineProd.length > 0) &&
                   <ViewProductMasters
                     productMasters={this.state.filtVaccineProd}
                     navigation={this.props.navigation}
                   />
               }
-              { (this.state.selectedIndex === 1) &&
+              { (this.state.selectedIndex === 1 && this.state.filtTreatmentProd.length > 0) &&
                   <ViewProductMasters
                     productMasters={this.state.filtTreatmentProd}
                     navigation={this.props.navigation}
                   />
               }
+              { (this.state.selectedIndex === 0 && this.state.filtVaccineProd.length === 0) &&
+                  <ViewCardText text={ t('bookmarks.products.emptyText.left') } />
+              }
+              { (this.state.selectedIndex === 1 && this.state.filtTreatmentProd.length === 0) &&
+                  <ViewCardText text={ t('bookmarks.products.emptyText.right') } />
+              }
             </View>
           </ScrollView>
         </View>
       );
-    } else {
+    } else { 
       return (
-        <View>
+        <>
           <View style={gStyle.spacer32} />
-          <View contentContainerStyle={gStyle.contentContainer}>
-            <Card>
-              <Text style={{fontSize: 16}}>{ t('bookmarks.introText') }</Text>
-            </Card>
-          </View>
-        </View>
+          <ViewCardText text={ t('bookmarks.introText') } />
+        </>
       );
     };
   }

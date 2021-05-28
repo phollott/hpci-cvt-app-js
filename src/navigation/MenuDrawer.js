@@ -1,19 +1,15 @@
 import * as React from 'react';
-import { Alert as Confirm, View } from 'react-native';
+import { View } from 'react-native';
 import { DrawerActions } from '@react-navigation/native';
 import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { t } from 'i18n-js';
 import { colors } from '../constants';
 import Icon from '../components/Icon';
 import Alert from '../components/Alert';
-import { storage } from '../services';
+import RemoveData from '../components/RemoveData';
 
 const SettingsIcon = () => (
   <Icon name='cog' color={colors.grey} style={{ minWidth: 26 }} />
-);
-
-const RemoveIcon = () => (
-  <Icon name='eraser' color={colors.grey} style={{ minWidth: 26 }} />
 );
 
 const GlobeIcon = () => (
@@ -22,6 +18,10 @@ const GlobeIcon = () => (
 
 const AboutIcon = () => (
   <Icon name='info' color={colors.grey} style={{ minWidth: 26 }} />
+);
+
+const ToolIcon = () => (
+  <Icon name='tools' color={colors.grey} style={{ minWidth: 26 }} />
 );
 
 const HorizontalLine = () => (
@@ -52,11 +52,30 @@ const MenuDrawer = (props) => {
           closeDrawer(props.navigation);
         }}
       />
+      <HorizontalLine />
+      <DrawerItem
+        label = { t('home.menu.toolsLabel') }
+        icon = {ToolIcon}
+        onPress={() => {}}
+      />
+      <DrawerItem
+        label = { t('home.menu.sendNotificationLabel') }
+        labelStyle =  {{
+          paddingLeft: 72
+        }}
+        onPress={() => {
+          props.navigation.navigate('PushNotification');
+          closeDrawer(props.navigation);
+        }}
+      />
       <DrawerItem
         label = { t('home.menu.removeLabel') }
-        icon = {RemoveIcon}
+        labelStyle =  {{
+          paddingLeft: 72
+        }}
         onPress={() => {
-          showRemoveAlert(props);
+          RemoveData(props);
+          closeDrawer(props.navigation);
         }}
       />
       <HorizontalLine />
@@ -85,31 +104,6 @@ const MenuDrawer = (props) => {
 
 const closeDrawer = (navigation) => {
   navigation.dispatch(DrawerActions.closeDrawer());
-}
-
-// [mrj] TODO: ****remove this 'feature' at some point.
-const showRemoveAlert = (props) => {
-  try {
-    Confirm.alert(
-      t('home.menu.removeAlert.title'),
-      t('home.menu.removeAlert.text'),
-      [
-        { text: t('common.alert.button.cancel'), onPress: () => {}, style: "cancel" },
-        { text: t('common.alert.button.ok'), 
-          onPress: async () => {
-            // clear settings, bookmarks
-            await storage.deleteAll();
-            closeDrawer(props.navigation);
-            // [mrj] hack: navigation is used to ensure the bookmarks screen is re-rendered after bookmarks are cleared
-            props.navigation.navigate('BookmarksStack', {screen: 'Bookmarks', params: { bookmarkAction: '-clear'}});
-            props.navigation.navigate('HomeStack', {screen: 'Home'});
-          }
-        }
-      ]
-    );
-  } catch (error) {
-    console.log('Unable to clear storage. ', error);
-  }
 }
 
 export default MenuDrawer;

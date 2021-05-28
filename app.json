@@ -24,7 +24,8 @@
       "node_modules/@expo/vector-icons/**/*"
     ],
     "android": {
-      "versionCode": 3
+      "versionCode": 3,
+      "useNextNotificationsApi": true
     },
     "ios": {
       "buildNumber": "0.0.3",
