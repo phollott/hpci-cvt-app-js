@@ -37,6 +37,7 @@ export default {
     screen: {
       homeTitle: "Accueil",
       languageTitle: "Modifier la langue",
+      pushNotificationTitle: "Envoyer une notification",
       productsTitle: "Produits de santé COVID-19",
       productDetailsTitle: "Description du produit",
       productResourceTitle: "Ressource",
@@ -56,11 +57,13 @@ export default {
     },
     menu: {
       settingsLabel: "Paramètres",
-      removeLabel: "Supprimer les données",
       languageLabel: "Langue...",
       privacyLabel: "Confidentialité",
       aboutLabel: "À propos",
       closeLabel: "Fermer",
+      toolsLabel: "Outils de développement",
+      removeLabel: "Supprimer les données",
+      sendNotificationLabel: "Envoyer une notification...",
       removeAlert: {
         title: "Supprimer les données",
         text: "Supprimer les paramètres et les favoris?"
@@ -69,6 +72,18 @@ export default {
     settings: {
       language: {
         touchText: "Français (Canada)"
+      }
+    },
+    pushNotification: {
+      notification: {
+        heading: "Notification reçue",
+        title: "Titre",
+        body: "Message",
+        data: "Les données"
+      },
+      button: {
+        sendTitle: "Envoyer une notification",
+        toolTitle: "Expo Push Notification Tool",
       }
     }
   },
@@ -83,6 +98,10 @@ export default {
     buttons: {
       left: "Vaccins",
       right: "Traitements"
+    },
+    emptyText: {
+      left: "Aucun vaccin ne correspond à vos paramètres.",
+      right: "Aucun produit de traitement ne correspond à vos paramètres."
     }
   },
   productDetails: {
@@ -107,7 +126,7 @@ export default {
     }
   },
   bookmarks: {
-    introText: "Vous n'avez ajouté aucun favori.",
+    introText: "Vous n'avez pas ajouté un produit à vos favoris.",
     products: {
       searchBar: {
         placeholder: ""
@@ -118,6 +137,10 @@ export default {
       buttons: {
         left: "Vaccins",
         right: "Traitements"
+      },
+      emptyText: {
+        left: "Vous n'avez pas ajouté un vaccin à vos favoris.",
+        right: "Vous n'avez pas ajouté un produit de traitement à vos favoris."
       }
     }
   }

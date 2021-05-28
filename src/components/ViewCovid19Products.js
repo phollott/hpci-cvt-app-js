@@ -9,6 +9,7 @@ import { selectProducts } from '../redux/selectors/productSelector';
 import { productMaster } from '../services';
 
 // components
+import ViewCardText from './ViewCardText';
 import ViewProductMasters from './ViewProductMasters';
 
 const internalState = {
@@ -86,17 +87,23 @@ class ViewCovid19Products extends Component {
               buttons = { buttons }
             />
             <View>
-              { (this.state.selectedIndex === 0) &&
-                  <ViewProductMasters
-                    productMasters={this.state.filtVaccineProd}
-                    navigation={this.props.navigation}
-                  />
+              { (this.state.selectedIndex === 0 && this.state.filtVaccineProd.length > 0) &&
+                <ViewProductMasters
+                  productMasters={this.state.filtVaccineProd}
+                  navigation={this.props.navigation}
+                />
               }
-              { (this.state.selectedIndex === 1) &&
-                  <ViewProductMasters
-                    productMasters={this.state.filtTreatmentProd}
-                    navigation={this.props.navigation}
-                  />
+              { (this.state.selectedIndex === 1 && this.state.filtTreatmentProd.length > 0) &&
+                <ViewProductMasters
+                  productMasters={this.state.filtTreatmentProd}
+                  navigation={this.props.navigation}
+                />
+              }
+              { (this.state.selectedIndex === 0 && this.state.filtVaccineProd.length === 0) &&
+                <ViewCardText text={ t('products.emptyText.left') } />
+              }
+              { (this.state.selectedIndex === 1 && this.state.filtTreatmentProd.length === 0) &&
+                <ViewCardText text={ t('products.emptyText.right') } />
               }
             </View>
           </ScrollView>
@@ -104,14 +111,10 @@ class ViewCovid19Products extends Component {
       );
     } else {
       return (
-        <View>
+        <>
           <View style={gStyle.spacer32} />
-          <View contentContainerStyle={gStyle.contentContainer}>
-            <Card>
-              <Text style={{fontSize: 16}}>{ t('products.card.offlineText') }</Text>
-            </Card>
-          </View>
-        </View>
+          <ViewCardText text={ t('products.card.offlineText') } />
+        </>
       );
     }
   }

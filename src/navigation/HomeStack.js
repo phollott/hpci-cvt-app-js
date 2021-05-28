@@ -8,6 +8,7 @@ import HomeNavigator from './HomeNavigator';
 import HomeMenu from '../components/HomeMenu';
 import NavigationBack from '../components/NavigationBack';
 import LanguageScreen from '../screens/LanguageScreen';
+import PushNotificationScreen from '../screens/PushNotificationScreen';
 
 const Stack = createStackNavigator();
 
@@ -32,6 +33,17 @@ const HomeStack = () => {
           headerShown: true,
           headerTitleStyle: gStyle.headerTitleStyle,
           title: t('stack.screen.languageTitle'),
+          headerLeft: () => <NavigationBack navigation={navigation} route={route} />,
+          headerRight: () => <View style={{ flex: 1 }} />
+        })}
+      />
+      <Stack.Screen 
+        name="PushNotification" 
+        component={PushNotificationScreen}
+        options={({ navigation, route }) => ({
+          headerShown: true,
+          headerTitleStyle: gStyle.headerTitleStyle,
+          title: t('stack.screen.pushNotificationTitle'),
           headerLeft: () => <NavigationBack navigation={navigation} route={route} />,
           headerRight: () => <View style={{ flex: 1 }} />
         })}
