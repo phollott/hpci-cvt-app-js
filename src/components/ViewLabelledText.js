@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
-import { t } from 'i18n-js';
 
 export default class ViewLabelledText extends Component {
   constructor(props) {

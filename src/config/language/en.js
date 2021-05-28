@@ -37,6 +37,7 @@ export default {
     screen: {
       homeTitle: "Home",
       languageTitle: "Choose Language",
+      pushNotificationTitle: "Send Push Notification",
       productsTitle: "COVID-19 Health Products",
       productDetailsTitle: "Product Description",
       productResourceTitle: "Product Resource",
@@ -56,11 +57,13 @@ export default {
     },
     menu: {
       settingsLabel: "Settings",
-      removeLabel: "Remove Data",
       languageLabel: "Language...",
       privacyLabel: "Privacy",
       aboutLabel: "About",
       closeLabel: "Close",
+      toolsLabel: "Dev Tools",
+      removeLabel: "Remove Data",
+      sendNotificationLabel: "Send Notification...",
       removeAlert: {
         title: "Remove Data",
         text: "Remove settings and bookmarks?"
@@ -69,6 +72,18 @@ export default {
     settings: {
       language: {
         touchText: "English (Canada)"
+      }
+    },
+    pushNotification: {
+      notification: {
+        heading: "Received Notification",
+        title: "Title",
+        body: "Body",
+        data: "Data"
+      },
+      button: {
+        sendTitle: "Send Push Notification",
+        toolTitle: "Expo Push Notification Tool",
       }
     }
   },
@@ -83,6 +98,10 @@ export default {
     buttons: {
       left: "Vaccines",
       right: "Treatments"
+    },
+    emptyText: {
+      left: "No vaccine products match your filter.",
+      right: "No treatment products match your filter."
     }
   },
   productDetails: {
@@ -107,7 +126,7 @@ export default {
     }
   },
   bookmarks: {
-    introText: "You have not added any bookmarks.",
+    introText: "You have not bookmarked any product.",
     products: {
       searchBar: {
         placeholder: ""
@@ -118,6 +137,10 @@ export default {
       buttons: {
         left: "Vaccines",
         right: "Treatments"
+      },
+      emptyText: {
+        left: "You have not added any vaccine products to your bookmarks.",
+        right: "You have not added any treatment products to your bookmarks."
       }
     }
   }
