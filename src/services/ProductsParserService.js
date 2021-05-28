@@ -3,7 +3,7 @@ import { lang, covidVaccinePortal, portailVaccinCovid, productType } from '../co
 import cheerio from 'react-native-cheerio';
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
-const WINDOW_IN_DAYS = 14;
+const WINDOW_IN_DAYS = 21;
 
 // TODO: **** review bus req for each once api is available
 
