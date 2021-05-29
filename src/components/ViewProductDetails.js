@@ -124,7 +124,7 @@ class ViewProductDetails extends Component {
             <List.AccordionGroup>
               {
                 this.state.consumerInformation.map( accordionItem =>
-                <View>
+                <View key={ 'view-'.concat(accordionItem.key) }>
                   <Divider/>
                   <List.Accordion title={ accordionItem.summary } id={ accordionItem.key }>
                     <HTML source= {{ html: accordionItem.html }} containerStyle={{ marginHorizontal: 20 }}/>
@@ -208,10 +208,11 @@ const mapStateToProps = (state, ownProps) => {
   }
   if (typeof product !== 'undefined') {
     productResourceList.push(...productResource.mapProductResources(product, state.settings.language));
+    const consumerInformationResource = productResourceList.shift();
+    if (typeof consumerInformationResource !== 'undefined') {
+      productResourceList.push(consumerInformationResource);
+    }
   }
-
-  const consumerInformationResource = productResourceList.shift();
-  productResourceList.push(consumerInformationResource);
 
   return {
     settings: state.settings,
