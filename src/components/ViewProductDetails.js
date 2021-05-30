@@ -34,65 +34,56 @@ class ViewProductDetails extends Component {
    */
 
   componentDidMount() {
-    if (this.props.settings.isOnline) {
-      let consumerInformationResource = this.props.productResourceList.find((resource, ind, arr) => { 
-        if (resource.resourceName === 'Consumer Information' || resource.resourceName.toLowerCase().includes('consommateurs')) {
-          return resource;
-        }
-      });
-
-      if (consumerInformationResource) {
-        const cvtPortal = (this.props.settings.language === lang.english) ? covidVaccinePortal : portailVaccinCovid;
-        var url = cvtPortal + consumerInformationResource.link;            
-        fetch(url).then((resp)=>{ return resp.text() }).then((text)=>{ 
-          var $ = cheerio.load(text), productMetadata = [], consumerInformation = [];
-          
-          // Extract Product Metadata from COVID Portal Consumer Information
-          $('tbody').first().find('tr').each((i, row) => {
-            var noMatch = true
-              , productInfo = { 'din': null, 'name': null, 'ingredient': null, 'strength': null, 'dosageForm': null, 'routeOfAdmin': null };
-            $(row).find('td').each((j, div) => {
-              switch (j) {
-                case 0: productInfo.din = $(div).text().trim(); break;
-                case 1: productInfo.name = $(div).text().trim(); break;
-                case 2: productInfo.ingredient = $(div).text().trim(); break;
-                case 3: productInfo.strength = $(div).text().trim(); break;
-                case 4: productInfo.dosageForm = $(div).text().trim(); break;
-                case 5: productInfo.routeOfAdmin = $(div).text().trim(); break;
-              }
-            });
-
-            // If two Products are identical, just add the DIN to the existing Product instead of adding it to the Product Metadata array
-            productMetadata.forEach((prodInfo, ind) => {
-              existProduct = [prodInfo.name, prodInfo.ingredient, prodInfo.strength, prodInfo.dosageForm, prodInfo.routeOfAdmin].join('|');
-              matchProduct = [productInfo.name, productInfo.ingredient, productInfo.strength, productInfo.dosageForm, productInfo.routeOfAdmin].join('|');
-              if (existProduct === matchProduct) {
-                prodInfo.din += (', ' + productInfo.din);
-                noMatch = false;
-              }
-            });
-            if (noMatch) {
-              productMetadata.push(productInfo);            
+    if (this.props.settings.isOnline && this.props.consumerInformationResource) {
+      const cvtPortal = (this.props.settings.language === lang.english) ? covidVaccinePortal : portailVaccinCovid;
+      var url = cvtPortal + this.props.consumerInformationResource.link;            
+      fetch(url).then((resp)=>{ return resp.text() }).then((text)=>{ 
+        var $ = cheerio.load(text), productMetadata = [], consumerInformation = [];
+        
+        // Extract Product Metadata from COVID Portal Consumer Information
+        $('tbody').first().find('tr').each((i, row) => {
+          var noMatch = true
+            , productInfo = { 'din': null, 'name': null, 'ingredient': null, 'strength': null, 'dosageForm': null, 'routeOfAdmin': null };
+          $(row).find('td').each((j, div) => {
+            switch (j) {
+              case 0: productInfo.din = $(div).text().trim(); break;
+              case 1: productInfo.name = $(div).text().trim(); break;
+              case 2: productInfo.ingredient = $(div).text().trim(); break;
+              case 3: productInfo.strength = $(div).text().trim(); break;
+              case 4: productInfo.dosageForm = $(div).text().trim(); break;
+              case 5: productInfo.routeOfAdmin = $(div).text().trim(); break;
             }
           });
 
-          //Extract Accordion data from COVID Portal Consumer Information
-          $('details.span-8').parent().each((i, detail) => {
-            const accordionItem = {
-              summary: $(detail).find('summary').text(),
-              html: $(detail).find('div').html(),
-              key: 'cons-' + i
-            };
-            consumerInformation.push(accordionItem);
+          // If two Products are identical, just add the DIN to the existing Product instead of adding it to the Product Metadata array
+          productMetadata.forEach((prodInfo, ind) => {
+            existProduct = [prodInfo.name, prodInfo.ingredient, prodInfo.strength, prodInfo.dosageForm, prodInfo.routeOfAdmin].join('|');
+            matchProduct = [productInfo.name, productInfo.ingredient, productInfo.strength, productInfo.dosageForm, productInfo.routeOfAdmin].join('|');
+            if (existProduct === matchProduct) {
+              prodInfo.din += (', ' + productInfo.din);
+              noMatch = false;
+            }
           });
-//          console.log('Consumer Information: ' + consumerInformation)
-
-          this.setState({
-            productMetadata: productMetadata,
-            consumerInformation: consumerInformation
-          });
+          if (noMatch) {
+            productMetadata.push(productInfo);            
+          }
         });
-      }
+
+        //Extract Accordion data from COVID Portal Consumer Information
+        $('details.span-8').parent().each((i, detail) => {
+          const accordionItem = {
+            summary: $(detail).find('summary').text(),
+            html: $(detail).find('div').html(),
+            key: 'cons-' + i
+          };
+          consumerInformation.push(accordionItem);
+        });
+
+        this.setState({
+          productMetadata: productMetadata,
+          consumerInformation: consumerInformation
+        });
+      });
     }
   }
 
@@ -105,24 +96,28 @@ class ViewProductDetails extends Component {
           <ViewLabelledText text={ this.props.productMaster.ingredient } label={ t('productDetails.card.ingredientLabel') } />
           <ViewLabelledText text={ this.props.productMaster.status } label={ t('productDetails.card.statusLabel') } />
           <ViewLabelledText text={ this.props.productMaster.approvalDate } label={ t('productDetails.card.approvalDateLabel') } />
-          {
-            this.state.productMetadata.map((product, key) => {
-              return (
-                <View key={'productMetadata' + key}>
-                  <ViewLabelledText text={ product.din } label={ t('productDetails.metadata.din') } />
-                  <ViewLabelledText text={ product.strength } label={ t('productDetails.metadata.strength') } />
-                  <ViewLabelledText text={ product.dosageForm } label={ t('productDetails.metadata.dosageForm') } />
-                  <ViewLabelledText text={ product.routeOfAdmin } label={ t('productDetails.metadata.administrationRoute') } />
-                </View>
-              );
-            })
-          }
         </Card>
         <List.AccordionGroup>
-          <List.Accordion title='Frequently Asked Questions' id='faq' titleStyle={{ fontWeight: 'bold' }}
+          <List.Accordion title='Product Information' id='pri' titleStyle={{ fontWeight: 'bold' }}
+              left={props => <List.Icon {...props} icon='comment-question-outline' style={{ marginHorizontal: 0 }}/>}>
+            {
+              this.state.productMetadata.map((product, key) => {
+                return (
+                  <View key={'productMetadata' + key} style={{ marginLeft: -50, marginBottom: 15 }}>
+                    <ViewLabelledText text={ product.din } label={ t('productDetails.metadata.din') } />
+                    <ViewLabelledText text={ product.strength } label={ t('productDetails.metadata.strength') } />
+                    <ViewLabelledText text={ product.dosageForm } label={ t('productDetails.metadata.dosageForm') } />
+                    <ViewLabelledText text={ product.routeOfAdmin } label={ t('productDetails.metadata.administrationRoute') } />
+                  </View>
+                );
+              })
+            }
+          </List.Accordion>
+          <Divider/>
+          <List.Accordion title='Patient Medication Information' id='pmi' titleStyle={{ fontWeight: 'bold' }}
             left={props => <List.Icon {...props} icon='comment-question-outline' style={{ marginHorizontal: 0 }}/>}>
             <List.AccordionGroup>
-              {
+            {
                 this.state.consumerInformation.map( accordionItem =>
                 <View key={ 'view-'.concat(accordionItem.key) }>
                   <Divider/>
@@ -135,15 +130,17 @@ class ViewProductDetails extends Component {
             </List.AccordionGroup>
           </List.Accordion>
           <Divider/>
-        </List.AccordionGroup>
-        {
+          <List.Accordion title='Additional Resource Links' id='add' titleStyle={{ fontWeight: 'bold' }}
+            left={props => <List.Icon {...props} icon='comment-question-outline' style={{ marginHorizontal: 0 }}/>}>
+            <View style={{ marginLeft: -64 }}>
+            {
               this.props.productResourceList.map( productResource =>
-                <ListItem key={productResource.key} bottomDivider
+                <ListItem key={productResource.key} topDivider
                   containerStyle={ (productResource.isNew || productResource.isUpdated) ? { backgroundColor: '#C1D699' } : { } }
                   onPress={() => (this.linkingProductResource(productResource)) &&
                     this.props.navigation.navigate('ProductResource', { productResource })}
                 >
-                  <Icon size={22} style={{ marginHorizontal: 2 }}
+                  <Icon size={16} style={{ marginHorizontal: 2 }}
                     name={ (productResource.resourceType === 'infernal') ? 'file-alt' : 'globe' }
                     color={ (productResource.resourceType !== 'pending') ? '#26374A': '#FF9F40' }
                   />
@@ -164,12 +161,16 @@ class ViewProductDetails extends Component {
                         : '\n'+productResource.link+'\n'}
                       </Text>
                     }
-                    <ListItem.Subtitle style={{ fontSize: 12, fontWeight: 'bold' }}>{ t('productDetails.listItem.publicationStatusLabel') }{ productResource.publicationStatus }</ListItem.Subtitle>
+                    <ListItem.Subtitle style={{ fontSize: 12 }}>{ t('productDetails.listItem.publicationStatusLabel') }{ productResource.publicationStatus }</ListItem.Subtitle>
                   </ListItem.Content>
                   { (productResource.link && this.props.settings.isOnline) && <ListItem.Chevron color='blue'/> }
                 </ListItem>
               )
             }
+            </View>
+          </List.Accordion>
+          <Divider/>
+        </List.AccordionGroup>
       </ScrollView>
     );
   }
@@ -194,7 +195,7 @@ class ViewProductDetails extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  var productMaster, product, productResourceList = [];
+  var productMaster, product, productResourceList = [], consumerInformationResource;
   
   // Product Master:
   productMaster = ownProps.route.params.productMaster;
@@ -206,18 +207,27 @@ const mapStateToProps = (state, ownProps) => {
   } else {
     product = selectProductByID(state, ownProps.route.params.productMaster.nid);
   }
+
+  // Push all of the Product Resources into props, but extract Consumer Information if it is in there
   if (typeof product !== 'undefined') {
     productResourceList.push(...productResource.mapProductResources(product, state.settings.language));
-    const consumerInformationResource = productResourceList.shift();
-    if (typeof consumerInformationResource !== 'undefined') {
-      productResourceList.push(consumerInformationResource);
-    }
+    consumerInformationResource = productResourceList.find((resource, ind, arr) => { 
+      if (resource.resourceName === 'Consumer Information' || resource.resourceName.toLowerCase().includes('consommateurs')) {
+        return resource;
+      }
+    });
+    productResourceList = productResourceList.filter((resource, ind, arr) => { 
+      if (!(resource.resourceName === 'Consumer Information' || resource.resourceName.toLowerCase().includes('consommateurs'))) {
+        return resource;
+      }
+    });
   }
 
   return {
     settings: state.settings,
     productMaster: productMaster,
-    productResourceList: productResourceList
+    productResourceList: productResourceList,
+    consumerInformationResource: consumerInformationResource
   };
 };
 
