@@ -123,6 +123,11 @@ export default {
         pending: "En attendant",
         various: "Plusieurs"
       }
+    },
+    accordion: {
+      pri: "Information sur le produit",
+      pmi: "Renseignments pour le patient sur le médicament",
+      add: "Liens vers des ressources supplémentaires"
     }
   },
   bookmarks: {
