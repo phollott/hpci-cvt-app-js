@@ -91,14 +91,14 @@ class ViewProductDetails extends Component {
     return (
       <ScrollView style={{ backgroundColor: 'white' }}>
         <Card style={{ flex: 1 }}>
-          <Card.Title style={{ color: gStyle.tintColor.active.light, fontSize: 18, fontWeight: 'bold', marginBottom: 8 }}>{this.props.productMaster.brandName}</Card.Title>
+          <Card.Title style={{ color: gStyle.tintColor.active.light, fontSize: 18, fontWeight: 'bold', marginBottom: 15 }}>{this.props.productMaster.brandName}</Card.Title>
           <ViewLabelledText text={ this.props.productMaster.companyName} label={ t('productDetails.card.companyNameLabel') } />
           <ViewLabelledText text={ this.props.productMaster.ingredient } label={ t('productDetails.card.ingredientLabel') } />
           <ViewLabelledText text={ this.props.productMaster.status } label={ t('productDetails.card.statusLabel') } />
           <ViewLabelledText text={ this.props.productMaster.approvalDate } label={ t('productDetails.card.approvalDateLabel') } />
         </Card>
         <List.AccordionGroup>
-          <List.Accordion title='Product Information' id='pri' titleStyle={{ fontWeight: 'bold' }}
+          <List.Accordion title={ t('productDetails.accordion.pri') } id='pri' titleStyle={{ fontWeight: 'bold' }}
               left={props => <List.Icon {...props} icon='comment-question-outline' style={{ marginHorizontal: 0 }}/>}>
             {
               this.state.productMetadata.map((product, key) => {
@@ -114,7 +114,7 @@ class ViewProductDetails extends Component {
             }
           </List.Accordion>
           <Divider/>
-          <List.Accordion title='Patient Medication Information' id='pmi' titleStyle={{ fontWeight: 'bold' }}
+          <List.Accordion title={ t('productDetails.accordion.pmi') } id='pmi' titleStyle={{ fontWeight: 'bold' }}
             left={props => <List.Icon {...props} icon='comment-question-outline' style={{ marginHorizontal: 0 }}/>}>
             <List.AccordionGroup>
             {
@@ -130,7 +130,7 @@ class ViewProductDetails extends Component {
             </List.AccordionGroup>
           </List.Accordion>
           <Divider/>
-          <List.Accordion title='Additional Resource Links' id='add' titleStyle={{ fontWeight: 'bold' }}
+          <List.Accordion title={ t('productDetails.accordion.add') } id='add' titleStyle={{ fontWeight: 'bold' }}
             left={props => <List.Icon {...props} icon='comment-question-outline' style={{ marginHorizontal: 0 }}/>}>
             <View style={{ marginLeft: -64 }}>
             {
@@ -140,7 +140,7 @@ class ViewProductDetails extends Component {
                   onPress={() => (this.linkingProductResource(productResource)) &&
                     this.props.navigation.navigate('ProductResource', { productResource })}
                 >
-                  <Icon size={16} style={{ marginHorizontal: 2 }}
+                  <Icon size={16} style={{ marginHorizontal: 5 }}
                     name={ (productResource.resourceType === 'infernal') ? 'file-alt' : 'globe' }
                     color={ (productResource.resourceType !== 'pending') ? '#26374A': '#FF9F40' }
                   />
