@@ -99,7 +99,7 @@ class ViewProductDetails extends Component {
         </Card>
         <List.AccordionGroup>
           <List.Accordion title={ t('productDetails.accordion.pri') } id='pri' titleStyle={{ fontWeight: 'bold' }}
-              left={props => <List.Icon {...props} icon='comment-question-outline' style={{ marginHorizontal: 0 }}/>}>
+              left={props => <List.Icon {...props} icon='card-text-outline' style={{ marginHorizontal: 0 }}/>}>
             {
               this.state.productMetadata.map((product, key) => {
                 return (
@@ -131,7 +131,7 @@ class ViewProductDetails extends Component {
           </List.Accordion>
           <Divider/>
           <List.Accordion title={ t('productDetails.accordion.add') } id='add' titleStyle={{ fontWeight: 'bold' }}
-            left={props => <List.Icon {...props} icon='comment-question-outline' style={{ marginHorizontal: 0 }}/>}>
+            left={props => <List.Icon {...props} icon='web' style={{ marginHorizontal: 0 }}/>}>
             <View style={{ marginLeft: -64 }}>
             {
               this.props.productResourceList.map( productResource =>
