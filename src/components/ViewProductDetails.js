@@ -57,8 +57,8 @@ class ViewProductDetails extends Component {
 
           // If two Products are identical, just add the DIN to the existing Product instead of adding it to the Product Metadata array
           productMetadata.forEach((prodInfo, ind) => {
-            existProduct = [prodInfo.name, prodInfo.ingredient, prodInfo.strength, prodInfo.dosageForm, prodInfo.routeOfAdmin].join('|');
-            matchProduct = [productInfo.name, productInfo.ingredient, productInfo.strength, productInfo.dosageForm, productInfo.routeOfAdmin].join('|');
+            const existProduct = [prodInfo.name, prodInfo.ingredient, prodInfo.strength, prodInfo.dosageForm, prodInfo.routeOfAdmin].join('|')
+            const matchProduct = [productInfo.name, productInfo.ingredient, productInfo.strength, productInfo.dosageForm, productInfo.routeOfAdmin].join('|');
             if (existProduct === matchProduct) {
               prodInfo.din += (', ' + productInfo.din);
               noMatch = false;
