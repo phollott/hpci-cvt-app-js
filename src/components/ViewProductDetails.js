@@ -139,11 +139,11 @@ class ViewProductDetails extends Component {
                   containerStyle={ (productResource.isNew || productResource.isUpdated) ? { backgroundColor: '#C1D699' } : { } }
                   onPress={() => (this.linkingProductResource(productResource)) &&
                     this.props.navigation.navigate('ProductResource', { productResource })}
-                >
+                >{/*
                   <Icon size={16} style={{ marginHorizontal: 5 }}
-                    name={ (productResource.resourceType === 'infernal') ? 'file-alt' : 'globe' }
+                    name={ (productResource.resourceType === 'internal') ? 'file-alt' : 'globe' }
                     color={ (productResource.resourceType !== 'pending') ? '#26374A': '#FF9F40' }
-                  />
+                />*/}
                   <ListItem.Content>
                     <ListItem.Title style={{ fontWeight: 'bold', fontSize: 16 }}>
                       { productResource.resourceName + ' '}
