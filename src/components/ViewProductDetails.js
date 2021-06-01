@@ -16,6 +16,7 @@ import { List, Divider } from 'react-native-paper';
 import { productResource } from '../services';
 
 // components
+import ViewCardText from './ViewCardText';
 import ViewLabelledText from './ViewLabelledText';
 
 class ViewProductDetails extends Component {
@@ -97,6 +98,7 @@ class ViewProductDetails extends Component {
           <ViewLabelledText text={ this.props.productMaster.status } label={ t('productDetails.card.statusLabel') } />
           <ViewLabelledText text={ this.props.productMaster.approvalDate } label={ t('productDetails.card.approvalDateLabel') } />
         </Card>
+        <ViewCardText text={ t('productDetails.card.consumerInformationText') } />
         <List.AccordionGroup>
           <List.Accordion title={ t('productDetails.accordion.pri') } id='pri' titleStyle={{ fontWeight: 'bold' }}
               left={props => <List.Icon {...props} icon='card-text-outline' style={{ marginHorizontal: 0 }}/>}>

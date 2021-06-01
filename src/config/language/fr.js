@@ -108,7 +108,8 @@ export default {
       companyNameLabel: "Entreprise",
       ingredientLabel: "Ingrédient",
       statusLabel: "État",
-      approvalDateLabel: "Date d'approbation"
+      approvalDateLabel: "Date d'approbation",
+      consumerInformationText: "Ces renseignements ont été fournis par le fabricant au moment de l'homologation de son produit pour la vente au Canada. Ils sont destinés aux consommateurs et aux soignants. Il s'agit d'un résumé qui ne contient pas tous les renseignements pertinents sur le produit. Contactez votre médecin ou pharmacien si vous avez des questions au sujet du produit."
     },
     metadata: {
       din: 'DIN',

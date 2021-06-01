@@ -108,7 +108,8 @@ export default {
       companyNameLabel: "Company Name",
       ingredientLabel: "Ingredient",
       statusLabel: "Status",
-      approvalDateLabel: "Date of Approval"
+      approvalDateLabel: "Date of Approval",
+      consumerInformationText: "This information was provided by the drug’s manufacturer when this drug product was approved for sale in Canada. It is designed for consumers and care givers. It is a summary of information about the drug and will not tell you everything about the drug. Contact your doctor or pharmacist if you have any questions about the drug."
     },
     metadata: {
       din: 'DIN',
