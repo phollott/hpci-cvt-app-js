@@ -13,7 +13,7 @@ export default class ViewCardText extends Component {
     return (
       <View contentContainerStyle={gStyle.contentContainer}>
         <Card>
-          <Text style={{fontSize: 16}}>{ this.props.text }</Text>
+          <Text>{ this.props.text }</Text>
         </Card>
       </View>
     );
