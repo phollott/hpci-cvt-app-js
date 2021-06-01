@@ -35,7 +35,6 @@ export default {
   },
   stack: {
     screen: {
-      homeTitle: "Home",
       languageTitle: "Choose Language",
       pushNotificationTitle: "Send Push Notification",
       productsTitle: "COVID-19 Health Products",

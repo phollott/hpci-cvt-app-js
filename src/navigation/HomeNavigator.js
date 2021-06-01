@@ -21,7 +21,7 @@ const HomeNavigator = () => {
   return (
     <Drawer.Navigator 
       drawerContent = { props => <MenuDrawer {...props} /> }
-      drawerPosition = 'right'
+      drawerPosition = 'left'
       drawerStyle = {{
         backgroundColor: colors.white,
         width: 300,
