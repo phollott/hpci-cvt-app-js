@@ -100,7 +100,7 @@ class ViewProductDetails extends Component {
         </Card>
         <ViewCardText text={ t('productDetails.card.consumerInformationText') } />
         <List.AccordionGroup>
-          <List.Accordion title={ t('productDetails.accordion.pri') } id='pri' titleStyle={{ fontWeight: 'bold' }}
+          <List.Accordion title={ t('productDetails.accordion.pri') } id='pri' titleStyle={{ fontWeight: 'bold' }} titleNumberOfLines={2}
               left={props => <List.Icon {...props} icon='card-text-outline' style={{ marginHorizontal: 0 }}/>}>
             {
               this.state.productMetadata.map((product, key) => {
@@ -116,7 +116,7 @@ class ViewProductDetails extends Component {
             }
           </List.Accordion>
           <Divider/>
-          <List.Accordion title={ t('productDetails.accordion.pmi') } id='pmi' titleStyle={{ fontWeight: 'bold' }}
+          <List.Accordion title={ t('productDetails.accordion.pmi') } id='pmi' titleStyle={{ fontWeight: 'bold' }} titleNumberOfLines={2}
             left={props => <List.Icon {...props} icon='comment-question-outline' style={{ marginHorizontal: 0 }}/>}>
             <List.AccordionGroup>
             {
@@ -132,7 +132,7 @@ class ViewProductDetails extends Component {
             </List.AccordionGroup>
           </List.Accordion>
           <Divider/>
-          <List.Accordion title={ t('productDetails.accordion.add') } id='add' titleStyle={{ fontWeight: 'bold' }}
+          <List.Accordion title={ t('productDetails.accordion.add') } id='add' titleStyle={{ fontWeight: 'bold' }} titleNumberOfLines={2}
             left={props => <List.Icon {...props} icon='web' style={{ marginHorizontal: 0 }}/>}>
             <View style={{ marginLeft: -64 }}>
             {
@@ -150,8 +150,8 @@ class ViewProductDetails extends Component {
                     <ListItem.Title style={{ fontWeight: 'bold', fontSize: 16 }}>
                       { productResource.resourceName + ' '}
                       <Tooltip popover={<Text>{ productResource.description }</Text>}
-                        height={200} width={250} >
-                        <Icon size={15} name='info-circle' color='blue'/>
+                        height={240} width={272} skipAndroidStatusBar={true} backgroundColor={'#CECECE'}>
+                        <Icon size={18} name='info-circle' color='#26374A' />
                       </Tooltip>
                       { productResource.isNew && !productResource.isUpdated && <Badge value={t('common.badge.new')} status='success' /> }
                       { productResource.isUpdated && <Badge value={t('common.badge.updated')} status='warning' /> }  
