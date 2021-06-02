@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { Image, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { t } from 'i18n-js';
-import { gStyle, images } from '../constants';
+import { images } from '../constants';
 
 import HomeNavigator from './HomeNavigator';
 import HomeMenu from '../components/HomeMenu';
@@ -36,8 +35,13 @@ const HomeStack = () => {
         component={LanguageScreen}
         options={({ navigation, route }) => ({
           headerShown: true,
-          headerTitleStyle: gStyle.headerTitleStyle,
-          title: t('stack.screen.languageTitle'),
+          headerTitle: () => (
+            <Image
+              style={{width: 103, height: 32}}
+              source={images[canadaLogo]}
+            />
+          ), 
+          headerTitleAlign: 'center',
           headerLeft: () => <NavigationBack navigation={navigation} route={route} />,
           headerRight: () => <View style={{ flex: 1 }} />
         })}
@@ -47,8 +51,13 @@ const HomeStack = () => {
         component={PushNotificationScreen}
         options={({ navigation, route }) => ({
           headerShown: true,
-          headerTitleStyle: gStyle.headerTitleStyle,
-          title: t('stack.screen.pushNotificationTitle'),
+          headerTitle: () => (
+            <Image
+              style={{width: 103, height: 32}}
+              source={images[canadaLogo]}
+            />
+          ), 
+          headerTitleAlign: 'center',
           headerLeft: () => <NavigationBack navigation={navigation} route={route} />,
           headerRight: () => <View style={{ flex: 1 }} />
         })}

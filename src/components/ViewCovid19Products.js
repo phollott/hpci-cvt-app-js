@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { ScrollView, View, Text } from 'react-native';
-import { ButtonGroup, Card, SearchBar } from 'react-native-elements';
+import { ScrollView, View } from 'react-native';
+import { ButtonGroup, SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { t } from 'i18n-js';
 import { gStyle } from '../constants';
@@ -78,9 +78,7 @@ class ViewCovid19Products extends Component {
           />
           <View style={gStyle.spacer8} />
           <ScrollView>
-            <Card>
-              <Text>{ t('products.card.instructionText') }</Text>
-            </Card>
+            <ViewCardText title={ t('stack.screen.productsTitle') } text={ t('products.card.instructionText') } />
             <ButtonGroup
               onPress = { this.updateIndex }
               selectedIndex = { selectedIndex }
