@@ -98,7 +98,6 @@ class ViewProductDetails extends Component {
           <ViewLabelledText text={ this.props.productMaster.status } label={ t('productDetails.card.statusLabel') } />
           <ViewLabelledText text={ this.props.productMaster.approvalDate } label={ t('productDetails.card.approvalDateLabel') } />
         </Card>
-        <ViewCardText text={ t('productDetails.card.consumerInformationText') } />
         <List.AccordionGroup>
           <List.Accordion title={ t('productDetails.accordion.pri') } id='pri' titleStyle={{ fontWeight: 'bold' }} titleNumberOfLines={2}
               left={props => <List.Icon {...props} icon='card-text-outline' style={{ marginHorizontal: 0 }}/>}>
@@ -117,7 +116,8 @@ class ViewProductDetails extends Component {
           </List.Accordion>
           <Divider/>
           <List.Accordion title={ t('productDetails.accordion.pmi') } id='pmi' titleStyle={{ fontWeight: 'bold' }} titleNumberOfLines={2}
-            left={props => <List.Icon {...props} icon='comment-question-outline' style={{ marginHorizontal: 0 }}/>}>
+              left={props => <List.Icon {...props} icon='comment-question-outline' style={{ marginHorizontal: 0 }}/>}>
+            <ViewCardText text={ t('productDetails.card.consumerInformationText') } />
             <List.AccordionGroup>
             {
                 this.state.consumerInformation.map( accordionItem =>
