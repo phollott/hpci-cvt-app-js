@@ -12,6 +12,7 @@ import { useColorScheme } from 'react-native-appearance';
 import { storage } from '../services';
 import i18n, {t} from 'i18n-js';
 import Touch from '../components/Touch';
+import ViewCardText from '../components/ViewCardText';
 
 const LanguageScreen = ({ navigation }) => { 
   const theme = useTheme();
@@ -43,8 +44,9 @@ const LanguageScreen = ({ navigation }) => {
 
       <View style={gStyle.container[theme]} key={languageViewKey}>
         <ScrollView contentContainerStyle={gStyle.contentContainer}>
+          <ViewCardText title={ t('stack.screen.languageTitle') } />
+          <View style={gStyle.spacer32} />
           <View style={{ width: '90%', justifyContent: 'center' }}>
-            <View style={gStyle.spacer32} />
             <Touch
               onPress={() => {
                 setLanguagePreference(lang.english);
@@ -65,7 +67,7 @@ const LanguageScreen = ({ navigation }) => {
               text={ t('home.settings.language.touchText', {locale: 'fr'}) }
               rIconName={ (language === lang.french) ? 'check' : null }
             />
-            </View>
+          </View>
           <View style={gStyle.spacer32} />
         </ScrollView>
       </View>

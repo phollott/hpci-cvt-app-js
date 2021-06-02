@@ -7,7 +7,7 @@ import { selectBookmarkByID } from '../redux/selectors/bookmarkSelector';
 import { selectProductByID } from '../redux/selectors/productSelector';
 import cheerio from 'react-native-cheerio';
 import Icon from './Icon';
-import { gStyle } from '../constants';
+import { colors, gStyle } from '../constants';
 import { lang, covidVaccinePortal, portailVaccinCovid } from '../constants/constants';
 import HTML from 'react-native-render-html';
 import { List, Divider } from 'react-native-paper';
@@ -99,7 +99,7 @@ class ViewProductDetails extends Component {
           <ViewLabelledText text={ this.props.productMaster.approvalDate } label={ t('productDetails.card.approvalDateLabel') } />
         </Card>
         <List.AccordionGroup>
-          <List.Accordion title={ t('productDetails.accordion.pri') } id='pri' titleStyle={{ fontWeight: 'bold' }} titleNumberOfLines={2}
+          <List.Accordion title={ t('productDetails.accordion.pri') } id='pri' titleStyle={{ fontWeight: 'bold' }} titleNumberOfLines={2} theme={{ colors: { primary: colors.blue }}}
               left={props => <List.Icon {...props} icon='card-text-outline' style={{ marginHorizontal: 0 }}/>}>
             {
               this.state.productMetadata.map((product, key) => {
@@ -115,7 +115,7 @@ class ViewProductDetails extends Component {
             }
           </List.Accordion>
           <Divider/>
-          <List.Accordion title={ t('productDetails.accordion.pmi') } id='pmi' titleStyle={{ fontWeight: 'bold' }} titleNumberOfLines={2}
+          <List.Accordion title={ t('productDetails.accordion.pmi') } id='pmi' titleStyle={{ fontWeight: 'bold' }} titleNumberOfLines={2} theme={{ colors: { primary: colors.blue }}}
               left={props => <List.Icon {...props} icon='comment-question-outline' style={{ marginHorizontal: 0 }}/>}>
             <ViewCardText text={ t('productDetails.card.consumerInformationText') } />
             <List.AccordionGroup>
@@ -123,7 +123,7 @@ class ViewProductDetails extends Component {
                 this.state.consumerInformation.map( accordionItem =>
                 <View key={ 'view-'.concat(accordionItem.key) }>
                   <Divider/>
-                  <List.Accordion title={ accordionItem.summary } id={ accordionItem.key }>
+                  <List.Accordion title={ accordionItem.summary } id={ accordionItem.key } titleNumberOfLines={2} theme={{ colors: { primary: colors.blue }}} >
                     <HTML source= {{ html: accordionItem.html }} containerStyle={{ marginHorizontal: 20 }}/>
                   </List.Accordion>
                 </View>
@@ -132,7 +132,7 @@ class ViewProductDetails extends Component {
             </List.AccordionGroup>
           </List.Accordion>
           <Divider/>
-          <List.Accordion title={ t('productDetails.accordion.add') } id='add' titleStyle={{ fontWeight: 'bold' }} titleNumberOfLines={2}
+          <List.Accordion title={ t('productDetails.accordion.add') } id='add' titleStyle={{ fontWeight: 'bold' }} titleNumberOfLines={2} theme={{ colors: { primary: colors.blue }}}
             left={props => <List.Icon {...props} icon='web' style={{ marginHorizontal: 0 }}/>}>
             <View style={{ marginLeft: -64 }}>
             {
@@ -150,8 +150,8 @@ class ViewProductDetails extends Component {
                     <ListItem.Title style={{ fontWeight: 'bold', fontSize: 16 }}>
                       { productResource.resourceName + ' '}
                       <Tooltip popover={<Text>{ productResource.description }</Text>}
-                        height={240} width={272} skipAndroidStatusBar={true} backgroundColor={'#CECECE'}>
-                        <Icon size={18} name='info-circle' color='#26374A' />
+                        height={304} width={288} skipAndroidStatusBar={true} backgroundColor={'#CECECE'}>
+                        <Icon size={20} name='info-circle' color='#26374A' />
                       </Tooltip>
                       { productResource.isNew && !productResource.isUpdated && <Badge value={t('common.badge.new')} status='success' /> }
                       { productResource.isUpdated && <Badge value={t('common.badge.updated')} status='warning' /> }  

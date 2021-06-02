@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { gStyle } from '../constants';
 import { useColorScheme } from 'react-native-appearance';
 import Icon from '../components/Icon';
+import ViewCardText from '../components/ViewCardText';
 import { storage } from '../services';
 import {t} from 'i18n-js';
 
@@ -48,6 +49,8 @@ const PushNotificationScreen = ({ navigation, route }) => {
 
       <View style={gStyle.container[theme]} key={pushNotificationViewKey}>
         <ScrollView contentContainerStyle={gStyle.contentContainer}>
+          <ViewCardText title={ t('stack.screen.pushNotificationTitle') } />
+          <View style={gStyle.spacer32} />
           <View style={{ width: '90%', justifyContent: 'center' }}>
             
             <View
@@ -63,7 +66,7 @@ const PushNotificationScreen = ({ navigation, route }) => {
                 <Text>{t('home.pushNotification.notification.body')}: {notification && notification.request.content.body}</Text>
                 <Text>{t('home.pushNotification.notification.data')}: {notification && JSON.stringify(notification.request.content.data)}</Text>
               </View>
-              <View style={gStyle.spacer64} />
+              <View style={gStyle.spacer32} />
               <Button
                 title={ t('home.pushNotification.button.sendTitle') }
                 onPress={async () => {
@@ -77,7 +80,7 @@ const PushNotificationScreen = ({ navigation, route }) => {
                 raised={true}
                 type="outline"
               />
-              <View style={gStyle.spacer64} />
+              <View style={gStyle.spacer32} />
               <Text>Expo Push Token:</Text>
               <View style={gStyle.spacer8} />
               <Text selectable={true} style={gStyle.text[theme], {fontSize: 14, fontWeight: 'bold'}}>{expoPushToken}</Text>
