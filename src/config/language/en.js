@@ -21,8 +21,7 @@ export default {
         bookmark: {
           add: "Unable to create bookmark at this time.",
           remove: "Unable to remove bookmark at this time."
-        },
-        loading: "Unable to load"
+        }
       }
     }
   },
@@ -31,16 +30,6 @@ export default {
       homeLabel: "Home",
       productsLabel: "Products",
       bookmarksLabel: "Bookmarks"
-    }
-  },
-  stack: {
-    screen: {
-      languageTitle: "Choose Language",
-      pushNotificationTitle: "Send Push Notification",
-      productsTitle: "COVID-19 Health Products",
-      productDetailsTitle: "Product Description",
-      productResourceTitle: "Product Resource",
-      bookmarksTitle: "Bookmarks"
     }
   },
   home: {
@@ -70,10 +59,15 @@ export default {
     },
     settings: {
       language: {
+        title: "Choose Language",
         touchText: "English (Canada)"
       }
     },
     pushNotification: {
+      card: {
+        title: "Send Push Notification",
+        instructionText: "Send a notification to your device from either the app or via the external tool (press, select and copy the Expo Push Token before navigating to the external tool)."
+      },
       notification: {
         heading: "Received Notification",
         title: "Title",
@@ -91,6 +85,7 @@ export default {
       placeholder: ""
     },
     card: {
+      title: "COVID-19 Health Products",
       instructionText: "Select a Vaccine or Treatment product to learn more.",
       offlineText: "Currently in offline mode (no internet access is detected). Only bookmarked products are available."
     },
@@ -127,7 +122,8 @@ export default {
     accordion: {
       pri: "Product Information",
       pmi: "Patient Medication Information",
-      add: "Additional Resource Links"
+      add: "Additional Resource Links",
+      reg: "Regulatory Announcements"
     }
   },
   bookmarks: {
@@ -137,6 +133,7 @@ export default {
         placeholder: ""
       },
       card: {
+        title: "Bookmarks",
         instructionText: "Select one of your bookmarked products to learn more."
       },
       buttons: {

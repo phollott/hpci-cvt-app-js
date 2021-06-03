@@ -49,7 +49,7 @@ const PushNotificationScreen = ({ navigation, route }) => {
 
       <View style={gStyle.container[theme]} key={pushNotificationViewKey}>
         <ScrollView contentContainerStyle={gStyle.contentContainer}>
-          <ViewCardText title={ t('stack.screen.pushNotificationTitle') } />
+          <ViewCardText title={ t('home.pushNotification.card.title') } text={ t('home.pushNotification.card.instructionText') } />
           <View style={gStyle.spacer32} />
           <View style={{ width: '90%', justifyContent: 'center' }}>
             
