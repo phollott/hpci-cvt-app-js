@@ -43,7 +43,7 @@ export default {
   },
   contentContainer: {
     alignItems: 'center',
-    paddingTop: 32
+    paddingTop: 8
   },
 
   // navigation styles
