@@ -90,6 +90,8 @@ class ViewProductDetails extends Component {
 
   render() {
     return (
+      <>
+      <View style={gStyle.spacer8} />
       <ScrollView style={{ backgroundColor: 'white' }}>
         <Card style={{ flex: 1 }}>
           <Card.Title style={{ color: gStyle.tintColor.active.light, fontSize: 18, fontWeight: 'bold', marginBottom: 15 }}>{this.props.productMaster.brandName}</Card.Title>
@@ -98,6 +100,7 @@ class ViewProductDetails extends Component {
           <ViewLabelledText text={ this.props.productMaster.status } label={ t('productDetails.card.statusLabel') } />
           <ViewLabelledText text={ this.props.productMaster.approvalDate } label={ t('productDetails.card.approvalDateLabel') } />
         </Card>
+        <View style={{ height: 8, width: '100%', backgroundColor: '#f2f2f2' }} />
         <List.AccordionGroup>
           <List.Accordion title={ t('productDetails.accordion.pri') } id='pri' titleStyle={{ fontWeight: 'bold' }} titleNumberOfLines={2} theme={{ colors: { primary: colors.blue }}}
               left={props => <List.Icon {...props} icon='card-text-outline' style={{ marginHorizontal: 0 }}/>}>
@@ -174,6 +177,7 @@ class ViewProductDetails extends Component {
           <Divider/>
         </List.AccordionGroup>
       </ScrollView>
+      </>
     );
   }
 

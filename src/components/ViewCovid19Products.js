@@ -67,6 +67,8 @@ class ViewCovid19Products extends Component {
     const { searchText } = this.state;
     if (this.props.settings.isOnline) {
       return (
+        <>
+        <View style={gStyle.spacer8} />
         <View
           style={{ flex: 1 }}
           contentContainerStyle={gStyle.contentContainer}
@@ -106,6 +108,7 @@ class ViewCovid19Products extends Component {
             </View>
           </ScrollView>
         </View>
+        </>
       );
     } else {
       return (
