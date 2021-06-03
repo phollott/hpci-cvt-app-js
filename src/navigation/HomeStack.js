@@ -1,17 +1,16 @@
 import * as React from 'react';
-import { Image, View } from 'react-native';
+import { View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { images } from '../constants';
-
 import HomeNavigator from './HomeNavigator';
+import HeaderTitle from '../components/HeaderTitle';
 import HomeMenu from '../components/HomeMenu';
 import NavigationBack from '../components/NavigationBack';
 import LanguageScreen from '../screens/LanguageScreen';
 import PushNotificationScreen from '../screens/PushNotificationScreen';
 
 const Stack = createStackNavigator();
+
 const HomeStack = () => {
-  const canadaLogo = 'canadaLogo';
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -19,12 +18,7 @@ const HomeStack = () => {
         component={HomeNavigator}
         options={({ navigation }) => ({
           headerShown: true,
-          headerTitle: () => (
-            <Image
-              style={{width: 103, height: 32}}
-              source={images[canadaLogo]}
-            />
-          ), 
+          headerTitle: () => ( <HeaderTitle /> ),
           headerTitleAlign: 'center',
           headerLeft: () => <HomeMenu navigation={navigation} />,
           headerRight: () => <View style={{ flex: 1 }} />
@@ -35,12 +29,7 @@ const HomeStack = () => {
         component={LanguageScreen}
         options={({ navigation, route }) => ({
           headerShown: true,
-          headerTitle: () => (
-            <Image
-              style={{width: 103, height: 32}}
-              source={images[canadaLogo]}
-            />
-          ), 
+          headerTitle: () => ( <HeaderTitle /> ),
           headerTitleAlign: 'center',
           headerLeft: () => <NavigationBack navigation={navigation} route={route} />,
           headerRight: () => <View style={{ flex: 1 }} />
@@ -51,12 +40,7 @@ const HomeStack = () => {
         component={PushNotificationScreen}
         options={({ navigation, route }) => ({
           headerShown: true,
-          headerTitle: () => (
-            <Image
-              style={{width: 103, height: 32}}
-              source={images[canadaLogo]}
-            />
-          ), 
+          headerTitle: () => ( <HeaderTitle /> ),
           headerTitleAlign: 'center',
           headerLeft: () => <NavigationBack navigation={navigation} route={route} />,
           headerRight: () => <View style={{ flex: 1 }} />

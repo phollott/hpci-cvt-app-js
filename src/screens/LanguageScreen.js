@@ -44,7 +44,7 @@ const LanguageScreen = ({ navigation }) => {
 
       <View style={gStyle.container[theme]} key={languageViewKey}>
         <ScrollView contentContainerStyle={gStyle.contentContainer}>
-          <ViewCardText title={ t('stack.screen.languageTitle') } />
+          <ViewCardText title={ t('home.settings.language.title') } />
           <View style={gStyle.spacer32} />
           <View style={{ width: '90%', justifyContent: 'center' }}>
             <Touch

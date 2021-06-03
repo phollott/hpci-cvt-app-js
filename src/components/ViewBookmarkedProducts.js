@@ -81,7 +81,7 @@ class ViewBookmarkedProducts extends Component {
           }
           <View style={gStyle.spacer8} />
           <ScrollView>
-            <ViewCardText title={ t('stack.screen.bookmarksTitle') } text={ t('bookmarks.products.card.instructionText') } />
+            <ViewCardText title={ t('bookmarks.products.card.title') } text={ t('bookmarks.products.card.instructionText') } />
             <ButtonGroup
               onPress = { this.updateIndex }
               selectedIndex = { selectedIndex }

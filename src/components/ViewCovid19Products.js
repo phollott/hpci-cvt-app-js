@@ -80,7 +80,7 @@ class ViewCovid19Products extends Component {
           />
           <View style={gStyle.spacer8} />
           <ScrollView>
-            <ViewCardText title={ t('stack.screen.productsTitle') } text={ t('products.card.instructionText') } />
+            <ViewCardText title={ t('products.card.title') } text={ t('products.card.instructionText') } />
             <ButtonGroup
               onPress = { this.updateIndex }
               selectedIndex = { selectedIndex }

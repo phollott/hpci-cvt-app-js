@@ -144,11 +144,7 @@ class ViewProductDetails extends Component {
                   containerStyle={ (productResource.isNew || productResource.isUpdated) ? { backgroundColor: '#C1D699' } : { } }
                   onPress={() => (this.linkingProductResource(productResource)) &&
                     this.props.navigation.navigate('ProductResource', { productResource })}
-                >{/*
-                  <Icon size={16} style={{ marginHorizontal: 5 }}
-                    name={ (productResource.resourceType === 'internal') ? 'file-alt' : 'globe' }
-                    color={ (productResource.resourceType !== 'pending') ? '#26374A': '#FF9F40' }
-                />*/}
+                >
                   <ListItem.Content>
                     <ListItem.Title style={{ fontWeight: 'bold', fontSize: 16 }}>
                       { productResource.resourceName + ' '}
@@ -173,6 +169,19 @@ class ViewProductDetails extends Component {
               )
             }
             </View>
+          </List.Accordion>
+          <Divider/>
+          <List.Accordion title={ t('productDetails.accordion.reg') } id='reg' titleStyle={{ fontWeight: 'bold' }} titleNumberOfLines={2} theme={{ colors: { primary: colors.blue }}}
+              left={props => <List.Icon {...props} icon='web' style={{ marginHorizontal: 0 }}/>}>
+            {
+              //this.state.productMetadata.map((product, key) => {
+              //  return (
+                  <View key={'productMetadata' + 'reg-key'} style={{ marginLeft: -50, marginBottom: 15 }}>
+                    <ViewLabelledText text={ 'Regulatory announcements are not yet available.' } />
+                  </View>
+              //  );
+              //})
+            }
           </List.Accordion>
           <Divider/>
         </List.AccordionGroup>

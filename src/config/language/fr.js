@@ -21,8 +21,7 @@ export default {
         bookmark: {
           add: "Impossible d'ajouter le favoris actuellement.",
           remove: "Impossible de supprimer le favoris actuellement."
-        },
-        loading: "Incapable de charger"
+        }
       }
     }
   },
@@ -31,16 +30,6 @@ export default {
       homeLabel: "Accueil",
       productsLabel: "Produits",
       bookmarksLabel: "Favoris"
-    }
-  },
-  stack: {
-    screen: {
-      languageTitle: "Modifier la langue",
-      pushNotificationTitle: "Envoyer une notification",
-      productsTitle: "Produits de santé COVID-19",
-      productDetailsTitle: "Description du produit",
-      productResourceTitle: "Ressource",
-      bookmarksTitle: "Favoris"
     }
   },
   home: {
@@ -70,10 +59,15 @@ export default {
     },
     settings: {
       language: {
+        title: "Modifier la langue",
         touchText: "Français (Canada)"
       }
     },
     pushNotification: {
+      card: {
+        title: "Envoyer une notification",
+        instructionText: "Envoyez une notification à votre appareil à partir de l’application ou de l’outil externe (appuyez, sélectionnez et copiez le 'Expo Push Token' avant de naviguer vers l’outil externe)."
+      },
       notification: {
         heading: "Notification reçue",
         title: "Titre",
@@ -91,6 +85,7 @@ export default {
       placeholder: ""
     },
     card: {
+      title: "Produits de santé COVID-19",
       instructionText: "Sélectionner un vaccin ou traitement pour en savoir plus.",
       offlineText: "Actuellement en mode hors-ligne, seuls les produits favoris sont disponibles."
     },
@@ -127,7 +122,8 @@ export default {
     accordion: {
       pri: "Information sur le produit",
       pmi: "Renseignments pour le patient sur le médicament",
-      add: "Liens vers des ressources supplémentaires"
+      add: "Liens vers des ressources supplémentaires",
+      reg: "Nouvelles"
     }
   },
   bookmarks: {
@@ -137,6 +133,7 @@ export default {
         placeholder: ""
       },
       card: {
+        title: "Favoris",
         instructionText: "Sélectionner le produit de votre choix pour en savoir plus."
       },
       buttons: {
