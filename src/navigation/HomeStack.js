@@ -18,7 +18,7 @@ const HomeStack = () => {
         component={HomeNavigator}
         options={({ navigation }) => ({
           headerShown: true,
-          headerTitle: () => ( <HeaderTitle /> ),
+          headerTitle: () => <HeaderTitle />,
           headerTitleAlign: 'center',
           headerLeft: () => <HomeMenu navigation={navigation} />,
           headerRight: () => <View style={{ flex: 1 }} />
@@ -29,7 +29,7 @@ const HomeStack = () => {
         component={LanguageScreen}
         options={({ navigation, route }) => ({
           headerShown: true,
-          headerTitle: () => ( <HeaderTitle /> ),
+          headerTitle: () => <HeaderTitle />,
           headerTitleAlign: 'center',
           headerLeft: () => <NavigationBack navigation={navigation} route={route} />,
           headerRight: () => <View style={{ flex: 1 }} />
@@ -40,7 +40,7 @@ const HomeStack = () => {
         component={PushNotificationScreen}
         options={({ navigation, route }) => ({
           headerShown: true,
-          headerTitle: () => ( <HeaderTitle /> ),
+          headerTitle: () => <HeaderTitle />,
           headerTitleAlign: 'center',
           headerLeft: () => <NavigationBack navigation={navigation} route={route} />,
           headerRight: () => <View style={{ flex: 1 }} />
