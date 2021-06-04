@@ -113,7 +113,7 @@ class ViewCovid19Products extends Component {
     } else {
       return (
         <>
-          <View style={gStyle.spacer32} />
+          <View style={gStyle.spacer8} />
           <ViewCardText text={ t('products.card.offlineText') } />
         </>
       );
