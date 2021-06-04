@@ -16,7 +16,7 @@ const BookmarksStack = () => {
         component={BookmarksScreen}
         options={{
           headerShown: true,
-          headerTitle: () => ( <HeaderTitle /> ),
+          headerTitle: () => <HeaderTitle />,
           headerTitleAlign: 'center'
         }}
       />
@@ -25,7 +25,7 @@ const BookmarksStack = () => {
         component={ProductDetailsScreen}
         options={({ navigation, route }) => ({
           headerShown: true,
-          headerTitle: () => ( <HeaderTitle /> ),
+          headerTitle: () => <HeaderTitle />,
           headerTitleAlign: 'center',
           headerLeft: () => <NavigationBack navigation={navigation} route={route} />,
           headerRight: () => <BookmarkTouch navigation={navigation} route={route} />
