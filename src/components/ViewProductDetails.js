@@ -142,8 +142,7 @@ class ViewProductDetails extends Component {
               this.props.productResourceList.map( productResource =>
                 <ListItem key={productResource.key} topDivider
                   containerStyle={ (productResource.isNew || productResource.isUpdated) ? { backgroundColor: '#C1D699' } : { } }
-                  onPress={() => (this.linkingProductResource(productResource)) &&
-                    this.props.navigation.navigate('ProductResource', { productResource })}
+                  onPress={ () => this.linkingProductResource(productResource) }
                 >
                   <ListItem.Content>
                     <ListItem.Title style={{ fontWeight: 'bold', fontSize: 16 }}>
@@ -174,13 +173,10 @@ class ViewProductDetails extends Component {
           <List.Accordion title={ t('productDetails.accordion.reg') } id='reg' titleStyle={{ fontWeight: 'bold' }} titleNumberOfLines={2} theme={{ colors: { primary: colors.blue }}}
               left={props => <List.Icon {...props} icon='web' style={{ marginHorizontal: 0 }}/>}>
             {
-              //this.state.productMetadata.map((product, key) => {
-              //  return (
-                  <View key={'productMetadata' + 'reg-key'} style={{ marginLeft: -50, marginBottom: 15 }}>
-                    <ViewLabelledText text={ 'Regulatory announcements are not yet available.' } />
-                  </View>
-              //  );
-              //})
+              // TODO: implement
+              <View key={'productMetadata' + 'reg-key'} style={{ marginLeft: -50, marginBottom: 15 }}>
+                <ViewLabelledText text={ 'Regulatory announcements are not yet available.' } />
+              </View>
             }
           </List.Accordion>
           <Divider/>
@@ -198,10 +194,7 @@ class ViewProductDetails extends Component {
           if (supported) {
             Linking.openURL(productResource.link);
           }
-        })
-      } else {
-        //console.log('internal product resource (show in WebView): ' + productResource.link);
-        return true;  
+        }) 
       }
     }
     // if there is no link or we have displayed an external link in the browser, return false to short-circuit the logic
