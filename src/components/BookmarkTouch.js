@@ -21,6 +21,15 @@ const BookmarkTouch = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const removeBookmarkProduct = nid => dispatch(removeBookmark(nid));
 
+  const navStacks = () => {
+    // [mrj] hack: navigation is used to ensure screens are re-rendered after bookmark is removed
+    navigation.navigate('ProductsStack', {screen: 'Products'});
+    navigation.navigate('BookmarksStack', {
+      screen: 'Bookmarks',
+      params: { bookmarkAction: ('-remove-').concat((new Date()).getTime().toString()) }
+    });
+  };
+
   return (
     <TouchableOpacity
       accessible
@@ -42,16 +51,9 @@ const BookmarkTouch = ({ navigation, route }) => {
                 removeBookmarkProduct(products[0].nid);
 
                 // remove en and fr bookmarks from storage
-                await storage.deleteMulti(['bookmark-product'+productMaster.nid+'-en', 'bookmark-product'+productMaster.nid+'-fr']);
+                storage.deleteMulti(['bookmark-product'+productMaster.nid+'-en', 'bookmark-product'+productMaster.nid+'-fr']).then(navStacks());
               }
               //console.log(await storage.retrieveMulti(['bookmark-product'+productMaster.nid+'-en', 'bookmark-product'+productMaster.nid+'-fr']));
-
-              // [mrj] hack: navigation is used to ensure screens are re-rendered after bookmark is removed
-              navigation.navigate('ProductsStack', {screen: 'Products'});
-              navigation.navigate('BookmarksStack', {
-                screen: 'Bookmarks',
-                params: { bookmarkAction: ('-remove-').concat((new Date()).getTime().toString()) }
-              });
             } else {
               throw isBookmark ? 'Unable to remove bookmark.' : 'Unable to create bookmark.'; 
             }

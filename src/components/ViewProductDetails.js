@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { t } from 'i18n-js';
 import { selectBookmarkByID } from '../redux/selectors/bookmarkSelector';
 import { selectProductByID } from '../redux/selectors/productSelector';
-import cheerio from 'react-native-cheerio';
 import Icon from './Icon';
 import { colors, gStyle } from '../constants';
 import { lang, covidVaccinePortal, portailVaccinCovid } from '../constants/constants';
@@ -13,7 +12,7 @@ import HTML from 'react-native-render-html';
 import { List, Divider } from 'react-native-paper';
 
 // services
-import { productResource } from '../services';
+import { productLoad, productResource, productsParser } from '../services';
 
 // components
 import ViewCardText from './ViewCardText';
@@ -31,60 +30,27 @@ class ViewProductDetails extends Component {
   /*************************************************************************************
    * 1. Extract from redux store Product Master and Product Resource details
    * 
-   * [pmh] we have the Product Master from the previous screen, but reload it anyway 
+   * We have the Product Master from the previous screen, but reloading it from state for resources mapping 
    */
 
   componentDidMount() {
-    if (this.props.settings.isOnline && this.props.consumerInformationResource) {
-      const cvtPortal = (this.props.settings.language === lang.english) ? covidVaccinePortal : portailVaccinCovid;
-      var url = cvtPortal + this.props.consumerInformationResource.link;            
-      fetch(url).then((resp)=>{ return resp.text() }).then((text)=>{ 
-        var $ = cheerio.load(text), productMetadata = [], consumerInformation = [];
-        
-        // Extract Product Metadata from COVID Portal Consumer Information
-        $('tbody').first().find('tr').each((i, row) => {
-          var noMatch = true
-            , productInfo = { 'din': null, 'name': null, 'ingredient': null, 'strength': null, 'dosageForm': null, 'routeOfAdmin': null };
-          $(row).find('td').each((j, div) => {
-            switch (j) {
-              case 0: productInfo.din = $(div).text().trim(); break;
-              case 1: productInfo.name = $(div).text().trim(); break;
-              case 2: productInfo.ingredient = $(div).text().trim(); break;
-              case 3: productInfo.strength = $(div).text().trim(); break;
-              case 4: productInfo.dosageForm = $(div).text().trim(); break;
-              case 5: productInfo.routeOfAdmin = $(div).text().trim(); break;
-            }
+    if (this.props.consumerInformationResource) {
+      if (this.props.settings.isOnline) {
+        // online, load/scrape
+        productLoad.loadConsumerInformation(this.props.consumerInformationResource.link, this.props.settings.language)
+        .then(productPortalInfo => {
+          this.setState({
+            productMetadata: productPortalInfo.productMetadata,
+            consumerInformation: productPortalInfo.consumerInformation
           });
-
-          // If two Products are identical, just add the DIN to the existing Product instead of adding it to the Product Metadata array
-          productMetadata.forEach((prodInfo, ind) => {
-            const existProduct = [prodInfo.name, prodInfo.ingredient, prodInfo.strength, prodInfo.dosageForm, prodInfo.routeOfAdmin].join('|')
-            const matchProduct = [productInfo.name, productInfo.ingredient, productInfo.strength, productInfo.dosageForm, productInfo.routeOfAdmin].join('|');
-            if (existProduct === matchProduct) {
-              prodInfo.din += (', ' + productInfo.din);
-              noMatch = false;
-            }
-          });
-          if (noMatch) {
-            productMetadata.push(productInfo);            
-          }
         });
-
-        //Extract Accordion data from COVID Portal Consumer Information
-        $('details.span-8').parent().each((i, detail) => {
-          const accordionItem = {
-            summary: $(detail).find('summary').text(),
-            html: $(detail).find('div').html(),
-            key: 'cons-' + i
-          };
-          consumerInformation.push(accordionItem);
-        });
-
+      } else {
+        // offline, set from state/storage (bookmarks)
         this.setState({
-          productMetadata: productMetadata,
-          consumerInformation: consumerInformation
+          productMetadata: this.props.productMetadata,
+          consumerInformation: this.props.consumerInformation
         });
-      });
+      }
     }
   }
 
@@ -203,7 +169,7 @@ class ViewProductDetails extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  var productMaster, product, productResourceList = [], consumerInformationResource;
+  var productMaster, product, productResourceList = [], consumerInformationResource, productMetadata, consumerInformation;
   
   // Product Master:
   productMaster = ownProps.route.params.productMaster;
@@ -212,6 +178,10 @@ const mapStateToProps = (state, ownProps) => {
   const key = productMaster.key.toString();
   if (key.startsWith('bookmark-product')) {
     product = selectBookmarkByID(state, ownProps.route.params.productMaster.nid);
+    if (typeof product !== 'undefined') {
+      productMetadata = product.productMetadata;
+      consumerInformation = product.consumerInformation;
+    }
   } else {
     product = selectProductByID(state, ownProps.route.params.productMaster.nid);
   }
@@ -219,13 +189,13 @@ const mapStateToProps = (state, ownProps) => {
   // Push all of the Product Resources into props, but extract Consumer Information if it is in there
   if (typeof product !== 'undefined') {
     productResourceList.push(...productResource.mapProductResources(product, state.settings.language));
-    consumerInformationResource = productResourceList.find((resource, ind, arr) => { 
-      if (resource.resourceName === 'Consumer Information' || resource.resourceName.toLowerCase().includes('consommateurs')) {
+    consumerInformationResource = productResourceList.find(resource => { 
+      if (productsParser.isProductResourceNameConsumerInfo(resource.resourceName)) {
         return resource;
       }
     });
-    productResourceList = productResourceList.filter((resource, ind, arr) => { 
-      if (!(resource.resourceName === 'Consumer Information' || resource.resourceName.toLowerCase().includes('consommateurs'))) {
+    productResourceList = productResourceList.filter(resource => { 
+      if (!productsParser.isProductResourceNameConsumerInfo(resource.resourceName)) {
         return resource;
       }
     });
@@ -235,7 +205,9 @@ const mapStateToProps = (state, ownProps) => {
     settings: state.settings,
     productMaster: productMaster,
     productResourceList: productResourceList,
-    consumerInformationResource: consumerInformationResource
+    consumerInformationResource: consumerInformationResource,
+    productMetadata: productMetadata,
+    consumerInformation: consumerInformation
   };
 };
 

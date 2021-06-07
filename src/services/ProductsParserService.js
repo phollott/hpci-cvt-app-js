@@ -137,6 +137,10 @@ const getProductResourceType = link => {
   return resourceType;
 }
 
+const isProductResourceNameConsumerInfo = resourceName => {
+  return resourceName.toLowerCase().includes('consumer information') || resourceName.toLowerCase().includes('consommateurs');
+}
+
 const isProductResourceNew = resource => {
   // TODO
   //  This is not very well tested, and I would not be surprised if it is off by one
@@ -204,6 +208,7 @@ export default {
   getProductResourceName,
   getProductResourcePublicationStatus,
   getProductResourceType,
+  isProductResourceNameConsumerInfo,
   isProductResourceNew,
   isProductResourceUpdated
 };

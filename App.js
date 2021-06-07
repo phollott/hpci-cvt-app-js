@@ -5,7 +5,7 @@ import { Appearance } from 'react-native-appearance';
 import { device, func } from './src/constants';
 import { lang } from './src/constants/constants';
 import { fetchProductsAsync } from './src/api/covid19Products';
-import { storage } from './src/services';
+import { productLoad, productsParser, storage } from './src/services';
 import initialState from './src/redux/store/initialState';
 import rootReducer from './src/redux/store/store';
 import { Provider } from 'react-redux';
@@ -89,9 +89,22 @@ class App extends React.Component {
                 && product.nid == bookmark.nid 
             });
             if (product.length === 1) {
-              bookmarks.push(product[0]);
-              // update storage async
-              this.saveBookmark(product[0]);
+              // scrape product consumer information (not in api), then add and save bookmark
+              var resourceLang, consumerInformationResource = [];
+              resourceLang = product[0].language.toLowerCase().substring(0,2);
+              consumerInformationResource.push(product[0].resources.find(resource => {
+                if (productsParser.isProductResourceNameConsumerInfo(resource.resource_link)) {
+                  return resource;
+                }
+              }));
+              productLoad.loadConsumerInformation(productsParser.getProductResourceLink(consumerInformationResource[0], resourceLang), resourceLang)
+              .then(productPortalInfo => {
+                product[0].productMetadata = productPortalInfo.productMetadata;
+                product[0].consumerInformation = productPortalInfo.consumerInformation;
+                bookmarks.push(product[0]);
+                // update storage async
+                this.saveBookmark(product[0]);
+              });
             } else {
               bookmarks.push(bookmark);
             }
