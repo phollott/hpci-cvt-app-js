@@ -34,8 +34,13 @@ const LanguageScreen = ({ navigation }) => {
       console.log('Unable to set language preference. ', error);
     }
   }
-
-// [mrj] hack: navigation is used to ensure the tab stacks, product resource webview and this screen are re-rendered after language is changed
+  
+  const navStacks = () => {
+    // [mrj] hack: navigation is used to ensure screens are re-rendered after language is changed
+    navigation.navigate('ProductsStack', {screen: 'Products'});
+    navigation.navigate('BookmarksStack', {screen: 'Bookmarks'});
+    navigation.navigate('HomeStack', {screen: 'Language'});
+  };
 
 // [pmh] this method of uapplying dark mode should work with RNE, but is untested
 
@@ -49,20 +54,14 @@ const LanguageScreen = ({ navigation }) => {
           <View style={{ width: '90%', justifyContent: 'center' }}>
             <Touch
               onPress={() => {
-                setLanguagePreference(lang.english);
-                navigation.navigate('ProductsStack', {screen: 'Products'});
-                navigation.navigate('BookmarksStack', {screen: 'Bookmarks'});
-                navigation.navigate('HomeStack', {screen: 'Language'});
+                setLanguagePreference(lang.english).then(navStacks());
               }}
               text={ t('home.settings.language.touchText', {locale: 'en'}) }
               rIconName={ (language === lang.english) ? 'check' : null }
             />
             <Touch
               onPress={() => {
-                setLanguagePreference(lang.french);
-                navigation.navigate('ProductsStack', {screen: 'Products'});
-                navigation.navigate('BookmarksStack', {screen: 'Bookmarks'});
-                navigation.navigate('HomeStack', {screen: 'Language'});
+                setLanguagePreference(lang.french).then(navStacks());
               }}
               text={ t('home.settings.language.touchText', {locale: 'fr'}) }
               rIconName={ (language === lang.french) ? 'check' : null }

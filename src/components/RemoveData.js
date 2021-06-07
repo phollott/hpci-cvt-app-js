@@ -4,6 +4,12 @@ import { storage } from '../services';
 
 // dev tool
 
+const navStacks = (props) => {
+  // [mrj] hack: navigation is used to ensure the bookmarks screen is re-rendered after bookmarks are cleared
+  props.navigation.navigate('BookmarksStack', {screen: 'Bookmarks', params: { bookmarkAction: '-clear'}});
+  props.navigation.navigate('HomeStack', {screen: 'Home'});
+};
+
 const RemoveData = (props) => {
   try {
     Confirm.alert(
@@ -14,10 +20,7 @@ const RemoveData = (props) => {
         { text: t('common.alert.button.ok'), 
           onPress: async () => {
             // clear settings, bookmarks
-            await storage.deleteAll();
-            // [mrj] hack: navigation is used to ensure the bookmarks screen is re-rendered after bookmarks are cleared
-            props.navigation.navigate('BookmarksStack', {screen: 'Bookmarks', params: { bookmarkAction: '-clear'}});
-            props.navigation.navigate('HomeStack', {screen: 'Home'});
+            storage.deleteAll().then(navStacks(props));
           }
         }
       ]
