@@ -13,7 +13,9 @@ let productMaster = (product, id) => {
     showLink: false,
     searchKey: '',
     isNew: false,
-    isUpdated: false
+    isUpdated: false,
+    productMetadata: [],
+    consumerInformation: []  // productMetadata and consumerInformation are set for bookmarks, used when !isOnline
   };
 }
 
