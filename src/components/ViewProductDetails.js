@@ -6,6 +6,7 @@ import { t } from 'i18n-js';
 import { selectBookmarkByID } from '../redux/selectors/bookmarkSelector';
 import { selectProductByID } from '../redux/selectors/productSelector';
 import Icon from './Icon';
+
 import { colors, gStyle } from '../constants';
 import { lang, covidVaccinePortal, portailVaccinCovid } from '../constants/constants';
 import HTML from 'react-native-render-html';
@@ -23,7 +24,8 @@ class ViewProductDetails extends Component {
     super(props);
     this.state = {
       productMetadata: [],
-      consumerInformation: []
+      consumerInformation: [],
+      regulatoryAnnouncements: []
     }
   }
 
@@ -41,14 +43,16 @@ class ViewProductDetails extends Component {
         .then(productPortalInfo => {
           this.setState({
             productMetadata: productPortalInfo.productMetadata,
-            consumerInformation: productPortalInfo.consumerInformation
+            consumerInformation: productPortalInfo.consumerInformation,
+            regulatoryAnnouncements: productPortalInfo.regulatoryAnnouncements
           });
         });
       } else {
         // offline, set from state/storage (bookmarks)
         this.setState({
           productMetadata: this.props.productMetadata,
-          consumerInformation: this.props.consumerInformation
+          consumerInformation: this.props.consumerInformation,
+//          regulatoryAnnouncements: this.props.regulatoryAnnouncements
         });
       }
     }
@@ -137,13 +141,19 @@ class ViewProductDetails extends Component {
           </List.Accordion>
           <Divider/>
           <List.Accordion title={ t('productDetails.accordion.reg') } id='reg' titleStyle={{ fontWeight: 'bold' }} titleNumberOfLines={2} theme={{ colors: { primary: colors.blue }}}
-              left={props => <List.Icon {...props} icon='web' style={{ marginHorizontal: 0 }}/>}>
+              left={props => <List.Icon {...props} icon='comment-alert-outline' style={{ marginHorizontal: 0 }}/>}>
+            <View style={{ marginLeft: -64 }}>
             {
-              // TODO: implement
-              <View key={'productMetadata' + 'reg-key'} style={{ marginLeft: -50, marginBottom: 15 }}>
-                <ViewLabelledText text={ 'Regulatory announcements are not yet available.' } />
-              </View>
+              this.state.regulatoryAnnouncements.map( regulatoryAnnouncement =>
+                <List.Item id={ regulatoryAnnouncement.key }
+                  title={ regulatoryAnnouncement.date }
+                  description={ regulatoryAnnouncement.description }
+                  onPress={ () => this.linkingProductResource(productResource) }
+                  right={props => <List.Icon {...props} icon='open-in-new' />}
+                />
+              )
             }
+            </View>
           </List.Accordion>
           <Divider/>
         </List.AccordionGroup>
