@@ -6,7 +6,7 @@ import { t } from 'i18n-js';
 import { selectBookmarkByID } from '../redux/selectors/bookmarkSelector';
 import { selectProductByID } from '../redux/selectors/productSelector';
 import Icon from './Icon';
-
+import ReadMore from 'react-native-read-more-text';
 import { colors, gStyle } from '../constants';
 import { lang, covidVaccinePortal, portailVaccinCovid } from '../constants/constants';
 import HTML from 'react-native-render-html';
@@ -142,24 +142,55 @@ class ViewProductDetails extends Component {
           <Divider/>
           <List.Accordion title={ t('productDetails.accordion.reg') } id='reg' titleStyle={{ fontWeight: 'bold' }} titleNumberOfLines={2} theme={{ colors: { primary: colors.blue }}}
               left={props => <List.Icon {...props} icon='comment-alert-outline' style={{ marginHorizontal: 0 }}/>}>
-            <View style={{ marginLeft: -64 }}>
             {
               this.state.regulatoryAnnouncements.map( regulatoryAnnouncement =>
-                <List.Item id={ regulatoryAnnouncement.key }
-                  title={ regulatoryAnnouncement.date }
-                  description={ regulatoryAnnouncement.description }
-                  onPress={ () => this.linkingProductResource(productResource) }
-                  right={props => <List.Icon {...props} icon='open-in-new' />}
-                />
+                <View style={{ marginLeft: -64 }}>
+                  <Divider/>
+                  <List.Item key={ regulatoryAnnouncement.key }
+                    title={ regulatoryAnnouncement.date } 
+                    description={ props => 
+                      <ReadMore
+                        numberOfLines={2}
+                        renderTruncatedFooter={this._renderTruncatedFooter}
+                        renderRevealedFooter={this._renderRevealedFooter}
+                        onReady={this._handleTextReady}>
+                          <Text>
+                            { regulatoryAnnouncement.description }
+                          </Text>
+                      </ReadMore> }
+                    onPress={ () => this.linkingProductResource(productResource) }
+                    right={props => <List.Icon {...props} icon='open-in-new' />}
+                  />
+                </View>
               )
             }
-            </View>
           </List.Accordion>
           <Divider/>
         </List.AccordionGroup>
       </ScrollView>
       </>
     );
+  }
+
+  //  description={ regulatoryAnnouncement.description }
+  _renderTruncatedFooter = (handlePress) => {
+    return (
+      <Text style={{ color: 'blue', marginTop: 5 }} onPress={handlePress}>
+        Read more
+      </Text>
+    );
+  }
+
+  _renderRevealedFooter = (handlePress) => {
+    return (
+      <Text style={{ color: 'blue', marginTop: 5 }} onPress={handlePress}>
+        Show less
+      </Text>
+    );
+  }
+
+  _handleTextReady = () => {
+    // ...
   }
 
   linkingProductResource(productResource) {
