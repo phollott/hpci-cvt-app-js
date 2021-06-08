@@ -5,12 +5,14 @@ import cheerio from 'react-native-cheerio';
 const loadConsumerInformation = async (resourceLink, language) => {
   var productLoad = {
       productMetadata: [],
-      consumerInformation: []
+      consumerInformation: [],
+      regulatoryAnnouncements: []
   }
   const cvtPortal = (language === lang.english) ? covidVaccinePortal : portailVaccinCovid;
-  var url = cvtPortal + resourceLink;
+  var urlPMI = cvtPortal + resourceLink
+    , urlPRD = resourceLink.replace('/info', cvtPortal).replace('-' + language + '.html', '/product-details');
 
-  await fetch(url)
+  await fetch(urlPMI)
   .then((resp)=>{ return resp.text() })
   .then((text)=>{ 
     var $ = cheerio.load(text), productMetadata = [], consumerInformation = [];
@@ -59,6 +61,33 @@ const loadConsumerInformation = async (resourceLink, language) => {
   })
   .catch (error => {
     console.log('Unable to load Consumer Information for product (check resource link). ', error);
+  });
+
+  await fetch(urlPRD)
+  .then((resp)=>{ return resp.text() })
+  .then((text)=>{ 
+    var $ = cheerio.load(text), regulatoryAnnouncements = [];
+
+    // Extract Regulatory Announcements from Product Details Page
+    $('div.view-vaccine-news').find('tbody').find('tr').each((i, row) => {
+    var regulatoryAnnouncement = { 'key': null, 'date': null, 'description': null, 'link': null };
+      $(row).find('td').each((j, td) => {
+        switch (j) {
+          case 0: 
+            regulatoryAnnouncement.link = $(td).find('a').attr('href').trim(); 
+            regulatoryAnnouncement.description = $(td).find('a').html().trim(); 
+            break;
+          case 1: regulatoryAnnouncement.date = $(td).text().trim(); break;
+        }
+        regulatoryAnnouncement.key = 'reg-' + i;
+      });
+      regulatoryAnnouncements.push(regulatoryAnnouncement);
+    });
+
+      productLoad.regulatoryAnnouncements = regulatoryAnnouncements;
+    })
+  .catch (error => {
+    console.log('Unable to load Product Details for product (check resource link). ', error);
   });
 
   return productLoad;
