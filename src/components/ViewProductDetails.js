@@ -119,7 +119,7 @@ class ViewProductDetails extends Component {
                       { productResource.resourceName + ' '}
                       <Tooltip popover={<Text>{ productResource.description }</Text>}
                         height={304} width={288} skipAndroidStatusBar={true} backgroundColor={'#CECECE'}>
-                        <Icon size={20} name='info-circle' color='#26374A' />
+                        <Icon name='info-circle' color={ colors.grey } />
                       </Tooltip>
                       { productResource.isNew && !productResource.isUpdated && <Badge value={t('common.badge.new')} status='success' /> }
                       { productResource.isUpdated && <Badge value={t('common.badge.updated')} status='warning' /> }  
@@ -133,7 +133,7 @@ class ViewProductDetails extends Component {
                     }
                     <ListItem.Subtitle style={{ fontSize: 12 }}>{ t('productDetails.listItem.publicationStatusLabel') }{ productResource.publicationStatus }</ListItem.Subtitle>
                   </ListItem.Content>
-                  { (productResource.link && this.props.settings.isOnline) && <ListItem.Chevron color='blue'/> }
+                  { (productResource.link && this.props.settings.isOnline) && <Icon name='open-in-new' type='material-community' color='#26374A' /> }
                 </ListItem>
               )
             }
@@ -144,11 +144,11 @@ class ViewProductDetails extends Component {
               left={props => <List.Icon {...props} icon='comment-alert-outline' style={{ marginHorizontal: 0 }}/>}>
             {
               this.state.regulatoryAnnouncements.map( regulatoryAnnouncement =>
-                <View style={{ marginLeft: -64 }}>
+                <View key={ 'view-'.concat(regulatoryAnnouncement.key) } style={{ marginLeft: -64 }}>
                   <Divider/>
                   <List.Item key={ regulatoryAnnouncement.key }
                     title={ regulatoryAnnouncement.date } 
-                    description={ props => 
+                    description={ () => 
                       <ReadMore
                         numberOfLines={2}
                         renderTruncatedFooter={this._renderTruncatedFooter}
@@ -159,7 +159,7 @@ class ViewProductDetails extends Component {
                           </Text>
                       </ReadMore> }
                     onPress={ () => this.linkingProductResource(productResource) }
-                    right={props => <List.Icon {...props} icon='open-in-new' />}
+                    right={ () => <Icon name='open-in-new' type='material-community' color='#26374A' style={{ marginTop: 12, marginRight: 6 }} />}
                   />
                 </View>
               )
