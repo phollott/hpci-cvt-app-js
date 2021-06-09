@@ -8,7 +8,6 @@ import { selectProductByID } from '../redux/selectors/productSelector';
 import Icon from './Icon';
 import ReadMore from 'react-native-read-more-text';
 import { colors, gStyle } from '../constants';
-import { lang, covidVaccinePortal, portailVaccinCovid } from '../constants/constants';
 import HTML from 'react-native-render-html';
 import { List, Divider } from 'react-native-paper';
 
@@ -117,23 +116,25 @@ class ViewProductDetails extends Component {
                   <ListItem.Content>
                     <ListItem.Title style={{ fontWeight: 'bold', fontSize: 16 }}>
                       { productResource.resourceName + ' '}
-                      <Tooltip popover={<Text>{ productResource.description }</Text>}
-                        height={304} width={288} skipAndroidStatusBar={true} backgroundColor={'#CECECE'}>
-                        <Icon name='info-circle' color={ colors.grey } />
-                      </Tooltip>
                       { productResource.isNew && !productResource.isUpdated && <Badge value={t('common.badge.new')} status='success' /> }
                       { productResource.isUpdated && <Badge value={t('common.badge.updated')} status='warning' /> }  
                     </ListItem.Title>
-                    { (false) && <Text style={{ fontSize: 10 }}>{  }</Text> }
-                    { !this.props.settings.isOnline && 
-                      <Text style={{ fontSize: 10 }}>{productResource.link.startsWith('/info')
-                        ? '\n'+((this.props.settings.language === lang.english ? covidVaccinePortal : portailVaccinCovid) + productResource.link)+'\n'
-                        : '\n'+productResource.link+'\n'}
-                      </Text>
-                    }
                     <ListItem.Subtitle style={{ fontSize: 12 }}>{ t('productDetails.listItem.publicationStatusLabel') }{ productResource.publicationStatus }</ListItem.Subtitle>
+                    <View style={gStyle.spacer8} />
+                    <ReadMore
+                      numberOfLines={1}
+                      renderTruncatedFooter={this._renderTruncatedFooter}
+                      renderRevealedFooter={this._renderRevealedFooter}
+                      onReady={this._handleTextReady}>
+                        <Text>
+                          { productResource.description }
+                        </Text>
+                    </ReadMore>
                   </ListItem.Content>
-                  { (productResource.link && this.props.settings.isOnline) && <Icon name='open-in-new' type='material-community' color='#26374A' /> }
+                  { 
+                  (productResource.link && this.props.settings.isOnline) && 
+                  <Icon name='open-in-new' type='material-community' color='#26374A' style={{ marginTop: 6, marginRight: 2 }} containerStyle={{ alignSelf: 'flex-start' }}/> 
+                  }
                 </ListItem>
               )
             }
@@ -162,7 +163,7 @@ class ViewProductDetails extends Component {
                     onPress={ () => {
                       this.linkingRegulatoryAnnouncement(regulatoryAnnouncement);
                     }}
-                    right={ () => <Icon name='open-in-new' type='material-community' color='#26374A' style={{ marginTop: 12, marginRight: 6 }} />}
+                    right={ () => <Icon name='open-in-new' type='material-community' color='#26374A' style={{ marginTop: 12, marginRight: 8 }} />}
                   />
                 </View>
               )
