@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Icon as IconRNE} from 'react-native-elements';
 import { gStyle } from '../constants';
 
-const Icon = ({name, type = 'font-awesome-5', size = 20, color = '', focused = true, reverse = false, solid = false, style}) => (
+const Icon = ({name, type = 'font-awesome-5', size = 20, color = '', focused = true, reverse = false, solid = false, style, containerStyle}) => (
   <IconRNE
     name={name}
     type={type}
@@ -14,6 +14,7 @@ const Icon = ({name, type = 'font-awesome-5', size = 20, color = '', focused = t
     reverse={reverse}
     solid={solid}
     style={style}
+    containerStyle={containerStyle}
   />
 );
 
@@ -29,6 +30,11 @@ Icon.propTypes = {
   reverse: PropTypes.bool,
   solid: PropTypes.bool,
   style: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.number,
+    PropTypes.object
+  ]),
+  containerStyle: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.number,
     PropTypes.object
