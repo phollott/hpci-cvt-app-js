@@ -23,6 +23,10 @@ export default {
           remove: "Impossible de supprimer le favoris actuellement."
         }
       }
+    },
+    readText: {
+      more: 'Découvrir plus',
+      less: 'Masquer'
     }
   },
   tab: {

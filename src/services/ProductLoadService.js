@@ -1,5 +1,6 @@
 import { lang, covidVaccinePortal, portailVaccinCovid } from '../constants/constants';
 import cheerio from 'react-native-cheerio';
+import he from 'he';
 
 // scrape metadata and consumer information from resourceLink url
 const loadConsumerInformation = async (resourceLink, language) => {
@@ -8,9 +9,9 @@ const loadConsumerInformation = async (resourceLink, language) => {
       consumerInformation: [],
       regulatoryAnnouncements: []
   }
-  const cvtPortal = (language === lang.english) ? covidVaccinePortal : portailVaccinCovid;
+  const cvtPortal = language === lang.english ? covidVaccinePortal : portailVaccinCovid;
   var urlPMI = cvtPortal + resourceLink
-    , urlPRD = resourceLink.replace('/info', cvtPortal).replace('-' + language + '.html', '/product-details');
+    , urlPRD = resourceLink.replace('/info', cvtPortal).replace('-' + language + '.html', language === lang.english ? '/product-details' : '/details-produit');
 
   await fetch(urlPMI)
   .then((resp)=>{ return resp.text() })
@@ -75,7 +76,7 @@ const loadConsumerInformation = async (resourceLink, language) => {
         switch (j) {
           case 0: 
             regulatoryAnnouncement.link = $(td).find('a').attr('href').trim(); 
-            regulatoryAnnouncement.description = $(td).find('a').html().trim(); 
+            regulatoryAnnouncement.description = he.decode($(td).find('a').html().trim()); 
             break;
           case 1: regulatoryAnnouncement.date = $(td).text().trim(); break;
         }

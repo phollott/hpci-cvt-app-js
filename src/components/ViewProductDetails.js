@@ -157,8 +157,11 @@ class ViewProductDetails extends Component {
                           <Text>
                             { regulatoryAnnouncement.description }
                           </Text>
-                      </ReadMore> }
-                    onPress={ () => this.linkingProductResource(productResource) }
+                      </ReadMore>
+                    }
+                    onPress={ () => {
+                      this.linkingRegulatoryAnnouncement(regulatoryAnnouncement);
+                    }}
                     right={ () => <Icon name='open-in-new' type='material-community' color='#26374A' style={{ marginTop: 12, marginRight: 6 }} />}
                   />
                 </View>
@@ -172,11 +175,10 @@ class ViewProductDetails extends Component {
     );
   }
 
-  //  description={ regulatoryAnnouncement.description }
   _renderTruncatedFooter = (handlePress) => {
     return (
       <Text style={{ color: 'blue', marginTop: 5 }} onPress={handlePress}>
-        Read more
+        { t('common.readText.more') }
       </Text>
     );
   }
@@ -184,7 +186,7 @@ class ViewProductDetails extends Component {
   _renderRevealedFooter = (handlePress) => {
     return (
       <Text style={{ color: 'blue', marginTop: 5 }} onPress={handlePress}>
-        Show less
+        { t('common.readText.less') }
       </Text>
     );
   }
@@ -203,6 +205,19 @@ class ViewProductDetails extends Component {
           }
         }) 
       }
+    }
+    // if there is no link or we have displayed an external link in the browser, return false to short-circuit the logic
+    return false;
+  }
+
+  linkingRegulatoryAnnouncement(regulatoryAnnouncement) {
+    if (regulatoryAnnouncement.link && this.props.settings.isOnline) {
+      //console.log('external regulatory announcement (show in browser): ' + regulatoryAnnouncement.link);
+      Linking.canOpenURL(regulatoryAnnouncement.link).then( supported => {
+        if (supported) {
+          Linking.openURL(regulatoryAnnouncement.link);
+        }
+      })
     }
     // if there is no link or we have displayed an external link in the browser, return false to short-circuit the logic
     return false;
