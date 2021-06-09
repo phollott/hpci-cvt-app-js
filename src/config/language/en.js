@@ -23,6 +23,10 @@ export default {
           remove: "Unable to remove bookmark at this time."
         }
       }
+    },
+    readText: {
+      more: 'Read more',
+      less: 'Show less'
     }
   },
   tab: {
