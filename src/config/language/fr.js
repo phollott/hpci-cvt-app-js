@@ -128,6 +128,9 @@ export default {
       pmi: "Renseignments pour le patient sur le médicament",
       add: "Liens vers des ressources supplémentaires",
       reg: "Nouvelles"
+    },
+    emptyText: {
+      reg: "Il n'y a actuellement aucun nouvelle à afficher."
     }
   },
   bookmarks: {

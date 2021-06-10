@@ -32,9 +32,6 @@ export default class ViewProductMasters extends Component {
               </ListItem.Title>
               <ListItem.Subtitle>{ productMaster.ingredient }</ListItem.Subtitle>
               <Text style={{ fontSize: 12 }}>{ productMaster.companyName }</Text>
-              { // TODO remove this if it's not required here 
-                // <Text style={{ fontSize: 12 }}>({ productMaster.status })</Text>
-              }
             </ListItem.Content>
             { productMaster.showLink && <ListItem.Chevron color='blue'/> }
           </ListItem>

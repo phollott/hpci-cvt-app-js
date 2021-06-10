@@ -10,8 +10,16 @@ const loadConsumerInformation = async (resourceLink, language) => {
       regulatoryAnnouncements: []
   }
   const cvtPortal = language === lang.english ? covidVaccinePortal : portailVaccinCovid;
+
   var urlPMI = cvtPortal + resourceLink
     , urlPRD = resourceLink.replace('/info', cvtPortal).replace('-' + language + '.html', language === lang.english ? '/product-details' : '/details-produit');
+ 
+  // [mrj] hack: the resource link does not match the parent's product details page:
+  //             /info/vaccin-contre-la-covid-19-de-pfizer-biontech.html - vaccin-contre-covid-19-pfizer-biontech/details-produit
+  // TODO: fix if links get added to api or url changes
+  if (urlPRD.includes('pfizer-biontech')) {
+    urlPRD = urlPRD.replace('vaccin-contre-la-covid-19-de-pfizer-biontech.html', 'vaccin-contre-covid-19-pfizer-biontech/details-produit');
+  }
 
   await fetch(urlPMI)
   .then((resp)=>{ return resp.text() })
