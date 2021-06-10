@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, ScrollView, Text, Linking } from 'react-native';
-import { Card, ListItem, Badge } from 'react-native-elements';
+import { Card, Badge } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { t } from 'i18n-js';
 import { selectBookmarkByID } from '../redux/selectors/bookmarkSelector';
@@ -109,33 +109,46 @@ class ViewProductDetails extends Component {
             <View style={{ marginLeft: -64 }}>
             {
               this.props.productResourceList.map( productResource =>
-                <ListItem key={productResource.key} topDivider
-                  containerStyle={ (productResource.isNew || productResource.isUpdated) ? { backgroundColor: '#C1D699' } : { } }
-                  onPress={ () => this.linkingProductResource(productResource) }
+                <View key={ 'view-'.concat(productResource.key) }
+                  style={ (productResource.isNew || productResource.isUpdated) ? { backgroundColor: '#C1D699' } : {  } }
                 >
-                  <ListItem.Content>
-                    <ListItem.Title style={{ fontWeight: 'bold', fontSize: 16 }}>
-                      { productResource.resourceName + ' '}
-                      { productResource.isNew && !productResource.isUpdated && <Badge value={t('common.badge.new')} status='success' /> }
-                      { productResource.isUpdated && <Badge value={t('common.badge.updated')} status='warning' /> }  
-                    </ListItem.Title>
-                    <ListItem.Subtitle style={{ fontSize: 12 }}>{ t('productDetails.listItem.publicationStatusLabel') }{ productResource.publicationStatus }</ListItem.Subtitle>
-                    <View style={gStyle.spacer8} />
-                    <ReadMore
-                      numberOfLines={1}
-                      renderTruncatedFooter={this._renderTruncatedFooter}
-                      renderRevealedFooter={this._renderRevealedFooter}
-                      onReady={this._handleTextReady}>
+                  <Divider/>
+                  <List.Item key={ productResource.key }
+                    title={
+                      <Text>
+                        { productResource.resourceName + ' '}
+                        { productResource.isNew && !productResource.isUpdated && <Badge value={t('common.badge.new')} status='success' /> }
+                        { productResource.isUpdated && <Badge value={t('common.badge.updated')} status='warning' /> }
+                      </Text>
+                    } 
+                    titleStyle={ { fontWeight: 'bold', fontSize: 16 } }
+                    titleNumberOfLines={2}
+                    description={ () =>
+                      <>
                         <Text>
-                          { productResource.description }
+                          <Text style={{ fontSize: 12 }}>{ t('productDetails.listItem.publicationStatusLabel') }{ productResource.publicationStatus }</Text>
+                          { '\n' }
                         </Text>
-                    </ReadMore>
-                  </ListItem.Content>
-                  { 
-                  (productResource.link && this.props.settings.isOnline) && 
-                  <Icon name='open-in-new' type='material-community' color='#26374A' style={{ marginTop: 6, marginRight: 2 }} containerStyle={{ alignSelf: 'flex-start' }}/> 
-                  }
-                </ListItem>
+                        <ReadMore
+                          numberOfLines={1}
+                          renderTruncatedFooter={this._renderTruncatedFooter}
+                          renderRevealedFooter={this._renderRevealedFooter}
+                          onReady={this._handleTextReady}>
+                            <Text>
+                              { productResource.description }
+                            </Text>
+                        </ReadMore>
+                      </>
+                    }
+                    onPress={ () => {
+                      this.linkingProductResource(productResource);
+                    }}
+                    right={ () => {
+                      return productResource.link && this.props.settings.isOnline
+                        ? <Icon name='open-in-new' type='material-community' color='#26374A' style={{ marginTop: 12, marginRight: 8 }} /> : null;
+                    }}
+                  />
+                </View>
               )
             }
             </View>
