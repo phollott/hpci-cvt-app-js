@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, ScrollView, Text, Linking } from 'react-native';
-import { Card, ListItem, Badge, Tooltip} from 'react-native-elements';
+import { Card, ListItem, Badge } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { t } from 'i18n-js';
 import { selectBookmarkByID } from '../redux/selectors/bookmarkSelector';
@@ -167,6 +167,10 @@ class ViewProductDetails extends Component {
                   />
                 </View>
               )
+            }
+            {
+              this.state.regulatoryAnnouncements.length === 0 &&
+              <ViewCardText text={ t('productDetails.emptyText.reg') } style={{ marginLeft: -64 }} />
             }
           </List.Accordion>
           <Divider/>

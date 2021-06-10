@@ -128,6 +128,9 @@ export default {
       pmi: "Patient Medication Information",
       add: "Additional Resource Links",
       reg: "Regulatory Announcements"
+    },
+    emptyText: {
+      reg: "There are no regulatory announcements to display at this time."
     }
   },
   bookmarks: {
