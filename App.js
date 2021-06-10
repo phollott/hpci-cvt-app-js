@@ -101,6 +101,7 @@ class App extends React.Component {
               .then(productPortalInfo => {
                 product[0].productMetadata = productPortalInfo.productMetadata;
                 product[0].consumerInformation = productPortalInfo.consumerInformation;
+                product[0].regulatoryAnnouncements = productPortalInfo.regulatoryAnnouncements;
                 bookmarks.push(product[0]);
                 // update storage async
                 this.saveBookmark(product[0]);

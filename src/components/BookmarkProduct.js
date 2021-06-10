@@ -68,11 +68,13 @@ const BookmarkProduct = ({ navigation, route }) => {
                 .then(productPortalInfoA => {
                   products[0].productMetadata = productPortalInfoA.productMetadata;
                   products[0].consumerInformation = productPortalInfoA.consumerInformation;
+                  products[0].regulatoryAnnouncements = productPortalInfoA.regulatoryAnnouncements;
 
                   productLoad.loadConsumerInformation(productsParser.getProductResourceLink(consumerInformationResource[1], lang[1]), lang[1])
                   .then(productPortalInfoB => {
                     products[1].productMetadata = productPortalInfoB.productMetadata;
                     products[1].consumerInformation = productPortalInfoB.consumerInformation;
+                    products[1].regulatoryAnnouncements = productPortalInfoB.regulatoryAnnouncements;
                     
                     // dispatch en and fr products to state store bookmarks
                     addBookmarkProduct(products);

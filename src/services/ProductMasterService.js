@@ -15,7 +15,8 @@ let productMaster = (product, id) => {
     isNew: false,
     isUpdated: false,
     productMetadata: [],
-    consumerInformation: []  // productMetadata and consumerInformation are set for bookmarks, used when !isOnline
+    consumerInformation: [],
+    regulatoryAnnouncements: []  // productMetadata, consumerInformation and regulatoryAnnouncements are set for bookmarks, used when !isOnline
   };
 }
 

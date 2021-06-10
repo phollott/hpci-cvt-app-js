@@ -51,7 +51,7 @@ class ViewProductDetails extends Component {
         this.setState({
           productMetadata: this.props.productMetadata,
           consumerInformation: this.props.consumerInformation,
-//          regulatoryAnnouncements: this.props.regulatoryAnnouncements
+          regulatoryAnnouncements: this.props.regulatoryAnnouncements
         });
       }
     }
@@ -163,7 +163,10 @@ class ViewProductDetails extends Component {
                     onPress={ () => {
                       this.linkingRegulatoryAnnouncement(regulatoryAnnouncement);
                     }}
-                    right={ () => <Icon name='open-in-new' type='material-community' color='#26374A' style={{ marginTop: 12, marginRight: 8 }} />}
+                    right={ () => {
+                      return regulatoryAnnouncement.link && this.props.settings.isOnline
+                        ? <Icon name='open-in-new' type='material-community' color='#26374A' style={{ marginTop: 12, marginRight: 8 }} /> : null;
+                    }}
                   />
                 </View>
               )
@@ -230,7 +233,7 @@ class ViewProductDetails extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  var productMaster, product, productResourceList = [], consumerInformationResource, productMetadata, consumerInformation;
+  var productMaster, product, productResourceList = [], consumerInformationResource, productMetadata, consumerInformation, regulatoryAnnouncements;
   
   // Product Master:
   productMaster = ownProps.route.params.productMaster;
@@ -242,6 +245,7 @@ const mapStateToProps = (state, ownProps) => {
     if (typeof product !== 'undefined') {
       productMetadata = product.productMetadata;
       consumerInformation = product.consumerInformation;
+      regulatoryAnnouncements = product.regulatoryAnnouncements;
     }
   } else {
     product = selectProductByID(state, ownProps.route.params.productMaster.nid);
@@ -268,7 +272,8 @@ const mapStateToProps = (state, ownProps) => {
     productResourceList: productResourceList,
     consumerInformationResource: consumerInformationResource,
     productMetadata: productMetadata,
-    consumerInformation: consumerInformation
+    consumerInformation: consumerInformation,
+    regulatoryAnnouncements: regulatoryAnnouncements
   };
 };
 
