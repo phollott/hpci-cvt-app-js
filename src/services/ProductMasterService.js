@@ -1,6 +1,6 @@
 import ProductsParserService from './ProductsParserService';
 
-let productMaster = (product, id) => {
+let productMaster = (product, id, language) => {
   return {
     key: id,
     nid: product.nid,
@@ -9,7 +9,7 @@ let productMaster = (product, id) => {
     companyName: product.company_name,
     type: ProductsParserService.getProductType(product),
     status: product.status, 
-    approvalDate: ProductsParserService.getProductDateOfApproval(product),
+    approvalDate: ProductsParserService.getProductDateOfApprovalFormatted(product, language),
     showLink: false,
     searchKey: '',
     isNew: false,
@@ -20,8 +20,8 @@ let productMaster = (product, id) => {
   };
 }
 
-const mapProduct = (product, id) => {
-  let prod = productMaster(product, id);
+const mapProduct = (product, id, language) => {
+  let prod = productMaster(product, id, language);
   prod.showLink = true;
   prod.searchKey = [prod.brandName, prod.companyName, prod.ingredient].join('-').toLowerCase();
   prod.isNew = ProductsParserService.isProductNew(prod.approvalDate);
