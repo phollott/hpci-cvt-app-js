@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Text, Linking } from 'react-native';
-import { Card, Badge } from 'react-native-elements';
+import { View, ScrollView, StyleSheet, Text, Linking } from 'react-native';
+import { Card } from 'react-native-elements';
+import { Badge, List, Divider } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { t } from 'i18n-js';
+import ReadMore from 'react-native-read-more-text';
+import HTML from 'react-native-render-html';
+import Icon from './Icon';
+import { colors, gStyle } from '../constants';
 import { selectBookmarkByID } from '../redux/selectors/bookmarkSelector';
 import { selectProductByID } from '../redux/selectors/productSelector';
-import Icon from './Icon';
-import ReadMore from 'react-native-read-more-text';
-import { colors, gStyle } from '../constants';
-import HTML from 'react-native-render-html';
-import { List, Divider } from 'react-native-paper';
-
 // services
 import { productLoad, productResource, productsParser } from '../services';
-
 // components
 import ViewCardText from './ViewCardText';
 import ViewLabelledText from './ViewLabelledText';
@@ -28,9 +26,9 @@ class ViewProductDetails extends Component {
     }
   }
 
-  /*************************************************************************************
+  /** ***********************************************************************************
    * 1. Extract from redux store Product Master and Product Resource details
-   * 
+   *
    * We have the Product Master from the previous screen, but reloading it from state for resources mapping 
    */
 
@@ -110,15 +108,19 @@ class ViewProductDetails extends Component {
             {
               this.props.productResourceList.map( productResource =>
                 <View key={ 'view-'.concat(productResource.key) }
-                  style={ (productResource.isNew || productResource.isUpdated) ? { backgroundColor: '#C1D699' } : {  } }
+                  style={ (productResource.isNew || productResource.isUpdated) ? { backgroundColor: '#e5f2e5' } : {  } }
                 >
                   <Divider/>
                   <List.Item key={ productResource.key }
                     title={
                       <Text>
-                        { productResource.resourceName + ' '}
-                        { productResource.isNew && !productResource.isUpdated && <Badge value={t('common.badge.new')} status='success' /> }
-                        { productResource.isUpdated && <Badge value={t('common.badge.updated')} status='warning' /> }
+                        <Text>
+                          { productResource.resourceName.trim()}
+                        </Text>
+                        <View>
+                          { productResource.isNew && !productResource.isUpdated && <Badge style={[styles.updateBadge, {backgroundColor: '#52c518'}]}>{t('common.badge.new')}</Badge> }
+                          { productResource.isUpdated && <Badge style={[styles.updateBadge, {backgroundColor: '#faae15'}]}>{t('common.badge.updated')}</Badge> }
+                        </View>
                       </Text>
                     } 
                     titleStyle={ { fontWeight: 'bold', fontSize: 16 } }
@@ -289,5 +291,14 @@ const mapStateToProps = (state, ownProps) => {
     regulatoryAnnouncements: regulatoryAnnouncements
   };
 };
+
+const styles = StyleSheet.create({
+  updateBadge: {
+    color: 'white',
+    marginLeft: 4,
+    marginRight: 4,
+    paddingHorizontal: 8
+  }
+});
 
 export default connect(mapStateToProps)(ViewProductDetails);
