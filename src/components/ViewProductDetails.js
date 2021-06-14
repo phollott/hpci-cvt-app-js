@@ -157,7 +157,7 @@ class ViewProductDetails extends Component {
           </List.Accordion>
           <Divider/>
           <List.Accordion title={ t('productDetails.accordion.reg') } id='reg' titleStyle={{ fontWeight: 'bold' }} titleNumberOfLines={2} theme={{ colors: { primary: colors.blue }}}
-              left={props => <List.Icon {...props} icon='comment-alert-outline' style={{ marginHorizontal: 0 }}/>}>
+              left={props => <List.Icon {...props} icon='bullhorn-outline' style={{ marginHorizontal: 0 }}/>}>
             {
               this.state.regulatoryAnnouncements.map( regulatoryAnnouncement =>
                 <View key={ 'view-'.concat(regulatoryAnnouncement.key) } style={{ marginLeft: -64 }}>
