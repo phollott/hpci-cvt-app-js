@@ -86,6 +86,7 @@ class ViewBookmarkedProducts extends Component {
               onPress = { this.updateIndex }
               selectedIndex = { selectedIndex }
               buttons = { buttons }
+              containerStyle={{ height: 30, marginHorizontal: 14 }}
             />
             <View>
               { (this.state.selectedIndex === 0 && this.state.filtVaccineProd.length > 0) &&
