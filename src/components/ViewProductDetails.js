@@ -60,7 +60,7 @@ class ViewProductDetails extends Component {
       <>
       <View style={gStyle.spacer8} />
       <ScrollView style={{ backgroundColor: 'white' }}>
-        <Card style={{ flex: 1 }}>
+        <Card containerStyle={{marginHorizontal: 0, marginTop: 0}} style={{ flex: 1 }}>
           <Card.Title style={{ color: gStyle.tintColor.active.light, fontSize: 18, fontWeight: 'bold', marginBottom: 15 }}>{this.props.productMaster.brandName}</Card.Title>
           <ViewLabelledText text={ this.props.productMaster.companyName} label={ t('productDetails.card.companyNameLabel') } />
           <ViewLabelledText text={ this.props.productMaster.ingredient } label={ t('productDetails.card.ingredientLabel') } />

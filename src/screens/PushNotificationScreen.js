@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 import { ScrollView, Text, View, Linking } from 'react-native';
-import { Button, ThemeProvider } from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import { useTheme } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
+import { t } from 'i18n-js';
 import { gStyle } from '../constants';
-import { useColorScheme } from 'react-native-appearance';
 import Icon from '../components/Icon';
 import ViewCardText from '../components/ViewCardText';
 import { storage } from '../services';
-import {t} from 'i18n-js';
 
 // dev tool
 
@@ -23,7 +22,6 @@ const retrieveExpoPushToken = async () => {
 
 const PushNotificationScreen = ({ navigation, route }) => { 
   const theme = useTheme();
-  const colorScheme = useColorScheme();
 
   const [expoPushToken, setExpoPushToken] = useState('');
 
@@ -42,75 +40,67 @@ const PushNotificationScreen = ({ navigation, route }) => {
     pushNotificationViewKey = pushNotificationViewKey.concat(route.params.pushNotificationAction);
   }
 
-// [pmh] this method of applying dark mode should work with RNE, but is untested
-
   return (
-    <ThemeProvider theme={ gStyle.mytheme } useDark={ colorScheme === 'dark' }>
-
-      <View style={gStyle.container[theme]} key={pushNotificationViewKey}>
-        <ScrollView contentContainerStyle={gStyle.contentContainer}>
-          <ViewCardText title={ t('home.pushNotification.card.title') } text={ t('home.pushNotification.card.instructionText') } />
-          <View style={gStyle.spacer32} />
-          <View style={{ width: '90%', justifyContent: 'center' }}>
-            
-            <View
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'space-around'
-            }}>
-              <Text>{t('home.pushNotification.notification.heading')}: </Text>
-              <View style={gStyle.spacer8} />
-              <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                <Text>{t('home.pushNotification.notification.title')}: {notification && notification.request.content.title} </Text>
-                <Text>{t('home.pushNotification.notification.body')}: {notification && notification.request.content.body}</Text>
-                <Text>{t('home.pushNotification.notification.data')}: {notification && JSON.stringify(notification.request.content.data)}</Text>
-              </View>
-              <View style={gStyle.spacer32} />
-              <Button
-                title={ t('home.pushNotification.button.sendTitle') }
-                onPress={async () => {
-                  await sendPushNotification();
-                }}
-                icon={
-                  <Icon name='share' size={40} style={{paddingRight: 8}} />
-                }
-                containerStyle={ gStyle.container.light }
-                titleStyle={{ color: "black" }}
-                raised={true}
-                type="outline"
-              />
-              <View style={gStyle.spacer32} />
-              <Text>Expo Push Token:</Text>
-              <View style={gStyle.spacer8} />
-              <Text selectable={true} style={gStyle.text[theme], {fontSize: 14, fontWeight: 'bold'}}>{expoPushToken}</Text>
-              <View style={gStyle.spacer32} />
-              <Button
-                onPress={() => {
-                  const epntUrl = 'https:expo.io/notifications';
-                  Linking.canOpenURL(epntUrl).then( supported => {
-                    if (supported) {
-                      Linking.openURL(epntUrl);
-                    }
-                  })
-                }}
-                icon={
-                  <Icon name='globe' size={40} style={{paddingRight: 8}} />
-                }
-                title={ t('home.pushNotification.button.toolTitle') }
-                containerStyle={ gStyle.container.light }
-                titleStyle={{ color: "black" }}
-                raised={true}
-                type="outline"
-              />
+    <View style={gStyle.container[theme]} key={pushNotificationViewKey}>
+      <ScrollView contentContainerStyle={gStyle.contentContainer}>
+        <ViewCardText title={t('home.pushNotification.card.title')} text={t('home.pushNotification.card.instructionText')} />
+        <View style={gStyle.spacer32} />
+        <View style={{ width: '90%', justifyContent: 'center' }}>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'space-around'
+          }}>
+            <Text>{t('home.pushNotification.notification.heading')}: </Text>
+            <View style={gStyle.spacer8} />
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <Text>{t('home.pushNotification.notification.title')}: {notification && notification.request.content.title} </Text>
+              <Text>{t('home.pushNotification.notification.body')}: {notification && notification.request.content.body}</Text>
+              <Text>{t('home.pushNotification.notification.data')}: {notification && JSON.stringify(notification.request.content.data)}</Text>
             </View>
-
+            <View style={gStyle.spacer32} />
+            <Button
+              title={ t('home.pushNotification.button.sendTitle') }
+              onPress={async () => {
+                await sendPushNotification();
+              }}
+              icon={
+                <Icon name='share' size={40} style={{paddingRight: 8}} />
+              }
+              containerStyle={ gStyle.container.light }
+              titleStyle={{ color: "black" }}
+              raised={true}
+              type="outline"
+            />
+            <View style={gStyle.spacer32} />
+            <Text>Expo Push Token:</Text>
+            <View style={gStyle.spacer8} />
+            <Text selectable={true} style={gStyle.text[theme], {fontSize: 14, fontWeight: 'bold'}}>{expoPushToken}</Text>
+            <View style={gStyle.spacer32} />
+            <Button
+              onPress={() => {
+                const epntUrl = 'https:expo.io/notifications';
+                Linking.canOpenURL(epntUrl).then( supported => {
+                  if (supported) {
+                    Linking.openURL(epntUrl);
+                  }
+                })
+              }}
+              icon={
+                <Icon name='globe' size={40} style={{paddingRight: 8}} />
+              }
+              title={ t('home.pushNotification.button.toolTitle') }
+              containerStyle={ gStyle.container.light }
+              titleStyle={{ color: "black" }}
+              raised={true}
+              type="outline"
+            />
           </View>
-          <View style={gStyle.spacer32} />
-        </ScrollView>
-      </View>
-      
-    </ThemeProvider>
+        </View>
+        <View style={gStyle.spacer32} />
+      </ScrollView>
+    </View>
   );
 };
 
@@ -125,7 +115,7 @@ async function sendPushNotification() {
       body: 'Message!',
       data: { 'date': (new Date()).toString() },
     };
-  
+
     fetch('https://exp.host/--/api/v2/push/send', {
       method: 'POST',
       headers: {
@@ -140,7 +130,8 @@ async function sendPushNotification() {
 
 PushNotificationScreen.propTypes = {
   // required
-  navigation: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired,
+  route: PropTypes.object.isRequired
 };
 
 export default PushNotificationScreen;
