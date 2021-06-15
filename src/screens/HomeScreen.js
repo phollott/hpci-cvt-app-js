@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import { Image, ScrollView, Text, View } from 'react-native';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
-import { Button, Card } from 'react-native-elements';
+import { Button } from 'react-native-elements';
+import { Card } from 'react-native-paper';
 import { useTheme } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { t } from 'i18n-js';
-import { gStyle, images } from '../constants';
+import { colors, gStyle, images } from '../constants';
 import Icon from '../components/Icon';
 import { storage } from '../services';
 
@@ -77,16 +78,25 @@ const HomeScreen = ({ navigation }) => {
     <View style={gStyle.container[theme]} key={homeViewKey}>
       <ScrollView contentContainerStyle={gStyle.contentContainer}>
         <View style={{ width: '100%', justifyContent: 'center' }}>
-          <Card containerStyle={{marginHorizontal: 0, marginTop: 0}}>
-            <Card.Title style={gStyle.text[theme], {fontSize: 18}}>{ t('home.introCard.title') }</Card.Title>
-            <View style={{ flex: 1 }}>
-              <Image
-                style={{ alignSelf: 'center', height: 120, width: 120 }}
-                source={images[titleLogo]}
-              />
-              <View style={gStyle.spacer16} />
-            </View>
-            <Text style={gStyle.text[theme], {fontSize: 16}}>{ t('home.introCard.text') }</Text>
+          <Card style={{ borderRadius: 0, marginHorizontal: 0, marginTop: 0 }}>
+            <Card.Content style={{ alignItems: 'center' }}>
+              <Text style={{ color: colors.darkColor, fontWeight: 'bold', fontSize: 18 }}>
+                {t('home.introCard.title')}
+              </Text>
+            </Card.Content>
+            <View style={gStyle.spacer16} />
+            <Card.Content>
+              <View style={{ flex: 1 }}>
+                <Image
+                  style={{ alignSelf: 'center', height: 120, width: 120 }}
+                  source={images[titleLogo]}
+                />
+                <View style={gStyle.spacer16} />
+              </View>
+              <Text style={{ color: colors.darkColor, fontSize: 16 }}>
+                {t('home.introCard.text')}
+              </Text>
+            </Card.Content>
           </Card>
         </View>
         <View style={gStyle.spacer32} />
@@ -95,7 +105,7 @@ const HomeScreen = ({ navigation }) => {
             navigation.navigate('ProductsStack', {screen: 'Products'});
           }}
           icon={
-            <Icon name='shield-virus' size={40} style={{paddingRight: 8}} />
+            <Icon name='search' size={32} style={{paddingRight: 8}} />
           }
           title={t('home.button.products.title')}
           containerStyle={gStyle.container.light}

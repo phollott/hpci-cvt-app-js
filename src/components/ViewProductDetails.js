@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { View, ScrollView, StyleSheet, Text, Linking } from 'react-native';
-import { Card } from 'react-native-elements';
-import { Badge, List, Divider } from 'react-native-paper';
+import { Badge, Card, List, Divider } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { t } from 'i18n-js';
 import ReadMore from 'react-native-read-more-text';
@@ -60,13 +59,22 @@ class ViewProductDetails extends Component {
       <>
       <View style={gStyle.spacer8} />
       <ScrollView style={{ backgroundColor: 'white' }}>
-        <Card containerStyle={{marginHorizontal: 0, marginTop: 0}} style={{ flex: 1 }}>
-          <Card.Title style={{ color: gStyle.tintColor.active.light, fontSize: 18, fontWeight: 'bold', marginBottom: 15 }}>{this.props.productMaster.brandName}</Card.Title>
-          <ViewLabelledText text={ this.props.productMaster.companyName} label={ t('productDetails.card.companyNameLabel') } />
-          <ViewLabelledText text={ this.props.productMaster.ingredient } label={ t('productDetails.card.ingredientLabel') } />
-          <ViewLabelledText text={ this.props.productMaster.status } label={ t('productDetails.card.statusLabel') } />
-          <ViewLabelledText text={ this.props.productMaster.approvalDate } label={ t('productDetails.card.approvalDateLabel') } />
-        </Card>
+        <View style={{ width: '100%', justifyContent: 'center' }}>
+          <Card style={{ borderRadius: 0, marginHorizontal: 0, marginTop: 0 }}>
+            <Card.Content style={{ alignItems: 'center' }}>
+              <Text style={{ color: colors.blue, fontWeight: 'bold', fontSize: 18 }}>
+                {this.props.productMaster.brandName}
+              </Text>
+            </Card.Content>
+            <View style={gStyle.spacer16} />
+            <Card.Content>
+              <ViewLabelledText text={ this.props.productMaster.companyName} label={ t('productDetails.card.companyNameLabel') } />
+              <ViewLabelledText text={ this.props.productMaster.ingredient } label={ t('productDetails.card.ingredientLabel') } />
+              <ViewLabelledText text={ this.props.productMaster.status } label={ t('productDetails.card.statusLabel') } />
+              <ViewLabelledText text={ this.props.productMaster.approvalDate } label={ t('productDetails.card.approvalDateLabel') } />
+            </Card.Content>
+          </Card>
+        </View>
         <View style={{ height: 8, width: '100%', backgroundColor: '#f2f2f2' }} />
         <List.AccordionGroup>
           <List.Accordion title={ t('productDetails.accordion.pri') } id='pri' titleStyle={{ fontWeight: 'bold' }} titleNumberOfLines={2} theme={{ colors: { primary: colors.blue }}}

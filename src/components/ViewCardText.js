@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Card } from 'react-native-elements';
-import { gStyle } from '../constants';
+import { Card } from 'react-native-paper';
+import { colors, gStyle } from '../constants';
 
 export default class ViewCardText extends Component {
   constructor(props) {
@@ -15,15 +15,16 @@ export default class ViewCardText extends Component {
         contentContainerStyle={gStyle.contentContainer}
         style={styles.container}
       >
-        <Card containerStyle={styles.cardContainer}>
+        <Card style={styles.cardContainer}>
           {
-            this.props.title &&
-            <Card.Title style={styles.cardTitle}>{this.props.title}</Card.Title>
+            this.props.title && 
+            <Card.Content style={styles.cardContentTitle}>
+              <Text style={styles.cardContentTitleText}>{this.props.title}</Text>
+            </Card.Content>
           }
-          {
-            this.props.text && 
-            <Text>{this.props.text}</Text>
-          }
+          <Card.Content style={styles.cardContent}>
+            <Text style={styles.cardContentText}>{this.props.text}</Text>
+          </Card.Content>
         </Card>
       </View>
     );
@@ -32,15 +33,26 @@ export default class ViewCardText extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%'
+    width: '100%',
+    justifyContent: 'center'
   },
   cardContainer: {
+    borderRadius: 0,
     marginHorizontal: 0,
     marginTop: 0
   },
-  cardTitle: {
-    fontSize: 18, 
-    fontWeight: 'bold', 
-    marginBottom: 15
+  cardContentTitle: {
+    alignItems: 'center'
+  },
+  cardContentTitleText: {
+    color: colors.darkColor,
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
+  cardContent: {
+    marginTop: 12
+  },
+  cardContentText: {
+    color: colors.darkColor
   }
 });
