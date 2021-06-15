@@ -3,7 +3,7 @@ import { Image } from 'react-native';
 import { images } from '../constants';
 
 const internalState = {
-  canadaLogo: 'canadaLogo'
+  canadaWordmark: 'canadaWordmark'
 };
 
 export default class HeaderTitle extends Component {
@@ -13,12 +13,12 @@ export default class HeaderTitle extends Component {
   }
 
   render() {
-    return ( 
+    return (
       <Image
-        source={ images[this.state.canadaLogo] }
-        style={{ 
-          width: 103, 
-          height: 32 
+        source={images[this.state.canadaWordmark]}
+        style={{
+          width: 100,
+          height: 24
         }}
       />
     );

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { colors } from '../constants';
 import HeaderTitle from '../components/HeaderTitle';
 import NavigationBack from '../components/NavigationBack';
 import BookmarkProduct from '../components/BookmarkProduct';
@@ -11,24 +12,30 @@ const Stack = createStackNavigator();
 const ProductsStack = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen 
-        name="Products" 
+      <Stack.Screen
+        name="Products"
         component={ProductsScreen}
         options={{
           headerShown: true,
           headerTitle: () => <HeaderTitle />,
-          headerTitleAlign: 'center'
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colors.darkColor
+          }
         }}
       />
-      <Stack.Screen 
-        name="ProductDetails" 
+      <Stack.Screen
+        name="ProductDetails"
         component={ProductDetailsScreen}
         options={({ navigation, route }) => ({
           headerShown: true,
           headerTitle: () => <HeaderTitle />,
           headerTitleAlign: 'center',
           headerLeft: () => <NavigationBack navigation={navigation} route={route} />,
-          headerRight: () => <BookmarkProduct navigation={navigation} route={route} />
+          headerRight: () => <BookmarkProduct navigation={navigation} route={route} />,
+          headerStyle: {
+            backgroundColor: colors.darkColor
+          }
         })}
       />
     </Stack.Navigator>

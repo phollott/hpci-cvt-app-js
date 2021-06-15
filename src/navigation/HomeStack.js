@@ -2,6 +2,7 @@ import * as React from 'react';
 import { View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeNavigator from './HomeNavigator';
+import { colors } from '../constants';
 import HeaderTitle from '../components/HeaderTitle';
 import HomeMenu from '../components/HomeMenu';
 import NavigationBack from '../components/NavigationBack';
@@ -21,29 +22,38 @@ const HomeStack = () => {
           headerTitle: () => <HeaderTitle />,
           headerTitleAlign: 'center',
           headerLeft: () => <HomeMenu navigation={navigation} />,
-          headerRight: () => <View style={{ flex: 1 }} />
+          headerRight: () => <View style={{ flex: 1 }} />,
+          headerStyle: {
+            backgroundColor: colors.darkColor
+          }
         })}
       />
-      <Stack.Screen 
-        name="Language" 
+      <Stack.Screen
+        name="Language"
         component={LanguageScreen}
         options={({ navigation, route }) => ({
           headerShown: true,
           headerTitle: () => <HeaderTitle />,
           headerTitleAlign: 'center',
           headerLeft: () => <NavigationBack navigation={navigation} route={route} />,
-          headerRight: () => <View style={{ flex: 1 }} />
+          headerRight: () => <View style={{ flex: 1 }} />,
+          headerStyle: {
+            backgroundColor: colors.darkColor
+          }
         })}
       />
-      <Stack.Screen 
-        name="PushNotification" 
+      <Stack.Screen
+        name="PushNotification"
         component={PushNotificationScreen}
         options={({ navigation, route }) => ({
           headerShown: true,
           headerTitle: () => <HeaderTitle />,
           headerTitleAlign: 'center',
           headerLeft: () => <NavigationBack navigation={navigation} route={route} />,
-          headerRight: () => <View style={{ flex: 1 }} />
+          headerRight: () => <View style={{ flex: 1 }} />,
+          headerStyle: {
+            backgroundColor: colors.darkColor
+          }
         })}
       />
     </Stack.Navigator>

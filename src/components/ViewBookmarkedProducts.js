@@ -3,7 +3,7 @@ import { ScrollView, View } from 'react-native';
 import { ButtonGroup, SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { t } from 'i18n-js';
-import { gStyle } from '../constants';
+import { colors, gStyle } from '../constants';
 import { productType } from '../constants/constants';
 import { selectBookmarks } from '../redux/selectors/bookmarkSelector';
 import { productMaster } from '../services';
@@ -87,6 +87,7 @@ class ViewBookmarkedProducts extends Component {
               selectedIndex = { selectedIndex }
               buttons = { buttons }
               containerStyle={{ height: 30, marginHorizontal: 14 }}
+              selectedButtonStyle={{ backgroundColor: colors.darkColor }}
             />
             <View>
               { (this.state.selectedIndex === 0 && this.state.filtVaccineProd.length > 0) &&

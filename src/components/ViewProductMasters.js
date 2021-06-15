@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Badge, List, Divider } from 'react-native-paper';
 import { t } from 'i18n-js';
 import Icon from './Icon';
+import { colors } from '../constants';
 
 export default class ViewProductMasters extends Component {
   constructor(props) {
@@ -22,7 +23,7 @@ export default class ViewProductMasters extends Component {
               left={ () => {
                 return <Icon reverse
                   name={ productMaster.type === 'Vaccine' ? 'syringe' : 'pills' }
-                  color={ productMaster.showLink ? '#26374A': '#FF9F40' }
+                  color={ productMaster.showLink ? colors.darkColor : '#FF9F40' }
                   />;
               }}
               title={
@@ -49,7 +50,7 @@ export default class ViewProductMasters extends Component {
                 productMaster.showLink && this.props.navigation.navigate('ProductDetails', { productMaster })
               }}
               right={ () => {
-                return productMaster.showLink ? <Icon name='chevron-right' color='blue' size={12} style={{ marginTop: 12, marginRight: 8 }} /> : null;
+                return productMaster.showLink ? <Icon name='chevron-right' color={colors.darkColor} size={12} style={{ marginTop: 12, marginRight: 8 }} /> : null;
               }}
             />
             <Divider/>

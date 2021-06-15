@@ -38,12 +38,12 @@ export default {
   // ///////////////////////////////////////////////////////////////////////////
   tintColor: {
     active: {
-      light: colors.blue,
-      dark: colors.grey
+      light: colors.white,
+      dark: colors.white
     },
     inactive: {
-      light: colors.grey,
-      dark: colors.white20
+      light: colors.white40,
+      dark: colors.white40
     }
   },
 
