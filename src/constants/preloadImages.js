@@ -1,10 +1,10 @@
 // app images
 // /////////////////////////////////////////////////////////////////////////////
 
-const canadaLogo = require('../assets/images/Canada-bg-white.png');
+const canadaWordmark = require('../assets/images/Canada_wordmark-inv.png');
 const canadianHealthProductsLogo = require('../assets/images/CanadianHealthProductsAppLogo400x400.png');
 
 export default {
-  canadaLogo,
+  canadaWordmark,
   canadianHealthProductsLogo
 };

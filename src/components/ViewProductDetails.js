@@ -155,7 +155,7 @@ class ViewProductDetails extends Component {
                     }}
                     right={ () => {
                       return productResource.link && this.props.settings.isOnline
-                        ? <Icon name='open-in-new' type='material-community' color='#26374A' style={{ marginTop: 12, marginRight: 8 }} /> : null;
+                        ? <Icon name='open-in-new' type='material-community' color={colors.darkColor} style={{ marginTop: 12, marginRight: 8 }} /> : null;
                     }}
                   />
                 </View>
@@ -188,7 +188,7 @@ class ViewProductDetails extends Component {
                     }}
                     right={ () => {
                       return regulatoryAnnouncement.link && this.props.settings.isOnline
-                        ? <Icon name='open-in-new' type='material-community' color='#26374A' style={{ marginTop: 12, marginRight: 8 }} /> : null;
+                        ? <Icon name='open-in-new' type='material-community' color={colors.darkColor} style={{ marginTop: 12, marginRight: 8 }} /> : null;
                     }}
                   />
                 </View>
@@ -208,7 +208,7 @@ class ViewProductDetails extends Component {
 
   _renderTruncatedFooter = (handlePress) => {
     return (
-      <Text style={{ color: 'blue', marginTop: 5 }} onPress={handlePress}>
+      <Text style={{ color: colors.blue, marginTop: 5 }} onPress={handlePress}>
         { t('common.readText.more') }
       </Text>
     );
@@ -216,7 +216,7 @@ class ViewProductDetails extends Component {
 
   _renderRevealedFooter = (handlePress) => {
     return (
-      <Text style={{ color: 'blue', marginTop: 5 }} onPress={handlePress}>
+      <Text style={{ color: colors.blue, marginTop: 5 }} onPress={handlePress}>
         { t('common.readText.less') }
       </Text>
     );

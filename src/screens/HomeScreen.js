@@ -105,11 +105,11 @@ const HomeScreen = ({ navigation }) => {
             navigation.navigate('ProductsStack', {screen: 'Products'});
           }}
           icon={
-            <Icon color='#404F60' name='search' size={32} style={{paddingRight: 8}} />
+            <Icon color={colors.darkColor} name='search' size={32} style={{paddingRight: 8}} />
           }
           title={t('home.button.products.title')}
           containerStyle={gStyle.container.light}
-          titleStyle={{ color: '#404F60' }}
+          titleStyle={{ color: colors.darkColor }}
           raised
           type="outline"
         />

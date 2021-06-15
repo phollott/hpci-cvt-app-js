@@ -5,7 +5,7 @@ import { Button } from 'react-native-elements';
 import { useTheme } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { t } from 'i18n-js';
-import { gStyle } from '../constants';
+import { colors, gStyle } from '../constants';
 import Icon from '../components/Icon';
 import ViewCardText from '../components/ViewCardText';
 import { storage } from '../services';
@@ -66,10 +66,10 @@ const PushNotificationScreen = ({ navigation, route }) => {
                 await sendPushNotification();
               }}
               icon={
-                <Icon name='share' size={40} style={{paddingRight: 8}} />
+                <Icon name='share' color={colors.darkColor} size={32} style={{paddingRight: 8}} />
               }
               containerStyle={ gStyle.container.light }
-              titleStyle={{ color: "black" }}
+              titleStyle={{  color: colors.darkColor }}
               raised={true}
               type="outline"
             />
@@ -88,11 +88,11 @@ const PushNotificationScreen = ({ navigation, route }) => {
                 })
               }}
               icon={
-                <Icon name='globe' size={40} style={{paddingRight: 8}} />
+                <Icon name='globe' color={colors.darkColor} size={32} style={{paddingRight: 8}} />
               }
               title={ t('home.pushNotification.button.toolTitle') }
               containerStyle={ gStyle.container.light }
-              titleStyle={{ color: "black" }}
+              titleStyle={{ color: colors.darkColor }}
               raised={true}
               type="outline"
             />

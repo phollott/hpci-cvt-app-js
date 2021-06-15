@@ -2,7 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { t } from 'i18n-js';
-import { gStyle } from '../constants';
+import { colors, gStyle } from '../constants';
 // navigation stacks
 import HomeStack from './HomeStack';
 import ProductsStack from './ProductsStack';
@@ -48,7 +48,8 @@ const TabNavigator = () => {
       initialRouteName="HomeStack"
       tabBarOptions={{
         activeTintColor: gStyle.tintColor.active.light,
-        inactiveTintColor: gStyle.tintColor.inactive.light
+        inactiveTintColor: gStyle.tintColor.inactive.light,
+        style: { backgroundColor: colors.darkColor }
       }}
     >
       <Tab.Screen
