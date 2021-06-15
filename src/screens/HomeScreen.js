@@ -19,8 +19,8 @@ Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
     shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
+    shouldSetBadge: false
+  })
 });
 
 const HomeScreen = ({ navigation }) => {
@@ -30,7 +30,7 @@ const HomeScreen = ({ navigation }) => {
   const language = useSelector(state => state.settings.language);
   const homeViewKey = language + "HomeView";
 
-  const titleLogo = 'covidAlertLogo';
+  const titleLogo = 'canadianHealthProductsLogo';
 
   const notificationListener = useRef();
   const responseListener = useRef();
@@ -44,10 +44,10 @@ const HomeScreen = ({ navigation }) => {
       console.log('notification received while app is foregrounded: ', notification);
       // TODO, for now, nav to dev tool
       navigation.navigate('HomeStack', {
-        screen: 'PushNotification', 
+        screen: 'PushNotification',
         params: { 
           pushNotification: JSON.stringify(notification),
-          pushNotificationAction: 'notification-'.concat((new Date()).getTime().toString())   
+          pushNotificationAction: 'notification-'.concat((new Date()).getTime().toString())
         }
       });
     });
@@ -59,10 +59,10 @@ const HomeScreen = ({ navigation }) => {
       console.log('notification received, response: ', response);
       // TODO, for now, nav to dev tool
       navigation.navigate('HomeStack', {
-        screen: 'PushNotification', 
+        screen: 'PushNotification',
         params: { 
           pushNotification: JSON.stringify(response.notification),
-          pushNotificationAction: 'notification-'.concat((new Date()).getTime().toString())   
+          pushNotificationAction: 'notification-'.concat((new Date()).getTime().toString())
         }
       });
     });
@@ -105,11 +105,11 @@ const HomeScreen = ({ navigation }) => {
             navigation.navigate('ProductsStack', {screen: 'Products'});
           }}
           icon={
-            <Icon name='search' size={32} style={{paddingRight: 8}} />
+            <Icon color='#404F60' name='search' size={32} style={{paddingRight: 8}} />
           }
           title={t('home.button.products.title')}
           containerStyle={gStyle.container.light}
-          titleStyle={{ color: 'black' }}
+          titleStyle={{ color: '#404F60' }}
           raised
           type="outline"
         />
