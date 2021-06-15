@@ -126,7 +126,7 @@ const mapStateToProps = (state) => {
   var vaccineProducts = [], treatmentProducts = [];
 
   selectProducts(state).forEach((prod, i) => {
-    let product = productMaster.mapProduct(prod, i, state.settings.language);
+    let product = productMaster.mapProduct(prod, i);
     if ( product.type === productType.vaccine ) {
       vaccineProducts.push(product);
     } else {
