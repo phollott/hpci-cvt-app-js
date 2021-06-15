@@ -2,6 +2,8 @@ import { lang, covidVaccinePortal, portailVaccinCovid } from '../constants/const
 import cheerio from 'react-native-cheerio';
 import he from 'he';
 
+const LONG_DATE_FORMAT = {year: 'numeric', month: 'long', day: 'numeric'};
+
 // scrape metadata and consumer information from resourceLink url
 const loadConsumerInformation = async (resourceLink, language) => {
   var productLoad = {
@@ -86,7 +88,11 @@ const loadConsumerInformation = async (resourceLink, language) => {
             regulatoryAnnouncement.link = $(td).find('a').attr('href').trim(); 
             regulatoryAnnouncement.description = he.decode($(td).find('a').html().trim()); 
             break;
-          case 1: regulatoryAnnouncement.date = $(td).text().trim(); break;
+          case 1:
+            const dtraw = new Date($(td).find('time').attr('datetime'));
+            regulatoryAnnouncement.date = dtraw.toLocaleDateString(language +'-CA', LONG_DATE_FORMAT);
+//            regulatoryAnnouncement.date = $(td).text().trim(); 
+            break;
         }
         regulatoryAnnouncement.key = 'reg-' + i;
       });
