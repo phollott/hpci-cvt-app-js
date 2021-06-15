@@ -21,7 +21,7 @@ HomeTabBarIcon.propTypes = {
 
 // ProductsTabBarIcon
 const ProductsTabBarIcon = ({ focused }) => (
-  <Icon name='shield-virus' focused={focused} />
+  <Icon name='search' focused={focused} />
 );
 
 ProductsTabBarIcon.propTypes = {
