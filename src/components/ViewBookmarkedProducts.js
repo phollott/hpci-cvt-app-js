@@ -128,7 +128,7 @@ const mapStateToProps = (state) => {
 
   // Bookmarks:  (bookmark.key to match storage's)
   selectBookmarks(state).forEach((bookmark) => {
-    let product = productMaster.mapProduct(bookmark, 'bookmark-product'.concat(bookmark.nid + '-' + state.settings.language));
+    let product = productMaster.mapProduct(bookmark, 'bookmark-product'.concat(bookmark.nid + '-' + state.settings.language), state.settings.language);
     if ( product.type === productType.vaccine ) {
       vaccineProducts.push(product);
     } else {
