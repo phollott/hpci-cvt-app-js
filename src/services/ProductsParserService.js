@@ -1,9 +1,11 @@
+import {Platform} from 'react-native';
 import {t} from 'i18n-js';
 import { lang, covidVaccinePortal, portailVaccinCovid, productType } from '../constants/constants';
 import cheerio from 'react-native-cheerio';
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
-const WINDOW_IN_DAYS = 21;
+const WINDOW_IN_DAYS = 7;
+const LONG_DATE_FORMAT = {year: 'numeric', month: 'long', day: 'numeric'};
 
 // TODO: **** review bus req for each once api is available
 
@@ -33,6 +35,34 @@ const getProductDateOfApproval = product => {
       approvalDate = product.date_of_approval.match(/<time [^>]+>([^<]+)<\/time>/)[1];    // extract time text between > and <
       approvalDate = approvalDate.indexOf(" - ") > -1 ? approvalDate.substring(0, approvalDate.indexOf(" - ")) : approvalDate;
       approvalDate = approvalDate.indexOf(",") > -1 ? approvalDate.substring(approvalDate.indexOf(",") + 1).trim() : approvalDate;
+    }
+  }
+  return approvalDate;
+}
+
+const getProductDateOfApprovalISO = product => {
+  let approvalDate = "";
+  if (typeof product.date_of_approval !== "undefined" && product.date_of_approval !== null) {
+    if (product.date_of_approval.indexOf("<time ") > -1) {
+      // ex: "<time datetime=\"2021-02-23T12:00:00Z\">Tue, 02/23/2021 - 12:00</time>\n"
+      const $ = cheerio.load(product.date_of_approval);
+      approvalDate = $('time').attr('datetime').substring(0, 10);
+    }
+  }
+  return approvalDate;
+}
+
+const getProductDateOfApprovalFormatted = (product, language) => {
+  let approvalDate = "";
+  if (typeof product.date_of_approval !== "undefined" && product.date_of_approval !== null) {
+    if (product.date_of_approval.indexOf("<time ") > -1) {
+      if (Platform.OS === 'android') {
+        approvalDate = getProductDateofApproval(product);
+      } else {
+        const $ = cheerio.load(product.date_of_approval),
+          dtraw = new Date($('time').attr('datetime'));
+        approvalDate = dtraw.toLocaleDateString(language +'-CA', LONG_DATE_FORMAT);
+      }
     }
   }
   return approvalDate;
@@ -200,6 +230,8 @@ export default {
   isAuthorizedProduct,
   getProductType,
   getProductDateOfApproval,
+  getProductDateOfApprovalISO,
+  getProductDateOfApprovalFormatted,
   isProductNew,
   isProductUpdated,
   isProductResourceLinkAnAnchor,
