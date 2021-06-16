@@ -42,8 +42,8 @@ export default {
       dark: colors.white
     },
     inactive: {
-      light: colors.white40,
-      dark: colors.white40
+      light: colors.white50,
+      dark: colors.white50
     }
   },
 
