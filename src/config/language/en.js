@@ -38,15 +38,23 @@ export default {
   },
   home: {
     introCard: {
-      title: "COVID-19 Vaccines and Treatments",
-      text: "Information on vaccines and treatments authorized for COVID-19."
-          + " Health Canada is committed to providing up-to-date information related to vaccines and treatments for COVID-19."
+      title: "Canadian Health Products",
+      meta: "Your evidence-based, trusted and unbiased information source for health products approved in Canada.",
+      text: "The information provided is not a substitute for professional advice, diagnosis or treatment. Always consult a medical professional before you take, change or stop using health products.",
+      link: "See terms of use for more details."
     },
-    button: {
-      products: {
-        title: "Vaccines and Treatments"
-      }
-    },
+		infoCard: {
+		  title: "Health Product Information for Canadians",
+			currentText: "This early edition of the Canadian Health Products app includes:",
+			futureText: "Future editions will include these health products:",
+			products: {
+			  covidTitle: "COVID-19 Vaccines and Treatments",
+				drugsTitle: "Drugs (Prescription and OTC)",
+				naturalTitle: "Natural Health Products",
+				devicesTitle: "Medical Devices",
+				veterinaryTitle: "Veterinary Medications"
+			}
+		},
     menu: {
       settingsLabel: "Settings",
       languageLabel: "Language...",

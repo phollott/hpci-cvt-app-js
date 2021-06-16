@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 import { Image, ScrollView, Text, View } from 'react-native';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
-import { Button } from 'react-native-elements';
-import { Card } from 'react-native-paper';
+import { Button, Card } from 'react-native-paper';
 import { useTheme } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { t } from 'i18n-js';
 import { colors, gStyle, images } from '../constants';
-import Icon from '../components/Icon';
 import { storage } from '../services';
 
 
@@ -80,39 +78,137 @@ const HomeScreen = ({ navigation }) => {
         <View style={{ width: '100%', justifyContent: 'center' }}>
           <Card style={{ borderRadius: 0, marginHorizontal: 0, marginTop: 0 }}>
             <Card.Content style={{ alignItems: 'center' }}>
-              <Text style={{ color: colors.darkColor, fontWeight: 'bold', fontSize: 18 }}>
+              <Text style={{ color: colors.darkColor, fontWeight: 'bold', fontSize: 24 }}>
                 {t('home.introCard.title')}
               </Text>
             </Card.Content>
             <View style={gStyle.spacer16} />
             <Card.Content>
-              <View style={{ flex: 1 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                 <Image
-                  style={{ alignSelf: 'center', height: 120, width: 120 }}
+                  style={{ height: 120, width: 120, marginHorizontal: 16 }}
                   source={images[titleLogo]}
                 />
-                <View style={gStyle.spacer16} />
+                <Text style={{ color: colors.darkColor, fontSize: 18, flex: 1, flexWrap: 'wrap', marginRight: 4 }}>
+                  {t('home.introCard.meta')}
+                </Text>
               </View>
+            </Card.Content>
+            <View style={gStyle.spacer16} />
+            <Card.Content>
               <Text style={{ color: colors.darkColor, fontSize: 16 }}>
                 {t('home.introCard.text')}
               </Text>
             </Card.Content>
           </Card>
         </View>
-        <View style={gStyle.spacer32} />
-        <Button
-          onPress={() => {
-            navigation.navigate('ProductsStack', {screen: 'Products'});
-          }}
-          icon={
-            <Icon color={colors.darkColor} name='search' size={32} style={{paddingRight: 8}} />
-          }
-          title={t('home.button.products.title')}
-          containerStyle={gStyle.container.light}
-          titleStyle={{ color: colors.darkColor }}
-          raised
-          type="outline"
-        />
+        <View style={gStyle.spacer8} />
+        <View style={{ width: '100%' }}>
+          <Card style={{ borderRadius: 0, marginHorizontal: 0, marginTop: 0 }}>
+            <Card.Content>
+              <Text style={{ color: colors.darkColor, fontWeight: 'bold', fontSize: 18 }}>
+                {t('home.infoCard.title')}
+              </Text>
+            </Card.Content>
+            <View style={gStyle.spacer16} />
+            <Card.Content>
+              <Text style={{ color: colors.darkColor, fontSize: 14 }}>
+                {t('home.infoCard.currentText')}
+              </Text>
+              <View style={gStyle.spacer16} />
+              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <Button
+                  onPress={() => {
+                    navigation.navigate('ProductsStack', {screen: 'Products'});
+                  }}
+                  icon="checkbox-marked-circle-outline"
+                  labelStyle={{ color: colors.black, fontSize: 12 }}
+                  mode="contained"
+                  style={{
+                    backgroundColor: colors.lightGrey,
+                    borderRadius: 20,
+                    width: '90%'
+                  }}
+                  uppercase={false}
+                >
+                  {t('home.infoCard.products.covidTitle')}
+                </Button>
+              </View>
+              <View style={gStyle.spacer16} />
+              <Text style={{ color: colors.darkColor, fontSize: 14 }}>
+                {t('home.infoCard.futureText')}
+              </Text>
+              <View style={gStyle.spacer16} />
+              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <Button
+                  onPress={() => {}}
+                  disabled
+                  labelStyle={{ color: colors.grey, fontSize: 12 }}
+                  mode="contained"
+                  style={{
+                    backgroundColor: colors.lightGrey,
+                    borderRadius: 20,
+                    width: '90%'
+                  }}
+                  uppercase={false}
+                >
+                  {t('home.infoCard.products.drugsTitle')}
+                </Button>
+              </View>
+              <View style={gStyle.spacer8} />
+              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <Button
+                  onPress={() => {}}
+                  disabled
+                  labelStyle={{ color: colors.grey, fontSize: 12 }}
+                  mode="contained"
+                  style={{
+                    backgroundColor: colors.lightGrey,
+                    borderRadius: 20,
+                    width: '90%'
+                  }}
+                  uppercase={false}
+                >
+                  {t('home.infoCard.products.naturalTitle')}
+                </Button>
+              </View>
+              <View style={gStyle.spacer8} />
+              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <Button
+                  onPress={() => {}}
+                  disabled
+                  labelStyle={{ color: colors.grey, fontSize: 12 }}
+                  mode="contained"
+                  style={{
+                    backgroundColor: colors.lightGrey,
+                    borderRadius: 20,
+                    width: '90%'
+                  }}
+                  uppercase={false}
+                >
+                  {t('home.infoCard.products.devicesTitle')}
+                </Button>
+              </View>
+              <View style={gStyle.spacer8} />
+              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <Button
+                  onPress={() => {}}
+                  disabled
+                  labelStyle={{ color: colors.grey, fontSize: 12 }}
+                  mode="contained"
+                  style={{
+                    backgroundColor: colors.lightGrey,
+                    borderRadius: 20,
+                    width: '90%'
+                  }}
+                  uppercase={false}
+                >
+                  {t('home.infoCard.products.veterinaryTitle')}
+                </Button>
+              </View>
+            </Card.Content>
+          </Card>
+        </View>
         <View style={gStyle.spacer32} />
       </ScrollView>
     </View>
