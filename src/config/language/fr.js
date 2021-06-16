@@ -38,15 +38,23 @@ export default {
   },
   home: {
     introCard: {
-      title: "Vaccins et traitements pour la COVID-19",
-      text: "Renseignements sur les vaccins et traitements autorisés pour la COVID-19."
-          + " Santé Canada s’engage à fournir l’information actualisée sur les vaccins et traitements pour la COVID-19."
+      title: "Produits de santé canadiens",
+      meta: "Votre source d'information factuelle, fiable et impartiale pour les produits de santé approuvés au Canada.",
+      text: "Les informations fournies ne remplacent pas les conseils professionnels, un diagnostic ou un traitement. Consultez toujours un professionnel de la santé avant de prendre, de changer ou d'arrêter d'utiliser des produits de santé.",
+      link: "Voir les conditions d'utilisation pour plus de détails."
     },
-    button: {
-      products: {
-        title: "Vaccins et traitements"
-      }
-    },
+		infoCard: {
+		  title: "Information sur les produits de santé pour les Canadiens",
+			currentText: "Cette première édition de l'application Produits de santé canadiens comprend:",
+			futureText: "Les prochaines éditions incluront ces produits de santé:",
+			products: {
+			  covidTitle: "Vaccins et traitements pour la COVID-19",
+				drugsTitle: "Médicaments (ordonnance, vente libre)",
+				naturalTitle: "Produits de santé naturels",
+				devicesTitle: "Dispositifs médicaux",
+				veterinaryTitle: "Médicaments vétérinaires"
+			}
+		},
     menu: {
       settingsLabel: "Paramètres",
       languageLabel: "Langue...",
