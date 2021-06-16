@@ -5,7 +5,7 @@ import { colors } from '../constants';
 // grab tabbed stacks
 import TabNavigator from './TabNavigator';
 
-const CanadaTheme = {
+const appTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
@@ -17,7 +17,7 @@ const Stack = createStackNavigator();
 
 const MainStack = () => {
   return (
-    <NavigationContainer theme={CanadaTheme}>
+    <NavigationContainer theme={appTheme}>
       <Stack.Navigator
         headerMode="none"
         initialRouteName="TabNavigator"
@@ -31,6 +31,6 @@ const MainStack = () => {
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
 
 export default MainStack;
