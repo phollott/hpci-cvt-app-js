@@ -71,7 +71,7 @@ class ViewProductDetails extends Component {
               <ViewLabelledText text={ this.props.productMaster.companyName} label={ t('productDetails.card.companyNameLabel') } />
               <ViewLabelledText text={ this.props.productMaster.ingredient } label={ t('productDetails.card.ingredientLabel') } />
               <ViewLabelledText text={ this.props.productMaster.status } label={ t('productDetails.card.statusLabel') } />
-              <ViewLabelledText text={ this.props.productMaster.approvalDate } label={ t('productDetails.card.approvalDateLabel') } />
+              <ViewLabelledText text={ this.props.productMaster.approvalDateFormatted } label={ t('productDetails.card.approvalDateLabel') } />
             </Card.Content>
           </Card>
         </View>
