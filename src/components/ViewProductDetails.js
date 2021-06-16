@@ -75,7 +75,7 @@ class ViewProductDetails extends Component {
             </Card.Content>
           </Card>
         </View>
-        <View style={{ height: 8, width: '100%', backgroundColor: '#f2f2f2' }} />
+        <View style={[gStyle.spacer8, {backgroundColor: colors.lightGrey}]} />
         <List.AccordionGroup>
           <List.Accordion title={ t('productDetails.accordion.pri') } id='pri' titleStyle={{ fontWeight: 'bold' }} titleNumberOfLines={2} theme={{ colors: { primary: colors.blue }}}
               left={props => <List.Icon {...props} icon='card-text-outline' style={{ marginHorizontal: 0 }}/>}>
@@ -116,7 +116,7 @@ class ViewProductDetails extends Component {
             {
               this.props.productResourceList.map( productResource =>
                 <View key={ 'view-'.concat(productResource.key) }
-                  style={ (productResource.isNew || productResource.isUpdated) ? { backgroundColor: '#e5f2e5' } : {  } }
+                  style={ (productResource.isNew || productResource.isUpdated) ? { backgroundColor: colors.lightGreen } : {  } }
                 >
                   <Divider/>
                   <List.Item key={ productResource.key }
@@ -126,8 +126,8 @@ class ViewProductDetails extends Component {
                           { productResource.resourceName.trim()}
                         </Text>
                         <View>
-                          { productResource.isNew && !productResource.isUpdated && <Badge style={[styles.updateBadge, {backgroundColor: '#52c518'}]}>{t('common.badge.new')}</Badge> }
-                          { productResource.isUpdated && <Badge style={[styles.updateBadge, {backgroundColor: '#faae15'}]}>{t('common.badge.updated')}</Badge> }
+                          { productResource.isNew && !productResource.isUpdated && <Badge style={[styles.updateBadge, {backgroundColor: colors.green}]}>{t('common.badge.new')}</Badge> }
+                          { productResource.isUpdated && <Badge style={[styles.updateBadge, {backgroundColor: colors.orange}]}>{t('common.badge.updated')}</Badge> }
                         </View>
                       </Text>
                     } 

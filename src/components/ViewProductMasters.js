@@ -16,14 +16,14 @@ export default class ViewProductMasters extends Component {
       <View style={{ backgroundColor: 'white', width: '100%', justifyContent: 'center' }}>
         { this.props.productMasters.map( productMaster =>
           <View key={ 'view-'.concat(productMaster.key) }
-            style={ (productMaster.isNew || productMaster.isUpdated) ? { backgroundColor: '#e5f2e5' } : {} }
+            style={ (productMaster.isNew || productMaster.isUpdated) ? { backgroundColor: colors.lightGreen } : {} }
           >
             <Divider/>
             <List.Item key={ productMaster.key }
               left={ () => {
                 return <Icon reverse
                   name={ productMaster.type === 'Vaccine' ? 'syringe' : 'pills' }
-                  color={ productMaster.showLink ? colors.darkColor : '#FF9F40' }
+                  color={ productMaster.showLink ? colors.darkColor : colors.orange }
                   />;
               }}
               title={
@@ -32,8 +32,8 @@ export default class ViewProductMasters extends Component {
                     {productMaster.brandName.trim()}
                   </Text>
                   <View>
-                    { productMaster.isNew && !productMaster.isUpdated && <Badge style={[styles.updateBadge, {backgroundColor: '#52c518'}]}>{t('common.badge.new')}</Badge> }
-                    { productMaster.isUpdated && <Badge style={[styles.updateBadge, {backgroundColor: '#faae15'}]}>{t('common.badge.updated')}</Badge> }
+                    { productMaster.isNew && !productMaster.isUpdated && <Badge style={[styles.updateBadge, {backgroundColor: colors.green}]}>{t('common.badge.new')}</Badge> }
+                    { productMaster.isUpdated && <Badge style={[styles.updateBadge, {backgroundColor: colors.orange}]}>{t('common.badge.updated')}</Badge> }
                   </View>
                 </Text>
               } 
@@ -41,7 +41,7 @@ export default class ViewProductMasters extends Component {
               titleNumberOfLines={2}
               description={ () =>
                 <Text>
-                  <Text style={{ color: 'grey' }}>{ productMaster.ingredient }</Text>
+                  <Text style={{ color: colors.grey }}>{ productMaster.ingredient }</Text>
                   { '\n' }
                   <Text style={{ fontSize: 12 }}>{ productMaster.companyName }</Text>
                 </Text>
