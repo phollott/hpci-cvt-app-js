@@ -4,6 +4,10 @@ import cheerio from 'react-native-cheerio';
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 const WINDOW_IN_DAYS = 21;
+const LONG_DATE_FORMAT = {year: 'numeric', month: 'long', day: 'numeric'};
+const EN_MONTH = "January_February_March_April_May_June_July_August_September_October_November_December".split('_');
+const FR_MONTH = "janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_decembre".split('_');
+
 
 // TODO: **** review bus req for each once api is available
 
@@ -33,6 +37,39 @@ const getProductDateOfApproval = product => {
       approvalDate = product.date_of_approval.match(/<time [^>]+>([^<]+)<\/time>/)[1];    // extract time text between > and <
       approvalDate = approvalDate.indexOf(" - ") > -1 ? approvalDate.substring(0, approvalDate.indexOf(" - ")) : approvalDate;
       approvalDate = approvalDate.indexOf(",") > -1 ? approvalDate.substring(approvalDate.indexOf(",") + 1).trim() : approvalDate;
+    }
+  }
+  return approvalDate;
+}
+
+const getProductDateOfApprovalISO = product => {
+  let approvalDate = "";
+  if (typeof product.date_of_approval !== "undefined" && product.date_of_approval !== null) {
+    if (product.date_of_approval.indexOf("<time ") > -1) {
+      // ex: "<time datetime=\"2021-02-23T12:00:00Z\">Tue, 02/23/2021 - 12:00</time>\n"
+      const $ = cheerio.load(product.date_of_approval);
+      approvalDate = $('time').attr('datetime').substring(0, 10);
+    }
+  }
+  return approvalDate;
+}
+
+const getProductDateOfApprovalFormatted = (product, language) => {
+  let approvalDate = "";
+  if (typeof product.date_of_approval !== "undefined" && product.date_of_approval !== null) {
+    if (product.date_of_approval.indexOf("<time ") > -1) {
+      // ex: "<time datetime=\"2021-02-23T12:00:00Z\">Tue, 02/23/2021 - 12:00</time>\n"
+      const $ = cheerio.load(product.date_of_approval),
+        dtraw = new Date($('time').attr('datetime'));
+      switch (language) {
+        case lang.english:
+          approvalDate = EN_MONTH[dtraw.getMonth()] + ' ' + dtraw.getDate() + ', ' + dtraw.getFullYear();
+          break;
+        case lang.french:
+          approvalDate = dtraw.getDate() +' ' + FR_MONTH[dtraw.getMonth()] + ' ' + dtraw.getFullYear();
+          break;
+      }
+//      approvalDate += dtraw.toLocaleDateString(language +'-CA', LONG_DATE_FORMAT);
     }
   }
   return approvalDate;
@@ -200,6 +237,8 @@ export default {
   isAuthorizedProduct,
   getProductType,
   getProductDateOfApproval,
+  getProductDateOfApprovalISO,
+  getProductDateOfApprovalFormatted,
   isProductNew,
   isProductUpdated,
   isProductResourceLinkAnAnchor,
