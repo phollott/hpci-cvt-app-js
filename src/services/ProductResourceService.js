@@ -1,6 +1,6 @@
 import ProductsParserService from './ProductsParserService';
 
-let productResource = (resource, id) => {
+let productResource = (resource, id, language) => {
   return {
     key: id,
     id: resource.id,
@@ -9,14 +9,14 @@ let productResource = (resource, id) => {
     audience: resource.audience.toString(),
     resourceName: ProductsParserService.getProductResourceName(resource),
     description: ProductsParserService.getProductResourceDescription(resource),
-    publicationStatus: ProductsParserService.getProductResourcePublicationStatus(resource),
+    publicationStatus: ProductsParserService.getProductResourcePublicationStatus(resource, language),
     isNew: false,
     isUpdated: false
   };
 }
 
 const mapProductResource = (product, resource, id, language) => {
-  let res = productResource(resource, id);
+  let res = productResource(resource, id, language);
   res.link = ProductsParserService.getProductResourceLink(resource, language);
   res.resourceType = ProductsParserService.getProductResourceType(res.link);
   res.isNew = ProductsParserService.isProductResourceNew(resource);

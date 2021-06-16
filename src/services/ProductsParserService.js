@@ -3,8 +3,7 @@ import { lang, covidVaccinePortal, portailVaccinCovid, productType } from '../co
 import cheerio from 'react-native-cheerio';
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
-const WINDOW_IN_DAYS = 21;
-const LONG_DATE_FORMAT = {year: 'numeric', month: 'long', day: 'numeric'};
+const WINDOW_IN_DAYS = 7;
 const EN_MONTH = "January_February_March_April_May_June_July_August_September_October_November_December".split('_');
 const FR_MONTH = "janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_decembre".split('_');
 
@@ -55,25 +54,31 @@ const getProductDateOfApprovalISO = product => {
 }
 
 const getProductDateOfApprovalFormatted = (product, language) => {
-  let approvalDate = "";
-  if (typeof product.date_of_approval !== "undefined" && product.date_of_approval !== null) {
-    if (product.date_of_approval.indexOf("<time ") > -1) {
+  return getFormattedDateFromHtml(product.date_of_approval, language);
+}
+
+const getFormattedDateFromHtml = (htmlDateTime, language) => {
+  let formattedDate = "";
+  if (typeof htmlDateTime !== "undefined" && htmlDateTime !== null) {
+    if (htmlDateTime.indexOf("<time ") > -1) {
       // ex: "<time datetime=\"2021-02-23T12:00:00Z\">Tue, 02/23/2021 - 12:00</time>\n"
-      const $ = cheerio.load(product.date_of_approval),
+      const $ = cheerio.load(htmlDateTime),
         dtraw = new Date($('time').attr('datetime'));
       switch (language) {
         case lang.english:
-          approvalDate = EN_MONTH[dtraw.getMonth()] + ' ' + dtraw.getDate() + ', ' + dtraw.getFullYear();
+          formattedDate = EN_MONTH[dtraw.getMonth()] + ' ' + dtraw.getDate() + ', ' + dtraw.getFullYear();
           break;
         case lang.french:
-          approvalDate = dtraw.getDate() +' ' + FR_MONTH[dtraw.getMonth()] + ' ' + dtraw.getFullYear();
+          formattedDate = dtraw.getDate() +' ' + FR_MONTH[dtraw.getMonth()] + ' ' + dtraw.getFullYear();
           break;
+        default:
+          formattedDate = $('time').attr('datetime').substring(0, 10);
       }
-//      approvalDate += dtraw.toLocaleDateString(language +'-CA', LONG_DATE_FORMAT);
     }
   }
-  return approvalDate;
+  return formattedDate;
 }
+
 
   // TODO
   //  This is not very well tested, and I would not be surprised if it is inaccurate
@@ -81,14 +86,12 @@ const isProductNew = productApprovalDate => {
   let dtraw = new Date(productApprovalDate),
     dtutc = Date.UTC(dtraw.getFullYear(), dtraw.getMonth()+1, dtraw.getDate()),
     dtdif = Math.floor((Date.now() - dtutc) / MS_PER_DAY);
-//    if (dtdif <= WINDOW_IN_DAYS) console.log ('NEW PRODUCT -----> ' + product.brand_name)
     return (dtdif <= WINDOW_IN_DAYS);
 }
 
   // TODO
   //  This is not very well tested, and I would not be surprised if it is inaccurate
 const isProductUpdated = product => {
-//  console.log ('-----> ' + product.brand_name)
   let isProductResourceChanged = false;
   let resources = product.resources.filter((res, ind, arr) => {
     return (res.audience.indexOf('Consumers') !== -1);
@@ -96,7 +99,6 @@ const isProductUpdated = product => {
   resources.forEach(res => {  
     if (isProductResourceNew(res) || isProductResourceUpdated(product, res)) {
       isProductResourceChanged = true;
-//      console.log('NEW OR UPDATED: ' + res.resource_link);
     }
   });
   return isProductResourceChanged;
@@ -140,7 +142,7 @@ const getProductResourceName = resource => {
   return name;
 }
 
-const getProductResourcePublicationStatus = resource => {
+const getProductResourcePublicationStatus = (resource, language) => {
   let publicationStatus = "";
   if (typeof resource.various_dates !== "undefined" && resource.various_dates !== null) {
     // publicationStatus: various, pending, or date (formatted)
@@ -148,15 +150,16 @@ const getProductResourcePublicationStatus = resource => {
       resource.various_dates.toLowerCase() === "yes" 
         ? t('productDetails.listItem.publicationStatus.various') 
         : (typeof resource.date !== "undefined" && resource.date !== null)
-          ? resource.date.match(/<time [^>]+>([^<]+)<\/time>/)[1]    // extract time text between > and <
+          ? getFormattedDateFromHtml(resource.date, language)
+          // resource.date.match(/<time [^>]+>([^<]+)<\/time>/)[1]    // extract time text between > and <
           : t('productDetails.listItem.publicationStatus.pending');
 
-    if (!publicationStatus.includes( t('productDetails.listItem.publicationStatus.various') ) 
+/*    if (!publicationStatus.includes( t('productDetails.listItem.publicationStatus.various') ) 
       && !publicationStatus.includes( t('productDetails.listItem.publicationStatus.pending') )
     ){
       publicationStatus = publicationStatus.indexOf(" - ") > -1 ? publicationStatus.substring(0, publicationStatus.indexOf(" - ")) : publicationStatus;
       publicationStatus = publicationStatus.indexOf(",") > -1 ? publicationStatus.substring(publicationStatus.indexOf(",") + 1).trim() : publicationStatus;
-    }
+    } */
   }
   return publicationStatus;
 }
@@ -249,5 +252,6 @@ export default {
   getProductResourceType,
   isProductResourceNameConsumerInfo,
   isProductResourceNew,
-  isProductResourceUpdated
+  isProductResourceUpdated,
+  getFormattedDateFromHtml
 };
