@@ -68,7 +68,6 @@ class ViewCovid19Products extends Component {
     if (this.props.settings.isOnline) {
       return (
         <>
-        <View style={gStyle.spacer8} />
         <View
           style={{ flex: 1 }}
           contentContainerStyle={gStyle.contentContainer}
