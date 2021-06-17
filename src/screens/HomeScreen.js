@@ -78,7 +78,7 @@ const HomeScreen = ({ navigation }) => {
         <View style={{ width: '100%', justifyContent: 'center' }}>
           <Card style={{ borderRadius: 0, marginHorizontal: 0, marginTop: 0 }}>
             <Card.Content style={{ alignItems: 'center' }}>
-              <Text style={{ color: colors.darkColor, fontWeight: 'bold', fontSize: 24 }}>
+              <Text style={{ color: colors.darkColor, fontWeight: 'bold', fontSize: 20 }}>
                 {t('home.introCard.title')}
               </Text>
             </Card.Content>
@@ -86,17 +86,17 @@ const HomeScreen = ({ navigation }) => {
             <Card.Content>
               <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                 <Image
-                  style={{ height: 120, width: 120, marginHorizontal: 16 }}
+                  style={{ height: 90, width: 90, marginHorizontal: 16 }}
                   source={images[titleLogo]}
                 />
-                <Text style={{ color: colors.darkColor, fontSize: 18, flex: 1, flexWrap: 'wrap', marginRight: 4 }}>
+                <Text style={{ color: colors.darkColor, fontSize: 16, flex: 1, flexWrap: 'wrap', marginRight: 4 }}>
                   {t('home.introCard.meta')}
                 </Text>
               </View>
             </Card.Content>
             <View style={gStyle.spacer16} />
             <Card.Content>
-              <Text style={{ color: colors.darkColor, fontSize: 16 }}>
+              <Text style={{ color: colors.darkColor }}>
                 {t('home.introCard.text')}
               </Text>
             </Card.Content>
@@ -106,13 +106,13 @@ const HomeScreen = ({ navigation }) => {
         <View style={{ width: '100%' }}>
           <Card style={{ borderRadius: 0, marginHorizontal: 0, marginTop: 0 }}>
             <Card.Content>
-              <Text style={{ color: colors.darkColor, fontWeight: 'bold', fontSize: 18 }}>
+              <Text style={{ color: colors.darkColor, fontWeight: 'bold' }}>
                 {t('home.infoCard.title')}
               </Text>
             </Card.Content>
             <View style={gStyle.spacer16} />
             <Card.Content>
-              <Text style={{ color: colors.darkColor, fontSize: 14 }}>
+              <Text style={{ color: colors.darkColor }}>
                 {t('home.infoCard.currentText')}
               </Text>
               <View style={gStyle.spacer16} />
@@ -122,7 +122,11 @@ const HomeScreen = ({ navigation }) => {
                     navigation.navigate('ProductsStack', {screen: 'Products'});
                   }}
                   icon="checkbox-marked-circle-outline"
-                  labelStyle={{ color: colors.black, fontSize: 12 }}
+                  labelStyle={{
+                    color: colors.green,
+                    fontSize: 12,
+                    fontWeight: 'bold'
+                  }}
                   mode="contained"
                   style={{
                     backgroundColor: colors.lightGrey,
@@ -135,7 +139,7 @@ const HomeScreen = ({ navigation }) => {
                 </Button>
               </View>
               <View style={gStyle.spacer16} />
-              <Text style={{ color: colors.darkColor, fontSize: 14 }}>
+              <Text style={{ color: colors.darkColor }}>
                 {t('home.infoCard.futureText')}
               </Text>
               <View style={gStyle.spacer16} />

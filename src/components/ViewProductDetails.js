@@ -302,7 +302,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const styles = StyleSheet.create({
   updateBadge: {
-    color: 'white',
+    color: colors.white,
     marginLeft: 4,
     marginRight: 4,
     paddingHorizontal: 8
