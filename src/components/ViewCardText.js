@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 import { Card } from 'react-native-paper';
 import { colors, gStyle } from '../constants';
@@ -10,20 +11,20 @@ export default class ViewCardText extends Component {
   }
 
   render() {
+    const { text, title } = this.props;
     return (
       <View
         contentContainerStyle={gStyle.contentContainer}
         style={styles.container}
       >
         <Card style={styles.cardContainer}>
-          {
-            this.props.title && 
+          {title && (
             <Card.Content style={styles.cardContentTitle}>
-              <Text style={styles.cardContentTitleText}>{this.props.title}</Text>
+              <Text style={styles.cardContentTitleText}>{title}</Text>
             </Card.Content>
-          }
+          )}
           <Card.Content style={styles.cardContent}>
-            <Text style={styles.cardContentText}>{this.props.text}</Text>
+            <Text style={styles.cardContentText}>{text}</Text>
           </Card.Content>
         </Card>
       </View>
@@ -56,3 +57,14 @@ const styles = StyleSheet.create({
     color: colors.darkColor
   }
 });
+
+ViewCardText.defaultProps = {
+  text: '',
+  title: null
+};
+
+ViewCardText.propTypes = {
+  // optional
+  text: PropTypes.string,
+  title: PropTypes.string
+};

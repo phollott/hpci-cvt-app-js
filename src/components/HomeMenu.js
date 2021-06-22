@@ -17,7 +17,7 @@ const HomeMenu = ({ navigation }) => (
     }}
     style={{ paddingHorizontal: 16, paddingVertical: 8 }}
   >
-    <Icon name='bars' />
+    <Icon name="bars" />
   </TouchableOpacity>
 );
 
