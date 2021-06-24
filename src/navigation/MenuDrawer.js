@@ -1,7 +1,11 @@
 import * as React from 'react';
 import { View } from 'react-native';
 import { DrawerActions } from '@react-navigation/native';
-import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
+import {
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem
+} from '@react-navigation/drawer';
 import { t } from 'i18n-js';
 import { colors } from '../constants';
 import Icon from '../components/Icon';
@@ -9,19 +13,19 @@ import Alert from '../components/Alert';
 import RemoveData from '../components/RemoveData';
 
 const SettingsIcon = () => (
-  <Icon name='cog' color={colors.grey} style={{ minWidth: 26 }} />
+  <Icon name="cog" color={colors.grey} containerStyle={{ minWidth: 26 }} />
 );
 
 const GlobeIcon = () => (
-  <Icon name='globe' color={colors.grey} style={{ minWidth: 26 }} />
+  <Icon name="globe" color={colors.grey} containerStyle={{ minWidth: 26 }} />
 );
 
 const AboutIcon = () => (
-  <Icon name='info' color={colors.grey} style={{ minWidth: 26 }} />
+  <Icon name="info" color={colors.grey} containerStyle={{ minWidth: 26 }} />
 );
 
 const ToolIcon = () => (
-  <Icon name='tools' color={colors.grey} style={{ minWidth: 26 }} />
+  <Icon name="tools" color={colors.grey} containerStyle={{ minWidth: 26 }} />
 );
 
 const HorizontalLine = () => (
@@ -38,13 +42,13 @@ const MenuDrawer = (props) => {
   return (
     <DrawerContentScrollView {...props}>
       <DrawerItem
-        label = { t('home.menu.settingsLabel') }
-        icon = {SettingsIcon}
+        label={t('home.menu.settingsLabel')}
+        icon={SettingsIcon}
         onPress={() => {}}
       />
       <DrawerItem
-        label = { t('home.menu.languageLabel') }
-        labelStyle =  {{
+        label={t('home.menu.languageLabel')}
+        labelStyle={{
           paddingLeft: 72
         }}
         onPress={() => {
@@ -54,13 +58,13 @@ const MenuDrawer = (props) => {
       />
       <HorizontalLine />
       <DrawerItem
-        label = { t('home.menu.toolsLabel') }
-        icon = {ToolIcon}
+        label={t('home.menu.toolsLabel')}
+        icon={ToolIcon}
         onPress={() => {}}
       />
       <DrawerItem
-        label = { t('home.menu.sendNotificationLabel') }
-        labelStyle =  {{
+        label={t('home.menu.sendNotificationLabel')}
+        labelStyle={{
           paddingLeft: 72
         }}
         onPress={() => {
@@ -69,8 +73,8 @@ const MenuDrawer = (props) => {
         }}
       />
       <DrawerItem
-        label = { t('home.menu.removeLabel') }
-        labelStyle =  {{
+        label={t('home.menu.removeLabel')}
+        labelStyle={{
           paddingLeft: 72
         }}
         onPress={() => {
@@ -80,30 +84,28 @@ const MenuDrawer = (props) => {
       />
       <HorizontalLine />
       <DrawerItem
-        label = { t('home.menu.privacyLabel') }
-        icon = {GlobeIcon}
+        label={t('home.menu.privacyLabel')}
+        icon={GlobeIcon}
         onPress={() => {
-          Alert( t('home.introCard.title') );
+          Alert(t('home.introCard.title'));
           closeDrawer(props.navigation);
         }}
       />
       <DrawerItem
-        label = { t('home.menu.aboutLabel') }
-        icon = {AboutIcon}
+        label={t('home.menu.aboutLabel')}
+        icon={AboutIcon}
         onPress={() => {
-          Alert( t('home.introCard.title') );
+          Alert(t('home.introCard.title'));
           closeDrawer(props.navigation);
         }}
       />
-      <DrawerItemList
-        {...props} 
-      />
+      <DrawerItemList {...props} />
     </DrawerContentScrollView>
   );
-}
+};
 
 const closeDrawer = (navigation) => {
   navigation.dispatch(DrawerActions.closeDrawer());
-}
+};
 
 export default MenuDrawer;

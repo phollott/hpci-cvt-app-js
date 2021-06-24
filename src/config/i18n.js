@@ -49,4 +49,4 @@ en.js:
 
 tip: put a space before  t(' for easy finds
                         ^
- */
+*/

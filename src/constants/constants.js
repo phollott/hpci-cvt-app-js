@@ -1,13 +1,13 @@
 export const lang = {
-  english : 'en',
-  french : 'fr',
-  default : 'en'
+  english: 'en',
+  french: 'fr',
+  default: 'en'
 };
 
-export const covidVaccinePortal = "https://covid-vaccine.canada.ca";
-export const portailVaccinCovid = "https://vaccin-covid.canada.ca";
+export const covidVaccinePortal = 'https://covid-vaccine.canada.ca';
+export const portailVaccinCovid = 'https://vaccin-covid.canada.ca';
 
 export const productType = {
-  vaccine: "Vaccine",
-  treatment: "Treatment"
+  vaccine: 'Vaccine',
+  treatment: 'Treatment'
 };

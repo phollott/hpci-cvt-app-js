@@ -45,8 +45,9 @@ class ViewBookmarkedProducts extends Component {
 
   render() {
     const buttons = [t('bookmarks.products.buttons.left'), t('bookmarks.products.buttons.right')];
+    const { vaccineProducts, treatmentProducts, navigation } = this.props;
     const { filtVaccineProd, filtTreatmentProd, selectedIndex } = this.state;
-    if (this.props.vaccineProducts.length > 0 || this.props.treatmentProducts.length > 0) {
+    if (vaccineProducts.length > 0 || treatmentProducts.length > 0) {
       return (
         <View
           style={{ flex: 1 }}
@@ -54,27 +55,27 @@ class ViewBookmarkedProducts extends Component {
         >
           <View style={gStyle.spacer8} />
           <ScrollView>
-            <ViewCardText title={ t('bookmarks.products.card.title') } text={ t('bookmarks.products.card.instructionText') } />
+            <ViewCardText title={t('bookmarks.products.card.title')} text={t('bookmarks.products.card.instructionText')} />
             <ViewButtonGroup buttons={buttons} onPress={this.updateIndex} selectedIndex={selectedIndex} />
             <View>
-              { (selectedIndex === 0 && filtVaccineProd.length > 0) &&
-                  <ViewProductMasters
-                    productMasters={filtVaccineProd}
-                    navigation={this.props.navigation}
-                  />
-              }
-              { (selectedIndex === 1 && filtTreatmentProd.length > 0) &&
-                  <ViewProductMasters
-                    productMasters={filtTreatmentProd}
-                    navigation={this.props.navigation}
-                  />
-              }
-              { (selectedIndex === 0 && filtVaccineProd.length === 0) &&
-                  <ViewCardText text={ t('bookmarks.products.emptyText.left') } />
-              }
-              { (selectedIndex === 1 && filtTreatmentProd.length === 0) &&
-                  <ViewCardText text={ t('bookmarks.products.emptyText.right') } />
-              }
+              {selectedIndex === 0 && filtVaccineProd.length > 0 && (
+                <ViewProductMasters
+                  productMasters={filtVaccineProd}
+                  navigation={navigation}
+                />
+              )}
+              {selectedIndex === 1 && filtTreatmentProd.length > 0 && (
+                <ViewProductMasters
+                  productMasters={filtTreatmentProd}
+                  navigation={navigation}
+                />
+              )}
+              {selectedIndex === 0 && filtVaccineProd.length === 0 && (
+                <ViewCardText text={t('bookmarks.products.emptyText.left')} />
+              )}
+              {selectedIndex === 1 && filtTreatmentProd.length === 0 && (
+                <ViewCardText text={t('bookmarks.products.emptyText.right')} />
+              )}
             </View>
           </ScrollView>
         </View>
@@ -83,7 +84,7 @@ class ViewBookmarkedProducts extends Component {
       return (
         <>
           <View style={gStyle.spacer8} />
-          <ViewCardText text={ t('bookmarks.introText') } />
+          <ViewCardText text={t('bookmarks.introText')} />
         </>
       );
     };

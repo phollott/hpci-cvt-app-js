@@ -24,7 +24,7 @@ const Touch = ({
         <Icon
           name={lIconName}
           color={gStyle.text.dark.color}
-          style={{ paddingRight: 20 }}
+          iconStyle={{ paddingRight: 20 }}
         />
       )}
       <Text style={textStyle}>{text}</Text>
@@ -32,7 +32,7 @@ const Touch = ({
         <Icon
           name={rIconName}
           color={gStyle.text.dark.color}
-          style={{ paddingLeft: 20 }}
+          iconStyle={{ paddingLeft: 20 }}
         />
       )}
     </View>

@@ -1,18 +1,19 @@
+/* eslint-disable no-console */
 import * as React from 'react';
 import { StatusBar } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { Appearance } from 'react-native-appearance';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import he from 'he';
+import * as Localization from 'expo-localization';
+import * as I18n from './src/config/i18n';
 import { device, func } from './src/constants';
 import { lang } from './src/constants/constants';
 import { fetchProductsAsync } from './src/api/covid19Products';
 import { productLoad, productsParser, storage } from './src/services';
 import initialState from './src/redux/store/initialState';
 import rootReducer from './src/redux/store/store';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import he from 'he';
-import * as Localization from 'expo-localization';
-import * as I18n from './src/config/i18n';
 
 // tab navigator
 import MainStack from './src/navigation/Stack';
@@ -49,63 +50,78 @@ class App extends React.Component {
     }
   }
 
-  updateTheme(themeType) {
-    this.setState({
-      theme: themeType
-    });
-  }
-
   retrieveLanguagePreference = async () => {
     try {
-      return value = await storage.retrieve('language');
+      const value = await storage.retrieve('language');
+      return value;
     } catch (error) {
       return null;
     }
-  }
+  };
 
   saveBookmark = async (bookmark) => {
     try {
-      var key = 'bookmark-product'.concat(bookmark.nid + '-' + bookmark.language.toLowerCase().substring(0,2));
+      const key = 'bookmark-product'.concat(
+        bookmark.nid
+          .concat('-')
+          .concat(bookmark.language.toLowerCase().substring(0, 2))
+      );
       await storage.save(key, JSON.stringify(bookmark));
     } catch (error) {
       console.log('Unable to sync bookmark with product. ', error);
     }
-  }
+  };
 
   retrieveBookmarks = async (syncWithProduct) => {
-    let keys = [], storedBookmarks = [], bookmarks = [];
+    let keys = [];
+    let storedBookmarks = [];
+    const bookmarks = [];
     try {
       keys = await storage.retrieveKeys();
       if (keys.length > 0) {
         keys = keys.filter((key) => {
           return key.startsWith('bookmark-product');
         });
-        storedBookmarks = keys !== null ? await storage.retrieveMulti(keys) : [];
+        storedBookmarks =
+          keys !== null ? await storage.retrieveMulti(keys) : [];
         storedBookmarks.map((storedBookmark) => {
-          let bookmark = JSON.parse(storedBookmark[1]);
+          const bookmark = JSON.parse(storedBookmark[1]);
           if (syncWithProduct) {
-            let product = initialState.products.filter(product => {
-              return product.language == bookmark.language
-                && product.nid == bookmark.nid 
+            const product = initialState.products.filter((p) => {
+              return p.language === bookmark.language && p.nid === bookmark.nid;
             });
             if (product.length === 1) {
               // scrape product consumer information (not in api), then add and save bookmark
-              var resourceLang, consumerInformationResource = [];
-              resourceLang = product[0].language.toLowerCase().substring(0,2);
-              consumerInformationResource.push(product[0].resources.find(resource => {
-                if (productsParser.isProductResourceNameConsumerInfo(resource.resource_link)) {
-                  return resource;
-                }
-              }));
-              productLoad.loadConsumerInformation(productsParser.getProductResourceLink(consumerInformationResource[0], resourceLang), resourceLang)
-              .then(productPortalInfo => {
-                product[0].productMetadata = productPortalInfo.productMetadata;
-                product[0].consumerInformation = productPortalInfo.consumerInformation;
-                product[0].regulatoryAnnouncements = productPortalInfo.regulatoryAnnouncements;
-                bookmarks.push(product[0]);
-                // update storage async
-                this.saveBookmark(product[0]);
-              });
+              const consumerInformationResource = [];
+              const resourceLang = product[0].language
+                .toLowerCase()
+                .substring(0, 2);
+              consumerInformationResource.push(
+                product[0].resources.find((r) => {
+                  if (productsParser.isProductResourceNameConsumerInfo(r.resource_link)) {
+                    return r;
+                  }
+                })
+              );
+              productLoad
+                .loadConsumerInformation(
+                  productsParser.getProductResourceLink(
+                    consumerInformationResource[0],
+                    resourceLang
+                  ),
+                  resourceLang
+                )
+                .then((productPortalInfo) => {
+                  product[0].productMetadata =
+                    productPortalInfo.productMetadata;
+                  product[0].consumerInformation =
+                    productPortalInfo.consumerInformation;
+                  product[0].regulatoryAnnouncements =
+                    productPortalInfo.regulatoryAnnouncements;
+                  bookmarks.push(product[0]);
+                  // update storage async
+                  this.saveBookmark(product[0]);
+                });
             } else {
               bookmarks.push(bookmark);
             }
@@ -118,27 +134,32 @@ class App extends React.Component {
       console.log('Unable to get bookmarks from storage. ', error);
     }
     return bookmarks;
-  }
+  };
 
-  fetchProducts = async() => {
+  fetchProducts = async () => {
     let products = [];
     try {
       products = await fetchProductsAsync();
-      products = JSON.parse(he.decode(JSON.stringify(products)));    // using he to decode html entities, but may want to review other ways to parse
+      products = JSON.parse(he.decode(JSON.stringify(products))); // using he to decode html entities, but may want to review other ways to parse
     } catch (error) {
       console.log('Could not fetch Covid-19 Products from api. ', error);
     }
     return products;
-  }
+  };
 
   loadInitialStateAsync = async () => {
     try {
       initialState.products = await this.fetchProducts();
       initialState.settings.isOnline = initialState.products.length > 0;
-      initialState.bookmarks = await this.retrieveBookmarks(initialState.settings.isOnline);
+      initialState.bookmarks = await this.retrieveBookmarks(
+        initialState.settings.isOnline
+      );
 
-      let langPref = await this.retrieveLanguagePreference();
-      if (langPref !== null && (langPref === lang.english || langPref === lang.french)) {
+      const langPref = await this.retrieveLanguagePreference();
+      if (
+        langPref !== null &&
+        (langPref === lang.english || langPref === lang.french)
+      ) {
         // user has selected language
         initialState.settings.language = langPref;
         I18n.setLocale(langPref);
@@ -147,13 +168,24 @@ class App extends React.Component {
         initialState.settings.language = I18n.getCurrentLocale();
       }
     } catch (error) {
-      console.log('Unhandled error occured while loading initial state. ', error);
+      console.log(
+        'Unhandled error occured while loading initial state. ',
+        error
+      );
     }
-  }
-  
-  loadResourcesAsync = async () => {
-    return this.loadInitialStateAsync().then(() => { return func.loadAssetsAsync });
   };
+
+  loadResourcesAsync = async () => {
+    return this.loadInitialStateAsync().then(() => {
+      return func.loadAssetsAsync;
+    });
+  };
+
+  updateTheme(themeType) {
+    this.setState({
+      theme: themeType
+    });
+  }
 
   render() {
     const { isLoading, theme } = this.state;
@@ -170,12 +202,12 @@ class App extends React.Component {
     }
 
     // redux
-    const store = createStore(rootReducer, initialState)
+    const store = createStore(rootReducer, initialState);
 
-    // [mrj] products state is now set and available for connect() within Provider - console.log('store.getState.products.length: ', store.getState().products.length);
+    // products state is now set and available for connect() within Provider - console.log('store.getState.products.length: ', store.getState().products.length);
 
     return (
-      <Provider store={store} >
+      <Provider store={store}>
         <React.Fragment>
           <StatusBar barStyle={device.iOS ? iOSStatusType : 'light-content'} />
           <MainStack

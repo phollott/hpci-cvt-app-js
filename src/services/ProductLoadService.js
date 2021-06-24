@@ -167,7 +167,10 @@ const loadConsumerInformation = async (resourceLink, language) => {
                   );
                   break;
                 case 1:
-                  regulatoryAnnouncement.date = ProductsParserService.getFormattedDateFromHtml($(td).html(), language);
+                  regulatoryAnnouncement.date = ProductsParserService.getFormattedDateFromHtml(
+                    $(td).html(),
+                    language
+                  );
                   break;
                 default:
                   break;
@@ -188,7 +191,7 @@ const loadConsumerInformation = async (resourceLink, language) => {
     });
 
   return productLoad;
-}
+};
 
 export default {
   loadConsumerInformation

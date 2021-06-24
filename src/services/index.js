@@ -4,10 +4,4 @@ import productResource from './ProductResourceService';
 import productsParser from './ProductsParserService';
 import storage from './StorageService';
 
-export {
-  productLoad,
-  productMaster,
-  productResource,
-  productsParser,
-  storage
-};
+export { productLoad, productMaster, productResource, productsParser, storage };

@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';  // asynchronous, unencrypted, persistent, key-value storage system for RN
+import AsyncStorage from '@react-native-async-storage/async-storage'; // asynchronous, unencrypted, persistent, key-value storage system for RN
 
 export class KeyValueStore {
   save(key, value) {

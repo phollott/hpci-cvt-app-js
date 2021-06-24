@@ -40,6 +40,6 @@ const BookmarksStack = () => {
       />
     </Stack.Navigator>
   );
-}
+};
 
 export default BookmarksStack;

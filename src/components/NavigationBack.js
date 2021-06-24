@@ -14,7 +14,7 @@ const NavigationBack = ({ navigation, route }) => (
     onPress={() => navigation.goBack(route.key)}
     style={{ paddingHorizontal: 16, paddingVertical: 8 }}
   >
-    <Icon name='chevron-left' />
+    <Icon name="chevron-left" />
   </TouchableOpacity>
 );
 

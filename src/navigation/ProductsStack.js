@@ -40,6 +40,6 @@ const ProductsStack = () => {
       />
     </Stack.Navigator>
   );
-}
+};
 
 export default ProductsStack;

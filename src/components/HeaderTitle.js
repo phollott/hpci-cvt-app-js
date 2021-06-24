@@ -13,9 +13,10 @@ export default class HeaderTitle extends Component {
   }
 
   render() {
+    const { canadaWordmark } = this.state;
     return (
       <Image
-        source={images[this.state.canadaWordmark]}
+        source={images[canadaWordmark]}
         style={{
           width: 100,
           height: 24

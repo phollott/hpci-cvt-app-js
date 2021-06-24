@@ -42,19 +42,20 @@ class ViewCovid19Products extends Component {
 
   // SearchBar
   updateSearch = (searchText) => {
+    const { vaccineProducts, treatmentProducts } = this.props;
     const searchLowercase = searchText.toLowerCase();
-    const filteredVaccineProducts = this.props.vaccineProducts.filter((item) => {
-      const itemData = item.searchKey
-      return itemData.indexOf(searchLowercase) > -1
+    const filteredVaccineProducts = vaccineProducts.filter((item) => {
+      const itemData = item.searchKey;
+      return itemData.indexOf(searchLowercase) > -1;
     });
-    const filteredTreatmentProducts = this.props.treatmentProducts.filter((item) => {
-      const itemData = item.searchKey
-      return itemData.indexOf(searchLowercase) > -1
+    const filteredTreatmentProducts = treatmentProducts.filter((item) => {
+      const itemData = item.searchKey;
+      return itemData.indexOf(searchLowercase) > -1;
     });
     this.setState({
       filtVaccineProd: filteredVaccineProducts,
       filtTreatmentProd: filteredTreatmentProducts,
-      searchText: searchText
+      searchText
     });
   };
 
@@ -65,8 +66,9 @@ class ViewCovid19Products extends Component {
 
   render() {
     const buttons = [t('products.buttons.left'), t('products.buttons.right')];
+    const { settings, navigation } = this.props;
     const { filtVaccineProd, filtTreatmentProd, selectedIndex, searchText } = this.state;
-    if (this.props.settings.isOnline) {
+    if (settings.isOnline) {
       return (
         <>
           <View
@@ -84,24 +86,24 @@ class ViewCovid19Products extends Component {
               <ViewCardText title={t('products.card.title')} text={t('products.card.instructionText')} />
               <ViewButtonGroup buttons={buttons} onPress={this.updateIndex} selectedIndex={selectedIndex} />
               <View>
-                { (selectedIndex === 0 && filtVaccineProd.length > 0) &&
+                {selectedIndex === 0 && filtVaccineProd.length > 0 && (
                   <ViewProductMasters
                     productMasters={filtVaccineProd}
-                    navigation={this.props.navigation}
+                    navigation={navigation}
                   />
-                }
-                { (selectedIndex === 1 && filtTreatmentProd.length > 0) &&
+                )}
+                {selectedIndex === 1 && filtTreatmentProd.length > 0 && (
                   <ViewProductMasters
                     productMasters={filtTreatmentProd}
-                    navigation={this.props.navigation}
+                    navigation={navigation}
                   />
-                }
-                { (selectedIndex === 0 && filtVaccineProd.length === 0) &&
-                  <ViewCardText text={ t('products.emptyText.left') } />
-                }
-                { (selectedIndex === 1 && filtTreatmentProd.length === 0) &&
-                  <ViewCardText text={ t('products.emptyText.right') } />
-                }
+                )}
+                {selectedIndex === 0 && filtVaccineProd.length === 0 && (
+                  <ViewCardText text={t('products.emptyText.left')} />
+                )}
+                {selectedIndex === 1 && filtTreatmentProd.length === 0 && (
+                  <ViewCardText text={t('products.emptyText.right')} />
+                )}
               </View>
             </ScrollView>
           </View>
@@ -111,7 +113,7 @@ class ViewCovid19Products extends Component {
       return (
         <>
           <View style={gStyle.spacer8} />
-          <ViewCardText text={ t('products.card.offlineText') } />
+          <ViewCardText text={t('products.card.offlineText')} />
         </>
       );
     }
