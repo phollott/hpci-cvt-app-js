@@ -11,7 +11,7 @@ import MenuDrawer from './MenuDrawer';
 import HomeScreen from '../screens/HomeScreen';
 
 const CloseIcon = () => (
-  <Icon name="times" color={colors.grey} style={{ minWidth: 26 }} />
+  <Icon name="times" color={colors.grey} containerStyle={{ minWidth: 26 }} />
 );
 
 const Drawer = createDrawerNavigator();
@@ -20,7 +20,7 @@ const Drawer = createDrawerNavigator();
 const HomeNavigator = () => {
   return (
     <Drawer.Navigator
-      drawerContent={ props => <MenuDrawer {...props} /> }
+      drawerContent={(props) => <MenuDrawer {...props} />}
       drawerPosition="left"
       drawerStyle={{
         backgroundColor: colors.lightGrey,
@@ -41,6 +41,6 @@ const HomeNavigator = () => {
       />
     </Drawer.Navigator>
   );
-}
+};
 
 export default HomeNavigator;

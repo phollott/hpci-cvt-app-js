@@ -11,7 +11,7 @@ import Icon from '../components/Icon';
 
 // HomeTabBarIcon
 const HomeTabBarIcon = ({ focused }) => (
-  <Icon name='home' focused={focused} />
+  <Icon name="home" focused={focused} />
 );
 
 HomeTabBarIcon.propTypes = {
@@ -21,7 +21,7 @@ HomeTabBarIcon.propTypes = {
 
 // ProductsTabBarIcon
 const ProductsTabBarIcon = ({ focused }) => (
-  <Icon name='search' focused={focused} />
+  <Icon name="search" focused={focused} />
 );
 
 ProductsTabBarIcon.propTypes = {
@@ -31,7 +31,7 @@ ProductsTabBarIcon.propTypes = {
 
 // BookmarksTabBarIcon
 const BookmarksTabBarIcon = ({ focused }) => (
-  <Icon name='bookmark' focused={focused} solid />
+  <Icon name="bookmark" focused={focused} solid />
 );
 
 BookmarksTabBarIcon.propTypes = {
@@ -78,6 +78,6 @@ const TabNavigator = () => {
       />
     </Tab.Navigator>
   );
-}
+};
 
 export default TabNavigator;

@@ -7,8 +7,8 @@ import ViewProductDetails from '../components/ViewProductDetails';
 
 const ProductDetailsScreen = ({ navigation, route }) => {
   // use hook to get language and set as key so react creates a new component instance when language gets changed
-  const language = useSelector(state => state.settings.language);
-  const viewProductDetailsKey = language + "ViewProductDetails";
+  const language = useSelector((state) => state.settings.language);
+  const viewProductDetailsKey = language.concat('ViewProductDetails');
 
   return (
     <ViewProductDetails navigation={navigation} route={route} key={viewProductDetailsKey} />

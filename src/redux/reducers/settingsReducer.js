@@ -2,15 +2,15 @@ import { SET_LANGUAGE, SET_IS_ONLINE } from '../actions/actionTypes';
 import { lang } from '../../constants/constants';
 
 const initialState = {
-  settings : {
-    language : lang.default,
-    isOnline : true
+  settings: {
+    language: lang.default,
+    isOnline: true
   }
 };
 
 const settingsReducer = (state = initialState, action) => {
   // get current state
-  switch(action.type) {
+  switch (action.type) {
     case SET_LANGUAGE: {
       const settingsNode = { ...state };
       settingsNode.language = action.payload.language;

@@ -8,6 +8,7 @@
 - Expo SDK 40
 - React Native 0.63.2
 - React Navigation v5
+- React Native Paper v4
 - iOS 13 Appearance Support (with [react-native-appearance](https://github.com/expo/react-native-appearance))
 - Preloading/caching local assets
 - Checker for the iOS notch: iPhoneX, iPhoneXs, iPhoneXr, iPhoneXs Max
@@ -18,7 +19,6 @@
 - [development on a physical device](#development-on-a-physical-device)
 - [linting](#linting)
 - [helpful links](#helpful-links)
-- [assets](#assets)
 - [device learnings](#device-learnings)
 - [demo & release notes](#demo-and-release-notes)
 
@@ -64,10 +64,6 @@ Run Project Locally: `expo start`
 - [using nvm](https://davidwalsh.name/nvm)
 - [setup prettier/eslint within project](https://blog.echobind.com/integrating-prettier-eslint-airbnb-style-guide-in-vscode-47f07b5d7d6a)
 
-## assets
-
-- [COVID Alert Logo](https://en.wikipedia.org/wiki/File:COVID_Alert_Logo.png)
-
 ## device learnings
 
 - **ios:** The notch on iPhoneX, iPhoneXs, iPhoneXr, iPhoneXs Max is **30pt** from top
@@ -81,10 +77,8 @@ HC CVT App - prototype
 - added user preference for en-CA/fr-CA
 - removed react-native-svg
 - upgraded to [React Navigation v5](https://reactnavigation.org/docs/upgrading-from-4.x/)
-- added search and filtering
-- started review of themes - React Navigation Theme Support / Example Usage ([themes docs](https://reactnavigation.org/docs/themes))
-- implemented navigation stacks for app, added screens
-- introduced cross platform UI toolkit [React Native Elements](https://reactnativeelements.com/)
+- introduced cross platform Material Design UI toolkit [React Native Paper](https://reactnativepaper.com/)
+- TODO: add themes - React Native Paper, React Navigation Theme Support / Example Usage ([themes docs](https://reactnavigation.org/docs/themes))
 
 ### version: 0.0.2
 

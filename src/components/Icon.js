@@ -1,22 +1,106 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { Icon as IconRNE} from 'react-native-elements';
+import { StyleSheet, View } from 'react-native';
+import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { gStyle } from '../constants';
 
-const Icon = ({name, type = 'font-awesome-5', size = 20, color = '', focused = true, reverse = false, solid = false, style, containerStyle}) => (
-  <IconRNE
-    name={name}
-    type={type}
-    size={size}
-    color={
-      color !== '' ? color : (focused ? gStyle.tintColor.active.light : gStyle.tintColor.inactive.light)
+const Icon = ({
+  name,
+  type,
+  size,
+  color,
+  focused,
+  reverse,
+  solid,
+  containerStyle,
+  iconStyle
+}) => {
+  const getBackgroundColor = () => {
+    if (reverse) {
+      return color;
     }
-    reverse={reverse}
-    solid={solid}
-    style={style}
-    containerStyle={containerStyle}
-  />
-);
+    return 'transparent';
+  };
+
+  const getColor = () => {
+    if (reverse) {
+      return gStyle.tintColor.active.light;
+    }
+    if (color !== '') {
+      return color;
+    }
+    return focused
+      ? gStyle.tintColor.active.light
+      : gStyle.tintColor.inactive.light;
+  };
+
+  const buttonStyles = {
+    borderRadius: size + 4,
+    height: size * 2 + 4,
+    width: size * 2 + 4
+  };
+
+  return (
+    <View
+      style={StyleSheet.flatten([
+        styles.container,
+        containerStyle && containerStyle,
+        reverse && styles.reverseButton,
+        reverse && buttonStyles,
+        reverse && {
+          backgroundColor: getBackgroundColor()
+        }
+      ])}
+    >
+      {type === 'material-community' && (
+        <MaterialCommunityIcons
+          name={name}
+          size={size}
+          color={getColor()}
+          solid={solid}
+          style={StyleSheet.flatten([
+            { backgroundColor: 'transparent' },
+            iconStyle && iconStyle
+          ])}
+        />
+      )}
+      {type === 'font-awesome-5' && (
+        <FontAwesome5
+          name={name}
+          size={size}
+          color={getColor()}
+          solid={solid}
+          style={StyleSheet.flatten([
+            { backgroundColor: 'transparent' },
+            iconStyle && iconStyle
+          ])}
+        />
+      )}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  reverseButton: {
+    margin: 7
+  }
+});
+
+Icon.defaultProps = {
+  type: 'font-awesome-5',
+  size: 20,
+  color: '',
+  focused: true,
+  reverse: false,
+  solid: false,
+  containerStyle: null,
+  iconStyle: null
+};
 
 Icon.propTypes = {
   // required
@@ -29,12 +113,12 @@ Icon.propTypes = {
   focused: PropTypes.bool,
   reverse: PropTypes.bool,
   solid: PropTypes.bool,
-  style: PropTypes.oneOfType([
+  containerStyle: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.number,
     PropTypes.object
   ]),
-  containerStyle: PropTypes.oneOfType([
+  iconStyle: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.number,
     PropTypes.object

@@ -6,8 +6,11 @@ import { storage } from '../services';
 
 const navStacks = (props) => {
   // [mrj] hack: navigation is used to ensure the bookmarks screen is re-rendered after bookmarks are cleared
-  props.navigation.navigate('BookmarksStack', {screen: 'Bookmarks', params: { bookmarkAction: '-clear'}});
-  props.navigation.navigate('HomeStack', {screen: 'Home'});
+  props.navigation.navigate('BookmarksStack', {
+    screen: 'Bookmarks',
+    params: { bookmarkAction: '-clear' }
+  });
+  props.navigation.navigate('HomeStack', { screen: 'Home' });
 };
 
 const RemoveData = (props) => {
@@ -16,8 +19,13 @@ const RemoveData = (props) => {
       t('home.menu.removeAlert.title'),
       t('home.menu.removeAlert.text'),
       [
-        { text: t('common.alert.button.cancel'), onPress: () => {}, style: "cancel" },
-        { text: t('common.alert.button.ok'), 
+        {
+          text: t('common.alert.button.cancel'),
+          onPress: () => {},
+          style: 'cancel'
+        },
+        {
+          text: t('common.alert.button.ok'),
           onPress: async () => {
             // clear settings, bookmarks
             storage.deleteAll().then(navStacks(props));
@@ -26,8 +34,9 @@ const RemoveData = (props) => {
       ]
     );
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.log('Unable to clear storage. ', error);
   }
-}
+};
 
 export default RemoveData;

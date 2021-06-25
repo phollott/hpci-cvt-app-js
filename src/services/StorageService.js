@@ -1,10 +1,9 @@
-import {KeyValueStore} from './KeyValueStore';
+import { KeyValueStore } from './KeyValueStore';
 
 class StorageService {
-  
   static instance;
 
-  constructor () {
+  constructor() {
     if (!this.instance) {
       this.instance = this;
       this.keyValueStore = new KeyValueStore();
@@ -43,7 +42,6 @@ class StorageService {
   deleteAll() {
     return this.keyValueStore.deleteAll();
   }
-
 }
 
 const storageService = new StorageService();
