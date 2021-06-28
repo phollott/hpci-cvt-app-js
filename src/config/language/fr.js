@@ -80,12 +80,6 @@ export default {
         title: 'Envoyer une notification',
         instructionText: 'Envoyez une notification à votre appareil à partir de l’application ou de l’outil externe (appuyez, sélectionnez et copiez le \'Expo Push Token\' avant de naviguer vers l’outil externe).'
       },
-      notification: {
-        heading: 'Notification reçue',
-        title: 'Titre',
-        body: 'Message',
-        data: 'Les données'
-      },
       button: {
         sendTitle: 'Envoyer une notification',
         toolTitle: 'Expo Push Notification Tool'

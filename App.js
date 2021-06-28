@@ -3,20 +3,35 @@ import * as React from 'react';
 import { StatusBar } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { Appearance } from 'react-native-appearance';
-import { Provider } from 'react-redux';
+import { Provider as ReactProvider } from 'react-redux';
 import { createStore } from 'redux';
 import he from 'he';
+import * as PushNotifications from 'expo-notifications';
 import * as Localization from 'expo-localization';
 import * as I18n from './src/config/i18n';
 import { device, func } from './src/constants';
 import { lang } from './src/constants/constants';
 import { fetchProductsAsync } from './src/api/covid19Products';
-import { productLoad, productsParser, storage } from './src/services';
+import {
+  notifications,
+  productLoad,
+  productsParser,
+  storage
+} from './src/services';
 import initialState from './src/redux/store/initialState';
 import rootReducer from './src/redux/store/store';
 
 // tab navigator
 import MainStack from './src/navigation/Stack';
+
+// set notification handler for when app is in the foreground
+PushNotifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false
+  })
+});
 
 class App extends React.Component {
   constructor(props) {
@@ -48,7 +63,29 @@ class App extends React.Component {
         theme: colorScheme
       });
     }
+
+    notifications.registerForPushNotificationsAsync();
+
+    // this listener is fired whenever a notification is received while the app is foregrounded
+    PushNotifications.addNotificationReceivedListener(this.handleNotification);
+
+    // this listener is fired whenever a user taps on or interacts with a notification
+    // note: this is supposed to work when app is foregrounded, backgrounded, or killed
+    PushNotifications.addNotificationResponseReceivedListener(
+      this.handleNotificationResponse
+    );
   }
+
+  handleNotification = (notification) => {
+    // this.setState({ notification: notification });
+    // console.log('addNotificationReceivedListener (fired whenever a notification is received while the app is foregrounded)...');
+    // console.log('notification received while app is foregrounded: ', notification);
+  };
+
+  handleNotificationResponse = (response) => {
+    // console.log('addNotificationResponseReceivedListener (fired whenever a user taps on or interacts with a notification)...');
+    // console.log('notification received, response: ', response);
+  };
 
   retrieveLanguagePreference = async () => {
     try {
@@ -204,10 +241,10 @@ class App extends React.Component {
     // redux
     const store = createStore(rootReducer, initialState);
 
-    // products state is now set and available for connect() within Provider - console.log('store.getState.products.length: ', store.getState().products.length);
+    // products state is now set and available for connect() within ReactProvider - console.log('store.getState.products.length: ', store.getState().products.length);
 
     return (
-      <Provider store={store}>
+      <ReactProvider store={store}>
         <React.Fragment>
           <StatusBar barStyle={device.iOS ? iOSStatusType : 'light-content'} />
           <MainStack
@@ -217,7 +254,7 @@ class App extends React.Component {
             theme={theme}
           />
         </React.Fragment>
-      </Provider>
+      </ReactProvider>
     );
   }
 }
