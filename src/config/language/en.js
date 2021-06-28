@@ -80,12 +80,6 @@ export default {
         title: 'Send Push Notification',
         instructionText: 'Send a notification to your device from either the app or via the external tool (press, select and copy the Expo Push Token before navigating to the external tool).'
       },
-      notification: {
-        heading: 'Received Notification',
-        title: 'Title',
-        body: 'Body',
-        data: 'Data'
-      },
       button: {
         sendTitle: 'Send Push Notification',
         toolTitle: 'Expo Push Notification Tool'

@@ -46,7 +46,4 @@ en.js:
   //show french home.settings.language.touchText with en locale
   console.log( t('home.settings.language.touchText', {locale: 'fr'}) );
   > Français (Canada)
-
-tip: put a space before  t(' for easy finds
-                        ^
 */
