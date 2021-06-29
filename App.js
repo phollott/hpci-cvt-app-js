@@ -58,7 +58,9 @@ class App extends React.Component {
     }
 
     // get expo token, may prompt ios users for permission
-    notifications.registerForPushNotificationsAsync();
+    notifications
+      .registerForPushNotificationsAsync()
+      .then((token) => notifications.saveExpoPushToken(token));
   }
 
   retrieveLanguagePreference = async () => {
