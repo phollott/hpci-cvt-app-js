@@ -6,7 +6,6 @@ import { Appearance } from 'react-native-appearance';
 import { Provider as ReactProvider } from 'react-redux';
 import { createStore } from 'redux';
 import he from 'he';
-import * as PushNotifications from 'expo-notifications';
 import * as Localization from 'expo-localization';
 import * as I18n from './src/config/i18n';
 import { device, func } from './src/constants';
@@ -24,14 +23,8 @@ import rootReducer from './src/redux/store/store';
 // tab navigator
 import MainStack from './src/navigation/Stack';
 
-// set notification handler for when app is in the foreground
-PushNotifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false
-  })
-});
+// global
+notifications.registerNotificationHandler();
 
 class App extends React.Component {
   constructor(props) {
@@ -64,28 +57,9 @@ class App extends React.Component {
       });
     }
 
+    // get expo token, may prompt ios users for permission
     notifications.registerForPushNotificationsAsync();
-
-    // this listener is fired whenever a notification is received while the app is foregrounded
-    PushNotifications.addNotificationReceivedListener(this.handleNotification);
-
-    // this listener is fired whenever a user taps on or interacts with a notification
-    // note: this is supposed to work when app is foregrounded, backgrounded, or killed
-    PushNotifications.addNotificationResponseReceivedListener(
-      this.handleNotificationResponse
-    );
   }
-
-  handleNotification = (notification) => {
-    // this.setState({ notification: notification });
-    // console.log('addNotificationReceivedListener (fired whenever a notification is received while the app is foregrounded)...');
-    // console.log('notification received while app is foregrounded: ', notification);
-  };
-
-  handleNotificationResponse = (response) => {
-    // console.log('addNotificationResponseReceivedListener (fired whenever a user taps on or interacts with a notification)...');
-    // console.log('notification received, response: ', response);
-  };
 
   retrieveLanguagePreference = async () => {
     try {

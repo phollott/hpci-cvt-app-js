@@ -3,31 +3,9 @@ import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import StorageService from './StorageService';
 
-async function retrieveExpoPushToken() {
-  let value;
-  try {
-    value = await StorageService.retrieve('expoPushToken');
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.log('Unable to retrieve expoPushToken. ', error);
-  }
-  return value;
-}
-
-async function saveExpoPushToken(token) {
-  try {
-    await StorageService.save(
-      'expoPushToken',
-      typeof token !== 'undefined' ? token : ''
-    );
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.log('Unable to save expoPushToken to storage. ', error);
-  }
-}
-
 // TODO: store token on backend, notification settings?
 async function registerForPushNotificationsAsync() {
+  // https://docs.expo.io/push-notifications/push-notifications-setup/
   let token = '';
   if (Constants.isDevice) {
     const {
@@ -66,7 +44,79 @@ async function registerForPushNotificationsAsync() {
   return token;
 }
 
+function handleNotification(notification) {
+  // console.log('addNotificationReceivedListener (fired whenever a notification is received while the app is foregrounded)...');
+  // console.log('notification received while app is foregrounded: ', notification);
+}
+
+function handleNotificationResponse(response) {
+  // console.log('addNotificationResponseReceivedListener (fired whenever a user taps on or interacts with a notification)...');
+  // console.log('notification received, response: ', response);
+}
+
+function registerNotificationHandler() {
+  try {
+    // https://docs.expo.io/push-notifications/receiving-notifications/
+
+    // set notification handler for when app is foregrounded
+    Notifications.setNotificationHandler({
+      handleNotification: async () => {
+        return {
+          shouldShowAlert: true,
+          shouldPlaySound: true,
+          shouldSetBadge: false
+        };
+      },
+      handleSuccess: (notificationId) => {
+        // console.log('Notifications: handleSuccess Id: ', notificationId);
+      },
+      handleError: (error) => {
+        // eslint-disable-next-line no-console
+        console.log('Notifications: handleError error: ', error);
+      }
+    });
+
+    // fired whenever a user taps on or interacts with a notification
+    // note: this is supposed to work when app is foregrounded, backgrounded, or killed
+    Notifications.addNotificationResponseReceivedListener(
+      handleNotificationResponse
+    );
+
+    // fired whenever a notification is received while the app is foregrounded
+    Notifications.addNotificationReceivedListener(handleNotification);
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.log('Error in registerNotificationHandler: ', e);
+  }
+}
+
+async function retrieveExpoPushToken() {
+  let value;
+  try {
+    value = await StorageService.retrieve('expoPushToken');
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log('Unable to retrieve expoPushToken. ', error);
+  }
+  return value;
+}
+
+async function saveExpoPushToken(token) {
+  try {
+    await StorageService.save(
+      'expoPushToken',
+      typeof token !== 'undefined' ? token : ''
+    );
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log('Unable to save expoPushToken to storage. ', error);
+  }
+}
+
+// can use this function below, OR use Expo's Push Notification Tool-> https://expo.io/notifications
+// TODO: backend - https://docs.expo.io/push-notifications/sending-notifications/
 async function sendExpoPushNotification(message) {
+  // https://docs.expo.io/push-notifications/overview/
   try {
     fetch('https://exp.host/--/api/v2/push/send', {
       method: 'POST',
@@ -84,8 +134,9 @@ async function sendExpoPushNotification(message) {
 }
 
 export default {
+  registerForPushNotificationsAsync,
+  registerNotificationHandler,
   retrieveExpoPushToken,
   saveExpoPushToken,
-  registerForPushNotificationsAsync,
   sendExpoPushNotification
 };
