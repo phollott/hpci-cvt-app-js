@@ -54,6 +54,16 @@ const PushNotificationScreen = ({ navigation, route }) => {
               />
             </View>
             <View style={gStyle.spacer16} />
+            <View style={{ width: '100%', justifyContent: 'center' }}>
+              <Touch
+                onPress={async () => {
+                  await sendPhizerRelatedPushNotification();
+                }}
+                text={t('home.pushNotification.button.sendTitle').concat(' - Phizer')}
+                lIconName="share"
+              />
+            </View>
+            <View style={gStyle.spacer16} />
             <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Expo Push Token</Text>
             <View style={gStyle.spacer8} />
             <Text
@@ -85,7 +95,8 @@ const PushNotificationScreen = ({ navigation, route }) => {
   );
 };
 
-// can use this function below, or Expo's Push Notification Tool-> https://expo.io/notifications
+// can use this function below, or
+// Expo's Push Notification Tool-> https://expo.io/notifications  (data examples: {"nid": 16} or {"nid": [15,16,9]})
 // TODO: replace with backend
 async function sendPushNotification() {
   notifications.retrieveExpoPushToken().then((expoPushToken) => {
@@ -96,6 +107,20 @@ async function sendPushNotification() {
       title: 'HPCI CVT',
       body: 'Message sent from Send Push Notification.',
       data: { date: new Date().toString() }
+    };
+    notifications.sendExpoPushNotification(message);
+  });
+}
+
+async function sendPhizerRelatedPushNotification() {
+  notifications.retrieveExpoPushToken().then((expoPushToken) => {
+    const message = {
+      to: expoPushToken,
+      sound: 'default',
+      badge: 1,
+      title: 'HPCI CVT',
+      body: 'Phizer related message sent from Send Push Notification.',
+      data: { nid: 16 }
     };
     notifications.sendExpoPushNotification(message);
   });

@@ -7,7 +7,7 @@ import StorageService from './StorageService';
 const NOTIFICATION_RECEIVED = 'notificationReceived'; // while app in foreground
 const NOTIFICATION_RESPONSE_RECEIVED = 'notificationResponseReceived'; // while app in foreground, background or closed
 
-const PERSIST_NOTIFICATION_ENABLED = false; // must be true, can disable for testing
+const PERSIST_NOTIFICATION_ENABLED = true; // must be true, can disable for testing
 
 const pushNotification = (notification) => {
   if (notification && notification.request) {
@@ -155,6 +155,72 @@ async function saveExpoPushToken(token) {
   }
 }
 
+async function findProductNidsWithUnreadNotification() {
+  const nids = [];
+  let keys = [];
+  let storedNotifications = [];
+  try {
+    keys = await StorageService.retrieveKeys();
+    if (keys.length > 0) {
+      keys = keys.filter((key) => {
+        return key.startsWith('expoPushNotification');
+      });
+      storedNotifications =
+        keys !== null ? await StorageService.retrieveMulti(keys) : [];
+      if (storedNotifications.length > 0) {
+        storedNotifications = storedNotifications.filter((notification) => {
+          const pn = JSON.parse(notification[1]);
+          const { data, isRead } = pn;
+          if (data.nid && !isRead) {
+            if (Array.isArray(data.nid)) {
+              nids.push(...data.nid);
+            } else {
+              nids.push(data.nid);
+            }
+          }
+          return false;
+        });
+      }
+    }
+  } catch (error) {
+    console.log('findProductNidsWithUnreadNotification error: ', error);
+  }
+  return [...new Set(nids)];
+}
+
+async function updateNotificationsAsReadForProduct(nid) {
+  const nidToUpdate = parseInt(nid, 10);
+  let keys = [];
+  let storedNotifications = [];
+  try {
+    keys = await StorageService.retrieveKeys();
+    if (keys.length > 0) {
+      keys = keys.filter((key) => {
+        return key.startsWith('expoPushNotification');
+      });
+      storedNotifications =
+        keys !== null ? await StorageService.retrieveMulti(keys) : [];
+      if (storedNotifications.length > 0) {
+        storedNotifications = storedNotifications.filter((notification) => {
+          const pn = JSON.parse(notification[1]);
+          const { data, isRead } = pn;
+          if (
+            !isRead &&
+            (data.nid === nidToUpdate ||
+              (Array.isArray(data.nid) && data.nid.includes(nidToUpdate)))
+          ) {
+            pn.isRead = true;
+            StorageService.save(notification[0], JSON.stringify(pn));
+          }
+          return false;
+        });
+      }
+    }
+  } catch (error) {
+    console.log('updateNotificationsAsReadForProduct error: ', error);
+  }
+}
+
 // can use this function below, OR use Expo's Push Notification Tool-> https://expo.io/notifications
 // TODO: backend - https://docs.expo.io/push-notifications/sending-notifications/
 async function sendExpoPushNotification(message) {
@@ -179,5 +245,7 @@ export default {
   registerForPushNotificationsAsync,
   retrieveExpoPushToken,
   saveExpoPushToken,
+  findProductNidsWithUnreadNotification,
+  updateNotificationsAsReadForProduct,
   sendExpoPushNotification
 };
