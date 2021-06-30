@@ -1,7 +1,99 @@
+/* eslint-disable no-console */
 import { Platform } from 'react-native';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import StorageService from './StorageService';
+
+const NOTIFICATION_RECEIVED = 'notificationReceived'; // while app in foreground
+const NOTIFICATION_RESPONSE_RECEIVED = 'notificationResponseReceived'; // while app in foreground, background or closed
+
+const PERSIST_NOTIFICATION_ENABLED = false; // must be true, can disable for testing
+
+const pushNotification = (notification) => {
+  if (notification && notification.request) {
+    return {
+      id: notification.request.identifier,
+      date: notification.date, // in millis
+      badge: notification.request.content.badge,
+      body: notification.request.content.body, // message
+      data: { ...notification.request.content.data }, // ex: {}, {"nid": 16}, {"nid": [16, 18, 20]}
+      sound: notification.request.content.sound,
+      subtitle: notification.request.content.subtitle, // ios
+      title: notification.request.content.title,
+      isRead: false // TODO: set true when opened on notifications screen, or if nid is in data, when product details is opened in products or bookmarks
+    };
+  }
+  return {};
+};
+
+async function saveExpoPushNotification(notification) {
+  try {
+    const key = 'expoPushNotification-'.concat(notification.id);
+    const storedPn = await StorageService.retrieve(key);
+    if (storedPn) {
+      console.log('Expo push notification already saved: ', key);
+      return;
+    }
+    // TODO: max limit?
+    await StorageService.save(
+      'expoPushNotification-'.concat(notification.id),
+      JSON.stringify(notification)
+    );
+  } catch (error) {
+    console.log('Unable to save Expo Push Notification to storage. ', error);
+  }
+}
+
+function handleNotificationReceived(notification) {
+  handleNotification(notification, NOTIFICATION_RECEIVED);
+}
+
+function handleNotificationResponseReceived(response) {
+  handleNotification(response.notification, NOTIFICATION_RESPONSE_RECEIVED);
+}
+
+async function handleNotification(notification, source) {
+  // console.log('handleNotification notification: ', notification);
+  console.log('handleNotification source: ', source);
+  const pn = pushNotification(notification);
+  if (pn && pn.id && pn.body && pn.body.length > 0) {
+    console.log('handleNotification pn: ', pn);
+    if (PERSIST_NOTIFICATION_ENABLED) {
+      await saveExpoPushNotification(pn);
+    }
+  }
+}
+
+function registerNotificationHandler() {
+  try {
+    // https://docs.expo.io/push-notifications/receiving-notifications/
+
+    // set notification handler for when app is foregrounded
+    Notifications.setNotificationHandler({
+      handleNotification: async () => {
+        return {
+          shouldShowAlert: true,
+          shouldPlaySound: false,
+          shouldSetBadge: false
+        };
+      }
+    });
+
+    // fired whenever a notification is received while the app is foregrounded
+    Notifications.addNotificationReceivedListener(handleNotificationReceived);
+
+    // fired whenever a user taps on or interacts with a notification
+    // note: this is supposed to work when app is foregrounded, backgrounded, or closed/killed
+    //       ios only opens expo go when app and expo go are closed, so app does not handle notification message
+    //         see: https://github.com/expo/expo/tree/master/packages/expo-notifications#handling-incoming-notifications-when-the-app-is-not-in-the-foreground-not-supported-in-expo-go
+    // TODO: backend for notifications, credentials, configure and implement for ios and android without expo go
+    Notifications.addNotificationResponseReceivedListener(
+      handleNotificationResponseReceived
+    );
+  } catch (e) {
+    console.log('Error in registerNotificationHandler: ', e);
+  }
+}
 
 // TODO: store token on backend, notification settings?
 async function registerForPushNotificationsAsync() {
@@ -18,7 +110,6 @@ async function registerForPushNotificationsAsync() {
     }
     if (finalStatus !== 'granted') {
       // android users do not get prompted (permissions are enabled by default, so user will need to re-enable)
-      // eslint-disable-next-line no-console
       console.log('Failed to get push token for push notification!');
       return '';
     }
@@ -26,10 +117,8 @@ async function registerForPushNotificationsAsync() {
     // token = (await Notifications.getExpoPushTokenAsync()).data;
     const experienceId = '@hpci-cvt/hpci-cvt-app-js';
     token = (await Notifications.getExpoPushTokenAsync(experienceId)).data;
-    // eslint-disable-next-line no-console
     console.log('Received Expo push token: ', token);
   } else {
-    // eslint-disable-next-line no-console
     console.log('Must use physical device for Push Notifications.');
   }
   // need to specify a channel if android, see expo-notifications documentation
@@ -42,52 +131,6 @@ async function registerForPushNotificationsAsync() {
     });
   }
   return token;
-}
-
-function handleNotification(notification) {
-  // console.log('addNotificationReceivedListener (fired whenever a notification is received while the app is foregrounded)...');
-  // console.log('notification received while app is foregrounded: ', notification);
-}
-
-function handleNotificationResponse(response) {
-  // console.log('addNotificationResponseReceivedListener (fired whenever a user taps on or interacts with a notification)...');
-  // console.log('notification received, response: ', response);
-}
-
-function registerNotificationHandler() {
-  try {
-    // https://docs.expo.io/push-notifications/receiving-notifications/
-
-    // set notification handler for when app is foregrounded
-    Notifications.setNotificationHandler({
-      handleNotification: async () => {
-        return {
-          shouldShowAlert: true,
-          shouldPlaySound: true,
-          shouldSetBadge: false
-        };
-      },
-      handleSuccess: (notificationId) => {
-        // console.log('Notifications: handleSuccess Id: ', notificationId);
-      },
-      handleError: (error) => {
-        // eslint-disable-next-line no-console
-        console.log('Notifications: handleError error: ', error);
-      }
-    });
-
-    // fired whenever a user taps on or interacts with a notification
-    // note: this is supposed to work when app is foregrounded, backgrounded, or killed
-    Notifications.addNotificationResponseReceivedListener(
-      handleNotificationResponse
-    );
-
-    // fired whenever a notification is received while the app is foregrounded
-    Notifications.addNotificationReceivedListener(handleNotification);
-  } catch (e) {
-    // eslint-disable-next-line no-console
-    console.log('Error in registerNotificationHandler: ', e);
-  }
 }
 
 async function retrieveExpoPushToken() {
@@ -108,7 +151,6 @@ async function saveExpoPushToken(token) {
       typeof token !== 'undefined' ? token : ''
     );
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.log('Unable to save expoPushToken to storage. ', error);
   }
 }
@@ -128,14 +170,13 @@ async function sendExpoPushNotification(message) {
       body: JSON.stringify(message)
     });
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.log('Unable to send Expo Push Notification. ', error);
   }
 }
 
 export default {
-  registerForPushNotificationsAsync,
   registerNotificationHandler,
+  registerForPushNotificationsAsync,
   retrieveExpoPushToken,
   saveExpoPushToken,
   sendExpoPushNotification
