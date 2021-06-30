@@ -1,17 +1,30 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Badge, List, Divider } from 'react-native-paper';
-import { t } from 'i18n-js';
 import Icon from './Icon';
 import { colors } from '../constants';
+// services
+import { notifications } from '../services';
 
 export default class ViewProductMasters extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      productNidsWithUnreadNotification: []
+    };
+  }
+
+  componentDidMount() {
+    notifications.findProductNidsWithUnreadNotification().then((nids) => {
+      this.setState({
+        productNidsWithUnreadNotification: nids
+      });
+      // console.log('productNidsWithUnreadNotification', this.state.productNidsWithUnreadNotification);
+    });
   }
 
   render() {
+    const { productNidsWithUnreadNotification } = this.state;
     return (
       <View
         style={{
@@ -26,21 +39,29 @@ export default class ViewProductMasters extends Component {
             <List.Item key={productMaster.key}
               left={() => {
                 return (
-                  <Icon reverse
-                    name={ productMaster.type === 'Vaccine' ? 'syringe' : 'pills' }
-                    color={ productMaster.showLink ? colors.darkColor : colors.orange }
-                  />
+                  <>
+                    <Icon
+                      reverse
+                      name={ productMaster.type === 'Vaccine' ? 'syringe' : 'pills' }
+                      color={ productMaster.showLink ? colors.darkColor : colors.orange }
+                    />
+                    {(productMaster.isNew ||
+                      productMaster.isUpdated ||
+                      productNidsWithUnreadNotification.includes(
+                        parseInt(productMaster.nid, 10)
+                      )) && (
+                      <Badge
+                        size={16}
+                        style={[
+                          styles.notificationBadge,
+                          { backgroundColor: colors.green }
+                        ]}
+                      />
+                    )}
+                  </>
                 );
               }}
-              title={
-                <Text>
-                  <Text>{productMaster.brandName.trim()}</Text>
-                  <View>
-                    { productMaster.isNew && !productMaster.isUpdated && <Badge style={[styles.updateBadge, {backgroundColor: colors.green}]}>{t('common.badge.new')}</Badge> }
-                    { productMaster.isUpdated && <Badge style={[styles.updateBadge, {backgroundColor: colors.orange}]}>{t('common.badge.updated')}</Badge> }
-                  </View>
-                </Text>
-              }
+              title={<Text>{productMaster.brandName.trim()}</Text>}
               titleStyle={{ fontWeight: 'bold' }}
               titleNumberOfLines={2}
               description={() => (
@@ -58,8 +79,8 @@ export default class ViewProductMasters extends Component {
                 productMaster.showLink && this.props.navigation.navigate('ProductDetails', {productMaster})
               }}
               right={() => {
-                return productMaster.showLink 
-                  ? <Icon name='chevron-right' color={colors.darkColor} size={12} containerStyle={{ justifyContent: 'flex-start', marginTop: 12, marginRight: 14 }} /> 
+                return productMaster.showLink
+                  ? <Icon name='chevron-right' color={colors.darkColor} size={12} containerStyle={{ justifyContent: 'flex-start', marginTop: 12, marginRight: 14 }} />
                   : null;
               }}
             />
@@ -72,10 +93,9 @@ export default class ViewProductMasters extends Component {
 }
 
 const styles = StyleSheet.create({
-  updateBadge: {
-    color: 'white',
-    marginLeft: 4,
-    marginRight: 4,
-    paddingHorizontal: 8
+  notificationBadge: {
+    position: 'absolute',
+    top: 2,
+    left: 36
   }
 });

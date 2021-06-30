@@ -10,7 +10,7 @@ import { colors, gStyle } from '../constants';
 import { selectBookmarkByID } from '../redux/selectors/bookmarkSelector';
 import { selectProductByID } from '../redux/selectors/productSelector';
 // services
-import { productLoad, productResource, productsParser } from '../services';
+import { notifications, productLoad, productResource, productsParser } from '../services';
 // components
 import ViewCardText from './ViewCardText';
 import ViewLabelledText from './ViewLabelledText';
@@ -52,6 +52,7 @@ class ViewProductDetails extends Component {
         });
       }
     }
+    notifications.updateNotificationsAsReadForProduct(this.props.productMaster.nid);
   }
 
   _renderTruncatedFooter = (handlePress) => {
