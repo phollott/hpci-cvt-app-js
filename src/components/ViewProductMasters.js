@@ -12,16 +12,21 @@ export default class ViewProductMasters extends Component {
     this.state = {
       productNidsWithUnreadNotification: []
     };
+    this.updateUnreadProductNids = this.updateUnreadProductNids.bind(this);
   }
 
   componentDidMount() {
+    this.updateUnreadProductNids();
+  }
+
+  updateUnreadProductNids = () => {
     notifications.findProductNidsWithUnreadNotification().then((nids) => {
       this.setState({
         productNidsWithUnreadNotification: nids
       });
       // console.log('productNidsWithUnreadNotification', this.state.productNidsWithUnreadNotification);
     });
-  }
+  };
 
   render() {
     const { productNidsWithUnreadNotification } = this.state;
@@ -76,7 +81,9 @@ export default class ViewProductMasters extends Component {
                 </Text>
               )}
               onPress={() => {
-                productMaster.showLink && this.props.navigation.navigate('ProductDetails', {productMaster})
+                productMaster.showLink &&
+                notifications.updateNotificationsAsReadForProduct(productMaster.nid) &&
+                this.props.navigation.navigate('ProductDetails', {productMaster})
               }}
               right={() => {
                 return productMaster.showLink

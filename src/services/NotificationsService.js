@@ -14,11 +14,8 @@ const pushNotification = (notification) => {
     return {
       id: notification.request.identifier,
       date: notification.date, // in millis
-      badge: notification.request.content.badge,
       body: notification.request.content.body, // message
       data: { ...notification.request.content.data }, // ex: {}, {"nid": 16}, {"nid": [16, 18, 20]}
-      sound: notification.request.content.sound,
-      subtitle: notification.request.content.subtitle, // ios
       title: notification.request.content.title,
       isRead: false // TODO: set true when opened on notifications screen, or if nid is in data, when product details is opened in products or bookmarks
     };
