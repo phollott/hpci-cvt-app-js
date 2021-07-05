@@ -23,9 +23,6 @@ import rootReducer from './src/redux/store/store';
 // tab navigator
 import MainStack from './src/navigation/Stack';
 
-// global
-notifications.registerNotificationHandler();
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -56,6 +53,8 @@ class App extends React.Component {
         theme: colorScheme
       });
     }
+
+    notifications.registerNotificationHandler();
 
     // get expo token, may prompt ios users for permission
     notifications
