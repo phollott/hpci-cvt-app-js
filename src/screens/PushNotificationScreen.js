@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView, Text, View, Linking } from 'react-native';
+import { Checkbox, TextInput } from 'react-native-paper';
 import { useTheme } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { t } from 'i18n-js';
@@ -28,6 +29,19 @@ const PushNotificationScreen = ({ navigation, route }) => {
   const language = useSelector((state) => state.settings.language);
   const pushNotificationViewKey = language.concat('PushNotificationView');
 
+  const [messageText, setMessageText] = React.useState('');
+
+  let covid19Products = [];
+  covid19Products.push({ nid: 29, brandName: 'COVISHIELD', checked: false });
+  covid19Products.push({ nid: 28, brandName: 'AstraZeneca', checked: false });
+  covid19Products.push({ nid: 27, brandName: 'Janssen', checked: false });
+  covid19Products.push({ nid: 16, brandName: 'Pfizer-BioNTech', checked: false });
+  covid19Products.push({ nid: 15, brandName: 'Moderna', checked: false });
+  covid19Products.push({ nid: 9, brandName: 'Veklury', checked: false });
+  covid19Products.push({ nid: 8, brandName: 'Bamlanivimab', checked: false });
+
+  const [products, setProducts] = React.useState(covid19Products);
+
   return (
     <View style={gStyle.container[theme]} key={pushNotificationViewKey}>
       <ScrollView contentContainerStyle={gStyle.contentContainer}>
@@ -35,7 +49,7 @@ const PushNotificationScreen = ({ navigation, route }) => {
           title={t('home.pushNotification.card.title')}
           text={t('home.pushNotification.card.instructionText')}
         />
-        <View style={gStyle.spacer32} />
+        <View style={gStyle.spacer16} />
         <View style={{ width: '90%', justifyContent: 'center' }}>
           <View
             style={{
@@ -44,26 +58,45 @@ const PushNotificationScreen = ({ navigation, route }) => {
               justifyContent: 'space-around'
             }}
           >
+            <View style={{ width: '100%' }}>
+              <TextInput
+                label="Message"
+                value={messageText}
+                onChangeText={(input) => setMessageText(input)}
+              />
+            </View>
+            <View style={gStyle.spacer8} />
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+              {covid19Products.map((product, index) => (
+                <View
+                  key={product.brandName.concat('-view').concat(index)}
+                  style={{ width: '50%' }}
+                >
+                  <Checkbox.Item
+                    key={product.brandName.concat(index)}
+                    label={product.brandName.toString()}
+                    status={products[index].checked ? 'checked' : 'unchecked'}
+                    onPress={() => {
+                      covid19Products = [...products];
+                      covid19Products[index].checked = !products[index].checked;
+                      setProducts(covid19Products);
+                    }}
+                    style={{ marginVertical: 0 }}
+                  />
+                </View>
+              ))}
+            </View>
+            <View style={gStyle.spacer8} />
             <View style={{ width: '100%', justifyContent: 'center' }}>
               <Touch
                 onPress={async () => {
-                  await sendPushNotification();
+                  await sendPushNotification(messageText, products);
                 }}
                 text={t('home.pushNotification.button.sendTitle')}
                 lIconName="share"
               />
             </View>
-            <View style={gStyle.spacer16} />
-            <View style={{ width: '100%', justifyContent: 'center' }}>
-              <Touch
-                onPress={async () => {
-                  await sendPhizerRelatedPushNotification();
-                }}
-                text={t('home.pushNotification.button.sendTitle').concat(' - Phizer')}
-                lIconName="share"
-              />
-            </View>
-            <View style={gStyle.spacer16} />
+            <View style={gStyle.spacer8} />
             <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Expo Push Token</Text>
             <View style={gStyle.spacer8} />
             <Text
@@ -98,29 +131,21 @@ const PushNotificationScreen = ({ navigation, route }) => {
 // can use this function below, or
 // Expo's Push Notification Tool-> https://expo.io/notifications  (data examples: {"nid": 16} or {"nid": [15,16,9]})
 // TODO: replace with backend
-async function sendPushNotification() {
+async function sendPushNotification(messageText, products) {
   notifications.retrieveExpoPushToken().then((expoPushToken) => {
+    const nids = [];
+    products.forEach((product) => {
+      if (product.checked) {
+        nids.push(product.nid);
+      }
+    });
     const message = {
       to: expoPushToken,
       sound: 'default',
       badge: 1,
       title: 'HPCI CVT',
-      body: 'Message sent from Send Push Notification.',
-      data: { date: new Date().toString() }
-    };
-    notifications.sendExpoPushNotification(message);
-  });
-}
-
-async function sendPhizerRelatedPushNotification() {
-  notifications.retrieveExpoPushToken().then((expoPushToken) => {
-    const message = {
-      to: expoPushToken,
-      sound: 'default',
-      badge: 1,
-      title: 'HPCI CVT',
-      body: 'Phizer related message sent from Send Push Notification.',
-      data: { nid: 16 }
+      body: messageText,
+      data: { nid: nids }
     };
     notifications.sendExpoPushNotification(message);
   });
