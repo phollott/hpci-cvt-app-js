@@ -30,8 +30,10 @@ export default class ViewProductMasters extends Component {
   }
 
   addNotificationEventListener = () => {
-    this.listener = EventRegister.addEventListener('notificationEvent', () => {
-      this.updateUnreadProductNids();
+    this.listener = EventRegister.addEventListener('notificationEvent', (notification) => {
+      if (notification.data.nid && notification.data.nid.length > 0) {
+        this.updateUnreadProductNids();
+      }
     });
   };
 
