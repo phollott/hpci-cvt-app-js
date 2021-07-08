@@ -25,7 +25,11 @@ const BookmarkProduct = ({ navigation, route }) => {
     // [mrj] hack: navigation is used to ensure the bookmarks screen is re-rendered after bookmark is added or removed
     navigation.navigate('BookmarksStack', {
       screen: 'Bookmarks',
-      params: { bookmarkAction: (isBookmark ? '-remove' : '-add-'.concat(nid)).concat('-' + (new Date()).getTime().toString()) }
+      params: {
+        bookmarkAction: (isBookmark ? '-remove' : '-add-'.concat(nid)).concat(
+          '-'.concat(new Date().getTime().toString())
+        )
+      }
     });
     navigation.navigate('ProductsStack', { screen: 'ProductDetails' });
   };

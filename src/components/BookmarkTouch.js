@@ -27,7 +27,9 @@ const BookmarkTouch = ({ navigation, route }) => {
     navigation.navigate('ProductsStack', { screen: 'Products' });
     navigation.navigate('BookmarksStack', {
       screen: 'Bookmarks',
-      params: { bookmarkAction: ('-remove-').concat((new Date()).getTime().toString()) }
+      params: {
+        bookmarkAction: '-remove-'.concat(new Date().getTime().toString())
+      }
     });
   };
 

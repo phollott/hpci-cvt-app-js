@@ -6,6 +6,7 @@ import { useTheme } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { t } from 'i18n-js';
 import { gStyle } from '../constants';
+import Alert from '../components/Alert';
 import Touch from '../components/Touch';
 import ViewCardText from '../components/ViewCardText';
 import { notifications } from '../services';
@@ -120,6 +121,19 @@ const PushNotificationScreen = ({ navigation, route }) => {
                 lIconName="globe"
               />
             </View>
+            <View style={gStyle.spacer16} />
+            <View style={{ width: '100%', justifyContent: 'center' }}>
+              <Touch
+                onPress={() => {
+                  const alertText = 'Example Data (JSON) [optional]:\n\n{"nid": 16}\nor\n{"nid": [15,16,9]}\n\n'.concat(
+                    JSON.stringify(covid19Products, ['nid', 'brandName'])
+                  );
+                  Alert(alertText);
+                }}
+                text={t('tab.screen.productsLabel')}
+                lIconName="info"
+              />
+            </View>
           </View>
         </View>
         <View style={gStyle.spacer32} />
@@ -132,6 +146,10 @@ const PushNotificationScreen = ({ navigation, route }) => {
 // Expo's Push Notification Tool-> https://expo.io/notifications  (data examples: {"nid": 16} or {"nid": [15,16,9]})
 // TODO: replace with backend
 async function sendPushNotification(messageText, products) {
+  if (messageText.length === 0) {
+    Alert('Please enter a message.');
+    return;
+  }
   notifications.retrieveExpoPushToken().then((expoPushToken) => {
     const nids = [];
     products.forEach((product) => {
