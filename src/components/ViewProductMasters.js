@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Badge, List, Divider } from 'react-native-paper';
+import { EventRegister } from 'react-native-event-listeners';
 import Icon from './Icon';
 import { colors } from '../constants';
 // services
@@ -10,28 +11,82 @@ export default class ViewProductMasters extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      productNidsWithUnreadNotification: []
+      productNidsWithUnreadNotification: [],
+      unreadProductNidsUpdatedTime: 0
     };
+    this.addNotificationEventListener = this.addNotificationEventListener.bind(this);
     this.updateUnreadProductNids = this.updateUnreadProductNids.bind(this);
+    this.handleProductListItemOnPress = this.handleProductListItemOnPress.bind(this);
+    this.resetStack = this.resetStack.bind(this);
   }
 
   componentDidMount() {
+    this.addNotificationEventListener();
     this.updateUnreadProductNids();
   }
 
-  updateUnreadProductNids = () => {
-    notifications.findProductNidsWithUnreadNotification().then((nids) => {
-      this.setState({
-        productNidsWithUnreadNotification: nids
-      });
-      // console.log('productNidsWithUnreadNotification', this.state.productNidsWithUnreadNotification);
+  componentWillUnmount() {
+    EventRegister.removeEventListener(this.listener);
+  }
+
+  addNotificationEventListener = () => {
+    this.listener = EventRegister.addEventListener('notificationEvent', () => {
+      this.updateUnreadProductNids();
     });
   };
 
-  render() {
+  updateUnreadProductNids = () => {
+    notifications.findProductNidsWithUnreadNotification().then((nids) => {
+      const timeInMillis = new Date().getTime();
+      this.setState({
+        productNidsWithUnreadNotification: nids,
+        unreadProductNidsUpdatedTime: timeInMillis
+      });
+    });
+  };
+
+  handleProductListItemOnPress = (productMaster) => {
+    const { navigation } = this.props;
     const { productNidsWithUnreadNotification } = this.state;
+    if (productNidsWithUnreadNotification.includes(parseInt(productMaster.nid, 10))) {
+      notifications
+        .updateNotificationsAsReadForProduct(productMaster.nid)
+        .then(() => {
+          this.updateUnreadProductNids();
+          this.resetStack(productMaster.isBookmark);
+          navigation.navigate('ProductDetails', { productMaster });
+        });
+    } else {
+      navigation.navigate('ProductDetails', { productMaster });
+    }
+  };
+
+  resetStack = (isBookmark) => {
+    const { navigation } = this.props;
+    const { unreadProductNidsUpdatedTime } = this.state;
+    // reset other stack
+    if (isBookmark) {
+      navigation.navigate('ProductsStack', {
+        screen: 'Products',
+        params: {
+          productAction: '-'.concat(unreadProductNidsUpdatedTime)
+        }
+      });
+    } else {
+      navigation.navigate('BookmarksStack', {
+        screen: 'Bookmarks',
+        params: {
+          bookmarkAction: '-'.concat(unreadProductNidsUpdatedTime)
+        }
+      });
+    }
+  };
+
+  render() {
+    const { productNidsWithUnreadNotification, unreadProductNidsUpdatedTime } = this.state;
     return (
       <View
+        key={'view-productMasters-'.concat(unreadProductNidsUpdatedTime)}
         style={{
           backgroundColor: 'white',
           width: '100%',
@@ -82,8 +137,7 @@ export default class ViewProductMasters extends Component {
               )}
               onPress={() => {
                 productMaster.showLink &&
-                notifications.updateNotificationsAsReadForProduct(productMaster.nid) &&
-                this.props.navigation.navigate('ProductDetails', {productMaster})
+                this.handleProductListItemOnPress(productMaster)
               }}
               right={() => {
                 return productMaster.showLink

@@ -2,6 +2,7 @@
 import { Platform } from 'react-native';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
+import { EventRegister } from 'react-native-event-listeners';
 import StorageService from './StorageService';
 
 const NOTIFICATION_RECEIVED = 'notificationReceived'; // while app in foreground
@@ -29,7 +30,7 @@ async function saveExpoPushNotification(notification) {
     const storedPn = await StorageService.retrieve(key);
     if (storedPn) {
       console.log('Expo push notification already saved: ', key);
-      return;
+      return false;
     }
     // TODO: max limit?
     await StorageService.save(
@@ -38,7 +39,9 @@ async function saveExpoPushNotification(notification) {
     );
   } catch (error) {
     console.log('Unable to save Expo Push Notification to storage. ', error);
+    return false;
   }
+  return true;
 }
 
 function handleNotificationReceived(notification) {
@@ -56,7 +59,11 @@ async function handleNotification(notification, source) {
   if (pn && pn.id && pn.body && pn.body.length > 0) {
     console.log('handleNotification pn: ', pn);
     if (PERSIST_NOTIFICATION_ENABLED) {
-      await saveExpoPushNotification(pn);
+      saveExpoPushNotification(pn).then((saved) => {
+        if (saved) {
+          EventRegister.emit('notificationEvent', pn);
+        }
+      });
     }
   }
 }

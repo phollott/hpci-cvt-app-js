@@ -18,13 +18,14 @@ const productMaster = (product, id, language) => {
     searchKey: '',
     isNew: false,
     isUpdated: false,
+    isBookmark: false,
     productMetadata: [],
     consumerInformation: [],
     regulatoryAnnouncements: [] // productMetadata, consumerInformation and regulatoryAnnouncements are set for bookmarks, used when !isOnline
   };
 };
 
-const mapProduct = (product, id, language) => {
+const mapProduct = (product, id, language, isBookmark = false) => {
   const prod = productMaster(product, id, language);
   prod.showLink = true;
   prod.searchKey = [prod.brandName, prod.companyName, prod.ingredient]
@@ -32,6 +33,7 @@ const mapProduct = (product, id, language) => {
     .toLowerCase();
   prod.isNew = ProductsParserService.isProductNew(prod.approvalDate);
   prod.isUpdated = ProductsParserService.isProductUpdated(product);
+  prod.isBookmark = isBookmark;
   return prod;
 };
 
