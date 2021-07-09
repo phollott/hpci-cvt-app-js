@@ -24,7 +24,7 @@ const PushNotificationScreen = ({ navigation, route }) => {
     notifications
       .retrieveExpoPushToken()
       .then((token) => setExpoPushToken(token));
-  });
+  }, []);
 
   // use hook to get language and set as key so react creates a new component instance when language gets changed
   const language = useSelector((state) => state.settings.language);
