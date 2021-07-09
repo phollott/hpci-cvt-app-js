@@ -10,6 +10,8 @@ const NOTIFICATION_RESPONSE_RECEIVED = 'notificationResponseReceived'; // while 
 
 const PERSIST_NOTIFICATION_ENABLED = true; // must be true, can disable for testing
 
+const PERSIST_NOTIFICATION_KEY_PREFIX = 'expoPushNotification-';
+
 const pushNotification = (notification) => {
   if (notification && notification.request) {
     return {
@@ -26,7 +28,7 @@ const pushNotification = (notification) => {
 
 async function saveExpoPushNotification(notification) {
   try {
-    const key = 'expoPushNotification-'.concat(notification.id);
+    const key = PERSIST_NOTIFICATION_KEY_PREFIX.concat(notification.id);
     const storedPn = await StorageService.retrieve(key);
     if (storedPn) {
       console.log('Expo push notification already saved: ', key);
@@ -34,7 +36,7 @@ async function saveExpoPushNotification(notification) {
     }
     // TODO: max limit?
     await StorageService.save(
-      'expoPushNotification-'.concat(notification.id),
+      PERSIST_NOTIFICATION_KEY_PREFIX.concat(notification.id),
       JSON.stringify(notification)
     );
   } catch (error) {
@@ -167,7 +169,7 @@ async function findProductNidsWithUnreadNotification() {
     keys = await StorageService.retrieveKeys();
     if (keys.length > 0) {
       keys = keys.filter((key) => {
-        return key.startsWith('expoPushNotification');
+        return key.startsWith(PERSIST_NOTIFICATION_KEY_PREFIX);
       });
       storedNotifications =
         keys !== null ? await StorageService.retrieveMulti(keys) : [];
@@ -200,7 +202,7 @@ async function updateNotificationsAsReadForProduct(nid) {
     keys = await StorageService.retrieveKeys();
     if (keys.length > 0) {
       keys = keys.filter((key) => {
-        return key.startsWith('expoPushNotification');
+        return key.startsWith(PERSIST_NOTIFICATION_KEY_PREFIX);
       });
       storedNotifications =
         keys !== null ? await StorageService.retrieveMulti(keys) : [];
@@ -223,6 +225,30 @@ async function updateNotificationsAsReadForProduct(nid) {
   } catch (error) {
     console.log('updateNotificationsAsReadForProduct error: ', error);
   }
+}
+
+async function retrieveNotifications() {
+  let keys = [];
+  let storedNotifications = [];
+  const notifications = [];
+  try {
+    keys = await StorageService.retrieveKeys();
+    if (keys.length > 0) {
+      keys = keys.filter((key) => {
+        return key.startsWith(PERSIST_NOTIFICATION_KEY_PREFIX);
+      });
+      storedNotifications =
+        keys !== null ? await StorageService.retrieveMulti(keys) : [];
+      if (storedNotifications.length > 0) {
+        storedNotifications.forEach((notification) => {
+          notifications.push(JSON.parse(notification[1]));
+        });
+      }
+    }
+  } catch (error) {
+    console.log('retrieveNotifications error: ', error);
+  }
+  return notifications;
 }
 
 // can use this function below, OR use Expo's Push Notification Tool-> https://expo.io/notifications
@@ -251,5 +277,6 @@ export default {
   saveExpoPushToken,
   findProductNidsWithUnreadNotification,
   updateNotificationsAsReadForProduct,
+  retrieveNotifications,
   sendExpoPushNotification
 };

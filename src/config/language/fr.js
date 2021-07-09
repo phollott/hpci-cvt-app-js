@@ -56,6 +56,7 @@ export default {
       }
     },
     menu: {
+      notificationsLabel: 'Notifications...',
       settingsLabel: 'Paramètres',
       languageLabel: 'Langue...',
       privacyLabel: 'Confidentialité',
@@ -67,6 +68,12 @@ export default {
       removeAlert: {
         title: 'Supprimer les données',
         text: 'Supprimer les paramètres et les favoris?'
+      }
+    },
+    notifications: {
+      card: {
+        title: 'Notifications',
+        instructionText: ''
       }
     },
     settings: {

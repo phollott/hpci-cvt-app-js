@@ -56,6 +56,7 @@ export default {
       }
     },
     menu: {
+      notificationsLabel: 'Notifications...',
       settingsLabel: 'Settings',
       languageLabel: 'Language...',
       privacyLabel: 'Privacy',
@@ -73,6 +74,12 @@ export default {
       language: {
         title: 'Choose Language',
         touchText: 'English (Canada)'
+      }
+    },
+    notifications: {
+      card: {
+        title: 'Notifications',
+        instructionText: ''
       }
     },
     pushNotification: {
