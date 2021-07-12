@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { ScrollView, StyleSheet, Text, View, Linking } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Badge, List, Divider } from 'react-native-paper';
 import { useTheme } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
@@ -66,7 +66,7 @@ const NotificationsScreen = ({ navigation, route }) => {
           title={t('home.notifications.card.title')}
           text={t('home.notifications.card.instructionText')}
         />
-        <View style={gStyle.spacer16} />
+        <View style={gStyle.spacer8} />
         <View
           style={{
             backgroundColor: 'white',
@@ -84,8 +84,18 @@ const NotificationsScreen = ({ navigation, route }) => {
                     <>
                       <Icon
                         reverse
-                        name={ notification.data.nid && notification.data.nid.length > 0 ? 'shield-virus' : 'envelope-open' }
-                        color={ notification.data.nid && notification.data.nid.length > 0 ? colors.darkColor : colors.darkColor }
+                        name={
+                          notification.data.nid &&
+                          notification.data.nid.length > 0
+                            ? 'shield-virus'
+                            : 'envelope-open'
+                        }
+                        color={
+                          notification.data.nid &&
+                          notification.data.nid.length > 0
+                            ? colors.darkColor
+                            : colors.darkColor
+                        }
                       />
                       {!notification.isRead && (
                         <Badge
