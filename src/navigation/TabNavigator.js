@@ -55,6 +55,15 @@ const TabNavigator = () => {
       <Tab.Screen
         name="HomeStack"
         component={HomeStack}
+        listeners={({ navigation }) => ({
+          tabPress: (event) => {
+            event.preventDefault();
+            // nav stacks (populated from state) to reset
+            navigation.navigate('ProductsStack', { screen: 'Products' });
+            navigation.navigate('BookmarksStack', { screen: 'Bookmarks' });
+            navigation.navigate('HomeStack', { screen: 'HomeNavigator' });
+          }
+        })}
         options={{
           tabBarLabel: t('tab.screen.homeLabel'),
           tabBarIcon: HomeTabBarIcon
@@ -63,6 +72,15 @@ const TabNavigator = () => {
       <Tab.Screen
         name="ProductsStack"
         component={ProductsStack}
+        listeners={({ navigation }) => ({
+          tabPress: (event) => {
+            event.preventDefault();
+            // nav stacks (populated from state) to reset
+            navigation.navigate('HomeStack', { screen: 'HomeNavigator' });
+            navigation.navigate('BookmarksStack', { screen: 'Bookmarks' });
+            navigation.navigate('ProductsStack', { screen: 'Products' });
+          }
+        })}
         options={{
           tabBarLabel: t('tab.screen.productsLabel'),
           tabBarIcon: ProductsTabBarIcon
@@ -71,6 +89,15 @@ const TabNavigator = () => {
       <Tab.Screen
         name="BookmarksStack"
         component={BookmarksStack}
+        listeners={({ navigation }) => ({
+          tabPress: (event) => {
+            event.preventDefault();
+            // nav stacks (populated from state) to reset
+            navigation.navigate('HomeStack', { screen: 'HomeNavigator' });
+            navigation.navigate('ProductsStack', { screen: 'Products' });
+            navigation.navigate('BookmarksStack', { screen: 'Bookmarks' });
+          }
+        })}
         options={{
           tabBarLabel: t('tab.screen.bookmarksLabel'),
           tabBarIcon: BookmarksTabBarIcon
