@@ -32,11 +32,16 @@ const NotificationsScreen = ({ navigation, route }) => {
   let notificationsViewKey = language.concat('NotificationsView');
 
   // concat notification action so screen rerenders when notification is added or removed
-  if (typeof route.params !== "undefined" && typeof route.params.notificationAction !== "undefined") {
-    notificationsViewKey = notificationsViewKey.concat(route.params.notificationAction);
+  if (
+    typeof route.params !== 'undefined' &&
+    typeof route.params.notificationAction !== 'undefined'
+  ) {
+    notificationsViewKey = notificationsViewKey.concat(
+      route.params.notificationAction
+    );
   }
 
-  function getFormattedDate(timeOfNotification) {
+  const getFormattedDate = (timeOfNotification) => {
     let formattedDate = productsParser.getFormattedDateFromHtml(
       '<time datetime="'
         .concat(
@@ -57,7 +62,7 @@ const NotificationsScreen = ({ navigation, route }) => {
       formattedDate = formattedDate.replace(' ', '\n');
     }
     return formattedDate;
-  }
+  };
 
   return (
     <View style={gStyle.container[theme]} key={notificationsViewKey}>
