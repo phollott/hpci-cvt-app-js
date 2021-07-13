@@ -12,7 +12,12 @@ const NotificationsTouch = ({ navigation, route }) => (
     accessibilityTraits="button"
     activeOpacity={gStyle.activeOpacity}
     onPress={() => {
-      navigation.navigate('HomeStack', { screen: 'Notifications' });
+      navigation.navigate('HomeStack', {
+        screen: 'Notifications',
+        params: {
+          notificationAction: '-touch-'.concat(new Date().getTime().toString())
+        }
+      });
     }}
     style={{ paddingHorizontal: 16, paddingVertical: 8 }}
   >

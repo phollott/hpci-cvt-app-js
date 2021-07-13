@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Swipeable } from 'react-native-gesture-handler';
 import { Badge, List, Divider } from 'react-native-paper';
 import { useTheme } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
@@ -9,23 +10,33 @@ import { colors, gStyle } from '../constants';
 import { lang } from '../constants/constants';
 import Icon from '../components/Icon';
 import ReadMoreText from '../components/ReadMoreText';
+import Touch from '../components/Touch';
 import ViewCardText from '../components/ViewCardText';
 import {
   notifications as notificationsService,
   productsParser
 } from '../services';
 
+// TODO: - show text when there are no notifications.
+//       - fr
+//       - react to notification event
+
 const NotificationsScreen = ({ navigation, route }) => {
   const theme = useTheme();
 
-  // key: notificationsService.PERSIST_NOTIFICATION_KEY_PREFIX + notification.id
   const [notifications, setNotifications] = useState([]);
 
-  useEffect(() => {
+  const dateComparator = (a, b) => {
+    return a.date < b.date ? 1 : -1;
+  };
+
+  const retrieveNotifications = () => {
     notificationsService.retrieveNotifications().then((retrieved) => {
-      setNotifications(retrieved.sort((a, b) => (a.date < b.date) ? 1 : -1));
+      setNotifications(retrieved.sort(dateComparator));
     });
-  }, []);
+  };
+
+  useEffect(retrieveNotifications, []);
 
   // use hook to get language and set as key so react creates a new component instance when language gets changed
   const language = useSelector((state) => state.settings.language);
@@ -40,6 +51,8 @@ const NotificationsScreen = ({ navigation, route }) => {
       route.params.notificationAction
     );
   }
+
+  const isOnline = useSelector((state) => state.settings.isOnline);
 
   const getFormattedDate = (timeOfNotification) => {
     let formattedDate = productsParser.getFormattedDateFromHtml(
@@ -64,6 +77,63 @@ const NotificationsScreen = ({ navigation, route }) => {
     return formattedDate;
   };
 
+  const deleteNotification = (notification) => {
+    const { id } = notification;
+    notificationsService.deleteNotification(notification).then(() => {
+      // update notifications state
+      setNotifications((prevState) => {
+        const newState = prevState.filter((value) => {
+          return value.id !== id;
+        });
+        return newState;
+      });
+    });
+  };
+
+  const handleNotificationOnPress = (notification) => {
+    const { id, isRead } = notification;
+    if (
+      !isRead &&
+      !(notification.data.nid && notification.data.nid.length > 0)
+    ) {
+      notificationsService
+        .updateNotificationIsRead(notification, true)
+        .then((updated) => {
+          // update notifications state
+          setNotifications((prevState) => {
+            const currState = prevState.filter((value) => {
+              return value.id !== id;
+            });
+            currState.push(updated);
+            currState.sort(dateComparator);
+            return currState;
+          });
+        });
+    }
+    if (notification.data.nid && notification.data.nid.length > 0) {
+      if (isOnline) {
+        navigation.navigate('ProductsStack', { screen: 'Products' });
+      } else {
+        navigation.navigate('BookmarksStack', { screen: 'Bookmarks' });
+      }
+    }
+  };
+
+  const renderRightActions = (notification) => (
+    <Touch
+      style={styles.rightOpenContainer}
+      textStyle={styles.rightRemoveItem}
+      text="Remove"
+      onPress={() => {
+        deleteNotification(notification);
+      }}
+    />
+  );
+
+  const swipeFromRightOpen = () => {
+    // console.log('Swipe from right');
+  };
+
   return (
     <View style={gStyle.container[theme]} key={notificationsViewKey}>
       <ScrollView contentContainerStyle={gStyle.contentContainer}>
@@ -82,62 +152,69 @@ const NotificationsScreen = ({ navigation, route }) => {
           {notifications.map((notification) => (
             <View key={'view-'.concat(notification.id)}>
               <Divider />
-              <List.Item
-                key={notification.id}
-                left={() => {
-                  return (
-                    <>
-                      <Icon
-                        reverse
-                        name={
-                          notification.data.nid &&
-                          notification.data.nid.length > 0
-                            ? 'shield-virus'
-                            : 'envelope-open'
-                        }
-                        color={
-                          notification.data.nid &&
-                          notification.data.nid.length > 0
-                            ? colors.darkColor
-                            : colors.darkColor
-                        }
-                      />
-                      {!notification.isRead && (
-                        <Badge
-                          size={14}
-                          style={[
-                            styles.notificationBadge,
-                            { backgroundColor: colors.green }
-                          ]}
+              <Swipeable
+                renderRightActions={() => renderRightActions(notification)}
+                onSwipeableRightOpen={swipeFromRightOpen}
+              >
+                <List.Item
+                  key={notification.id}
+                  left={() => {
+                    return (
+                      <>
+                        <Icon
+                          reverse
+                          name={
+                            notification.data.nid &&
+                            notification.data.nid.length > 0
+                              ? 'shield-virus'
+                              : 'envelope-open'
+                          }
+                          color={
+                            notification.data.nid &&
+                            notification.data.nid.length > 0
+                              ? colors.darkColor
+                              : colors.darkColor
+                          }
                         />
-                      )}
-                    </>
-                  );
-                }}
-                title={<Text>{notification.title.trim()}</Text>}
-                titleStyle={{ fontWeight: 'bold' }}
-                titleNumberOfLines={2}
-                description={() => (
-                  <ReadMoreText
-                    text={notification.body.trim()}
-                    numberOfLines={2}
-                  />
-                )}
-                onPress={() => {}}
-                right={() => (
-                  <Text
-                    style={{
-                      color: colors.grey,
-                      fontSize: 12,
-                      marginTop: 12,
-                      marginRight: 14,
-                      textAlign: 'right'
-                    }}
-                  >
-                    {getFormattedDate(notification.date)}
-                  </Text>
-                )}
-              />
+                        {!notification.isRead && (
+                          <Badge
+                            size={14}
+                            style={[
+                              styles.notificationBadge,
+                              { backgroundColor: colors.green }
+                            ]}
+                          />
+                        )}
+                      </>
+                    );
+                  }}
+                  title={<Text>{notification.title.trim()}</Text>}
+                  titleStyle={{ fontWeight: 'bold' }}
+                  titleNumberOfLines={2}
+                  description={() => (
+                    <ReadMoreText
+                      text={notification.body.trim()}
+                      numberOfLines={2}
+                    />
+                  )}
+                  onPress={() => {
+                    handleNotificationOnPress(notification);
+                  }}
+                  right={() => (
+                    <Text
+                      style={{
+                        color: colors.grey,
+                        fontSize: 12,
+                        marginTop: 12,
+                        marginRight: 14,
+                        textAlign: 'right'
+                      }}
+                    >
+                      {getFormattedDate(notification.date)}
+                    </Text>
+                  )}
+                />
+              </Swipeable>
               <Divider />
             </View>
           ))}
@@ -153,6 +230,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 2,
     left: 36
+  },
+  rightOpenContainer: {
+    backgroundColor: colors.red,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    marginLeft: 20
+  },
+  rightRemoveItem: {
+    color: colors.white,
+    paddingHorizontal: 40,
+    paddingVertical: 20
   }
 });
 

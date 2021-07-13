@@ -9,6 +9,7 @@ const grey = '#848484'; // (e.g. drawer text)
 const lightGreen = '#e5f2e5'; // (e.g. row highlight)
 const lightGrey = '#f2f2f2'; // primary background color on screens and drawer
 const orange = '#ff9f40'; // (e.g. updated badge)
+const red = '#af3c43'; // (e.g. remove button background)
 const white50 = 'rgba(255, 255, 255, 0.5)'; // (e.g. inactive tab icons)
 
 export default {
@@ -22,5 +23,6 @@ export default {
   lightGreen,
   lightGrey,
   orange,
+  red,
   white50
 };

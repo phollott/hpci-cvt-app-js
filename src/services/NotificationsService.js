@@ -20,11 +20,13 @@ const pushNotification = (notification) => {
       body: notification.request.content.body, // message
       data: { ...notification.request.content.data }, // ex: {}, {"nid": 16}, {"nid": [16, 18, 20]}
       title: notification.request.content.title,
-      isRead: false // TODO: set true when opened on notifications screen, or if nid is in data, when product details is opened in products or bookmarks
+      isRead: false
     };
   }
   return {};
 };
+
+// notificationEvent emitted by: handleNotification, deleteNotification, updateNotificationIsRead
 
 async function saveExpoPushNotification(notification) {
   try {
@@ -251,6 +253,50 @@ async function retrieveNotifications() {
   return notifications;
 }
 
+async function deleteNotification(notification) {
+  const { id } = notification;
+  try {
+    StorageService.delete(PERSIST_NOTIFICATION_KEY_PREFIX.concat(id)).then(
+      () => {
+        EventRegister.emit('notificationEvent', notification);
+      }
+    );
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log(
+      'Unable to delete notification '
+        .concat(PERSIST_NOTIFICATION_KEY_PREFIX)
+        .concat(id)
+        .concat(' from storage. '),
+      error
+    );
+  }
+}
+
+async function updateNotificationIsRead(inNotification, isRead) {
+  const { id } = inNotification;
+  const notification = JSON.parse(JSON.stringify(inNotification));
+  notification.isRead = isRead;
+  try {
+    StorageService.save(
+      PERSIST_NOTIFICATION_KEY_PREFIX.concat(id),
+      JSON.stringify(notification)
+    ).then(() => {
+      EventRegister.emit('notificationEvent', notification);
+    });
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log(
+      'Unable to update stored notification '
+        .concat(PERSIST_NOTIFICATION_KEY_PREFIX)
+        .concat(id)
+        .concat(' IsRead. '),
+      error
+    );
+  }
+  return notification;
+}
+
 // can use this function below, OR use Expo's Push Notification Tool-> https://expo.io/notifications
 // TODO: backend - https://docs.expo.io/push-notifications/sending-notifications/
 async function sendExpoPushNotification(message) {
@@ -278,5 +324,7 @@ export default {
   findProductNidsWithUnreadNotification,
   updateNotificationsAsReadForProduct,
   retrieveNotifications,
+  deleteNotification,
+  updateNotificationIsRead,
   sendExpoPushNotification
 };
