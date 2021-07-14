@@ -161,7 +161,7 @@ async function sendPushNotification(messageText, products) {
       to: expoPushToken,
       sound: 'default',
       badge: 1,
-      title: 'HPCI CVT',
+      title: 'Health Canada • Santé Canada',
       body: messageText,
       data: { nid: nids }
     };

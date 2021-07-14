@@ -30,11 +30,14 @@ export default class ViewProductMasters extends Component {
   }
 
   addNotificationEventListener = () => {
-    this.listener = EventRegister.addEventListener('notificationEvent', (notification) => {
-      if (notification.data.nid && notification.data.nid.length > 0) {
-        this.updateUnreadProductNids();
+    this.listener = EventRegister.addEventListener(
+      'notificationEvent',
+      (notification) => {
+        if (notifications.isProductSpecific(notification)) {
+          this.updateUnreadProductNids();
+        }
       }
-    });
+    );
   };
 
   updateUnreadProductNids = () => {
@@ -50,7 +53,11 @@ export default class ViewProductMasters extends Component {
   handleProductListItemOnPress = (productMaster) => {
     const { navigation } = this.props;
     const { productNidsWithUnreadNotification } = this.state;
-    if (productNidsWithUnreadNotification.includes(parseInt(productMaster.nid, 10))) {
+    if (
+      productNidsWithUnreadNotification.includes(
+        parseInt(productMaster.nid, 10)
+      )
+    ) {
       notifications
         .updateNotificationsAsReadForProduct(productMaster.nid)
         .then(() => {
@@ -85,7 +92,11 @@ export default class ViewProductMasters extends Component {
   };
 
   render() {
-    const { productNidsWithUnreadNotification, unreadProductNidsUpdatedTime } = this.state;
+    const { productMasters } = this.props;
+    const {
+      productNidsWithUnreadNotification,
+      unreadProductNidsUpdatedTime
+    } = this.state;
     return (
       <View
         key={'view-productMasters-'.concat(unreadProductNidsUpdatedTime)}
@@ -95,10 +106,18 @@ export default class ViewProductMasters extends Component {
           justifyContent: 'center'
         }}
       >
-        {this.props.productMasters.map((productMaster) => (
-          <View key={'view-'.concat(productMaster.key)} style={ (productMaster.isNew || productMaster.isUpdated) ? { backgroundColor: colors.lightGreen } : {} }>
+        {productMasters.map((productMaster) => (
+          <View
+            key={'view-'.concat(productMaster.key)}
+            style={
+              productMaster.isNew || productMaster.isUpdated
+                ? { backgroundColor: colors.lightGreen }
+                : {}
+            }
+          >
             <Divider />
-            <List.Item key={productMaster.key}
+            <List.Item
+              key={productMaster.key}
               left={() => {
                 return (
                   <>

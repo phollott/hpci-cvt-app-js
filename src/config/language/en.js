@@ -5,15 +5,16 @@ export default {
   },
   common: {
     alert: {
-      title: 'Alert',
-      button: {
-        ok: 'OK',
-        cancel: 'Cancel'
-      }
+      title: 'Alert'
     },
     badge: {
       new: 'New',
       updated: 'Updated'
+    },
+    button: {
+      ok: 'OK',
+      cancel: 'Cancel',
+      remove: 'Remove'
     },
     message: {
       loading: 'Loading, please wait...',
@@ -70,16 +71,17 @@ export default {
         text: 'Remove settings and bookmarks?'
       }
     },
-    settings: {
-      language: {
-        title: 'Choose Language',
-        touchText: 'English (Canada)'
-      }
-    },
     notifications: {
       card: {
         title: 'Notifications',
         instructionText: ''
+      },
+      emptyText: 'There are no notifications to display at this time.'
+    },
+    settings: {
+      language: {
+        title: 'Choose Language',
+        touchText: 'English (Canada)'
       }
     },
     pushNotification: {
