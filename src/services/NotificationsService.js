@@ -20,7 +20,8 @@ const pushNotification = (notification) => {
       body: notification.request.content.body, // message
       data: { ...notification.request.content.data }, // ex: {}, {"nid": 16}, {"nid": [16, 18, 20]}
       title: notification.request.content.title,
-      isRead: false
+      isRead: false,
+      isRemoved: false
     };
   }
   return {};
@@ -28,12 +29,26 @@ const pushNotification = (notification) => {
 
 // notificationEvent emitted by: handleNotification, deleteNotification, updateNotificationIsRead
 
+const isProductSpecific = (notification) => {
+  const { data } = notification;
+  let hasNid = false;
+  if (
+    typeof data.nid !== 'undefined' &&
+    data.nid !== null &&
+    ((Number.isInteger(data.nid) && data.nid > 0) ||
+      (Array.isArray(data.nid) && notification.data.nid.length > 0))
+  ) {
+    hasNid = true;
+  }
+  return hasNid;
+};
+
 async function saveExpoPushNotification(notification) {
   try {
     const key = PERSIST_NOTIFICATION_KEY_PREFIX.concat(notification.id);
     const storedPn = await StorageService.retrieve(key);
     if (storedPn) {
-      console.log('Expo push notification already saved: ', key);
+      // console.log('Expo push notification already saved: ', key);
       return false;
     }
     // TODO: max limit?
@@ -58,10 +73,10 @@ function handleNotificationResponseReceived(response) {
 
 async function handleNotification(notification, source) {
   // console.log('handleNotification notification: ', notification);
-  console.log('handleNotification source: ', source);
+  // console.log('handleNotification source: ', source);
   const pn = pushNotification(notification);
   if (pn && pn.id && pn.body && pn.body.length > 0) {
-    console.log('handleNotification pn: ', pn);
+    // console.log('handleNotification pn: ', pn);
     if (PERSIST_NOTIFICATION_ENABLED) {
       saveExpoPushNotification(pn).then((saved) => {
         if (saved) {
@@ -125,7 +140,7 @@ async function registerForPushNotificationsAsync() {
     // token = (await Notifications.getExpoPushTokenAsync()).data;
     const experienceId = '@hpci-cvt/hpci-cvt-app-js';
     token = (await Notifications.getExpoPushTokenAsync(experienceId)).data;
-    console.log('Received Expo push token: ', token);
+    // console.log('Received Expo push token: ', token);
   } else {
     console.log('Must use physical device for Push Notifications.');
   }
@@ -179,7 +194,7 @@ async function findProductNidsWithUnreadNotification() {
         storedNotifications = storedNotifications.filter((notification) => {
           const pn = JSON.parse(notification[1]);
           const { data, isRead } = pn;
-          if (data.nid && !isRead) {
+          if (!isRead && isProductSpecific(pn)) {
             if (Array.isArray(data.nid)) {
               nids.push(...data.nid);
             } else {
@@ -253,11 +268,13 @@ async function retrieveNotifications() {
   return notifications;
 }
 
-async function deleteNotification(notification) {
-  const { id } = notification;
+async function deleteNotification(inNotification) {
+  const { id } = inNotification;
+  const notification = JSON.parse(JSON.stringify(inNotification));
   try {
     StorageService.delete(PERSIST_NOTIFICATION_KEY_PREFIX.concat(id)).then(
       () => {
+        notification.isRemoved = true;
         EventRegister.emit('notificationEvent', notification);
       }
     );
@@ -326,5 +343,6 @@ export default {
   retrieveNotifications,
   deleteNotification,
   updateNotificationIsRead,
+  isProductSpecific,
   sendExpoPushNotification
 };

@@ -5,15 +5,16 @@ export default {
   },
   common: {
     alert: {
-      title: 'Alerte',
-      button: {
-        ok: 'OK',
-        cancel: 'Annuler'
-      }
+      title: 'Alerte'
     },
     badge: {
       new: 'Nouveau',
       updated: 'Modifié'
+    },
+    button: {
+      ok: 'OK',
+      cancel: 'Annuler',
+      remove: 'Supprimer'
     },
     message: {
       loading: 'Chargement en course, veuillez patienter...',
@@ -74,7 +75,8 @@ export default {
       card: {
         title: 'Notifications',
         instructionText: ''
-      }
+      },
+      emptyText: 'Il n’y a actuellement aucun notification à afficher.'
     },
     settings: {
       language: {

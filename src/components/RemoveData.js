@@ -20,12 +20,12 @@ const RemoveData = (props) => {
       t('home.menu.removeAlert.text'),
       [
         {
-          text: t('common.alert.button.cancel'),
+          text: t('common.button.cancel'),
           onPress: () => {},
           style: 'cancel'
         },
         {
-          text: t('common.alert.button.ok'),
+          text: t('common.button.ok'),
           onPress: async () => {
             // clear settings, bookmarks
             storage.deleteAll().then(navStacks(props));
