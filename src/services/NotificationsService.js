@@ -27,14 +27,17 @@ const pushNotification = (notification) => {
   return {};
 };
 
+const isNil = (value) => {
+  return typeof value === 'undefined' || value === null;
+};
+
 // notificationEvent emitted by: handleNotification, deleteNotification, updateNotificationIsRead
 
 const isProductSpecific = (notification) => {
   const { data } = notification;
   let hasNid = false;
   if (
-    typeof data.nid !== 'undefined' &&
-    data.nid !== null &&
+    !isNil(data.nid) &&
     ((Number.isInteger(data.nid) && data.nid > 0) ||
       (Array.isArray(data.nid) && notification.data.nid.length > 0))
   ) {
@@ -169,10 +172,7 @@ async function retrieveExpoPushToken() {
 
 async function saveExpoPushToken(token) {
   try {
-    await StorageService.save(
-      'expoPushToken',
-      typeof token !== 'undefined' ? token : ''
-    );
+    await StorageService.save('expoPushToken', !isNil(token) ? token : '');
   } catch (error) {
     console.log('Unable to save expoPushToken to storage. ', error);
   }

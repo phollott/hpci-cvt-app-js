@@ -68,7 +68,7 @@ const NotificationsScreen = ({ navigation, route }) => {
   const language = useSelector((state) => state.settings.language);
   let notificationsViewKey = language.concat('NotificationsView');
 
-  // concat notification action so screen rerenders when notification is added or removed
+  // concat notification action so screen rerenders, e.g. when NotificationsTouch is pressed
   if (
     typeof route.params !== 'undefined' &&
     typeof route.params.notificationAction !== 'undefined'
