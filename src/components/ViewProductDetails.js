@@ -90,6 +90,25 @@ class ViewProductDetails extends Component {
     return false;
   }
 
+  checkForUpdatedOrNewResource() {
+    const { productResourceList } = this.props;
+    if (
+      productResourceList.some((resource) => {
+        return resource.isUpdated;
+      })
+    ) {
+      return 'updated';
+    }
+    if (
+      productResourceList.some((resource) => {
+        return resource.isNew;
+      })
+    ) {
+      return 'new';
+    }
+    return '';
+  }
+
   render() {
     const { productMaster, productResourceList, settings } = this.props;
     const { productMetadata, consumerInformation, regulatoryAnnouncements } = this.state;
@@ -221,13 +240,32 @@ class ViewProductDetails extends Component {
               titleStyle={{ fontWeight: 'bold' }}
               titleNumberOfLines={2}
               theme={{ colors: { primary: colors.blue } }}
-              left={(props) => (
-                <List.Icon
-                  {...props}
-                  icon="web"
-                  style={{ marginHorizontal: 0 }}
-                />
-              )}
+              left={(props) => {
+                const isUpdatedOrNew = this.checkForUpdatedOrNewResource();
+                return (
+                  <>
+                    <List.Icon
+                      {...props}
+                      icon="web"
+                      style={{ marginHorizontal: 0 }}
+                    />
+                    {isUpdatedOrNew !== '' && (
+                      <Badge
+                        size={16}
+                        style={[
+                          styles.updateIndicatorBadge,
+                          {
+                            backgroundColor:
+                              isUpdatedOrNew === 'new'
+                                ? colors.green
+                                : colors.orange
+                          }
+                        ]}
+                      />
+                    )}
+                  </>
+                );
+              }}
             >
               <View style={{ marginLeft: -64 }}>
                 {productResourceList.map((productResource) => (
@@ -385,6 +423,11 @@ const styles = StyleSheet.create({
     marginLeft: 4,
     marginRight: 4,
     paddingHorizontal: 8
+  },
+  updateIndicatorBadge: {
+    position: 'absolute',
+    top: 8,
+    left: 22
   }
 });
 
