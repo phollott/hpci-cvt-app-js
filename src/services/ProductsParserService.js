@@ -104,7 +104,7 @@ const isProductNew = (productApprovalDate) => {
   const dtraw = new Date(productApprovalDate);
   const dtutc = Date.UTC(
     dtraw.getFullYear(),
-    dtraw.getMonth() + 1,
+    dtraw.getMonth(),
     dtraw.getDate()
   );
   const dtdif = Math.floor((Date.now() - dtutc) / MS_PER_DAY);
