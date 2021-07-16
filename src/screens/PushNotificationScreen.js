@@ -10,6 +10,7 @@ import Alert from '../components/Alert';
 import Touch from '../components/Touch';
 import ViewCardText from '../components/ViewCardText';
 import { addProduct } from '../redux/actions/productActions';
+import { addBookmark } from '../redux/actions/bookmarkActions';
 import { notifications, productsParser } from '../services';
 
 // dev tool
@@ -58,6 +59,7 @@ const PushNotificationScreen = ({ navigation, route }) => {
       .concat('-')
       .concat(new Date().getDate());
   };
+  const bookmarksInStore = useSelector((state) => state.bookmarks);
   const productsInStore = useSelector((state) => {
     return state.products.filter((product) => {
       return productsParser.isAuthorizedProduct(product);
@@ -91,7 +93,7 @@ const PushNotificationScreen = ({ navigation, route }) => {
               newTestResource.date = resource.date.replace('2021-03-12', getCurrentDate()).replace('Fri, 03/12/2021 - 10:10', '');
               break;
             case '29': // P:
-              newTestResource.date = resource.date.replace('2020-12-09', getCurrentDate()).replace('Wed, 12/09/2020 - 12:00', 'Wed, 12/09/2020 - 12:00');
+              newTestResource.date = resource.date.replace('2020-12-09', getCurrentDate()).replace('Wed, 12/09/2020 - 12:00', '');
               break;
             case '19': // B:
               newTestResource.date = resource.date.replace('2020-10-12', getCurrentDate()).replace('Mon, 10/12/2020 - 12:00', '');
@@ -117,6 +119,8 @@ const PushNotificationScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const replaceProductWithTestProduct = (enfrTestProduct) =>
     dispatch(addProduct(enfrTestProduct));
+  const replaceBookmarkWithTestProduct = (enfrTestProduct) =>
+    dispatch(addBookmark(enfrTestProduct));
 
   return (
     <View style={gStyle.container[theme]} key={pushNotificationViewKey}>
@@ -188,6 +192,10 @@ const PushNotificationScreen = ({ navigation, route }) => {
                           return tp.nid == product.nid;
                         });
                         replaceProductWithTestProduct(testProduct);
+                        // dispatch if bookmarked
+                        if (bookmarksInStore.some((bm) => { return bm.nid == product.nid })) {
+                          replaceBookmarkWithTestProduct([...testProduct]);
+                        }
                       }
                     });
                   }
