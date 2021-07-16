@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import { ScrollView, Text, View, Linking } from 'react-native';
 import { Checkbox, TextInput } from 'react-native-paper';
 import { useTheme } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { t } from 'i18n-js';
 import { gStyle } from '../constants';
 import Alert from '../components/Alert';
 import Touch from '../components/Touch';
 import ViewCardText from '../components/ViewCardText';
-import { notifications } from '../services';
+import { addProduct } from '../redux/actions/productActions';
+import { notifications, productsParser } from '../services';
 
 // dev tool
 
@@ -42,6 +43,80 @@ const PushNotificationScreen = ({ navigation, route }) => {
   covid19Products.push({ nid: 8, brandName: 'Bamlanivimab', checked: false });
 
   const [products, setProducts] = React.useState(covid19Products);
+
+  const [addTestResourceChecked, setAddTestResourceChecked] = React.useState(false);
+
+  // prep test resource for all products and set to local state
+  const getMonth = () => {
+    return 1 + new Date().getMonth();
+  };
+  const getCurrentDate = () => {
+    return ''
+      .concat(new Date().getFullYear())
+      .concat('-')
+      .concat(getMonth().length === 2 ? getMonth() : '0'.concat(getMonth()))
+      .concat('-')
+      .concat(new Date().getDate());
+  };
+  const productsInStore = useSelector((state) => {
+    return state.products.filter((product) => {
+      return productsParser.isAuthorizedProduct(product);
+    });
+  });
+  const [testProducts, setTestProducts] = useState({});
+  useEffect(() => {
+    const productsWithTestProducts = [];
+    productsInStore.forEach((product) => {
+      //console.log(product.nid);
+      const testProduct = { ...product };
+      const resourcesWithTestResource = [];
+      let newTestResource = {};
+      product.resources.forEach((resource) => {
+        // consummer rds for A,M,C,J,P,B,V: 77,56,92,106,29,19,8
+        if (['77', '56', '92', '106', '29', '19', '8'].includes(resource.id)) {
+          newTestResource = { ...resource };
+          newTestResource.id = resource.id.concat('000');
+          newTestResource.resource_link = resource.resource_link.replace('>Regulatory Decision Summary<', '>Regulatory Decision Summary - test<');
+          switch (resource.id) {
+            case '77': // A:
+              newTestResource.date = resource.date.replace('2021-02-26', getCurrentDate()).replace('Fri, 02/26/2021 - 12:12', '');
+              break;
+            case '56': // M:
+              newTestResource.date = resource.date.replace('2020-12-23', getCurrentDate()).replace('Wed, 12/23/2020 - 12:00', '');
+              break;
+            case '92': // C:
+              newTestResource.date = resource.date.replace('2021-02-26', getCurrentDate()).replace('Fri, 02/26/2021 - 10:10', '');
+              break;
+            case '106': // J:
+              newTestResource.date = resource.date.replace('2021-03-12', getCurrentDate()).replace('Fri, 03/12/2021 - 10:10', '');
+              break;
+            case '29': // P:
+              newTestResource.date = resource.date.replace('2020-12-09', getCurrentDate()).replace('Wed, 12/09/2020 - 12:00', 'Wed, 12/09/2020 - 12:00');
+              break;
+            case '19': // B:
+              newTestResource.date = resource.date.replace('2020-10-12', getCurrentDate()).replace('Mon, 10/12/2020 - 12:00', '');
+              break;
+            case '8': // V:
+              newTestResource.date = resource.date.replace('2020-12-02', getCurrentDate()).replace('Wed, 12/02/2020 - 12:00', '');
+              newTestResource.date = newTestResource.date.replace('2020-07-27', getCurrentDate()).replace('Mon, 07/27/2020 - 12:00', '');
+              break;
+            default:
+              break;
+          }
+          resourcesWithTestResource.push(resource);
+          resourcesWithTestResource.push(newTestResource);
+        } else {
+          resourcesWithTestResource.push(resource);
+        }
+      });
+      testProduct.resources = [...resourcesWithTestResource];
+      productsWithTestProducts.push(testProduct);
+    });
+    setTestProducts(productsWithTestProducts);
+  }, []);
+  const dispatch = useDispatch();
+  const replaceProductWithTestProduct = (enfrTestProduct) =>
+    dispatch(addProduct(enfrTestProduct));
 
   return (
     <View style={gStyle.container[theme]} key={pushNotificationViewKey}>
@@ -87,10 +162,35 @@ const PushNotificationScreen = ({ navigation, route }) => {
                 </View>
               ))}
             </View>
+            <View>
+              <Checkbox.Item
+                label={'Add test resource'}
+                status={addTestResourceChecked ? 'checked' : 'unchecked'}
+                onPress={() => {
+                  setAddTestResourceChecked(!addTestResourceChecked);
+                }}
+                style={{ marginVertical: 0 }}
+              />
+            </View>
             <View style={gStyle.spacer8} />
             <View style={{ width: '100%', justifyContent: 'center' }}>
               <Touch
                 onPress={async () => {
+                  if (messageText.length === 0) {
+                    Alert('Please enter a message.');
+                    return;
+                  }
+                  if (addTestResourceChecked) {
+                    products.forEach((product) => {
+                      if (product.checked) {
+                        // get en and fr products from testProducts and dispatch
+                        const testProduct = testProducts.filter((tp) => {
+                          return tp.nid == product.nid;
+                        });
+                        replaceProductWithTestProduct(testProduct);
+                      }
+                    });
+                  }
                   await sendPushNotification(messageText, products);
                 }}
                 text={t('home.pushNotification.button.sendTitle')}
@@ -146,10 +246,6 @@ const PushNotificationScreen = ({ navigation, route }) => {
 // Expo's Push Notification Tool-> https://expo.io/notifications  (data examples: {"nid": 16} or {"nid": [15,16,9]})
 // TODO: replace with backend
 async function sendPushNotification(messageText, products) {
-  if (messageText.length === 0) {
-    Alert('Please enter a message.');
-    return;
-  }
   notifications.retrieveExpoPushToken().then((expoPushToken) => {
     const nids = [];
     products.forEach((product) => {
