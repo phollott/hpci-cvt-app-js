@@ -121,6 +121,24 @@ const PushNotificationScreen = ({ navigation, route }) => {
     dispatch(addProduct(enfrTestProduct));
   const replaceBookmarkWithTestProduct = (enfrTestProduct) =>
     dispatch(addBookmark(enfrTestProduct));
+  const navStacks = () => {
+    // [mrj] hack: navigation is used to ensure screens are re-rendered after dispatch (and before pn)
+    navigation.navigate('BookmarksStack', {
+      screen: 'Bookmarks',
+      params: {
+        bookmarkAction: '-pntest-'.concat(new Date().getTime().toString())
+      }
+    });
+    navigation.navigate('ProductsStack', {
+      screen: 'Products',
+      params: {
+        productAction: '-pntest-'.concat(new Date().getTime().toString())
+      }
+    });
+    navigation.navigate('HomeStack', {
+      screen: 'PushNavigation'
+    });
+  };
 
   return (
     <View style={gStyle.container[theme]} key={pushNotificationViewKey}>
@@ -198,6 +216,9 @@ const PushNotificationScreen = ({ navigation, route }) => {
                         }
                       }
                     });
+                    setTimeout(() => {}, 1000);
+                    navStacks();
+                    setTimeout(() => {}, 1000);
                   }
                   await sendPushNotification(messageText, products);
                 }}
