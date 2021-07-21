@@ -255,10 +255,7 @@ class ViewProductDetails extends Component {
                         style={[
                           styles.updateIndicatorBadge,
                           {
-                            backgroundColor:
-                              isUpdatedOrNew === 'new'
-                                ? colors.green
-                                : colors.orange
+                            backgroundColor: colors.green
                           }
                         ]}
                       />
