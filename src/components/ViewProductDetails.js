@@ -100,6 +100,21 @@ class ViewProductDetails extends Component {
     return false;
   }
 
+  linkingProductPortal(productMaster) {
+    const { settings } = this.props;
+    if (productMaster.productLink && settings.isOnline) {
+      // console.log('external portal link (show in browser): ' + productMaster.productLink);
+      Linking.canOpenURL(productMaster.productLink).then((supported) => {
+        if (supported) {
+          Linking.openURL(productMaster.productLink);
+        }
+      });
+    }
+    // if there is no link or we have displayed an external link in the browser, return false to short-circuit the logic
+    return false;
+  }
+
+
   checkForUpdatedOrNewResource() {
     const { productResourceList } = this.props;
     if (
@@ -381,6 +396,26 @@ class ViewProductDetails extends Component {
             </List.Accordion>
             <Divider />
           </List.AccordionGroup>
+          {
+            (settings.isOnline) &&  
+              <List.Item
+              key={'portal-link'}
+              title={t('productDetails.portalLink.title')}
+              titleStyle={{ fontWeight: 'bold' }}
+              description={t('productDetails.portalLink.description')}
+              onPress={() => {
+                this.linkingProductPortal(
+                  productMaster
+                );
+              }}
+              left={() => 
+                <Icon name='web' type='material-community' color={colors.darkColor} containerStyle={{ justifyContent: 'flex-start', marginTop: 15, marginLeft: 8, marginRight: 12 }} /> 
+              }
+              right={() => 
+                <Icon name='open-in-new' type='material-community' color={colors.darkColor} containerStyle={{ justifyContent: 'flex-start', marginTop: 12, marginRight: 10 }} /> 
+              }
+            />
+          }
         </ScrollView>
       </>
     );

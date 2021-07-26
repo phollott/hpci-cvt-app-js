@@ -140,6 +140,10 @@ export default {
       add: 'Additional Resource Links',
       reg: 'Regulatory Announcements'
     },
+    portalLink: {
+      title: 'Link to COVID-19 Portal',
+      description: 'Go to the COVID-19 Portal for more information about this product'
+    },
     emptyText: {
       reg: 'There are no regulatory announcements to display at this time.'
     }
