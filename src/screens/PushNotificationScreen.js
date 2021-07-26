@@ -78,29 +78,29 @@ const PushNotificationScreen = ({ navigation, route }) => {
         if (['77', '56', '92', '106', '29', '19', '8'].includes(resource.id)) {
           newTestResource = { ...resource };
           newTestResource.id = resource.id.concat('000');
-          newTestResource.resource_link = resource.resource_link.replace('>Regulatory Decision Summary<', '>Regulatory Decision Summary - test<');
+          newTestResource.resource_link.text = resource.resource_link.text.replace('Regulatory Decision Summary', 'Regulatory Decision Summary - test');
           switch (resource.id) {
             case '77': // A:
-              newTestResource.date = resource.date.replace('2021-02-26', getCurrentDate()).replace('Fri, 02/26/2021 - 12:12', '');
+              newTestResource.date = resource.date.replace('2021-02-26', getCurrentDate());
               break;
             case '56': // M:
-              newTestResource.date = resource.date.replace('2020-12-23', getCurrentDate()).replace('Wed, 12/23/2020 - 12:00', '');
+              newTestResource.date = resource.date.replace('2020-12-23', getCurrentDate());
               break;
             case '92': // C:
-              newTestResource.date = resource.date.replace('2021-02-26', getCurrentDate()).replace('Fri, 02/26/2021 - 10:10', '');
+              newTestResource.date = resource.date.replace('2021-02-26', getCurrentDate());
               break;
             case '106': // J:
-              newTestResource.date = resource.date.replace('2021-03-12', getCurrentDate()).replace('Fri, 03/12/2021 - 10:10', '');
+              newTestResource.date = resource.date.replace('2021-03-12', getCurrentDate());
               break;
             case '29': // P:
-              newTestResource.date = resource.date.replace('2020-12-09', getCurrentDate()).replace('Wed, 12/09/2020 - 12:00', '');
+              newTestResource.date = resource.date.replace('2020-12-09', getCurrentDate());
               break;
             case '19': // B:
-              newTestResource.date = resource.date.replace('2020-10-12', getCurrentDate()).replace('Mon, 10/12/2020 - 12:00', '');
+              newTestResource.date = resource.date.replace('2020-10-12', getCurrentDate());
               break;
             case '8': // V:
-              newTestResource.date = resource.date.replace('2020-12-02', getCurrentDate()).replace('Wed, 12/02/2020 - 12:00', '');
-              newTestResource.date = newTestResource.date.replace('2020-07-27', getCurrentDate()).replace('Mon, 07/27/2020 - 12:00', '');
+              newTestResource.date = resource.date.replace('2020-12-02', getCurrentDate());
+              newTestResource.date = newTestResource.date.replace('2020-07-27', getCurrentDate());
               break;
             default:
               break;

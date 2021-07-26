@@ -42,14 +42,18 @@ const BookmarkProduct = ({ navigation, route }) => {
       accessibilityTraits="button"
       activeOpacity={gStyle.activeOpacity}
       onPress={async () => {
-        const productMaster = route.params.productMaster;
+        const { productMaster } = route.params;
         if (productMaster) {
           try {
             const products = selectProductsByID(state, productMaster.nid);
             if (
               products.length === 2 &&
-              'enfr'.includes(products[0].language.toLowerCase().substring(0, 2)) &&
-              'enfr'.includes(products[1].language.toLowerCase().substring(0, 2))
+              'enfr'.includes(
+                products[0].language.toLowerCase().substring(0, 2)
+              ) &&
+              'enfr'.includes(
+                products[1].language.toLowerCase().substring(0, 2)
+              )
             ) {
               if (!isBookmark) {
                 // scrape product consumer information (not in api), then add and save bookmark (en and fr)
@@ -59,20 +63,30 @@ const BookmarkProduct = ({ navigation, route }) => {
                 lang.push(products[1].language.toLowerCase().substring(0, 2));
                 consumerInformationResource.push(
                   products[0].resources.find((resource) => {
-                    if (productsParser.isProductResourceNameConsumerInfo(resource.resource_link)) {
-                      return resource;
-                    }
+                    return (
+                      productsParser.isProductResourceForConsumers(resource) &&
+                      resource
+                    );
                   })
                 );
                 consumerInformationResource.push(
                   products[1].resources.find((resource) => {
-                    if (productsParser.isProductResourceNameConsumerInfo(resource.resource_link)) {
-                      return resource;
-                    }
+                    return (
+                      productsParser.isProductResourceForConsumers(resource) &&
+                      resource
+                    );
                   })
                 );
 
-                productLoad.loadConsumerInformation(productsParser.getProductResourceLink(consumerInformationResource[0], lang[0]), lang[0])
+                productLoad
+                  .loadConsumerInformation(
+                    productsParser.getProductResourceLink(
+                      consumerInformationResource[0],
+                      lang[0]
+                    ),
+                    productsParser.getProductLink(products[0]),
+                    lang[0]
+                  )
                   .then((productPortalInfoA) => {
                     products[0].productMetadata =
                       productPortalInfoA.productMetadata;
@@ -81,7 +95,15 @@ const BookmarkProduct = ({ navigation, route }) => {
                     products[0].regulatoryAnnouncements =
                       productPortalInfoA.regulatoryAnnouncements;
 
-                    productLoad.loadConsumerInformation(productsParser.getProductResourceLink(consumerInformationResource[1], lang[1]), lang[1])
+                    productLoad
+                      .loadConsumerInformation(
+                        productsParser.getProductResourceLink(
+                          consumerInformationResource[1],
+                          lang[1]
+                        ),
+                        productsParser.getProductLink(products[1]),
+                        lang[1]
+                      )
                       .then((productPortalInfoB) => {
                         products[1].productMetadata =
                           productPortalInfoB.productMetadata;
@@ -96,8 +118,20 @@ const BookmarkProduct = ({ navigation, route }) => {
                         // save en and fr bookmarks to storage
                         const bookmarks = [];
                         // key format: bookmark-product + nid + '-' + lang, ex.: bookmark-product16-en, bookmark-product16-fr
-                        bookmarks.push([ 'bookmark-product'.concat(productMaster.nid + '-' + lang[0]), JSON.stringify(products[0]) ]);
-                        bookmarks.push([ 'bookmark-product'.concat(productMaster.nid + '-' + lang[1]), JSON.stringify(products[1]) ]);
+                        bookmarks.push([
+                          'bookmark-product'
+                            .concat(productMaster.nid)
+                            .concat('-')
+                            .concat(lang[0]),
+                          JSON.stringify(products[0])
+                        ]);
+                        bookmarks.push([
+                          'bookmark-product'
+                            .concat(productMaster.nid)
+                            .concat('-')
+                            .concat(lang[1]),
+                          JSON.stringify(products[1])
+                        ]);
                         storage
                           .saveMulti(bookmarks)
                           .then(navStacks(productMaster.nid));
@@ -109,12 +143,15 @@ const BookmarkProduct = ({ navigation, route }) => {
 
                 // remove en and fr bookmarks from storage
                 storage
-                  .deleteMulti(['bookmark-product' + productMaster.nid + '-en', 'bookmark-product' + productMaster.nid + '-fr'])
+                  .deleteMulti([
+                    'bookmark-product'.concat(productMaster.nid).concat('-en'),
+                    'bookmark-product'.concat(productMaster.nid).concat('-fr')
+                  ])
                   .then(navStacks(productMaster.nid));
               }
               // console.log(await storage.retrieveMulti(['bookmark-product'+productMaster.nid+'-en', 'bookmark-product'+productMaster.nid+'-fr']));
             } else {
-              throw isBookmark ? 'Unable to remove bookmark.' : 'Unable to create bookmark.'; 
+              throw isBookmark ? 'Unable to remove bookmark.' : 'Unable to create bookmark.';
             }
           } catch (error) {
             if (isBookmark) {

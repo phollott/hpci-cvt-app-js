@@ -8,7 +8,7 @@ import {
 import ProductsParserService from './ProductsParserService';
 
 // scrape metadata and consumer information from resourceLink url
-const loadConsumerInformation = async (resourceLink, language) => {
+const loadConsumerInformation = async (resourceLink, productLink, language) => {
   const productLoad = {
     productMetadata: [],
     consumerInformation: [],
@@ -17,22 +17,8 @@ const loadConsumerInformation = async (resourceLink, language) => {
   const cvtPortal =
     language === lang.english ? covidVaccinePortal : portailVaccinCovid;
   const urlPMI = cvtPortal + resourceLink;
-  let urlPRD = resourceLink
-    .replace('/info', cvtPortal)
-    .replace(
-      '-'.concat(language).concat('.html'),
-      language === lang.english ? '/product-details' : '/details-produit'
-    );
 
-  // [mrj] hack: the resource link does not match the parent's product details page:
-  //             /info/vaccin-contre-la-covid-19-de-pfizer-biontech.html - vaccin-contre-covid-19-pfizer-biontech/details-produit
-  // TODO: fix if links get added to api or url changes
-  if (urlPRD.includes('pfizer-biontech')) {
-    urlPRD = urlPRD.replace(
-      'vaccin-contre-la-covid-19-de-pfizer-biontech.html',
-      'vaccin-contre-covid-19-pfizer-biontech/details-produit'
-    );
-  }
+  const urlPRD = productLink;
 
   await fetch(urlPMI)
     .then((resp) => {

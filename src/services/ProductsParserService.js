@@ -4,6 +4,8 @@ import {
   lang,
   covidVaccinePortal,
   portailVaccinCovid,
+  covidVaccinePortalStage,
+  portailVaccinCovidStage,
   productType
 } from '../constants/constants';
 
@@ -16,7 +18,59 @@ const isNil = (value) => {
   return typeof value === 'undefined' || value === null;
 };
 
-// TODO: **** review bus req for each once api is available
+const getFormattedDate = (dtraw, language) => {
+  // dtraw: Date expected
+  let formattedDate = '';
+  switch (language) {
+    case lang.english:
+      formattedDate = ''
+        .concat(EN_MONTH[dtraw.getMonth()])
+        .concat(' ')
+        .concat(dtraw.getDate())
+        .concat(', ')
+        .concat(dtraw.getFullYear());
+      break;
+    case lang.french:
+      formattedDate = ''
+        .concat(dtraw.getDate())
+        .concat(' ')
+        .concat(FR_MONTH[dtraw.getMonth()])
+        .concat(' ')
+        .concat(dtraw.getFullYear());
+      break;
+    default:
+      formattedDate = dtraw.substring(0, 10);
+  }
+  return formattedDate;
+};
+
+const getFormattedDateFromHtml = (htmlDateTime, language) => {
+  let formattedDate = '';
+  if (!isNil(htmlDateTime)) {
+    if (htmlDateTime.indexOf('<time ') > -1) {
+      // ex: "<time datetime=\"2021-02-23T12:00:00Z\">Tue, 02/23/2021 - 12:00</time>\n"
+      const $ = cheerio.load(htmlDateTime);
+      const dtraw = new Date($('time').attr('datetime'));
+      formattedDate = getFormattedDate(dtraw, language);
+    }
+  }
+  return formattedDate;
+};
+
+const isDateWithinWindow = (dt) => {
+  // TODO
+  //  This is not very well tested, and I would not be surprised if it is off by one
+  const dtraw = new Date(dt);
+  const dtutc = Date.UTC(
+    dtraw.getFullYear(),
+    dtraw.getMonth(),
+    dtraw.getDate()
+  );
+  const dtdif = Math.floor((Date.now() - dtutc) / MS_PER_DAY);
+  // console.log(dt);
+  // console.log('Date Difference: ' + Date.now() + '-' + dtutc + '=' + dtdif + ' : ' + dtdif <= WINDOW_IN_DAYS);
+  return dtdif <= WINDOW_IN_DAYS;
+};
 
 // //
 // Product (product: store's products.product)
@@ -32,91 +86,46 @@ const getProductType = (product) => {
   // productType: Vaccine or Treatment
   let prodType = 'Vaccine';
   if (!isNil(product.field_product_type)) {
-    // e.g. "field_product_type": "<a href=\"https://covid-vaccine-stage.hpfb-dgpsa.ca/taxonomy/term/16\" hreflang=\"en\">Vaccine</a>"
-    prodType = product.field_product_type.replace(/(<([^>]+)>)/gi, '').trim(); // strip html, trim
-    prodType = prodType.toLowerCase().startsWith('vaccin')
+    prodType = product.field_product_type.toLowerCase().startsWith('vaccin')
       ? productType.vaccine
       : productType.treatment;
   }
   return prodType;
 };
 
+const getProductLink = (product) => {
+  let prodLink = '';
+  if (!isNil(product.view_node)) {
+    // TODO: remove replace after api or env is updated
+    prodLink = product.view_node
+      .replace(covidVaccinePortalStage, covidVaccinePortal)
+      .replace(portailVaccinCovidStage, portailVaccinCovid);
+  }
+  return prodLink;
+};
+
 const getProductDateOfApproval = (product) => {
   let approvalDate = '';
   if (!isNil(product.date_of_approval)) {
-    if (product.date_of_approval.indexOf('<time ') > -1) {
-      // ex: "<time datetime=\"2021-02-23T12:00:00Z\">Tue, 02/23/2021 - 12:00</time>\n"
-      approvalDate = product.date_of_approval.match(/<time [^>]+>([^<]+)<\/time>/)[1]; // extract time text between > and <
-      approvalDate =
-        approvalDate.indexOf(' - ') > -1
-          ? approvalDate.substring(0, approvalDate.indexOf(' - '))
-          : approvalDate;
-      approvalDate =
-        approvalDate.indexOf(',') > -1
-          ? approvalDate.substring(approvalDate.indexOf(',') + 1).trim()
-          : approvalDate;
-    }
-  }
-  return approvalDate;
-};
-
-const getProductDateOfApprovalISO = (product) => {
-  let approvalDate = '';
-  if (!isNil(product.date_of_approval)) {
-    if (product.date_of_approval.indexOf('<time ') > -1) {
-      // ex: "<time datetime=\"2021-02-23T12:00:00Z\">Tue, 02/23/2021 - 12:00</time>\n"
-      const $ = cheerio.load(product.date_of_approval);
-      approvalDate = $('time').attr('datetime').substring(0, 10);
-    }
+    // ISO8601 compliant, e.g. "2021-04-26"
+    approvalDate = product.date_of_approval;
   }
   return approvalDate;
 };
 
 const getProductDateOfApprovalFormatted = (product, language) => {
-  return getFormattedDateFromHtml(product.date_of_approval, language);
+  // date_of_approval expected
+  return getFormattedDate(new Date(product.date_of_approval), language);
 };
 
-const getFormattedDateFromHtml = (htmlDateTime, language) => {
-  let formattedDate = '';
-  if (!isNil(htmlDateTime)) {
-    if (htmlDateTime.indexOf('<time ') > -1) {
-      // ex: "<time datetime=\"2021-02-23T12:00:00Z\">Tue, 02/23/2021 - 12:00</time>\n"
-      const $ = cheerio.load(htmlDateTime);
-      const dtraw = new Date($('time').attr('datetime'));
-      switch (language) {
-        case lang.english:
-          formattedDate = EN_MONTH[dtraw.getMonth()] + ' ' + dtraw.getDate() + ', ' + dtraw.getFullYear();
-          break;
-        case lang.french:
-          formattedDate = dtraw.getDate() + ' ' + FR_MONTH[dtraw.getMonth()] + ' ' + dtraw.getFullYear();
-          break;
-        default:
-          formattedDate = $('time').attr('datetime').substring(0, 10);
-      }
-    }
-  }
-  return formattedDate;
-};
-
-// TODO
-//  This is not very well tested, and I would not be surprised if it is inaccurate
 const isProductNew = (productApprovalDate) => {
-  const dtraw = new Date(productApprovalDate);
-  const dtutc = Date.UTC(
-    dtraw.getFullYear(),
-    dtraw.getMonth(),
-    dtraw.getDate()
-  );
-  const dtdif = Math.floor((Date.now() - dtutc) / MS_PER_DAY);
-  return dtdif <= WINDOW_IN_DAYS;
+  return isDateWithinWindow(productApprovalDate);
 };
 
-// TODO
-//  This is not very well tested, and I would not be surprised if it is inaccurate
 const isProductUpdated = (product) => {
   let isProductResourceChanged = false;
   const resources = product.resources.filter((res) => {
-    return res.audience.indexOf('Consumers') !== -1;
+    return isProductResourceForConsumers(res);
   });
   resources.forEach((res) => {
     if (isProductResourceNew(res) || isProductResourceUpdated(product, res)) {
@@ -129,9 +138,17 @@ const isProductUpdated = (product) => {
 // //
 // Product resource (resource: store's products.product.resource)
 
-const isProductResourceLinkAnAnchor = (resource) => {
+const isProductResourceForConsumers = (resource) => {
+  return resource.audience.includes('Consumers');
+};
+
+const isProductResourceConsumerInfo = (resource) => {
+  const resourceText = !isNil(resource.resourceName)
+    ? resource.resourceName.toLowerCase()
+    : getProductResourceName(resource).toLowerCase();
   return (
-    !isNil(resource.resource_link) && resource.resource_link.indexOf('<a') > -1
+    resourceText.includes('consumer information') ||
+    resourceText.includes('consommateurs')
   );
 };
 
@@ -145,8 +162,12 @@ const getProductResourceDescription = (resource) => {
 
 const getProductResourceLink = (resource, language) => {
   let link = null;
-  if (isProductResourceLinkAnAnchor(resource)) {
-    link = resource.resource_link.match(/href="([^"]*)/)[1]; // link or null (check to display right chevron, errors if text)
+  if (
+    !isNil(resource.resource_link) &&
+    !isNil(resource.resource_link.url) &&
+    resource.resource_link.url !== ''
+  ) {
+    link = resource.resource_link.url; // link or null (check to display right chevron, errors if text)
     if (link.includes('?linkID')) {
       // [pmh] this is a hack because I'm not sure why these don't render correctly
       let fixedUrl =
@@ -160,24 +181,26 @@ const getProductResourceLink = (resource, language) => {
 
 const getProductResourceName = (resource) => {
   let name = '';
-  if (isProductResourceLinkAnAnchor(resource)) {
-    name = resource.resource_link.match(/<a [^>]+>([^<]+)<\/a>/)[1]; // extract anchor text between > and <
+  if (!isNil(resource.resource_link) && !isNil(resource.resource_link.text)) {
+    name = resource.resource_link.text;
   }
   return name;
 };
 
 const getProductResourcePublicationStatus = (resource, language) => {
+  // publicationStatus: date (formatted) or if various_dates: various or pending
   let publicationStatus = '';
-  if (!isNil(resource.various_dates)) {
-    // publicationStatus: various, pending, or date (formatted)
-    if (resource.various_dates.toLowerCase() === 'yes') {
+  if (!isNil(resource.date)) {
+    publicationStatus = getFormattedDate(new Date(resource.date), language);
+  } else if (!isNil(resource.various_dates)) {
+    if (resource.various_dates.toLowerCase() === 'true') {
       publicationStatus = t(
         'productDetails.listItem.publicationStatus.various'
       );
     } else {
-      publicationStatus = !isNil(resource.date)
-        ? getFormattedDateFromHtml(resource.date, language)
-        : t('productDetails.listItem.publicationStatus.pending');
+      publicationStatus = t(
+        'productDetails.listItem.publicationStatus.pending'
+      );
     }
   }
   return publicationStatus;
@@ -196,96 +219,39 @@ const getProductResourceType = (link) => {
   return resourceType;
 };
 
-const isProductResourceNameConsumerInfo = (resourceName) => {
-  return (
-    resourceName.toLowerCase().includes('consumer information') ||
-    resourceName.toLowerCase().includes('consommateurs')
-  );
-};
-
 const isProductResourceNew = (resource) => {
-  // TODO
-  //  This is not very well tested, and I would not be surprised if it is off by one
   let isResourceNew = false;
-  if (resource.date) {
-    // console.log ('NEW Res --> ' + resource.resource_link)
-    const $ = cheerio.load(resource.date);
-    const dtraw = new Date($('time').attr('datetime'));
-    const dtutc = Date.UTC(
-      dtraw.getFullYear(),
-      dtraw.getMonth(),
-      dtraw.getDate()
-    );
-    const dtdif = Math.floor((Date.now() - dtutc) / MS_PER_DAY);
-    isResourceNew = dtdif <= WINDOW_IN_DAYS;
-    // console.log($('time').attr('datetime'));
-    // console.log('New Date Difference: ' + Date.now() + '-' + dtutc + '=' + dtdif + ' : ' + isResourceNew);
+  if (!isNil(resource.date)) {
+    isResourceNew = isDateWithinWindow(resource.date);
   }
   return isResourceNew;
 };
 
-const isProductResourceUpdated = (product, resource) => {
-  // TODO
-  //  This is not very well tested, and I would not be surprised if it is off by one
+const isProductResourceUpdated = (resource) => {
   let isResourceUpdated = false;
-  if (product.field_vaccine_resources_export_1) {
-    const $ = cheerio.load(product.field_vaccine_resources_export_1);
-    $('div.paragraph--type--vaccine-resources').map((i, el_outer) => {
-      let match = null;
-      let dtraw = null;
-      $(el_outer)
-        .find('div.field')
-        .map((j, el_inner) => {
-          // Inner loop is iterates over all of the Resource Details
-          const fieldItem = $(el_inner).find('div.field--item').html();
-          switch ($(el_inner).find('div.field--label').text()) {
-            case 'Updated Date':
-              dtraw = new Date($(fieldItem).attr('datetime'));
-              break;
-            case 'Resource link':
-              if (fieldItem === resource.resource_link) {
-                match = true;
-              }
-              break;
-            default:
-              break;
-          }
-        });
-
-      // At this point, we have iterated over the Resource Details
-      if (match && dtraw) {
-        const dtutc = Date.UTC(
-          dtraw.getFullYear(),
-          dtraw.getMonth(),
-          dtraw.getDate()
-        );
-        const dtdif = Math.floor((Date.now() - dtutc) / MS_PER_DAY);
-        if (dtdif <= WINDOW_IN_DAYS) {
-          isResourceUpdated = true;
-        }
-        // console.log('Updated Date Difference for : ' + resource.description + ' : ' + dtdif + ' : ' + isResourceUpdated);
-      }
-    });
+  if (!isNil(resource.updated_date)) {
+    isResourceUpdated = isDateWithinWindow(resource.updated_date);
   }
   return isResourceUpdated;
 };
 
 export default {
+  getFormattedDate,
+  getFormattedDateFromHtml,
   isAuthorizedProduct,
   getProductType,
+  getProductLink,
   getProductDateOfApproval,
-  getProductDateOfApprovalISO,
   getProductDateOfApprovalFormatted,
   isProductNew,
   isProductUpdated,
-  isProductResourceLinkAnAnchor,
+  isProductResourceForConsumers,
+  isProductResourceConsumerInfo,
   getProductResourceDescription,
   getProductResourceLink,
   getProductResourceName,
   getProductResourcePublicationStatus,
   getProductResourceType,
-  isProductResourceNameConsumerInfo,
   isProductResourceNew,
-  isProductResourceUpdated,
-  getFormattedDateFromHtml
+  isProductResourceUpdated
 };

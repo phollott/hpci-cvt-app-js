@@ -81,16 +81,12 @@ const NotificationsScreen = ({ navigation, route }) => {
   const isOnline = useSelector((state) => state.settings.isOnline);
 
   const getFormattedDate = (timeOfNotification) => {
-    let formattedDate = productsParser.getFormattedDateFromHtml(
-      '<time datetime="'
-        .concat(
-          new Date(
-            timeOfNotification.toString().indexOf('.') > -1
-              ? Math.round(timeOfNotification * 1000)
-              : timeOfNotification
-          ).toString()
-        )
-        .concat('">'),
+    let formattedDate = productsParser.getFormattedDate(
+      new Date(
+        timeOfNotification.toString().indexOf('.') > -1
+          ? Math.round(timeOfNotification * 1000)
+          : timeOfNotification
+      ),
       language
     );
     formattedDate = formattedDate.substring(

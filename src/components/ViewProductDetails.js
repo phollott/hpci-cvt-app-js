@@ -9,7 +9,11 @@ import { colors, gStyle } from '../constants';
 import { selectBookmarkByID } from '../redux/selectors/bookmarkSelector';
 import { selectProductByID } from '../redux/selectors/productSelector';
 // services
-import { productLoad, productResource, productsParser } from '../services';
+import {
+  productLoad,
+  productResource as resourceService,
+  productsParser
+} from '../services';
 // components
 import ReadMoreText from './ReadMoreText';
 import ViewCardText from './ViewCardText';
@@ -32,6 +36,7 @@ class ViewProductDetails extends Component {
 
   componentDidMount() {
     const {
+      productMaster,
       consumerInformationResource,
       settings,
       productMetadata,
@@ -41,7 +46,12 @@ class ViewProductDetails extends Component {
     if (consumerInformationResource) {
       if (settings.isOnline) {
         // online, load/scrape
-        productLoad.loadConsumerInformation(consumerInformationResource.link, settings.language)
+        productLoad
+          .loadConsumerInformation(
+            consumerInformationResource.link,
+            productMaster.productLink,
+            settings.language
+          )
           .then((productPortalInfo) => {
             this.setState({
               productMetadata: productPortalInfo.productMetadata,
@@ -111,7 +121,11 @@ class ViewProductDetails extends Component {
 
   render() {
     const { productMaster, productResourceList, settings } = this.props;
-    const { productMetadata, consumerInformation, regulatoryAnnouncements } = this.state;
+    const {
+      productMetadata,
+      consumerInformation,
+      regulatoryAnnouncements
+    } = this.state;
     return (
       <>
         <View style={gStyle.spacer8} />
@@ -173,7 +187,7 @@ class ViewProductDetails extends Component {
               {productMetadata.map((product, key) => {
                 return (
                   <View
-                    key={'productMetadata' + key}
+                    key={'productMetadata'.concat(key)}
                     style={{ marginLeft: -50, marginBottom: 15 }}
                   >
                     <ViewLabelledText
@@ -268,7 +282,11 @@ class ViewProductDetails extends Component {
                 {productResourceList.map((productResource) => (
                   <View
                     key={'view-'.concat(productResource.key)}
-                    style={ (productResource.isNew || productResource.isUpdated) ? { backgroundColor: colors.lightGreen } : {} }
+                    style={
+                      productResource.isNew || productResource.isUpdated
+                        ? { backgroundColor: colors.lightGreen }
+                        : {}
+                    }
                   >
                     <Divider />
                     <List.Item
@@ -342,7 +360,9 @@ class ViewProductDetails extends Component {
                       />
                     )}
                     onPress={() => {
-                      this.linkingRegulatoryAnnouncement(regulatoryAnnouncement);
+                      this.linkingRegulatoryAnnouncement(
+                        regulatoryAnnouncement
+                      );
                     }}
                     right={() => {
                       return regulatoryAnnouncement.link && settings.isOnline
@@ -368,15 +388,23 @@ class ViewProductDetails extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  var productMaster, product, productResourceList = [], consumerInformationResource, productMetadata, consumerInformation, regulatoryAnnouncements;
+  let product;
+  let productResourceList = [];
+  let consumerInformationResource;
+  let productMetadata;
+  let consumerInformation;
+  let regulatoryAnnouncements;
 
   // Product Master:
-  productMaster = ownProps.route.params.productMaster;
+  const { productMaster } = ownProps.route.params;
 
   // Product Resources:
   const key = productMaster.key.toString();
   if (key.startsWith('bookmark-product')) {
-    product = selectBookmarkByID(state, ownProps.route.params.productMaster.nid);
+    product = selectBookmarkByID(
+      state,
+      ownProps.route.params.productMaster.nid
+    );
     if (typeof product !== 'undefined') {
       productMetadata = product.productMetadata;
       consumerInformation = product.consumerInformation;
@@ -389,17 +417,15 @@ const mapStateToProps = (state, ownProps) => {
   // Push all of the Product Resources into props, but extract Consumer Information if it is in there
   if (typeof product !== 'undefined') {
     productResourceList.push(
-      ...productResource.mapProductResources(product, state.settings.language)
+      ...resourceService.mapProductResources(product, state.settings.language)
     );
     consumerInformationResource = productResourceList.find((resource) => {
-      if (productsParser.isProductResourceNameConsumerInfo(resource.resourceName)) {
-        return resource;
-      }
+      return productsParser.isProductResourceConsumerInfo(resource) && resource;
     });
     productResourceList = productResourceList.filter((resource) => {
-      if (!productsParser.isProductResourceNameConsumerInfo(resource.resourceName)) {
-        return resource;
-      }
+      return (
+        !productsParser.isProductResourceConsumerInfo(resource) && resource
+      );
     });
   }
 
