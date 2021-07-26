@@ -140,6 +140,10 @@ export default {
       add: 'Liens vers des ressources supplémentaires',
       reg: 'Nouvelles'
     },
+    portalLink: {
+      title: 'Liens vers le Portail COVID-19',
+      description: 'Rendez-vous sur le Portail COVID-19 pour plus d\'informations sur ce produit'
+    },
     emptyText: {
       reg: 'Il n’y a actuellement aucun nouvelle à afficher.'
     }
