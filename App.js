@@ -110,9 +110,7 @@ class App extends React.Component {
                 .substring(0, 2);
               consumerInformationResource.push(
                 product[0].resources.find((r) => {
-                  if (productsParser.isProductResourceNameConsumerInfo(r.resource_link)) {
-                    return r;
-                  }
+                  return productsParser.isProductResourceForConsumers(r) && r;
                 })
               );
               productLoad
@@ -121,6 +119,7 @@ class App extends React.Component {
                     consumerInformationResource[0],
                     resourceLang
                   ),
+                  productsParser.getProductLink(product[0]),
                   resourceLang
                 )
                 .then((productPortalInfo) => {

@@ -14,6 +14,7 @@ const productMaster = (product, id, language) => {
       product,
       language
     ),
+    productLink: ProductsParserService.getProductLink(product),
     showLink: false,
     searchKey: '',
     isNew: false,
