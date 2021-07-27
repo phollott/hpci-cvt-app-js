@@ -74,8 +74,16 @@ ViewButton.propTypes = {
   icon: PropTypes.string,
   onPress: PropTypes.func,
   disabled: PropTypes.bool,
-  labelStyle: PropTypes.object,
+  labelStyle: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.number,
+    PropTypes.object
+  ]),
   mode: PropTypes.string,
-  style: PropTypes.object,
+  style: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.number,
+    PropTypes.object
+  ]),
   uppercase: PropTypes.bool
 };

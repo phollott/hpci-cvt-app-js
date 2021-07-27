@@ -381,7 +381,7 @@ class ViewProductDetails extends Component {
                     }}
                     right={() => {
                       return regulatoryAnnouncement.link && settings.isOnline
-                        ? <Icon name='open-in-new' type='material-community' color={colors.darkColor} containerStyle={{ justifyContent: 'flex-start', marginTop: 12, marginRight: 10 }} /> 
+                        ? <Icon name='open-in-new' type='material-community' color={colors.darkColor} containerStyle={{ justifyContent: 'flex-start', marginTop: 12, marginRight: 10 }} />
                         : null;
                     }}
                   />
@@ -396,26 +396,27 @@ class ViewProductDetails extends Component {
             </List.Accordion>
             <Divider />
           </List.AccordionGroup>
-          {
-            (settings.isOnline) &&  
+          {settings.isOnline && (
+            <>
               <List.Item
-              key={'portal-link'}
-              title={t('productDetails.portalLink.title')}
-              titleStyle={{ fontWeight: 'bold' }}
-              description={t('productDetails.portalLink.description')}
-              onPress={() => {
-                this.linkingProductPortal(
-                  productMaster
-                );
-              }}
-              left={() => 
-                <Icon name='web' type='material-community' color={colors.darkColor} containerStyle={{ justifyContent: 'flex-start', marginTop: 15, marginLeft: 8, marginRight: 12 }} /> 
-              }
-              right={() => 
-                <Icon name='open-in-new' type='material-community' color={colors.darkColor} containerStyle={{ justifyContent: 'flex-start', marginTop: 12, marginRight: 10 }} /> 
-              }
-            />
-          }
+                key="portal-link"
+                title={t('productDetails.portalLink.title')}
+                titleStyle={{ fontWeight: 'bold' }}
+                description={t('productDetails.portalLink.description')}
+                onPress={() => {
+                  this.linkingProductPortal(productMaster);
+                }}
+                left={() => (
+                  <Icon name='web' type='material-community' color={colors.black54} size={24} containerStyle={{ justifyContent: 'flex-start', marginTop: 4, marginLeft: 8, marginRight: 8 }} />
+                )}
+                right={() => (
+                  <Icon name='open-in-new' type='material-community' color={colors.darkColor} containerStyle={{ justifyContent: 'flex-start', marginTop: 12, marginRight: 10 }} />
+                )}
+                style={{ marginVertical: 8 }}
+              />
+              <Divider />
+            </>
+          )}
         </ScrollView>
       </>
     );
