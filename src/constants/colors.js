@@ -11,6 +11,7 @@ const lightGrey = '#f2f2f2'; // primary background color on screens and drawer
 const orange = '#ff9f40'; // (e.g. updated badge)
 const red = '#af3c43'; // (e.g. remove button background)
 const white50 = 'rgba(255, 255, 255, 0.5)'; // (e.g. inactive tab icons)
+const black54 = 'rgba(0, 0, 0, 0.54)'; // (e.g. accordion list item left icon)
 
 export default {
   black: '#000000',
@@ -24,5 +25,6 @@ export default {
   lightGrey,
   orange,
   red,
-  white50
+  white50,
+  black54
 };

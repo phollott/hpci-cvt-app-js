@@ -59,7 +59,11 @@ Touch.propTypes = {
     PropTypes.number,
     PropTypes.object
   ]),
-  textStyle: PropTypes.object,
+  textStyle: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.number,
+    PropTypes.object
+  ]),
   lIconName: PropTypes.string,
   rIconName: PropTypes.string
 };
