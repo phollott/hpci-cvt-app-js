@@ -26,6 +26,7 @@
     "android": {
       "package": "com.hpcicvt.hpcicvtappjs",
       "versionCode": 3,
+      "googleServicesFile": "./google-services.json",
       "useNextNotificationsApi": true
     },
     "ios": {
