@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "864992723195",
+    "project_id": "hpci-cvt",
+    "storage_bucket": "hpci-cvt.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:864992723195:android:3429421f3081aed83fb05e",
+        "android_client_info": {
+          "package_name": "com.hpcicvt.hpcicvtappjs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "864992723195-hp00s9pq6ugucag37poc4d8c7nbcgc37.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkuD7kGl-uA4P27ELjW--yN5siOP4MDnE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "864992723195-hp00s9pq6ugucag37poc4d8c7nbcgc37.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
