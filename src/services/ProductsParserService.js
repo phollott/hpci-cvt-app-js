@@ -18,6 +18,12 @@ const isNil = (value) => {
   return typeof value === 'undefined' || value === null;
 };
 
+const getDateWithTimezoneOffset = (isoDate) => {
+  // expected format: YYYY-MM-DD
+  const date = new Date(isoDate);
+  return new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+};
+
 const getFormattedDate = (dtraw, language) => {
   // dtraw: Date expected
   let formattedDate = '';
@@ -115,7 +121,10 @@ const getProductDateOfApproval = (product) => {
 
 const getProductDateOfApprovalFormatted = (product, language) => {
   // date_of_approval expected
-  return getFormattedDate(new Date(product.date_of_approval), language);
+  return getFormattedDate(
+    getDateWithTimezoneOffset(product.date_of_approval),
+    language
+  );
 };
 
 const isProductNew = (productApprovalDate) => {
@@ -191,7 +200,10 @@ const getProductResourcePublicationStatus = (resource, language) => {
   // publicationStatus: date (formatted) or if various_dates: various or pending
   let publicationStatus = '';
   if (!isNil(resource.date)) {
-    publicationStatus = getFormattedDate(new Date(resource.date), language);
+    publicationStatus = getFormattedDate(
+      getDateWithTimezoneOffset(resource.date),
+      language
+    );
   } else if (!isNil(resource.various_dates)) {
     if (resource.various_dates.toLowerCase() === 'true') {
       publicationStatus = t(
@@ -236,6 +248,7 @@ const isProductResourceUpdated = (resource) => {
 };
 
 export default {
+  getDateWithTimezoneOffset,
   getFormattedDate,
   getFormattedDateFromHtml,
   isAuthorizedProduct,
