@@ -51,13 +51,16 @@ const PushNotificationScreen = ({ navigation, route }) => {
   const getMonth = () => {
     return 1 + new Date().getMonth();
   };
+  const getDate = new Date().getDate();
   const getCurrentDate = () => {
-    return ''
-      .concat(new Date().getFullYear())
-      .concat('-')
-      .concat(getMonth().length === 2 ? getMonth() : '0'.concat(getMonth()))
-      .concat('-')
-      .concat(new Date().getDate());
+    return productsParser.getDateWithTimezoneOffset(
+      ''
+        .concat(new Date().getFullYear())
+        .concat('-')
+        .concat(getMonth().length === 2 ? getMonth() : '0'.concat(getMonth()))
+        .concat('-')
+        .concat(getDate.length === 2 ? getDate : '0'.concat(getDate))
+    );
   };
   const bookmarksInStore = useSelector((state) => state.bookmarks);
   const productsInStore = useSelector((state) => {
@@ -77,8 +80,9 @@ const PushNotificationScreen = ({ navigation, route }) => {
         // consummer rds for A,M,C,J,P,B,V: 77,56,92,106,29,19,8
         if (['77', '56', '92', '106', '29', '19', '8'].includes(resource.id)) {
           newTestResource = { ...resource };
+          newTestResource = JSON.parse(JSON.stringify(newTestResource));
           newTestResource.id = resource.id.concat('000');
-          newTestResource.resource_link.text = resource.resource_link.text.replace('Regulatory Decision Summary', 'Regulatory Decision Summary - test');
+          newTestResource.resource_link.text = 'Regulatory Decision Summary - test';
           switch (resource.id) {
             case '77': // A:
               newTestResource.date = resource.date.replace('2021-02-26', getCurrentDate());
