@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View } from 'react-native';
-import { DrawerActions } from '@react-navigation/native';
+import { DrawerActions, useFocusEffect } from '@react-navigation/native';
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -43,14 +43,25 @@ const HorizontalLine = () => (
 );
 
 const MenuDrawer = (props) => {
+  const { navigation } = props;
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // drawer is focused
+      return () => {
+        // drawer is unfocused
+        closeDrawer(navigation);
+      };
+    }, [])
+  );
+
   return (
     <DrawerContentScrollView {...props}>
       <DrawerItem
         label={t('home.menu.notificationsLabel')}
         icon={NotificationsIcon}
         onPress={() => {
-          props.navigation.navigate('Notifications');
-          closeDrawer(props.navigation);
+          navigation.navigate('Notifications');
         }}
       />
       <DrawerItem
@@ -64,8 +75,7 @@ const MenuDrawer = (props) => {
           paddingLeft: 72
         }}
         onPress={() => {
-          props.navigation.navigate('Language');
-          closeDrawer(props.navigation);
+          navigation.navigate('Language');
         }}
       />
       <HorizontalLine />
@@ -80,8 +90,7 @@ const MenuDrawer = (props) => {
           paddingLeft: 72
         }}
         onPress={() => {
-          props.navigation.navigate('PushNotification');
-          closeDrawer(props.navigation);
+          navigation.navigate('PushNotification');
         }}
       />
       <DrawerItem
@@ -91,7 +100,7 @@ const MenuDrawer = (props) => {
         }}
         onPress={() => {
           RemoveData(props);
-          closeDrawer(props.navigation);
+          closeDrawer(navigation);
         }}
       />
       <HorizontalLine />
@@ -100,7 +109,7 @@ const MenuDrawer = (props) => {
         icon={GlobeIcon}
         onPress={() => {
           Alert(t('home.introCard.title'));
-          closeDrawer(props.navigation);
+          closeDrawer(navigation);
         }}
       />
       <DrawerItem
@@ -108,7 +117,7 @@ const MenuDrawer = (props) => {
         icon={AboutIcon}
         onPress={() => {
           Alert(t('home.introCard.title'));
-          closeDrawer(props.navigation);
+          closeDrawer(navigation);
         }}
       />
       <DrawerItemList {...props} />
