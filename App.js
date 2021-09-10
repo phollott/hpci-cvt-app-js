@@ -151,7 +151,9 @@ class App extends React.Component {
     let products = [];
     try {
       products = await fetchProductsAsync();
-      products = JSON.parse(he.decode(JSON.stringify(products))); // using he to decode html entities, but may want to review other ways to parse
+      products = JSON.parse(
+        he.decode(JSON.stringify(products).replace(/&quot;/gi, '\\"')) // &quot; expected only in string values, so escape for decode
+      );
     } catch (error) {
       console.log('Could not fetch Covid-19 Products from api. ', error);
     }

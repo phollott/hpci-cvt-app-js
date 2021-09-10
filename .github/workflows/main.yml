@@ -19,5 +19,14 @@ jobs:
           expo-version: 4.x
           expo-username: ${{ secrets.EXPO_CLI_USERNAME }}
           expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
+      - uses: actions/github-script@v4
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+        with:
+          script: |
+            const fs = require('fs');
+            if (!fs.existsSync('.env')) {
+              fs.writeFileSync('.env', process.env.ENV_FILE);
+            }
       - run: yarn install
       - run: expo publish --target managed
