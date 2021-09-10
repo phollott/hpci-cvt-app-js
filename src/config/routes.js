@@ -1,5 +1,6 @@
-// [mrj] TODO: proper api integration, and set up and manage env variables...
+import { CVT_API_URL_VACCINES, CVT_API_URL_NEWS } from 'react-native-dotenv';
 
-// export const vaccineAPI1Url = "http://192.168.1.129:3031/api/vaccineAPI1";
-// export const vaccineAPI1Url = "http://phollott.github.io/hc-spm/Samples/vaccineapi.json";
-export const vaccineAPI1Url = "https://phollott.github.io/hpci-cvt-app-js/vaccineapi.json";
+const vaccineAPIUrl = CVT_API_URL_VACCINES;
+const newsAPIUrl = CVT_API_URL_NEWS;
+
+export { vaccineAPIUrl, newsAPIUrl };

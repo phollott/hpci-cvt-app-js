@@ -15,7 +15,8 @@
     "describe": "readonly",
     "expect": "readonly",
     "it": "readonly",
-    "jest": "readonly"
+    "jest": "readonly",
+    "fetch": false
   },
   "settings": {
     "import/core-modules": [
