@@ -42,6 +42,8 @@ const PushNotificationScreen = ({ navigation, route }) => {
   covid19Products.push({ nid: 15, brandName: 'Moderna', checked: false });
   covid19Products.push({ nid: 9, brandName: 'Veklury', checked: false });
   covid19Products.push({ nid: 8, brandName: 'Bamlanivimab', checked: false });
+  covid19Products.push({ nid: 36, brandName: 'Sotrovimab', checked: false });
+  covid19Products.push({ nid: 34, brandName: 'Casirivimab / imdevimab', checked: false });
 
   const [products, setProducts] = React.useState(covid19Products);
 
@@ -49,9 +51,11 @@ const PushNotificationScreen = ({ navigation, route }) => {
 
   // prep test resource for all products and set to local state
   const getMonth = () => {
-    return 1 + new Date().getMonth();
+    return ''.concat(1 + new Date().getMonth());
   };
-  const getDate = new Date().getDate();
+  const getDate = () => {
+    return ''.concat(new Date().getDate());
+  };
   const getCurrentDate = () => {
     return productsParser.getDateWithTimezoneOffset(
       ''
@@ -59,7 +63,7 @@ const PushNotificationScreen = ({ navigation, route }) => {
         .concat('-')
         .concat(getMonth().length === 2 ? getMonth() : '0'.concat(getMonth()))
         .concat('-')
-        .concat(getDate.length === 2 ? getDate : '0'.concat(getDate))
+        .concat(getDate().length === 2 ? getDate() : '0'.concat(getDate()))
     );
   };
   const bookmarksInStore = useSelector((state) => state.bookmarks);
@@ -77,8 +81,8 @@ const PushNotificationScreen = ({ navigation, route }) => {
       const resourcesWithTestResource = [];
       let newTestResource = {};
       product.resources.forEach((resource) => {
-        // consummer rds for A,M,C,J,P,B,V: 77,56,92,106,29,19,8
-        if (['77', '56', '92', '106', '29', '19', '8'].includes(resource.id)) {
+        // consummer rds for A,M,C,J,P,B,V,S,CI: 77,56,92,106,29,19,8
+        if (['77', '56', '92', '106', '29', '19', '8', '145', '134'].includes(resource.id)) {
           newTestResource = { ...resource };
           newTestResource = JSON.parse(JSON.stringify(newTestResource));
           newTestResource.id = resource.id.concat('000');
@@ -103,8 +107,13 @@ const PushNotificationScreen = ({ navigation, route }) => {
               newTestResource.date = resource.date.replace('2020-10-12', getCurrentDate());
               break;
             case '8': // V:
-              newTestResource.date = resource.date.replace('2020-12-02', getCurrentDate());
-              newTestResource.date = newTestResource.date.replace('2020-07-27', getCurrentDate());
+              newTestResource.date = resource.date.replace('2020-07-27', getCurrentDate());
+              break;
+            case '145': // S:
+              newTestResource.date = resource.date.replace('2021-07-30', getCurrentDate());
+              break;
+            case '134': // CI:
+              newTestResource.date = resource.date.replace('2021-06-09', getCurrentDate());
               break;
             default:
               break;
