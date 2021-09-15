@@ -5,10 +5,35 @@ import {
   covidVaccinePortal,
   portailVaccinCovid
 } from '../constants/constants';
+import { fetchProductNewsAsync } from '../api/covid19Products';
 import ProductsParserService from './ProductsParserService';
 
+const fetchProductNews = async (language, nid) => {
+  let productNews = [];
+  try {
+    productNews = await fetchProductNewsAsync(language, nid);
+    productNews = JSON.parse(
+      he.decode(JSON.stringify(productNews).replace(/&quot;/gi, '\\"')) // &quot; expected only in string values, so escape for decode
+    );
+    if (Array.isArray(productNews) && productNews.length > 1) {
+      productNews.sort(
+        (a, b) =>
+          a.field_publish_date_export > b.field_publish_date_export ? -1 : 1 // desc
+      );
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log(
+      `Could not fetch product news (e.g. regulatory announcements) for product ${nid} from api. `,
+      error
+    );
+  }
+  return productNews;
+};
+
 // scrape metadata and consumer information from resourceLink url
-const loadConsumerInformation = async (resourceLink, productLink, language) => {
+// fetch regulatory announcements from api
+const loadConsumerInformation = async (resourceLink, language, nid) => {
   const productLoad = {
     productMetadata: [],
     consumerInformation: [],
@@ -17,8 +42,6 @@ const loadConsumerInformation = async (resourceLink, productLink, language) => {
   const cvtPortal =
     language === lang.english ? covidVaccinePortal : portailVaccinCovid;
   const urlPMI = cvtPortal + resourceLink;
-
-  const urlPRD = productLink;
 
   await fetch(urlPMI)
     .then((resp) => {
@@ -120,61 +143,34 @@ const loadConsumerInformation = async (resourceLink, productLink, language) => {
       );
     });
 
-  await fetch(urlPRD)
-    .then((resp) => {
-      return resp.text();
-    })
-    .then((text) => {
-      const $ = cheerio.load(text);
-      const regulatoryAnnouncements = [];
-
-      // Extract Regulatory Announcements from Product Details Page
-      $('div.view-vaccine-news')
-        .find('tbody')
-        .find('tr')
-        .each((i, row) => {
-          const regulatoryAnnouncement = {
-            key: null,
-            date: null,
-            description: null,
-            link: null
-          };
-          $(row)
-            .find('td')
-            .each((j, td) => {
-              switch (j) {
-                case 0:
-                  regulatoryAnnouncement.link = $(td)
-                    .find('a')
-                    .attr('href')
-                    .trim();
-                  regulatoryAnnouncement.description = he.decode(
-                    $(td).find('a').html().trim()
-                  );
-                  break;
-                case 1:
-                  regulatoryAnnouncement.date = ProductsParserService.getFormattedDateFromHtml(
-                    $(td).html(),
-                    language
-                  );
-                  break;
-                default:
-                  break;
-              }
-              regulatoryAnnouncement.key = 'reg-'.concat(i);
-            });
-          regulatoryAnnouncements.push(regulatoryAnnouncement);
-        });
-
-      productLoad.regulatoryAnnouncements = regulatoryAnnouncements;
-    })
-    .catch((error) => {
-      // eslint-disable-next-line no-console
-      console.log(
-        'Unable to load Product Details for product (check resource link). ',
-        error
+  // Fetch Regulatory Announcements from API
+  const regulatoryAnnouncements = [];
+  try {
+    const productNews = await fetchProductNews(language, nid);
+    productNews.forEach((ra) => {
+      const regulatoryAnnouncement = {
+        key: null,
+        date: null,
+        description: null,
+        link: null
+      };
+      regulatoryAnnouncement.key = 'reg-'.concat(ra.nid);
+      regulatoryAnnouncement.date = ProductsParserService.getFormattedDateFromHtml(
+        ra.field_publish_date_export,
+        language
       );
+      regulatoryAnnouncement.description = ra.title;
+      regulatoryAnnouncement.link = ra.field_article_link;
+      regulatoryAnnouncements.push(regulatoryAnnouncement);
     });
+    productLoad.regulatoryAnnouncements = regulatoryAnnouncements;
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log(
+      `Unable to load regulatory announcements for product ${nid}. `,
+      error
+    );
+  }
 
   return productLoad;
 };

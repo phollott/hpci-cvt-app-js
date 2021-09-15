@@ -84,8 +84,8 @@ const BookmarkProduct = ({ navigation, route }) => {
                       consumerInformationResource[0],
                       lang[0]
                     ),
-                    productsParser.getProductLink(products[0]),
-                    lang[0]
+                    lang[0],
+                    productMaster.nid
                   )
                   .then((productPortalInfoA) => {
                     products[0].productMetadata =
@@ -101,8 +101,8 @@ const BookmarkProduct = ({ navigation, route }) => {
                           consumerInformationResource[1],
                           lang[1]
                         ),
-                        productsParser.getProductLink(products[1]),
-                        lang[1]
+                        lang[1],
+                        productMaster.nid
                       )
                       .then((productPortalInfoB) => {
                         products[1].productMetadata =
