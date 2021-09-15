@@ -119,8 +119,8 @@ class App extends React.Component {
                     consumerInformationResource[0],
                     resourceLang
                   ),
-                  productsParser.getProductLink(product[0]),
-                  resourceLang
+                  resourceLang,
+                  product[0].nid
                 )
                 .then((productPortalInfo) => {
                   product[0].productMetadata =

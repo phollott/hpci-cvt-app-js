@@ -49,8 +49,8 @@ class ViewProductDetails extends Component {
         productLoad
           .loadConsumerInformation(
             consumerInformationResource.link,
-            productMaster.productLink,
-            settings.language
+            settings.language,
+            productMaster.nid
           )
           .then((productPortalInfo) => {
             this.setState({
