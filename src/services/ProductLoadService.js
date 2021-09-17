@@ -30,6 +30,10 @@ const fetchProductNews = async (language, nid) => {
   return productNews;
 };
 
+// eslint-disable-next-line no-undef
+const headers = new Headers();
+headers.append('Cache-Control', 'no-cache');
+
 // scrape metadata and consumer information from resourceLink url
 // fetch regulatory announcements from api
 const loadConsumerInformation = async (resourceLink, language, nid) => {
@@ -42,7 +46,11 @@ const loadConsumerInformation = async (resourceLink, language, nid) => {
     language === lang.english ? covidVaccinePortal : portailVaccinCovid;
   const urlPMI = cvtPortal + resourceLink;
 
-  await fetch(urlPMI)
+  const requestInit = {
+    method: 'GET',
+    headers
+  };
+  await fetch(urlPMI, requestInit)
     .then((resp) => {
       return resp.text();
     })

@@ -13,6 +13,7 @@ headers.append(
 );
 headers.append('Accept', 'application/json');
 headers.append('Content-Type', 'application/json');
+headers.append('Cache-Control', 'no-cache');
 
 const fetchProductsAsync = async () => {
   try {
