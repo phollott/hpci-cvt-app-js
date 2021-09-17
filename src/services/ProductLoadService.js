@@ -32,6 +32,7 @@ const fetchProductNews = async (language, nid) => {
 
 // eslint-disable-next-line no-undef
 const headers = new Headers();
+headers.append('Pragma', 'no-cache');
 headers.append('Cache-Control', 'no-cache');
 
 // scrape metadata and consumer information from resourceLink url
