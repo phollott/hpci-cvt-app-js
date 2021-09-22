@@ -91,8 +91,8 @@ const isAuthorizedProduct = (product) => {
 const getProductType = (product) => {
   // productType: Vaccine or Treatment
   let prodType = 'Vaccine';
-  if (!isNil(product.field_product_type)) {
-    prodType = product.field_product_type.toLowerCase().startsWith('vaccin')
+  if (!isNil(product.product_type)) {
+    prodType = product.product_type.toLowerCase().startsWith('vaccin')
       ? productType.vaccine
       : productType.treatment;
   }
