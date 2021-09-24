@@ -114,7 +114,6 @@ class ViewProductDetails extends Component {
     return false;
   }
 
-
   checkForUpdatedOrNewResource() {
     const { productResourceList } = this.props;
     if (
@@ -177,6 +176,10 @@ class ViewProductDetails extends Component {
                 <ViewLabelledText
                   text={productMaster.approvalDateFormatted}
                   label={t('productDetails.card.approvalDateLabel')}
+                />
+                <ViewLabelledText
+                  text={productMaster.note}
+                  label={t('productDetails.card.productNote')}
                 />
               </Card.Content>
             </Card>
