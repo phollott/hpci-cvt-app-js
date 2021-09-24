@@ -145,17 +145,23 @@ export default class ViewProductMasters extends Component {
               title={<Text>{productMaster.brandName.trim()}</Text>}
               titleStyle={{ fontWeight: 'bold' }}
               titleNumberOfLines={2}
-              description={() => (
-                <Text>
-                  <Text style={{ color: colors.grey }}>
-                    {productMaster.ingredient}
+              description={() => {
+                return (
+                  <Text>
+                    <Text style={{ color: colors.grey }}>
+                      {productMaster.ingredient}
+                    </Text>
+                    {productMaster.note.length > 0 && '\n'}
+                    <Text style={{ color: colors.grey }}>
+                      {productMaster.note}
+                    </Text>
+                    {'\n'}
+                    <Text style={{ fontSize: 12 }}>
+                      {productMaster.companyName}
+                    </Text>
                   </Text>
-                  {'\n'}
-                  <Text style={{ fontSize: 12 }}>
-                    {productMaster.companyName}
-                  </Text>
-                </Text>
-              )}
+                );
+              }}
               onPress={() => {
                 productMaster.showLink &&
                 this.handleProductListItemOnPress(productMaster)
