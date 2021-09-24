@@ -17,7 +17,7 @@ const fetchProductNews = async (language, nid) => {
     );
     if (Array.isArray(productNews) && productNews.length > 1) {
       productNews.sort(
-        (a, b) => (a.field_publish_date > b.field_publish_date ? -1 : 1) // desc
+        (a, b) => (a.publish_date > b.publish_date ? -1 : 1) // desc
       );
     }
   } catch (error) {
@@ -164,11 +164,11 @@ const loadConsumerInformation = async (resourceLink, language, nid) => {
       };
       regulatoryAnnouncement.key = 'reg-'.concat(ra.nid);
       regulatoryAnnouncement.date = ProductsParserService.getFormattedDate(
-        ProductsParserService.getDateWithTimezoneOffset(ra.field_publish_date),
+        ProductsParserService.getDateWithTimezoneOffset(ra.publish_date),
         language
       );
       regulatoryAnnouncement.description = ra.title;
-      regulatoryAnnouncement.link = ra.field_article_link;
+      regulatoryAnnouncement.link = ra.article_link;
       regulatoryAnnouncements.push(regulatoryAnnouncement);
     });
     productLoad.regulatoryAnnouncements = regulatoryAnnouncements;
