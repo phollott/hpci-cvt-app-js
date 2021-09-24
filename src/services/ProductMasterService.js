@@ -30,7 +30,12 @@ const productMaster = (product, id, language) => {
 const mapProduct = (product, id, language, isBookmark = false) => {
   const prod = productMaster(product, id, language);
   prod.showLink = true;
-  prod.searchKey = [prod.brandName, prod.companyName, prod.ingredient]
+  prod.searchKey = [
+    prod.brandName,
+    prod.companyName,
+    prod.ingredient,
+    prod.note
+  ]
     .join('-')
     .toLowerCase();
   prod.isNew = ProductsParserService.isProductNew(prod.approvalDate);
