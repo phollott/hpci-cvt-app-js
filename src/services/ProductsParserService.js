@@ -110,6 +110,14 @@ const getProductLink = (product) => {
   return prodLink;
 };
 
+const getProductNote = (product) => {
+  let note = '';
+  if (!isNil(product.note)) {
+    note = product.note.trim();
+  }
+  return note;
+};
+
 const getProductDateOfApproval = (product) => {
   let approvalDate = '';
   if (!isNil(product.date_of_approval)) {
@@ -254,6 +262,7 @@ export default {
   isAuthorizedProduct,
   getProductType,
   getProductLink,
+  getProductNote,
   getProductDateOfApproval,
   getProductDateOfApprovalFormatted,
   isProductNew,
