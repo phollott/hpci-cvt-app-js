@@ -177,10 +177,12 @@ class ViewProductDetails extends Component {
                   text={productMaster.approvalDateFormatted}
                   label={t('productDetails.card.approvalDateLabel')}
                 />
-                <ViewLabelledText
-                  text={productMaster.note}
-                  label={t('productDetails.card.productNote')}
-                />
+                {productMaster.note.length > 0 && (
+                  <ViewLabelledText
+                    text={productMaster.note}
+                    label={t('productDetails.card.productNote')}
+                  />
+                )}
               </Card.Content>
             </Card>
           </View>
