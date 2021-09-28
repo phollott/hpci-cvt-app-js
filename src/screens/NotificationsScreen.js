@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { Badge, List, Divider } from 'react-native-paper';
 import { useTheme } from '@react-navigation/native';
@@ -129,7 +129,15 @@ const NotificationsScreen = ({ navigation, route }) => {
           });
         });
     }
-    if (notificationsService.isProductSpecific(notification)) {
+    const externalLink = notificationsService.getExternalLink(notification);
+    if (isOnline && externalLink !== '') {
+      // console.log('external link (show in browser): ' + externalLink);
+      Linking.canOpenURL(externalLink).then((supported) => {
+        if (supported) {
+          Linking.openURL(externalLink);
+        }
+      });
+    } else if (notificationsService.isProductSpecific(notification)) {
       if (isOnline) {
         navigation.navigate('ProductsStack', { screen: 'Products' });
       } else {
@@ -216,11 +224,25 @@ const NotificationsScreen = ({ navigation, route }) => {
                     onPress={() => {
                       handleNotificationOnPress(notification);
                     }}
-                    right={() => (
-                      <Text style={styles.rightListItemText}>
-                        {getFormattedDate(notification.date)}
-                      </Text>
-                    )}
+                    right={() => {
+                      return (
+                        <View style={styles.rightListItem}>
+                          {notificationsService.getExternalLink(
+                            notification
+                          ) !== '' && (
+                            <Icon
+                              name="open-in-new"
+                              type="material-community"
+                              color={colors.darkColor}
+                              containerStyle={{ marginBottom: 4 }}
+                            />
+                          )}
+                          <Text style={styles.rightListItemText}>
+                            {getFormattedDate(notification.date)}
+                          </Text>
+                        </View>
+                      );
+                    }}
                   />
                 </Swipeable>
                 <Divider />
@@ -248,11 +270,16 @@ const styles = StyleSheet.create({
     top: 2,
     left: 36
   },
+  rightListItem: {
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    marginTop: 12,
+    marginRight: 14,
+    marginBottom: 12
+  },
   rightListItemText: {
     color: colors.grey,
     fontSize: 12,
-    marginTop: 12,
-    marginRight: 14,
     textAlign: 'right'
   },
   rightOpenContainer: {
