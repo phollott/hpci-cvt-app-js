@@ -18,7 +18,7 @@ const pushNotification = (notification) => {
       id: notification.request.identifier,
       date: notification.date, // in millis
       body: notification.request.content.body, // message
-      data: { ...notification.request.content.data }, // ex: {}, {"nid": 16}, {"nid": [16, 18, 20]}
+      data: { ...notification.request.content.data }, // ex: {}, {"nid": 16}, {"nid": [16, 18, 20]}, {"link": "https:..."}, both
       title: notification.request.content.title,
       isRead: false,
       isRemoved: false
@@ -44,6 +44,20 @@ const isProductSpecific = (notification) => {
     hasNid = true;
   }
   return hasNid;
+};
+
+const getExternalLink = (notification) => {
+  const { data } = notification;
+  let link = '';
+  if (
+    !isNil(data.link) &&
+    data.link.length > 10 &&
+    (data.link.toLowerCase().startsWith('https://') ||
+      data.link.toLowerCase().startsWith('http://'))
+  ) {
+    link = data.link;
+  }
+  return link;
 };
 
 async function saveExpoPushNotification(notification) {
@@ -344,5 +358,6 @@ export default {
   deleteNotification,
   updateNotificationIsRead,
   isProductSpecific,
+  getExternalLink,
   sendExpoPushNotification
 };

@@ -49,6 +49,8 @@ const PushNotificationScreen = ({ navigation, route }) => {
 
   const [addTestResourceChecked, setAddTestResourceChecked] = React.useState(false);
 
+  const [linkText, setLinkText] = React.useState('');
+
   // prep test resource for all products and set to local state
   const getMonth = () => {
     return ''.concat(1 + new Date().getMonth());
@@ -208,11 +210,29 @@ const PushNotificationScreen = ({ navigation, route }) => {
               />
             </View>
             <View style={gStyle.spacer8} />
+            <View style={{ width: '100%' }}>
+              <TextInput
+                label="Add external link"
+                value={linkText}
+                onChangeText={(input) => setLinkText(input)}
+              />
+            </View>
+            <View style={gStyle.spacer16} />
             <View style={{ width: '100%', justifyContent: 'center' }}>
               <Touch
                 onPress={async () => {
                   if (messageText.length === 0) {
                     Alert('Please enter a message.');
+                    return;
+                  }
+                  if (
+                    linkText.length > 0 &&
+                    !(
+                      linkText.toLowerCase().startsWith('https://') ||
+                      linkText.toLowerCase().startsWith('http://')
+                    )
+                  ) {
+                    Alert('Please enter a valid external link.');
                     return;
                   }
                   if (addTestResourceChecked) {
@@ -231,7 +251,11 @@ const PushNotificationScreen = ({ navigation, route }) => {
                     });
                     navStacks();
                   }
-                  await sendPushNotification(messageText, products);
+                  await sendPushNotification(
+                    messageText,
+                    products,
+                    linkText.toLowerCase()
+                  );
                 }}
                 text={t('home.pushNotification.button.sendTitle')}
                 lIconName="share"
@@ -285,7 +309,7 @@ const PushNotificationScreen = ({ navigation, route }) => {
 // can use this function below, or
 // Expo's Push Notification Tool-> https://expo.io/notifications  (data examples: {"nid": 16} or {"nid": [15,16,9]})
 // TODO: replace with backend
-async function sendPushNotification(messageText, products) {
+async function sendPushNotification(messageText, products, linkText) {
   notifications.retrieveExpoPushToken().then((expoPushToken) => {
     const nids = [];
     products.forEach((product) => {
@@ -299,7 +323,10 @@ async function sendPushNotification(messageText, products) {
       badge: 1,
       title: 'Health Canada • Santé Canada',
       body: messageText,
-      data: { nid: nids }
+      data: {
+        nid: nids,
+        link: linkText
+      }
     };
     notifications.sendExpoPushNotification(message);
   });
