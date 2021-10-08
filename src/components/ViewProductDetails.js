@@ -237,13 +237,33 @@ class ViewProductDetails extends Component {
               titleStyle={{ fontWeight: 'bold' }}
               titleNumberOfLines={2}
               theme={{ colors: { primary: colors.blue } }}
-              left={(props) => (
-                <List.Icon
-                  {...props}
-                  icon="comment-question-outline"
-                  style={{ marginHorizontal: 0 }}
-                />
-              )}
+              left={(props) => {
+                const { consumerInformationResource } = this.props;
+                const isUpdatedOrNew =
+                  consumerInformationResource &&
+                  (consumerInformationResource.isNew ||
+                    consumerInformationResource.isUpdated);
+                return (
+                  <>
+                    <List.Icon
+                      {...props}
+                      icon="comment-question-outline"
+                      style={{ marginHorizontal: 0 }}
+                    />
+                    {isUpdatedOrNew && (
+                      <Badge
+                        size={16}
+                        style={[
+                          styles.updateIndicatorBadge,
+                          {
+                            backgroundColor: colors.green
+                          }
+                        ]}
+                      />
+                    )}
+                  </>
+                );
+              }}
             >
               <ViewCardText
                 text={t('productDetails.card.consumerInformationText')}
