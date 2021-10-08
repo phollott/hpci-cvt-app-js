@@ -36,7 +36,9 @@ class App extends React.Component {
 
     this.updateTheme = this.updateTheme.bind(this);
     this.retrieveLanguagePreference = this.retrieveLanguagePreference.bind(this);
+    this.keyBookmark = this.keyBookmark.bind(this);
     this.saveBookmark = this.saveBookmark.bind(this);
+    this.deleteBookmark = this.deleteBookmark.bind(this);
     this.retrieveBookmarks = this.retrieveBookmarks.bind(this);
     this.fetchProducts = this.fetchProducts.bind(this);
     this.loadInitialStateAsync = this.loadInitialStateAsync.bind(this);
@@ -71,14 +73,27 @@ class App extends React.Component {
     }
   };
 
+  keyBookmark = async (bookmark) => {
+    return 'bookmark-product'.concat(
+      bookmark.nid
+        .concat('-')
+        .concat(bookmark.language.toLowerCase().substring(0, 2))
+    );
+  };
+
   saveBookmark = async (bookmark) => {
     try {
-      const key = 'bookmark-product'.concat(
-        bookmark.nid
-          .concat('-')
-          .concat(bookmark.language.toLowerCase().substring(0, 2))
-      );
+      const key = await this.keyBookmark(bookmark);
       await storage.save(key, JSON.stringify(bookmark));
+    } catch (error) {
+      console.log('Unable to sync bookmark with product. ', error);
+    }
+  };
+
+  deleteBookmark = async (bookmark) => {
+    try {
+      const key = await this.keyBookmark(bookmark);
+      await storage.delete(key);
     } catch (error) {
       console.log('Unable to sync bookmark with product. ', error);
     }
@@ -134,7 +149,8 @@ class App extends React.Component {
                   this.saveBookmark(product[0]);
                 });
             } else {
-              bookmarks.push(bookmark);
+              // update storage async
+              this.deleteBookmark(product[0]);
             }
           } else {
             bookmarks.push(bookmark);
@@ -151,6 +167,9 @@ class App extends React.Component {
     let products = [];
     try {
       products = await fetchProductsAsync();
+      products = products.filter((product) => {
+        return !productsParser.isProductUnderReview(product);
+      });
       products = JSON.parse(
         he.decode(JSON.stringify(products).replace(/&quot;/gi, '\\"')) // &quot; expected only in string values, so escape for decode
       );

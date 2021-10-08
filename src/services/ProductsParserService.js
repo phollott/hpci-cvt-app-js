@@ -152,6 +152,13 @@ const isProductUpdated = (product) => {
   return isProductResourceChanged;
 };
 
+const isProductUnderReview = (product) => {
+  return (
+    product.status.toLowerCase().includes('under review') ||
+    product.status.toLowerCase().includes('en cours d’examen')
+  );
+};
+
 // //
 // Product resource (resource: store's products.product.resource)
 
@@ -267,6 +274,7 @@ export default {
   getProductDateOfApprovalFormatted,
   isProductNew,
   isProductUpdated,
+  isProductUnderReview,
   isProductResourceForConsumers,
   isProductResourceConsumerInfo,
   getProductResourceDescription,
