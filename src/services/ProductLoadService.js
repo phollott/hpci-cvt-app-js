@@ -6,7 +6,10 @@ import {
   portailVaccinCovid
 } from '../constants/constants';
 import { fetchProductNewsAsync } from '../api/covid19Products';
-import ProductsParserService from './ProductsParserService';
+import {
+  getDateWithTimezoneOffset,
+  getFormattedDate
+} from '../shared/date-fns';
 
 const fetchProductNews = async (language, nid) => {
   let productNews = [];
@@ -163,8 +166,8 @@ const loadConsumerInformation = async (resourceLink, language, nid) => {
         link: null
       };
       regulatoryAnnouncement.key = 'reg-'.concat(ra.nid);
-      regulatoryAnnouncement.date = ProductsParserService.getFormattedDate(
-        ProductsParserService.getDateWithTimezoneOffset(ra.publish_date),
+      regulatoryAnnouncement.date = getFormattedDate(
+        getDateWithTimezoneOffset(ra.publish_date),
         language
       );
       regulatoryAnnouncement.description = ra.title;

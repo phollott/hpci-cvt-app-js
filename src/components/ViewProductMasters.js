@@ -6,12 +6,13 @@ import Icon from './Icon';
 import { colors } from '../constants';
 // services
 import { notifications } from '../services';
+import { getCurrentTimeInMillis } from '../shared/date-fns';
 
 export default class ViewProductMasters extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      productLastViewed: new Date().getTime()
+      productLastViewed: getCurrentTimeInMillis()
     };
     this.addNotificationListener = this.addNotificationListener.bind(this);
     this.syncProduct = this.syncProduct.bind(this);
@@ -44,7 +45,7 @@ export default class ViewProductMasters extends Component {
 
   handleProductOnPress = (productMaster) => {
     const { navigation } = this.props;
-    const timeInMillis = new Date().getTime();
+    const timeInMillis = getCurrentTimeInMillis();
     this.setState({
       productLastViewed: timeInMillis
     });

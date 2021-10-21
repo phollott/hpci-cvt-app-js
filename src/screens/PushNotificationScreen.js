@@ -12,6 +12,11 @@ import ViewCardText from '../components/ViewCardText';
 import { addProduct } from '../redux/actions/productActions';
 import { addBookmark } from '../redux/actions/bookmarkActions';
 import { notifications, productsParser } from '../services';
+import {
+  getCurrentDate,
+  getCurrentTimeInMillis,
+  getDateWithTimezoneOffset
+} from '../shared/date-fns';
 
 // dev tool
 
@@ -52,20 +57,20 @@ const PushNotificationScreen = ({ navigation, route }) => {
   const [linkText, setLinkText] = React.useState('');
 
   // prep test resource for all products and set to local state
-  const getMonth = () => {
-    return ''.concat(1 + new Date().getMonth());
+  const formatMonth = () => {
+    return ''.concat(1 + getCurrentDate().getMonth());
   };
-  const getDate = () => {
-    return ''.concat(new Date().getDate());
+  const formatDate = () => {
+    return ''.concat(getCurrentDate().getDate());
   };
-  const getCurrentDate = () => {
-    return productsParser.getDateWithTimezoneOffset(
+  const formatCurrentDate = () => {
+    return getDateWithTimezoneOffset(
       ''
-        .concat(new Date().getFullYear())
+        .concat(getCurrentDate().getFullYear())
         .concat('-')
-        .concat(getMonth().length === 2 ? getMonth() : '0'.concat(getMonth()))
+        .concat(formatMonth().length === 2 ? formatMonth() : '0'.concat(formatMonth()))
         .concat('-')
-        .concat(getDate().length === 2 ? getDate() : '0'.concat(getDate()))
+        .concat(formatDate().length === 2 ? formatDate() : '0'.concat(formatDate()))
     );
   };
   const bookmarksInStore = useSelector((state) => state.bookmarks);
@@ -91,31 +96,31 @@ const PushNotificationScreen = ({ navigation, route }) => {
           newTestResource.resource_link.text = 'Regulatory Decision Summary - test';
           switch (resource.id) {
             case '77': // Vaxzevria:
-              newTestResource.date = resource.date.replace('2021-02-26', getCurrentDate());
+              newTestResource.date = resource.date.replace('2021-02-26', formatCurrentDate());
               break;
             case '56': // SPIKEVAX:
-              newTestResource.date = resource.date.replace('2020-12-23', getCurrentDate());
+              newTestResource.date = resource.date.replace('2020-12-23', formatCurrentDate());
               break;
             case '92': // COVISHIELD:
-              newTestResource.date = resource.date.replace('2021-02-26', getCurrentDate());
+              newTestResource.date = resource.date.replace('2021-02-26', formatCurrentDate());
               break;
             case '106': // Janssen:
-              newTestResource.date = resource.date.replace('2021-03-12', getCurrentDate());
+              newTestResource.date = resource.date.replace('2021-03-12', formatCurrentDate());
               break;
             case '29': // Comirnaty:
-              newTestResource.date = resource.date.replace('2020-12-09', getCurrentDate());
+              newTestResource.date = resource.date.replace('2020-12-09', formatCurrentDate());
               break;
             case '19': // Bamlanivimab:
-              newTestResource.date = resource.date.replace('2020-10-12', getCurrentDate());
+              newTestResource.date = resource.date.replace('2020-10-12', formatCurrentDate());
               break;
             case '8': // Veklury:
-              newTestResource.date = resource.date.replace('2020-07-27', getCurrentDate());
+              newTestResource.date = resource.date.replace('2020-07-27', formatCurrentDate());
               break;
             case '145': // Sotrovimab:
-              newTestResource.date = resource.date.replace('2021-07-30', getCurrentDate());
+              newTestResource.date = resource.date.replace('2021-07-30', formatCurrentDate());
               break;
             case '134': // Casirivimab / imdevimab:
-              newTestResource.date = resource.date.replace('2021-06-09', getCurrentDate());
+              newTestResource.date = resource.date.replace('2021-06-09', formatCurrentDate());
               break;
             default:
               break;
@@ -141,13 +146,13 @@ const PushNotificationScreen = ({ navigation, route }) => {
     navigation.navigate('ProductsStack', {
       screen: 'Products',
       params: {
-        productAction: '-pntest-'.concat(new Date().getTime().toString())
+        productAction: '-pntest-'.concat(getCurrentTimeInMillis().toString())
       }
     });
     navigation.navigate('BookmarksStack', {
       screen: 'Bookmarks',
       params: {
-        bookmarkAction: '-pntest-'.concat(new Date().getTime().toString())
+        bookmarkAction: '-pntest-'.concat(getCurrentTimeInMillis().toString())
       }
     });
     navigation.navigate('HomeStack', {
