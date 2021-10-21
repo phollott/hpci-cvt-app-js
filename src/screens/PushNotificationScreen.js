@@ -36,10 +36,10 @@ const PushNotificationScreen = ({ navigation, route }) => {
 
   let covid19Products = [];
   covid19Products.push({ nid: 29, brandName: 'COVISHIELD', checked: false });
-  covid19Products.push({ nid: 28, brandName: 'AstraZeneca', checked: false });
+  covid19Products.push({ nid: 28, brandName: 'Vaxzevria', checked: false });
   covid19Products.push({ nid: 27, brandName: 'Janssen', checked: false });
-  covid19Products.push({ nid: 16, brandName: 'Pfizer-BioNTech', checked: false });
-  covid19Products.push({ nid: 15, brandName: 'Moderna', checked: false });
+  covid19Products.push({ nid: 16, brandName: 'Comirnaty', checked: false });
+  covid19Products.push({ nid: 15, brandName: 'SPIKEVAX', checked: false });
   covid19Products.push({ nid: 9, brandName: 'Veklury', checked: false });
   covid19Products.push({ nid: 8, brandName: 'Bamlanivimab', checked: false });
   covid19Products.push({ nid: 36, brandName: 'Sotrovimab', checked: false });
@@ -83,38 +83,38 @@ const PushNotificationScreen = ({ navigation, route }) => {
       const resourcesWithTestResource = [];
       let newTestResource = {};
       product.resources.forEach((resource) => {
-        // consummer rds for A,M,C,J,P,B,V,S,CI: 77,56,92,106,29,19,8
+        // consummer rds for Va,Sp,Cov,J,Com,B,Ve,So,CI: 77,56,92,106,29,19,8
         if (['77', '56', '92', '106', '29', '19', '8', '145', '134'].includes(resource.id)) {
           newTestResource = { ...resource };
           newTestResource = JSON.parse(JSON.stringify(newTestResource));
           newTestResource.id = resource.id.concat('000');
           newTestResource.resource_link.text = 'Regulatory Decision Summary - test';
           switch (resource.id) {
-            case '77': // A:
+            case '77': // Vaxzevria:
               newTestResource.date = resource.date.replace('2021-02-26', getCurrentDate());
               break;
-            case '56': // M:
+            case '56': // SPIKEVAX:
               newTestResource.date = resource.date.replace('2020-12-23', getCurrentDate());
               break;
-            case '92': // C:
+            case '92': // COVISHIELD:
               newTestResource.date = resource.date.replace('2021-02-26', getCurrentDate());
               break;
-            case '106': // J:
+            case '106': // Janssen:
               newTestResource.date = resource.date.replace('2021-03-12', getCurrentDate());
               break;
-            case '29': // P:
+            case '29': // Comirnaty:
               newTestResource.date = resource.date.replace('2020-12-09', getCurrentDate());
               break;
-            case '19': // B:
+            case '19': // Bamlanivimab:
               newTestResource.date = resource.date.replace('2020-10-12', getCurrentDate());
               break;
-            case '8': // V:
+            case '8': // Veklury:
               newTestResource.date = resource.date.replace('2020-07-27', getCurrentDate());
               break;
-            case '145': // S:
+            case '145': // Sotrovimab:
               newTestResource.date = resource.date.replace('2021-07-30', getCurrentDate());
               break;
-            case '134': // CI:
+            case '134': // Casirivimab / imdevimab:
               newTestResource.date = resource.date.replace('2021-06-09', getCurrentDate());
               break;
             default:
