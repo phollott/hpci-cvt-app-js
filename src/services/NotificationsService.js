@@ -5,6 +5,7 @@ import * as Notifications from 'expo-notifications';
 import { EventRegister } from 'react-native-event-listeners';
 import StorageService from './StorageService';
 import { isNil } from '../shared/util';
+import { getCurrentTimeInMillis } from '../shared/date-fns';
 
 const NOTIFICATION_RECEIVED = 'notificationReceived'; // while app in foreground
 const NOTIFICATION_RESPONSE_RECEIVED = 'notificationResponseReceived'; // while app in foreground, background or closed
@@ -238,7 +239,7 @@ async function deleteNotification(inNotification) {
 async function setViewed(inNotification) {
   const { id } = inNotification;
   const notification = JSON.parse(JSON.stringify(inNotification));
-  notification.viewed = new Date().getTime();
+  notification.viewed = getCurrentTimeInMillis();
   try {
     StorageService.save(
       PERSIST_NOTIFICATION_KEY_PREFIX.concat(id),

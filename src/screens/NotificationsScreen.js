@@ -13,10 +13,8 @@ import Icon from '../components/Icon';
 import ReadMoreText from '../components/ReadMoreText';
 import Touch from '../components/Touch';
 import ViewCardText from '../components/ViewCardText';
-import {
-  notifications as notificationsService,
-  productsParser
-} from '../services';
+import { notifications as notificationsService } from '../services';
+import { compareDesc, getFormattedDate } from '../shared/date-fns';
 import { isNil } from '../shared/util';
 
 const NotificationsScreen = ({ navigation, route }) => {
@@ -24,13 +22,9 @@ const NotificationsScreen = ({ navigation, route }) => {
 
   const [notifications, setNotifications] = useState([]);
 
-  const dateComparator = (a, b) => {
-    return a.date < b.date ? 1 : -1;
-  };
-
   const retrieveNotifications = () => {
     notificationsService.retrieveNotifications().then((retrieved) => {
-      setNotifications(retrieved.sort(dateComparator));
+      setNotifications(retrieved.sort(compareDesc));
     });
   };
 
@@ -47,7 +41,7 @@ const NotificationsScreen = ({ navigation, route }) => {
           if (!notification.isRemoved) {
             currState.push(notification);
           }
-          currState.sort(dateComparator);
+          currState.sort(compareDesc);
           return currState;
         });
       }
@@ -81,8 +75,8 @@ const NotificationsScreen = ({ navigation, route }) => {
 
   const isOnline = useSelector((state) => state.settings.isOnline);
 
-  const getFormattedDate = (timeOfNotification) => {
-    let formattedDate = productsParser.getFormattedDate(
+  const formatNotificationDate = (timeOfNotification) => {
+    let formattedDate = getFormattedDate(
       new Date(
         timeOfNotification.toString().indexOf('.') > -1
           ? Math.round(timeOfNotification * 1000)
@@ -227,7 +221,7 @@ const NotificationsScreen = ({ navigation, route }) => {
                             />
                           )}
                           <Text style={styles.rightListItemText}>
-                            {getFormattedDate(notification.date)}
+                            {formatNotificationDate(notification.date)}
                           </Text>
                         </View>
                       );

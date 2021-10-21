@@ -10,6 +10,7 @@ import { addBookmark, removeBookmark } from '../redux/actions/bookmarkActions';
 import { selectProductsByID } from '../redux/selectors/productSelector';
 import { selectBookmarkExists } from '../redux/selectors/bookmarkSelector';
 import { productLoad, productsParser, storage } from '../services';
+import { getCurrentTimeInMillis } from '../shared/date-fns';
 
 const BookmarkProduct = ({ navigation, route }) => {
   const state = useSelector((state) => state);
@@ -27,7 +28,7 @@ const BookmarkProduct = ({ navigation, route }) => {
       screen: 'Bookmarks',
       params: {
         bookmarkAction: (isBookmark ? '-remove' : '-add-'.concat(nid)).concat(
-          '-'.concat(new Date().getTime().toString())
+          '-'.concat(getCurrentTimeInMillis().toString())
         )
       }
     });

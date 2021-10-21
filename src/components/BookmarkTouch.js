@@ -12,6 +12,7 @@ import {
   selectBookmarksByID
 } from '../redux/selectors/bookmarkSelector';
 import { storage } from '../services';
+import { getCurrentTimeInMillis } from '../shared/date-fns';
 
 const BookmarkTouch = ({ navigation, route }) => {
   const state = useSelector((state) => state);
@@ -28,7 +29,7 @@ const BookmarkTouch = ({ navigation, route }) => {
     navigation.navigate('BookmarksStack', {
       screen: 'Bookmarks',
       params: {
-        bookmarkAction: '-remove-'.concat(new Date().getTime().toString())
+        bookmarkAction: '-remove-'.concat(getCurrentTimeInMillis().toString())
       }
     });
   };
