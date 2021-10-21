@@ -20,7 +20,7 @@ const pushNotification = (notification) => {
       body: notification.request.content.body, // message
       data: { ...notification.request.content.data }, // ex: {}, {"nid": 16}, {"nid": [16, 18, 20]}, {"link": "https:..."}, both
       title: notification.request.content.title,
-      isRead: false,
+      viewed: null, // in millis
       isRemoved: false
     };
   }
@@ -31,7 +31,7 @@ const isNil = (value) => {
   return typeof value === 'undefined' || value === null;
 };
 
-// notificationEvent emitted by: handleNotification, deleteNotification, updateNotificationIsRead
+// notificationEvent emitted by: handleNotification, deleteNotification, setViewed
 
 const isProductSpecific = (notification) => {
   const { data } = notification;
@@ -192,72 +192,6 @@ async function saveExpoPushToken(token) {
   }
 }
 
-async function findProductNidsWithUnreadNotification() {
-  const nids = [];
-  let keys = [];
-  let storedNotifications = [];
-  try {
-    keys = await StorageService.retrieveKeys();
-    if (keys.length > 0) {
-      keys = keys.filter((key) => {
-        return key.startsWith(PERSIST_NOTIFICATION_KEY_PREFIX);
-      });
-      storedNotifications =
-        keys !== null ? await StorageService.retrieveMulti(keys) : [];
-      if (storedNotifications.length > 0) {
-        storedNotifications = storedNotifications.filter((notification) => {
-          const pn = JSON.parse(notification[1]);
-          const { data, isRead } = pn;
-          if (!isRead && isProductSpecific(pn)) {
-            if (Array.isArray(data.nid)) {
-              nids.push(...data.nid);
-            } else {
-              nids.push(data.nid);
-            }
-          }
-          return false;
-        });
-      }
-    }
-  } catch (error) {
-    console.log('findProductNidsWithUnreadNotification error: ', error);
-  }
-  return [...new Set(nids)];
-}
-
-async function updateNotificationsAsReadForProduct(nid) {
-  const nidToUpdate = parseInt(nid, 10);
-  let keys = [];
-  let storedNotifications = [];
-  try {
-    keys = await StorageService.retrieveKeys();
-    if (keys.length > 0) {
-      keys = keys.filter((key) => {
-        return key.startsWith(PERSIST_NOTIFICATION_KEY_PREFIX);
-      });
-      storedNotifications =
-        keys !== null ? await StorageService.retrieveMulti(keys) : [];
-      if (storedNotifications.length > 0) {
-        storedNotifications = storedNotifications.filter((notification) => {
-          const pn = JSON.parse(notification[1]);
-          const { data, isRead } = pn;
-          if (
-            !isRead &&
-            (data.nid === nidToUpdate ||
-              (Array.isArray(data.nid) && data.nid.includes(nidToUpdate)))
-          ) {
-            pn.isRead = true;
-            StorageService.save(notification[0], JSON.stringify(pn));
-          }
-          return false;
-        });
-      }
-    }
-  } catch (error) {
-    console.log('updateNotificationsAsReadForProduct error: ', error);
-  }
-}
-
 async function retrieveNotifications() {
   let keys = [];
   let storedNotifications = [];
@@ -304,10 +238,10 @@ async function deleteNotification(inNotification) {
   }
 }
 
-async function updateNotificationIsRead(inNotification, isRead) {
+async function setViewed(inNotification) {
   const { id } = inNotification;
   const notification = JSON.parse(JSON.stringify(inNotification));
-  notification.isRead = isRead;
+  notification.viewed = new Date().getTime();
   try {
     StorageService.save(
       PERSIST_NOTIFICATION_KEY_PREFIX.concat(id),
@@ -321,7 +255,7 @@ async function updateNotificationIsRead(inNotification, isRead) {
       'Unable to update stored notification '
         .concat(PERSIST_NOTIFICATION_KEY_PREFIX)
         .concat(id)
-        .concat(' IsRead. '),
+        .concat(' viewed. '),
       error
     );
   }
@@ -352,11 +286,9 @@ export default {
   registerForPushNotificationsAsync,
   retrieveExpoPushToken,
   saveExpoPushToken,
-  findProductNidsWithUnreadNotification,
-  updateNotificationsAsReadForProduct,
   retrieveNotifications,
   deleteNotification,
-  updateNotificationIsRead,
+  setViewed,
   isProductSpecific,
   getExternalLink,
   sendExpoPushNotification

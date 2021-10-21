@@ -23,6 +23,10 @@ const NotificationsScreen = ({ navigation, route }) => {
 
   const [notifications, setNotifications] = useState([]);
 
+  const isNil = (value) => {
+    return typeof value === 'undefined' || value === null;
+  };
+
   const dateComparator = (a, b) => {
     return a.date < b.date ? 1 : -1;
   };
@@ -34,7 +38,7 @@ const NotificationsScreen = ({ navigation, route }) => {
   };
 
   let listener;
-  const addNotificationEventListener = () => {
+  const addNotificationListener = () => {
     listener = EventRegister.addEventListener(
       'notificationEvent',
       (notification) => {
@@ -56,7 +60,7 @@ const NotificationsScreen = ({ navigation, route }) => {
   useEffect(() => {
     retrieveNotifications();
 
-    addNotificationEventListener();
+    addNotificationListener();
 
     // when component unmounts
     return () => {
@@ -113,21 +117,9 @@ const NotificationsScreen = ({ navigation, route }) => {
   };
 
   const handleNotificationOnPress = (notification) => {
-    const { id, isRead } = notification;
-    if (!isRead && !notificationsService.isProductSpecific(notification)) {
-      notificationsService
-        .updateNotificationIsRead(notification, true)
-        .then((updated) => {
-          // update notifications state
-          setNotifications((prevState) => {
-            const currState = prevState.filter((value) => {
-              return value.id !== id;
-            });
-            currState.push(updated);
-            currState.sort(dateComparator);
-            return currState;
-          });
-        });
+    const { viewed } = notification;
+    if (isNil(viewed)) {
+      notificationsService.setViewed(notification);
     }
     const externalLink = notificationsService.getExternalLink(notification);
     if (isOnline && externalLink !== '') {
@@ -200,7 +192,7 @@ const NotificationsScreen = ({ navigation, route }) => {
                                 : colors.darkColor
                             }
                           />
-                          {!notification.isRead && (
+                          {isNil(notification.viewed) && (
                             <Badge
                               size={14}
                               style={[

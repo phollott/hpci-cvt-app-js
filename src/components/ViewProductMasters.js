@@ -11,95 +11,53 @@ export default class ViewProductMasters extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      productNidsWithUnreadNotification: [],
-      unreadProductNidsUpdatedTime: 0
+      productLastViewed: new Date().getTime()
     };
-    this.addNotificationEventListener = this.addNotificationEventListener.bind(this);
-    this.updateUnreadProductNids = this.updateUnreadProductNids.bind(this);
-    this.handleProductListItemOnPress = this.handleProductListItemOnPress.bind(this);
-    this.resetStack = this.resetStack.bind(this);
+    this.addNotificationListener = this.addNotificationListener.bind(this);
+    this.syncProduct = this.syncProduct.bind(this);
+    this.handleProductOnPress = this.handleProductOnPress.bind(this);
   }
 
   componentDidMount() {
-    this.addNotificationEventListener();
-    this.updateUnreadProductNids();
+    this.addNotificationListener();
   }
 
   componentWillUnmount() {
     EventRegister.removeEventListener(this.listener);
   }
 
-  addNotificationEventListener = () => {
+  addNotificationListener = () => {
     this.listener = EventRegister.addEventListener(
       'notificationEvent',
       (notification) => {
         if (notifications.isProductSpecific(notification)) {
-          this.updateUnreadProductNids();
+          this.syncProduct(notification.data.nid);
         }
       }
     );
   };
 
-  updateUnreadProductNids = () => {
-    notifications.findProductNidsWithUnreadNotification().then((nids) => {
-      const timeInMillis = new Date().getTime();
-      this.setState({
-        productNidsWithUnreadNotification: nids,
-        unreadProductNidsUpdatedTime: timeInMillis
-      });
+  syncProduct = (nid) => {
+    // TODO: for each product nid, re-fetch from api
+    return nid;
+  };
+
+  handleProductOnPress = (productMaster) => {
+    const { navigation } = this.props;
+    const timeInMillis = new Date().getTime();
+    this.setState({
+      productLastViewed: timeInMillis
     });
-  };
-
-  handleProductListItemOnPress = (productMaster) => {
-    const { navigation } = this.props;
-    const { productNidsWithUnreadNotification } = this.state;
-    if (
-      productNidsWithUnreadNotification.includes(
-        parseInt(productMaster.nid, 10)
-      )
-    ) {
-      notifications
-        .updateNotificationsAsReadForProduct(productMaster.nid)
-        .then(() => {
-          this.updateUnreadProductNids();
-          this.resetStack(productMaster.isBookmark);
-          navigation.navigate('ProductDetails', { productMaster });
-        });
-    } else {
-      navigation.navigate('ProductDetails', { productMaster });
-    }
-  };
-
-  resetStack = (isBookmark) => {
-    const { navigation } = this.props;
-    const { unreadProductNidsUpdatedTime } = this.state;
-    // reset other stack
-    if (isBookmark) {
-      navigation.navigate('ProductsStack', {
-        screen: 'Products',
-        params: {
-          productAction: '-'.concat(unreadProductNidsUpdatedTime)
-        }
-      });
-    } else {
-      navigation.navigate('BookmarksStack', {
-        screen: 'Bookmarks',
-        params: {
-          bookmarkAction: '-'.concat(unreadProductNidsUpdatedTime)
-        }
-      });
-    }
+    // TODO: update product as viewed (storage and state store), then navigate (and don't show badge if viewed is within last 7 days)
+    navigation.navigate('ProductDetails', { productMaster });
   };
 
   render() {
     const { productMasters } = this.props;
-    const {
-      productNidsWithUnreadNotification,
-      unreadProductNidsUpdatedTime
-    } = this.state;
+    const { productLastViewed } = this.state;
     return (
       <View
-        key={'view-productMasters-'.concat(unreadProductNidsUpdatedTime)}
+        key={'view-productMasters-'.concat(productLastViewed)}
         style={{
           backgroundColor: 'white',
           width: '100%',
@@ -126,11 +84,7 @@ export default class ViewProductMasters extends Component {
                       name={ productMaster.type === 'Vaccine' ? 'syringe' : 'pills' }
                       color={ productMaster.showLink ? colors.darkColor : colors.orange }
                     />
-                    {(productMaster.isNew ||
-                      productMaster.isUpdated ||
-                      productNidsWithUnreadNotification.includes(
-                        parseInt(productMaster.nid, 10)
-                      )) && (
+                    {(productMaster.isNew || productMaster.isUpdated) && (
                       <Badge
                         size={16}
                         style={[
@@ -164,7 +118,7 @@ export default class ViewProductMasters extends Component {
               }}
               onPress={() => {
                 productMaster.showLink &&
-                this.handleProductListItemOnPress(productMaster)
+                this.handleProductOnPress(productMaster)
               }}
               right={() => {
                 return productMaster.showLink
