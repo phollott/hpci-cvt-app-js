@@ -17,15 +17,12 @@ import {
   notifications as notificationsService,
   productsParser
 } from '../services';
+import { isNil } from '../shared/util';
 
 const NotificationsScreen = ({ navigation, route }) => {
   const theme = useTheme();
 
   const [notifications, setNotifications] = useState([]);
-
-  const isNil = (value) => {
-    return typeof value === 'undefined' || value === null;
-  };
 
   const dateComparator = (a, b) => {
     return a.date < b.date ? 1 : -1;

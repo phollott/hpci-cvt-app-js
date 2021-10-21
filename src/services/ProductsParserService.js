@@ -1,5 +1,4 @@
 import { t } from 'i18n-js';
-import cheerio from 'react-native-cheerio';
 import {
   lang,
   covidVaccinePortal,
@@ -8,15 +7,12 @@ import {
   portailVaccinCovidStage,
   productType
 } from '../constants/constants';
+import { isNil } from '../shared/util';
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 const WINDOW_IN_DAYS = 7;
 const EN_MONTH = 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_');
 const FR_MONTH = 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_decembre'.split('_');
-
-const isNil = (value) => {
-  return typeof value === 'undefined' || value === null;
-};
 
 const getDateWithTimezoneOffset = (isoDate) => {
   // expected format: YYYY-MM-DD
@@ -46,19 +42,6 @@ const getFormattedDate = (dtraw, language) => {
       break;
     default:
       formattedDate = dtraw.substring(0, 10);
-  }
-  return formattedDate;
-};
-
-const getFormattedDateFromHtml = (htmlDateTime, language) => {
-  let formattedDate = '';
-  if (!isNil(htmlDateTime)) {
-    if (htmlDateTime.indexOf('<time ') > -1) {
-      // ex: "<time datetime=\"2021-02-23T12:00:00Z\">Tue, 02/23/2021 - 12:00</time>\n"
-      const $ = cheerio.load(htmlDateTime);
-      const dtraw = new Date($('time').attr('datetime'));
-      formattedDate = getFormattedDate(dtraw, language);
-    }
   }
   return formattedDate;
 };
@@ -265,7 +248,6 @@ const isProductResourceUpdated = (resource) => {
 export default {
   getDateWithTimezoneOffset,
   getFormattedDate,
-  getFormattedDateFromHtml,
   isAuthorizedProduct,
   getProductType,
   getProductLink,
