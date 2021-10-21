@@ -4,6 +4,7 @@ import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import { EventRegister } from 'react-native-event-listeners';
 import StorageService from './StorageService';
+import { isNil } from '../shared/util';
 
 const NOTIFICATION_RECEIVED = 'notificationReceived'; // while app in foreground
 const NOTIFICATION_RESPONSE_RECEIVED = 'notificationResponseReceived'; // while app in foreground, background or closed
@@ -25,10 +26,6 @@ const pushNotification = (notification) => {
     };
   }
   return {};
-};
-
-const isNil = (value) => {
-  return typeof value === 'undefined' || value === null;
 };
 
 // notificationEvent emitted by: handleNotification, deleteNotification, setViewed
