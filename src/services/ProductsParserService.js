@@ -5,13 +5,14 @@ import {
   portailVaccinCovid,
   covidVaccinePortalStage,
   portailVaccinCovidStage,
+  newlyModifiedWindowInDays,
   productType
 } from '../constants/constants';
 import { isNil } from '../shared/util';
 import {
   getDateWithTimezoneOffset,
-  getFormattedDate,
-  isDateWithinWindow
+  formatDate,
+  isDateWithinDaysBefore
 } from '../shared/date-fns';
 
 // //
@@ -65,14 +66,14 @@ const getProductDateOfApproval = (product) => {
 
 const getProductDateOfApprovalFormatted = (product, language) => {
   // date_of_approval expected
-  return getFormattedDate(
+  return formatDate(
     getDateWithTimezoneOffset(product.date_of_approval),
     language
   );
 };
 
 const isProductNew = (productApprovalDate) => {
-  return isDateWithinWindow(productApprovalDate);
+  return isDateWithinDaysBefore(productApprovalDate, newlyModifiedWindowInDays);
 };
 
 const isProductUpdated = (product) => {
@@ -151,7 +152,7 @@ const getProductResourcePublicationStatus = (resource, language) => {
   // publicationStatus: date (formatted) or if various_dates: various or pending
   let publicationStatus = '';
   if (!isNil(resource.date)) {
-    publicationStatus = getFormattedDate(
+    publicationStatus = formatDate(
       getDateWithTimezoneOffset(resource.date),
       language
     );
@@ -185,7 +186,10 @@ const getProductResourceType = (link) => {
 const isProductResourceNew = (resource) => {
   let isResourceNew = false;
   if (!isNil(resource.date)) {
-    isResourceNew = isDateWithinWindow(resource.date);
+    isResourceNew = isDateWithinDaysBefore(
+      resource.date,
+      newlyModifiedWindowInDays
+    );
   }
   return isResourceNew;
 };
@@ -193,7 +197,10 @@ const isProductResourceNew = (resource) => {
 const isProductResourceUpdated = (resource) => {
   let isResourceUpdated = false;
   if (!isNil(resource.updated_date)) {
-    isResourceUpdated = isDateWithinWindow(resource.updated_date);
+    isResourceUpdated = isDateWithinDaysBefore(
+      resource.updated_date,
+      newlyModifiedWindowInDays
+    );
   }
   return isResourceUpdated;
 };

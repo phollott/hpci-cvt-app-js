@@ -28,6 +28,8 @@ First, make sure you have Expo CLI installed: `npm install -g expo-cli`
 
 Install: `yarn` or `yarn install`
 
+Add .env: see .env.template
+
 Run Project Locally: `expo start`
 
 ## development on a physical device
@@ -35,6 +37,7 @@ Run Project Locally: `expo start`
 - first, your machine and physical device should be on the same wifi connection
 - make sure you have Expo CLI installed globally, if not run:
   - `npm install -g expo-cli`
+- then configure .env: see .env.template
 - then navigate to this project's directory on your machine and run:
   - `expo start`
 - now download the Expo Client app on your preferred physical device:

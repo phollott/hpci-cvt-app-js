@@ -13,8 +13,8 @@ import { addProduct } from '../redux/actions/productActions';
 import { addBookmark } from '../redux/actions/bookmarkActions';
 import { notifications, productsParser } from '../services';
 import {
-  getCurrentDate,
-  getCurrentTimeInMillis,
+  getDate,
+  getTimeInMillis,
   getDateWithTimezoneOffset
 } from '../shared/date-fns';
 
@@ -58,15 +58,15 @@ const PushNotificationScreen = ({ navigation, route }) => {
 
   // prep test resource for all products and set to local state
   const formatMonth = () => {
-    return ''.concat(1 + getCurrentDate().getMonth());
+    return ''.concat(1 + getDate().getMonth());
   };
   const formatDate = () => {
-    return ''.concat(getCurrentDate().getDate());
+    return ''.concat(getDate().getDate());
   };
   const formatCurrentDate = () => {
     return getDateWithTimezoneOffset(
       ''
-        .concat(getCurrentDate().getFullYear())
+        .concat(getDate().getFullYear())
         .concat('-')
         .concat(formatMonth().length === 2 ? formatMonth() : '0'.concat(formatMonth()))
         .concat('-')
@@ -146,13 +146,13 @@ const PushNotificationScreen = ({ navigation, route }) => {
     navigation.navigate('ProductsStack', {
       screen: 'Products',
       params: {
-        productAction: '-pntest-'.concat(getCurrentTimeInMillis().toString())
+        productAction: '-pntest-'.concat(getTimeInMillis().toString())
       }
     });
     navigation.navigate('BookmarksStack', {
       screen: 'Bookmarks',
       params: {
-        bookmarkAction: '-pntest-'.concat(getCurrentTimeInMillis().toString())
+        bookmarkAction: '-pntest-'.concat(getTimeInMillis().toString())
       }
     });
     navigation.navigate('HomeStack', {

@@ -1,6 +1,6 @@
-import { CVT_API_URL_VACCINES, CVT_API_URL_NEWS } from 'react-native-dotenv';
+import { cvtApiUrlVaccines, cvtApiUrlNews } from '../constants/constants';
 
-const vaccineAPIUrl = CVT_API_URL_VACCINES;
-const newsAPIUrl = CVT_API_URL_NEWS;
+const vaccineAPIUrl = cvtApiUrlVaccines;
+const newsAPIUrl = cvtApiUrlNews;
 
 export { vaccineAPIUrl, newsAPIUrl };
