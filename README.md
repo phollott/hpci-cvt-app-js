@@ -30,7 +30,7 @@ Install: `yarn` or `yarn install`
 
 Add .env: see .env.template
 
-Run Project Locally: `expo start`
+Run project locally: `expo start`
 
 ## development on a physical device
 
