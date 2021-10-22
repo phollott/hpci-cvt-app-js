@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
 import { gStyle } from '../constants';
 import Icon from './Icon';
-import { getCurrentTimeInMillis } from '../shared/date-fns';
+import { getTimeInMillis } from '../shared/date-fns';
 
 const NotificationsTouch = ({ navigation, route }) => (
   <TouchableOpacity
@@ -16,9 +16,7 @@ const NotificationsTouch = ({ navigation, route }) => (
       navigation.navigate('HomeStack', {
         screen: 'Notifications',
         params: {
-          notificationAction: '-touch-'.concat(
-            getCurrentTimeInMillis().toString()
-          )
+          notificationAction: '-touch-'.concat(getTimeInMillis().toString())
         }
       });
     }}

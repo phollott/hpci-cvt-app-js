@@ -14,7 +14,7 @@ import ReadMoreText from '../components/ReadMoreText';
 import Touch from '../components/Touch';
 import ViewCardText from '../components/ViewCardText';
 import { notifications as notificationsService } from '../services';
-import { compareDesc, getFormattedDate } from '../shared/date-fns';
+import { compareDesc, formatDate } from '../shared/date-fns';
 import { isNil } from '../shared/util';
 
 const NotificationsScreen = ({ navigation, route }) => {
@@ -76,7 +76,7 @@ const NotificationsScreen = ({ navigation, route }) => {
   const isOnline = useSelector((state) => state.settings.isOnline);
 
   const formatNotificationDate = (timeOfNotification) => {
-    let formattedDate = getFormattedDate(
+    let formattedDate = formatDate(
       new Date(
         timeOfNotification.toString().indexOf('.') > -1
           ? Math.round(timeOfNotification * 1000)

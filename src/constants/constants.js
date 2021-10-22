@@ -1,20 +1,41 @@
-import { CVT_PORTAL, CVT_PORTAIL } from 'react-native-dotenv';
+import {
+  CVT_API_URL_VACCINES,
+  CVT_API_URL_NEWS,
+  CVT_PORTAL,
+  CVT_PORTAIL,
+  NEWLY_MODIFIED_WINDOW_IN_DAYS
+} from 'react-native-dotenv';
 
-export const lang = {
+const cvtApiUrlVaccines = CVT_API_URL_VACCINES;
+const cvtApiUrlNews = CVT_API_URL_NEWS;
+
+const covidVaccinePortal = CVT_PORTAL;
+const portailVaccinCovid = CVT_PORTAIL;
+
+const covidVaccinePortalStage = 'https://covid-vaccine-stage.hpfb-dgpsa.ca';
+const portailVaccinCovidStage = 'https://vaccin-covid-stage.hpfb-dgpsa.ca';
+
+const lang = {
   english: 'en',
   french: 'fr',
   default: 'en'
 };
 
-export const covidVaccinePortal = CVT_PORTAL;
-export const portailVaccinCovid = CVT_PORTAIL;
+const newlyModifiedWindowInDays = NEWLY_MODIFIED_WINDOW_IN_DAYS;
 
-export const covidVaccinePortalStage =
-  'https://covid-vaccine-stage.hpfb-dgpsa.ca';
-export const portailVaccinCovidStage =
-  'https://vaccin-covid-stage.hpfb-dgpsa.ca';
-
-export const productType = {
+const productType = {
   vaccine: 'Vaccine',
   treatment: 'Treatment'
+};
+
+export {
+  cvtApiUrlVaccines,
+  cvtApiUrlNews,
+  covidVaccinePortal,
+  portailVaccinCovid,
+  covidVaccinePortalStage,
+  portailVaccinCovidStage,
+  lang,
+  newlyModifiedWindowInDays,
+  productType
 };
