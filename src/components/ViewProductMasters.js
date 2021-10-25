@@ -4,7 +4,6 @@ import { Badge, List, Divider } from 'react-native-paper';
 import { EventRegister } from 'react-native-event-listeners';
 import Icon from './Icon';
 import { colors } from '../constants';
-// services
 import { notifications } from '../services';
 import { getTimeInMillis } from '../shared/date-fns';
 
@@ -39,7 +38,7 @@ export default class ViewProductMasters extends Component {
   };
 
   syncProduct = (nid) => {
-    // TODO: for each product nid, re-fetch from api
+    // TODO: for each product nid, if viewed isnil or < window, re-fetch from api (move)
     return nid;
   };
 

@@ -10,7 +10,6 @@ import * as Localization from 'expo-localization';
 import * as I18n from './src/config/i18n';
 import { device, func } from './src/constants';
 import { lang } from './src/constants/constants';
-import { fetchProductsAsync } from './src/api/covid19Products';
 import {
   notifications,
   productLoad,
@@ -40,7 +39,6 @@ class App extends React.Component {
     this.saveBookmark = this.saveBookmark.bind(this);
     this.deleteBookmark = this.deleteBookmark.bind(this);
     this.retrieveBookmarks = this.retrieveBookmarks.bind(this);
-    this.fetchProducts = this.fetchProducts.bind(this);
     this.loadInitialStateAsync = this.loadInitialStateAsync.bind(this);
     this.loadResourcesAsync = this.loadResourcesAsync.bind(this);
   }
@@ -163,25 +161,9 @@ class App extends React.Component {
     return bookmarks;
   };
 
-  fetchProducts = async () => {
-    let products = [];
-    try {
-      products = await fetchProductsAsync();
-      products = products.filter((product) => {
-        return !productsParser.isProductUnderReview(product);
-      });
-      products = JSON.parse(
-        he.decode(JSON.stringify(products).replace(/&quot;/gi, '\\"')) // &quot; expected only in string values, so escape for decode
-      );
-    } catch (error) {
-      console.log('Could not fetch Covid-19 Products from api. ', error);
-    }
-    return products;
-  };
-
   loadInitialStateAsync = async () => {
     try {
-      initialState.products = await this.fetchProducts();
+      initialState.products = await productLoad.fetchProducts();
       initialState.settings.isOnline = initialState.products.length > 0;
       initialState.bookmarks = await this.retrieveBookmarks(
         initialState.settings.isOnline

@@ -27,6 +27,7 @@ const getDateWithTimezoneOffset = (date) => {
 };
 
 const getUTCDate = (date) => {
+  // date: Date expected
   const dtutc = Date.UTC(
     date.getUTCFullYear(),
     date.getUTCMonth(),
