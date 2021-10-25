@@ -54,7 +54,6 @@ const BookmarkTouch = ({ navigation, route }) => {
               if (isBookmark) {
                 // dispatch removal of en and fr products from state store bookmarks
                 removeBookmarkProduct(products[0].nid);
-
                 // remove en and fr bookmarks from storage
                 bookmarkStorage
                   .deleteProductBookmarks(productMaster.nid)

@@ -9,7 +9,7 @@ import Icon from './Icon';
 import { addBookmark, removeBookmark } from '../redux/actions/bookmarkActions';
 import { selectProductsByID } from '../redux/selectors/productSelector';
 import { selectBookmarkExists } from '../redux/selectors/bookmarkSelector';
-import { bookmarkStorage, productLoad, productsParser } from '../services';
+import { bookmarkStorage, productLoad } from '../services';
 import { getTimeInMillis } from '../shared/date-fns';
 
 const BookmarkProduct = ({ navigation, route }) => {
@@ -57,65 +57,16 @@ const BookmarkProduct = ({ navigation, route }) => {
               )
             ) {
               if (!isBookmark) {
-                // scrape product consumer information (not in api), then add and save bookmark (en and fr)
-                const lang = [];
-                const consumerInformationResource = [];
-                lang.push(products[0].language.toLowerCase().substring(0, 2));
-                lang.push(products[1].language.toLowerCase().substring(0, 2));
-                consumerInformationResource.push(
-                  products[0].resources.find((resource) => {
-                    return (
-                      productsParser.isProductResourceForConsumers(resource) &&
-                      resource
-                    );
-                  })
-                );
-                consumerInformationResource.push(
-                  products[1].resources.find((resource) => {
-                    return (
-                      productsParser.isProductResourceForConsumers(resource) &&
-                      resource
-                    );
-                  })
-                );
-
                 productLoad
-                  .loadConsumerInformation(
-                    productsParser.getProductResourceLink(
-                      consumerInformationResource[0],
-                      lang[0]
-                    ),
-                    lang[0],
-                    productMaster.nid
-                  )
-                  .then((productPortalInfoA) => {
-                    products[0].productMetadata =
-                      productPortalInfoA.productMetadata;
-                    products[0].consumerInformation =
-                      productPortalInfoA.consumerInformation;
-                    products[0].regulatoryAnnouncements =
-                      productPortalInfoA.regulatoryAnnouncements;
-
+                  .setConsumerInformation(products[0])
+                  .then((productInfoA) => {
+                    products[0] = productInfoA;
                     productLoad
-                      .loadConsumerInformation(
-                        productsParser.getProductResourceLink(
-                          consumerInformationResource[1],
-                          lang[1]
-                        ),
-                        lang[1],
-                        productMaster.nid
-                      )
-                      .then((productPortalInfoB) => {
-                        products[1].productMetadata =
-                          productPortalInfoB.productMetadata;
-                        products[1].consumerInformation =
-                          productPortalInfoB.consumerInformation;
-                        products[1].regulatoryAnnouncements =
-                          productPortalInfoB.regulatoryAnnouncements;
-
+                      .setConsumerInformation(products[1])
+                      .then((productInfoB) => {
+                        products[1] = productInfoB;
                         // dispatch en and fr products to state store bookmarks
                         addBookmarkProduct(products);
-
                         // save en and fr bookmarks to storage
                         bookmarkStorage
                           .saveProductBookmarks(products)
@@ -125,7 +76,6 @@ const BookmarkProduct = ({ navigation, route }) => {
               } else {
                 // dispatch removal of en and fr products from state store bookmarks
                 removeBookmarkProduct(products[0].nid);
-
                 // remove en and fr bookmarks from storage
                 bookmarkStorage
                   .deleteProductBookmarks(productMaster.nid)
