@@ -9,7 +9,7 @@ import Icon from './Icon';
 import { addBookmark, removeBookmark } from '../redux/actions/bookmarkActions';
 import { selectProductsByID } from '../redux/selectors/productSelector';
 import { selectBookmarkExists } from '../redux/selectors/bookmarkSelector';
-import { productLoad, productsParser, storage } from '../services';
+import { bookmarkStorage, productLoad, productsParser } from '../services';
 import { getTimeInMillis } from '../shared/date-fns';
 
 const BookmarkProduct = ({ navigation, route }) => {
@@ -117,24 +117,8 @@ const BookmarkProduct = ({ navigation, route }) => {
                         addBookmarkProduct(products);
 
                         // save en and fr bookmarks to storage
-                        const bookmarks = [];
-                        // key format: bookmark-product + nid + '-' + lang, ex.: bookmark-product16-en, bookmark-product16-fr
-                        bookmarks.push([
-                          'bookmark-product'
-                            .concat(productMaster.nid)
-                            .concat('-')
-                            .concat(lang[0]),
-                          JSON.stringify(products[0])
-                        ]);
-                        bookmarks.push([
-                          'bookmark-product'
-                            .concat(productMaster.nid)
-                            .concat('-')
-                            .concat(lang[1]),
-                          JSON.stringify(products[1])
-                        ]);
-                        storage
-                          .saveMulti(bookmarks)
+                        bookmarkStorage
+                          .saveProductBookmarks(products)
                           .then(navStacks(productMaster.nid));
                       });
                   });
@@ -143,14 +127,10 @@ const BookmarkProduct = ({ navigation, route }) => {
                 removeBookmarkProduct(products[0].nid);
 
                 // remove en and fr bookmarks from storage
-                storage
-                  .deleteMulti([
-                    'bookmark-product'.concat(productMaster.nid).concat('-en'),
-                    'bookmark-product'.concat(productMaster.nid).concat('-fr')
-                  ])
+                bookmarkStorage
+                  .deleteProductBookmarks(productMaster.nid)
                   .then(navStacks(productMaster.nid));
               }
-              // console.log(await storage.retrieveMulti(['bookmark-product'+productMaster.nid+'-en', 'bookmark-product'+productMaster.nid+'-fr']));
             } else {
               throw isBookmark ? 'Unable to remove bookmark.' : 'Unable to create bookmark.';
             }

@@ -11,7 +11,7 @@ import {
   selectBookmarkExists,
   selectBookmarksByID
 } from '../redux/selectors/bookmarkSelector';
-import { storage } from '../services';
+import { bookmarkStorage } from '../services';
 import { getTimeInMillis } from '../shared/date-fns';
 
 const BookmarkTouch = ({ navigation, route }) => {
@@ -42,7 +42,7 @@ const BookmarkTouch = ({ navigation, route }) => {
       accessibilityTraits="button"
       activeOpacity={gStyle.activeOpacity}
       onPress={async () => {
-        const productMaster = route.params.productMaster;
+        const { productMaster } = route.params;
         if (productMaster) {
           try {
             const products = selectBookmarksByID(state, productMaster.nid);
@@ -56,8 +56,8 @@ const BookmarkTouch = ({ navigation, route }) => {
                 removeBookmarkProduct(products[0].nid);
 
                 // remove en and fr bookmarks from storage
-                storage
-                  .deleteMulti(['bookmark-product' + productMaster.nid + '-en', 'bookmark-product' + productMaster.nid + '-fr'])
+                bookmarkStorage
+                  .deleteProductBookmarks(productMaster.nid)
                   .then(navStacks());
               }
               // console.log(await storage.retrieveMulti(['bookmark-product'+productMaster.nid+'-en', 'bookmark-product'+productMaster.nid+'-fr']));

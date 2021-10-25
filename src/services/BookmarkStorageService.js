@@ -30,6 +30,33 @@ const deleteBookmark = async (bookmark) => {
   }
 };
 
+const saveProductBookmarks = async (products) => {
+  // save en and fr products to bookmarks
+  const bookmarks = [];
+  bookmarks.push([
+    await keyBookmark({
+      nid: products[0].nid,
+      language: products[0].language.toLowerCase().substring(0, 2)
+    }),
+    JSON.stringify(products[0])
+  ]);
+  bookmarks.push([
+    await keyBookmark({
+      nid: products[1].nid,
+      language: products[1].language.toLowerCase().substring(0, 2)
+    }),
+    JSON.stringify(products[1])
+  ]);
+  await StorageService.saveMulti(bookmarks);
+};
+
+const deleteProductBookmarks = async (id) => {
+  await StorageService.deleteMulti([
+    await keyBookmark({ nid: id, language: 'en' }),
+    await keyBookmark({ nid: id, language: 'fr' })
+  ]);
+};
+
 const retrieveBookmarks = async (syncWithProducts) => {
   let keys = [];
   let storedBookmarks = [];
@@ -97,5 +124,7 @@ export default {
   keyBookmark,
   deleteBookmark,
   saveBookmark,
+  saveProductBookmarks,
+  deleteProductBookmarks,
   retrieveBookmarks
 };
