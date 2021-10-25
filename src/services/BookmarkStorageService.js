@@ -76,35 +76,13 @@ const retrieveBookmarks = async (syncWithProducts) => {
             return p.language === bookmark.language && p.nid === bookmark.nid;
           });
           if (product.length === 1) {
-            // scrape product consumer information (not in api), then add and save bookmark
-            const consumerInformationResource = [];
-            const resourceLang = product[0].language
-              .toLowerCase()
-              .substring(0, 2);
-            consumerInformationResource.push(
-              product[0].resources.find((r) => {
-                return (
-                  ProductsParserService.isProductResourceForConsumers(r) && r
-                );
-              })
+            ProductLoadService.setConsumerInformation(product[0]).then(
+              (productInfoToSyncWith) => {
+                bookmarks.push(productInfoToSyncWith);
+                // update storage async
+                saveBookmark(productInfoToSyncWith);
+              }
             );
-            ProductLoadService.loadConsumerInformation(
-              ProductsParserService.getProductResourceLink(
-                consumerInformationResource[0],
-                resourceLang
-              ),
-              resourceLang,
-              product[0].nid
-            ).then((productPortalInfo) => {
-              product[0].productMetadata = productPortalInfo.productMetadata;
-              product[0].consumerInformation =
-                productPortalInfo.consumerInformation;
-              product[0].regulatoryAnnouncements =
-                productPortalInfo.regulatoryAnnouncements;
-              bookmarks.push(product[0]);
-              // update storage async
-              saveBookmark(product[0]);
-            });
           } else {
             // update storage async
             deleteBookmark(product[0]);

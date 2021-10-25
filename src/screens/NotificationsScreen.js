@@ -212,14 +212,15 @@ const NotificationsScreen = ({ navigation, route }) => {
                         <View style={styles.rightListItem}>
                           {notificationsService.getExternalLink(
                             notification
-                          ) !== '' && (
-                            <Icon
-                              name="open-in-new"
-                              type="material-community"
-                              color={colors.darkColor}
-                              containerStyle={{ marginBottom: 4 }}
-                            />
-                          )}
+                          ) !== '' &&
+                            isOnline && (
+                              <Icon
+                                name="open-in-new"
+                                type="material-community"
+                                color={colors.darkColor}
+                                containerStyle={{ marginBottom: 4 }}
+                              />
+                            )}
                           <Text style={styles.rightListItemText}>
                             {formatNotificationDate(notification.date)}
                           </Text>

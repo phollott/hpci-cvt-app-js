@@ -57,7 +57,7 @@ const headers = new Headers();
 headers.append('Pragma', 'no-cache');
 headers.append('Cache-Control', 'no-cache');
 
-// scrape metadata and consumer information from resourceLink url
+// scrape metadata and consumer information from resourceLink url (not in api)
 // fetch regulatory announcements from api
 const loadConsumerInformation = async (resourceLink, language, nid) => {
   const productLoad = {
@@ -203,8 +203,35 @@ const loadConsumerInformation = async (resourceLink, language, nid) => {
   return productLoad;
 };
 
+const setConsumerInformation = async (inProduct) => {
+  const product = inProduct;
+  const consumerInformationResource = [];
+  const resourceLang = product.language.toLowerCase().substring(0, 2);
+  consumerInformationResource.push(
+    product.resources.find((resource) => {
+      return (
+        ProductsParserService.isProductResourceForConsumers(resource) &&
+        resource
+      );
+    })
+  );
+  const productPortalInfo = await loadConsumerInformation(
+    ProductsParserService.getProductResourceLink(
+      consumerInformationResource[0],
+      resourceLang
+    ),
+    resourceLang,
+    product.nid
+  );
+  product.productMetadata = productPortalInfo.productMetadata;
+  product.consumerInformation = productPortalInfo.consumerInformation;
+  product.regulatoryAnnouncements = productPortalInfo.regulatoryAnnouncements;
+  return product;
+};
+
 export default {
   fetchProducts,
   fetchProductNews,
-  loadConsumerInformation
+  loadConsumerInformation,
+  setConsumerInformation
 };
