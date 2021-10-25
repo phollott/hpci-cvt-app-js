@@ -1,27 +1,49 @@
+/* eslint-disable no-console */
 import cheerio from 'react-native-cheerio';
 import he from 'he';
+import ProductsParserService from './ProductsParserService';
 import {
   lang,
   covidVaccinePortal,
   portailVaccinCovid
 } from '../constants/constants';
-import { fetchProductNewsAsync } from '../api/covid19Products';
+import {
+  fetchProductsAsync,
+  fetchProductNewsAsync
+} from '../api/covid19Products';
 import { getDateWithTimezoneOffset, formatDate } from '../shared/date-fns';
+
+const decode = (value) => {
+  return JSON.parse(
+    he.decode(JSON.stringify(value).replace(/&quot;/gi, '\\"')) // &quot; expected only in string values, so escape for decode
+  );
+};
+
+const fetchProducts = async () => {
+  let products = [];
+  try {
+    products = await fetchProductsAsync();
+    products = products.filter((product) => {
+      return !ProductsParserService.isProductUnderReview(product);
+    });
+    products = decode(products);
+  } catch (error) {
+    console.log('Could not fetch Covid-19 Products from api. ', error);
+  }
+  return products;
+};
 
 const fetchProductNews = async (language, nid) => {
   let productNews = [];
   try {
     productNews = await fetchProductNewsAsync(language, nid);
-    productNews = JSON.parse(
-      he.decode(JSON.stringify(productNews).replace(/&quot;/gi, '\\"')) // &quot; expected only in string values, so escape for decode
-    );
+    productNews = decode(productNews);
     if (Array.isArray(productNews) && productNews.length > 1) {
       productNews.sort(
         (a, b) => (a.publish_date > b.publish_date ? -1 : 1) // desc
       );
     }
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.log(
       `Could not fetch product news (e.g. regulatory announcements) for product ${nid} from api. `,
       error
@@ -144,7 +166,6 @@ const loadConsumerInformation = async (resourceLink, language, nid) => {
       productLoad.consumerInformation = consumerInformation;
     })
     .catch((error) => {
-      // eslint-disable-next-line no-console
       console.log(
         'Unable to load Consumer Information for product (check resource link). ',
         error
@@ -173,7 +194,6 @@ const loadConsumerInformation = async (resourceLink, language, nid) => {
     });
     productLoad.regulatoryAnnouncements = regulatoryAnnouncements;
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.log(
       `Unable to load regulatory announcements for product ${nid}. `,
       error
@@ -184,5 +204,7 @@ const loadConsumerInformation = async (resourceLink, language, nid) => {
 };
 
 export default {
+  fetchProducts,
+  fetchProductNews,
   loadConsumerInformation
 };
