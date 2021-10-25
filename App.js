@@ -5,16 +5,15 @@ import AppLoading from 'expo-app-loading';
 import { Appearance } from 'react-native-appearance';
 import { Provider as ReactProvider } from 'react-redux';
 import { createStore } from 'redux';
-import he from 'he';
 import * as Localization from 'expo-localization';
 import * as I18n from './src/config/i18n';
 import { device, func } from './src/constants';
 import { lang } from './src/constants/constants';
 import {
+  bookmarkStorage,
+  languageStorage,
   notifications,
-  productLoad,
-  productsParser,
-  storage
+  productLoad
 } from './src/services';
 import initialState from './src/redux/store/initialState';
 import rootReducer from './src/redux/store/store';
@@ -34,11 +33,6 @@ class App extends React.Component {
     I18n.setLocale(Localization.locale);
 
     this.updateTheme = this.updateTheme.bind(this);
-    this.retrieveLanguagePreference = this.retrieveLanguagePreference.bind(this);
-    this.keyBookmark = this.keyBookmark.bind(this);
-    this.saveBookmark = this.saveBookmark.bind(this);
-    this.deleteBookmark = this.deleteBookmark.bind(this);
-    this.retrieveBookmarks = this.retrieveBookmarks.bind(this);
     this.loadInitialStateAsync = this.loadInitialStateAsync.bind(this);
     this.loadResourcesAsync = this.loadResourcesAsync.bind(this);
   }
@@ -62,114 +56,15 @@ class App extends React.Component {
       .then((token) => notifications.saveExpoPushToken(token));
   }
 
-  retrieveLanguagePreference = async () => {
-    try {
-      const value = await storage.retrieve('language');
-      return value;
-    } catch (error) {
-      return null;
-    }
-  };
-
-  keyBookmark = async (bookmark) => {
-    return 'bookmark-product'.concat(
-      bookmark.nid
-        .concat('-')
-        .concat(bookmark.language.toLowerCase().substring(0, 2))
-    );
-  };
-
-  saveBookmark = async (bookmark) => {
-    try {
-      const key = await this.keyBookmark(bookmark);
-      await storage.save(key, JSON.stringify(bookmark));
-    } catch (error) {
-      console.log('Unable to sync bookmark with product. ', error);
-    }
-  };
-
-  deleteBookmark = async (bookmark) => {
-    try {
-      const key = await this.keyBookmark(bookmark);
-      await storage.delete(key);
-    } catch (error) {
-      console.log('Unable to sync bookmark with product. ', error);
-    }
-  };
-
-  retrieveBookmarks = async (syncWithProduct) => {
-    let keys = [];
-    let storedBookmarks = [];
-    const bookmarks = [];
-    try {
-      keys = await storage.retrieveKeys();
-      if (keys.length > 0) {
-        keys = keys.filter((key) => {
-          return key.startsWith('bookmark-product');
-        });
-        storedBookmarks =
-          keys !== null ? await storage.retrieveMulti(keys) : [];
-        storedBookmarks.map((storedBookmark) => {
-          const bookmark = JSON.parse(storedBookmark[1]);
-          if (syncWithProduct) {
-            const product = initialState.products.filter((p) => {
-              return p.language === bookmark.language && p.nid === bookmark.nid;
-            });
-            if (product.length === 1) {
-              // scrape product consumer information (not in api), then add and save bookmark
-              const consumerInformationResource = [];
-              const resourceLang = product[0].language
-                .toLowerCase()
-                .substring(0, 2);
-              consumerInformationResource.push(
-                product[0].resources.find((r) => {
-                  return productsParser.isProductResourceForConsumers(r) && r;
-                })
-              );
-              productLoad
-                .loadConsumerInformation(
-                  productsParser.getProductResourceLink(
-                    consumerInformationResource[0],
-                    resourceLang
-                  ),
-                  resourceLang,
-                  product[0].nid
-                )
-                .then((productPortalInfo) => {
-                  product[0].productMetadata =
-                    productPortalInfo.productMetadata;
-                  product[0].consumerInformation =
-                    productPortalInfo.consumerInformation;
-                  product[0].regulatoryAnnouncements =
-                    productPortalInfo.regulatoryAnnouncements;
-                  bookmarks.push(product[0]);
-                  // update storage async
-                  this.saveBookmark(product[0]);
-                });
-            } else {
-              // update storage async
-              this.deleteBookmark(product[0]);
-            }
-          } else {
-            bookmarks.push(bookmark);
-          }
-        });
-      }
-    } catch (error) {
-      console.log('Unable to get bookmarks from storage. ', error);
-    }
-    return bookmarks;
-  };
-
   loadInitialStateAsync = async () => {
     try {
       initialState.products = await productLoad.fetchProducts();
       initialState.settings.isOnline = initialState.products.length > 0;
-      initialState.bookmarks = await this.retrieveBookmarks(
-        initialState.settings.isOnline
+      initialState.bookmarks = await bookmarkStorage.retrieveBookmarks(
+        initialState.products
       );
 
-      const langPref = await this.retrieveLanguagePreference();
+      const langPref = await languageStorage.retrieveLanguage();
       if (
         langPref !== null &&
         (langPref === lang.english || langPref === lang.french)

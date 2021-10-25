@@ -7,7 +7,7 @@ import i18n, { t } from 'i18n-js';
 import { setLanguage } from '../redux/actions/settingsActions';
 import { gStyle } from '../constants';
 import { lang } from '../constants/constants';
-import { storage } from '../services';
+import { languageStorage } from '../services';
 import Touch from '../components/Touch';
 import ViewCardText from '../components/ViewCardText';
 
@@ -25,7 +25,7 @@ const LanguageScreen = ({ navigation }) => {
     try {
       i18n.locale = value; // t
       setLang(value); // redux
-      await storage.save('language', value); // persist
+      await languageStorage.saveLanguage('language', value); // persist
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log('Unable to set language preference. ', error);
