@@ -6,6 +6,7 @@ import { t } from 'i18n-js';
 import HTML from 'react-native-render-html';
 import Icon from './Icon';
 import { colors, gStyle } from '../constants';
+import { bookmarkKeyPrefix } from '../constants/constants';
 import { selectBookmarkByID } from '../redux/selectors/bookmarkSelector';
 import { selectProductByID } from '../redux/selectors/productSelector';
 // services
@@ -461,7 +462,7 @@ const mapStateToProps = (state, ownProps) => {
 
   // Product Resources:
   const key = productMaster.key.toString();
-  if (key.startsWith('bookmark-product')) {
+  if (key.startsWith(bookmarkKeyPrefix)) {
     product = selectBookmarkByID(
       state,
       ownProps.route.params.productMaster.nid

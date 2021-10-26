@@ -1,13 +1,5 @@
 import { KeyValueStore } from './KeyValueStore';
 
-// key: value
-//   bookmark-product<<nid>>-<<lang>>: product
-//   expoPushToken: expoPushToken for device
-//   expoPushNotification-<<notification id>>: pushNotification
-//   language: en or fr
-//   TODO:
-//     product<<nid>>-<<lang>>: viewed
-
 class StorageService {
   static instance;
 

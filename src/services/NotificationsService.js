@@ -4,6 +4,10 @@ import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import { EventRegister } from 'react-native-event-listeners';
 import StorageService from './StorageService';
+import {
+  expoPushNotificationKeyPrefix,
+  expoPushTokenKeyPrefix
+} from '../constants/constants';
 import { isNil } from '../shared/util';
 import { getTimeInMillis } from '../shared/date-fns';
 
@@ -11,8 +15,6 @@ const NOTIFICATION_RECEIVED = 'notificationReceived'; // while app in foreground
 const NOTIFICATION_RESPONSE_RECEIVED = 'notificationResponseReceived'; // while app in foreground, background or closed
 
 const PERSIST_NOTIFICATION_ENABLED = true; // must be true, can disable for testing
-
-const PERSIST_NOTIFICATION_KEY_PREFIX = 'expoPushNotification-';
 
 const pushNotification = (notification) => {
   if (notification && notification.request) {
@@ -60,7 +62,7 @@ const getExternalLink = (notification) => {
 
 async function saveExpoPushNotification(notification) {
   try {
-    const key = PERSIST_NOTIFICATION_KEY_PREFIX.concat(notification.id);
+    const key = expoPushNotificationKeyPrefix.concat(notification.id);
     const storedPn = await StorageService.retrieve(key);
     if (storedPn) {
       // console.log('Expo push notification already saved: ', key);
@@ -68,7 +70,7 @@ async function saveExpoPushNotification(notification) {
     }
     // TODO: max limit?
     await StorageService.save(
-      PERSIST_NOTIFICATION_KEY_PREFIX.concat(notification.id),
+      expoPushNotificationKeyPrefix.concat(notification.id),
       JSON.stringify(notification)
     );
   } catch (error) {
@@ -174,7 +176,7 @@ async function registerForPushNotificationsAsync() {
 async function retrieveExpoPushToken() {
   let value;
   try {
-    value = await StorageService.retrieve('expoPushToken');
+    value = await StorageService.retrieve(expoPushTokenKeyPrefix);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log('Unable to retrieve expoPushToken. ', error);
@@ -184,7 +186,10 @@ async function retrieveExpoPushToken() {
 
 async function saveExpoPushToken(token) {
   try {
-    await StorageService.save('expoPushToken', !isNil(token) ? token : '');
+    await StorageService.save(
+      expoPushTokenKeyPrefix,
+      !isNil(token) ? token : ''
+    );
   } catch (error) {
     console.log('Unable to save expoPushToken to storage. ', error);
   }
@@ -198,7 +203,7 @@ async function retrieveNotifications() {
     keys = await StorageService.retrieveKeys();
     if (keys.length > 0) {
       keys = keys.filter((key) => {
-        return key.startsWith(PERSIST_NOTIFICATION_KEY_PREFIX);
+        return key.startsWith(expoPushNotificationKeyPrefix);
       });
       storedNotifications =
         keys !== null ? await StorageService.retrieveMulti(keys) : [];
@@ -218,17 +223,15 @@ async function deleteNotification(inNotification) {
   const { id } = inNotification;
   const notification = JSON.parse(JSON.stringify(inNotification));
   try {
-    StorageService.delete(PERSIST_NOTIFICATION_KEY_PREFIX.concat(id)).then(
-      () => {
-        notification.isRemoved = true;
-        EventRegister.emit('notificationEvent', notification);
-      }
-    );
+    StorageService.delete(expoPushNotificationKeyPrefix.concat(id)).then(() => {
+      notification.isRemoved = true;
+      EventRegister.emit('notificationEvent', notification);
+    });
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log(
       'Unable to delete notification '
-        .concat(PERSIST_NOTIFICATION_KEY_PREFIX)
+        .concat(expoPushNotificationKeyPrefix)
         .concat(id)
         .concat(' from storage. '),
       error
@@ -242,7 +245,7 @@ async function setViewed(inNotification) {
   notification.viewed = getTimeInMillis();
   try {
     StorageService.save(
-      PERSIST_NOTIFICATION_KEY_PREFIX.concat(id),
+      expoPushNotificationKeyPrefix.concat(id),
       JSON.stringify(notification)
     ).then(() => {
       EventRegister.emit('notificationEvent', notification);
@@ -251,7 +254,7 @@ async function setViewed(inNotification) {
     // eslint-disable-next-line no-console
     console.log(
       'Unable to update stored notification '
-        .concat(PERSIST_NOTIFICATION_KEY_PREFIX)
+        .concat(expoPushNotificationKeyPrefix)
         .concat(id)
         .concat(' viewed. '),
       error

@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
 import ProductLoadService from './ProductLoadService';
-import ProductsParserService from './ProductsParserService';
 import StorageService from './StorageService';
+import { bookmarkKeyPrefix } from '../constants/constants';
 import { isNil } from '../shared/util';
 
 const keyBookmark = async (bookmark) => {
-  return 'bookmark-product'.concat(
+  return bookmarkKeyPrefix.concat(
     bookmark.nid
       .concat('-')
       .concat(bookmark.language.toLowerCase().substring(0, 2))
@@ -65,7 +65,7 @@ const retrieveBookmarks = async (syncWithProducts) => {
     keys = await StorageService.retrieveKeys();
     if (keys.length > 0) {
       keys = keys.filter((key) => {
-        return key.startsWith('bookmark-product');
+        return key.startsWith(bookmarkKeyPrefix);
       });
       storedBookmarks =
         keys !== null ? await StorageService.retrieveMulti(keys) : [];
