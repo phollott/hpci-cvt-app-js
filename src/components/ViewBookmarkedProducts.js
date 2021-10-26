@@ -3,7 +3,7 @@ import { ScrollView, View } from 'react-native';
 import { connect } from 'react-redux';
 import { t } from 'i18n-js';
 import { gStyle } from '../constants';
-import { productType } from '../constants/constants';
+import { bookmarkKeyPrefix, productType } from '../constants/constants';
 import { selectBookmarks } from '../redux/selectors/bookmarkSelector';
 import { productMaster } from '../services';
 
@@ -97,7 +97,7 @@ const mapStateToProps = (state) => {
 
   // Bookmarks:  (bookmark.key to match storage's)
   selectBookmarks(state).forEach((bookmark) => {
-    const product = productMaster.mapProduct(bookmark, 'bookmark-product'.concat(bookmark.nid + '-' + state.settings.language), state.settings.language, true);
+    const product = productMaster.mapProduct(bookmark, bookmarkKeyPrefix.concat(bookmark.nid + '-' + state.settings.language), state.settings.language, true);
     if (product.type === productType.vaccine) {
       vaccineProducts.push(product);
     } else {

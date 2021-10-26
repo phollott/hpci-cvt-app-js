@@ -1,8 +1,9 @@
 import StorageService from './StorageService';
+import { languageKeyPrefix } from '../constants/constants';
 
 const retrieveLanguage = async () => {
   try {
-    const value = await StorageService.retrieve('language');
+    const value = await StorageService.retrieve(languageKeyPrefix);
     return value;
   } catch (error) {
     return null;
@@ -10,7 +11,7 @@ const retrieveLanguage = async () => {
 };
 
 const saveLanguage = async (value) => {
-  await StorageService.save('language', value);
+  await StorageService.save(languageKeyPrefix, value);
 };
 
 export default {

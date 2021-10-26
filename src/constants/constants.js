@@ -28,6 +28,18 @@ const productType = {
   treatment: 'Treatment'
 };
 
+// key - value
+//   bookmark-product<<nid>>-<<lang>> - product
+//   expoPushToken - expoPushToken for device
+//   expoPushNotification-<<notification id>> - pushNotification
+//   language - en or fr
+//   TODO:
+//     product<<nid>>-<<lang>>: viewed
+const bookmarkKeyPrefix = 'bookmark-product';
+const expoPushTokenKeyPrefix = 'expoPushToken';
+const expoPushNotificationKeyPrefix = 'expoPushNotification-';
+const languageKeyPrefix = 'language';
+
 export {
   cvtApiUrlVaccines,
   cvtApiUrlNews,
@@ -37,5 +49,9 @@ export {
   portailVaccinCovidStage,
   lang,
   newlyModifiedWindowInDays,
-  productType
+  productType,
+  bookmarkKeyPrefix,
+  expoPushTokenKeyPrefix,
+  expoPushNotificationKeyPrefix,
+  languageKeyPrefix
 };
