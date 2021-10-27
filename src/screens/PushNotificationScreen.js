@@ -204,16 +204,18 @@ const PushNotificationScreen = ({ navigation, route }) => {
                 </View>
               ))}
             </View>
-            <View>
-              <Checkbox.Item
-                label={'Add test resource'}
-                status={addTestResourceChecked ? 'checked' : 'unchecked'}
-                onPress={() => {
-                  setAddTestResourceChecked(!addTestResourceChecked);
-                }}
-                style={{ marginVertical: 0 }}
-              />
-            </View>
+            {1 === 0 && (
+              <View>
+                <Checkbox.Item
+                  label={'Add test resource'}
+                  status={addTestResourceChecked ? 'checked' : 'unchecked'}
+                  onPress={() => {
+                    setAddTestResourceChecked(!addTestResourceChecked);
+                  }}
+                  style={{ marginVertical: 0 }}
+                />
+              </View>
+            )}
             <View style={gStyle.spacer8} />
             <View style={{ width: '100%' }}>
               <TextInput

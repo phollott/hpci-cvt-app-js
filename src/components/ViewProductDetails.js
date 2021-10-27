@@ -71,51 +71,47 @@ class ViewProductDetails extends Component {
     }
   }
 
-  linkingProductResource(productResource) {
+  openURL = (link) => {
+    Linking.canOpenURL(link).then((supported) => {
+      if (supported) {
+        Linking.openURL(link);
+      }
+    });
+  };
+
+  linkingProductResource = (productResource) => {
     const { settings } = this.props;
     if (productResource.link && settings.isOnline) {
       if (productResource.resourceType === 'external') {
         // console.log('external product resource (show in browser): ' + productResource.link);
-        Linking.canOpenURL(productResource.link).then((supported) => {
-          if (supported) {
-            Linking.openURL(productResource.link);
-          }
-        });
+        this.openURL(productResource.link);
       }
     }
     // if there is no link or we have displayed an external link in the browser, return false to short-circuit the logic
     return false;
-  }
+  };
 
-  linkingRegulatoryAnnouncement(regulatoryAnnouncement) {
+  linkingRegulatoryAnnouncement = (regulatoryAnnouncement) => {
     const { settings } = this.props;
     if (regulatoryAnnouncement.link && settings.isOnline) {
       // console.log('external regulatory announcement (show in browser): ' + regulatoryAnnouncement.link);
-      Linking.canOpenURL(regulatoryAnnouncement.link).then((supported) => {
-        if (supported) {
-          Linking.openURL(regulatoryAnnouncement.link);
-        }
-      });
+      this.openURL(regulatoryAnnouncement.link);
     }
     // if there is no link or we have displayed an external link in the browser, return false to short-circuit the logic
     return false;
-  }
+  };
 
-  linkingProductPortal(productMaster) {
+  linkingProductPortal = (productMaster) => {
     const { settings } = this.props;
     if (productMaster.productLink && settings.isOnline) {
       // console.log('external portal link (show in browser): ' + productMaster.productLink);
-      Linking.canOpenURL(productMaster.productLink).then((supported) => {
-        if (supported) {
-          Linking.openURL(productMaster.productLink);
-        }
-      });
+      this.openURL(productMaster.productLink);
     }
     // if there is no link or we have displayed an external link in the browser, return false to short-circuit the logic
     return false;
-  }
+  };
 
-  checkForUpdatedOrNewResource() {
+  checkForUpdatedOrNewResource = () => {
     const { productResourceList } = this.props;
     if (
       productResourceList.some((resource) => {
@@ -132,7 +128,7 @@ class ViewProductDetails extends Component {
       return 'new';
     }
     return '';
-  }
+  };
 
   render() {
     const { productMaster, productResourceList, settings } = this.props;
@@ -336,8 +332,10 @@ class ViewProductDetails extends Component {
                         <Text>
                           <Text>{productResource.resourceName.trim()}</Text>
                           <View>
-                            { productResource.isNew && !productResource.isUpdated && <Badge style={[styles.updateBadge, {backgroundColor: colors.green}]}>{t('common.badge.new')}</Badge> }
-                            { productResource.isUpdated && <Badge style={[styles.updateBadge, {backgroundColor: colors.orange}]}>{t('common.badge.updated')}</Badge> }
+                            { productResource.isNew && !productResource.isUpdated &&
+                              <Badge style={[styles.updateBadge, {backgroundColor: colors.green}]}>{t('common.badge.new')}</Badge> }
+                            { productResource.isUpdated &&
+                              <Badge style={[styles.updateBadge, {backgroundColor: colors.orange}]}>{t('common.badge.updated')}</Badge> }
                           </View>
                         </Text>
                       }

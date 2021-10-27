@@ -67,7 +67,12 @@ class ViewCovid19Products extends Component {
   render() {
     const buttons = [t('products.buttons.left'), t('products.buttons.right')];
     const { settings, navigation } = this.props;
-    const { filtVaccineProd, filtTreatmentProd, selectedIndex, searchText } = this.state;
+    const {
+      filtVaccineProd,
+      filtTreatmentProd,
+      selectedIndex,
+      searchText
+    } = this.state;
     if (settings.isOnline) {
       return (
         <>
@@ -83,8 +88,15 @@ class ViewCovid19Products extends Component {
             />
             <View style={gStyle.spacer8} />
             <ScrollView>
-              <ViewCardText title={t('products.card.title')} text={t('products.card.instructionText')} />
-              <ViewButtonGroup buttons={buttons} onPress={this.updateIndex} selectedIndex={selectedIndex} />
+              <ViewCardText
+                title={t('products.card.title')}
+                text={t('products.card.instructionText')}
+              />
+              <ViewButtonGroup
+                buttons={buttons}
+                onPress={this.updateIndex}
+                selectedIndex={selectedIndex}
+              />
               <View>
                 {selectedIndex === 0 && filtVaccineProd.length > 0 && (
                   <ViewProductMasters
@@ -135,8 +147,12 @@ const mapStateToProps = (state) => {
 
   return {
     settings: state.settings,
-    vaccineProducts: vaccineProducts.sort((a, b) => (a.brandName > b.brandName) ? 1 : -1),
-    treatmentProducts: treatmentProducts.sort((a, b) => (a.brandName > b.brandName) ? 1 : -1)
+    vaccineProducts: vaccineProducts.sort((a, b) =>
+      a.brandName > b.brandName ? 1 : -1
+    ),
+    treatmentProducts: treatmentProducts.sort((a, b) =>
+      a.brandName > b.brandName ? 1 : -1
+    )
   };
 };
 

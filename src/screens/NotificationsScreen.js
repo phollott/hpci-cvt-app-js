@@ -4,7 +4,7 @@ import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { Badge, List, Divider } from 'react-native-paper';
 import { useTheme } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { EventRegister } from 'react-native-event-listeners';
 import { t } from 'i18n-js';
 import { colors, gStyle } from '../constants';
@@ -13,14 +13,24 @@ import Icon from '../components/Icon';
 import ReadMoreText from '../components/ReadMoreText';
 import Touch from '../components/Touch';
 import ViewCardText from '../components/ViewCardText';
-import { notifications as notificationsService } from '../services';
-import { compareDesc, formatDate } from '../shared/date-fns';
+import { addBookmark } from '../redux/actions/bookmarkActions';
+import { addProduct } from '../redux/actions/productActions';
+import {
+  notifications as notificationsService,
+  productLoad,
+  bookmarkStorage
+} from '../services';
+import { compareDesc, formatDate, getTimeInMillis } from '../shared/date-fns';
 import { isNil } from '../shared/util';
 
 const NotificationsScreen = ({ navigation, route }) => {
   const theme = useTheme();
 
   const [notifications, setNotifications] = useState([]);
+
+  const dispatch = useDispatch();
+  const addFetchedProduct = (products) => dispatch(addProduct(products));
+  const addBookmarkProduct = (bookmarks) => dispatch(addBookmark(bookmarks));
 
   const retrieveNotifications = () => {
     notificationsService.retrieveNotifications().then((retrieved) => {
@@ -94,6 +104,89 @@ const NotificationsScreen = ({ navigation, route }) => {
     return formattedDate;
   };
 
+  const navStacks = () => {
+    // [mrj] hack: navigation is used to ensure screens are re-rendered after dispatch
+    navigation.navigate('ProductsStack', {
+      screen: 'Products',
+      params: {
+        productAction: '-sync-'.concat(getTimeInMillis().toString())
+      }
+    });
+    navigation.navigate('BookmarksStack', {
+      screen: 'Bookmarks',
+      params: {
+        bookmarkAction: '-sync-'.concat(getTimeInMillis().toString())
+      }
+    });
+    navigation.navigate('HomeStack', {
+      screen: 'Notifications'
+    });
+  };
+
+  const sync = async (inNid) => {
+    // fetch, retrieve, (scrape, store)
+    const fetchedProducts = await productLoad.fetchProducts();
+    const retrievedBookmarks = await bookmarkStorage.retrieveBookmarks(
+      fetchedProducts
+    );
+    let nids = [];
+    if (Number.isInteger(inNid)) {
+      nids.push(inNid);
+    } else {
+      nids = [...inNid];
+    }
+    nids.forEach((nid) => {
+      const enfrProduct = fetchedProducts.filter((product) => {
+        return nid === parseInt(product.nid, 10);
+      });
+      const enfrBookmark = retrievedBookmarks.filter((bookmark) => {
+        return nid === parseInt(bookmark.nid, 10);
+      });
+      // and dispatch
+      if (enfrProduct.length === 2) {
+        addFetchedProduct(enfrProduct);
+      }
+      if (enfrBookmark.length === 2) {
+        addBookmarkProduct(enfrBookmark);
+      }
+    });
+  };
+
+  const openURL = (link) => {
+    Linking.canOpenURL(link).then((supported) => {
+      if (supported) {
+        Linking.openURL(link);
+      }
+    });
+  };
+
+  const handleNotificationOnPress = async (notification) => {
+    const { data, viewed } = notification;
+    const externalLink = notificationsService.getExternalLink(notification);
+    const isProductSpecific = notificationsService.isProductSpecific(
+      notification
+    );
+    if (isNil(viewed)) {
+      if (isProductSpecific && isOnline) {
+        await sync(data.nid);
+        navStacks();
+      }
+      notificationsService.setViewed(notification);
+    }
+    if (isOnline && externalLink !== '') {
+      openURL(externalLink);
+    }
+    if (isProductSpecific) {
+      if (externalLink === '') {
+        if (isOnline) {
+          navigation.navigate('ProductsStack', { screen: 'Products' });
+        } else {
+          navigation.navigate('BookmarksStack', { screen: 'Bookmarks' });
+        }
+      }
+    }
+  };
+
   const deleteNotification = (notification) => {
     const { id } = notification;
     notificationsService.deleteNotification(notification).then(() => {
@@ -105,28 +198,6 @@ const NotificationsScreen = ({ navigation, route }) => {
         return newState;
       });
     });
-  };
-
-  const handleNotificationOnPress = (notification) => {
-    const { viewed } = notification;
-    if (isNil(viewed)) {
-      notificationsService.setViewed(notification);
-    }
-    const externalLink = notificationsService.getExternalLink(notification);
-    if (isOnline && externalLink !== '') {
-      // console.log('external link (show in browser): ' + externalLink);
-      Linking.canOpenURL(externalLink).then((supported) => {
-        if (supported) {
-          Linking.openURL(externalLink);
-        }
-      });
-    } else if (notificationsService.isProductSpecific(notification)) {
-      if (isOnline) {
-        navigation.navigate('ProductsStack', { screen: 'Products' });
-      } else {
-        navigation.navigate('BookmarksStack', { screen: 'Bookmarks' });
-      }
-    }
   };
 
   const renderRightActions = (notification) => (

@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Badge, List, Divider } from 'react-native-paper';
-import { EventRegister } from 'react-native-event-listeners';
 import Icon from './Icon';
 import { colors } from '../constants';
-import { notifications } from '../services';
 import { getTimeInMillis } from '../shared/date-fns';
 
 export default class ViewProductMasters extends Component {
@@ -13,34 +11,10 @@ export default class ViewProductMasters extends Component {
     this.state = {
       productLastViewed: getTimeInMillis()
     };
-    this.addNotificationListener = this.addNotificationListener.bind(this);
-    this.syncProduct = this.syncProduct.bind(this);
     this.handleProductOnPress = this.handleProductOnPress.bind(this);
   }
 
-  componentDidMount() {
-    this.addNotificationListener();
-  }
-
-  componentWillUnmount() {
-    EventRegister.removeEventListener(this.listener);
-  }
-
-  addNotificationListener = () => {
-    this.listener = EventRegister.addEventListener(
-      'notificationEvent',
-      (notification) => {
-        if (notifications.isProductSpecific(notification)) {
-          this.syncProduct(notification.data.nid);
-        }
-      }
-    );
-  };
-
-  syncProduct = (nid) => {
-    // TODO: for each product nid, if viewed isnil or < window, re-fetch from api (move)
-    return nid;
-  };
+  componentDidMount() {}
 
   handleProductOnPress = (productMaster) => {
     const { navigation } = this.props;
