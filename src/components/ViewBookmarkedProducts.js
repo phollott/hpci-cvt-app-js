@@ -34,7 +34,8 @@ class ViewBookmarkedProducts extends Component {
     this.setState({
       filtVaccineProd: vaccineProducts,
       filtTreatmentProd: treatmentProducts,
-      selectedIndex: vaccineProducts.length === 0 && treatmentProducts.length > 0 ? 1 : 0
+      selectedIndex:
+        vaccineProducts.length === 0 && treatmentProducts.length > 0 ? 1 : 0
     });
   }
 
@@ -44,7 +45,10 @@ class ViewBookmarkedProducts extends Component {
   }
 
   render() {
-    const buttons = [t('bookmarks.products.buttons.left'), t('bookmarks.products.buttons.right')];
+    const buttons = [
+      t('bookmarks.products.buttons.left'),
+      t('bookmarks.products.buttons.right')
+    ];
     const { vaccineProducts, treatmentProducts, navigation } = this.props;
     const { filtVaccineProd, filtTreatmentProd, selectedIndex } = this.state;
     if (vaccineProducts.length > 0 || treatmentProducts.length > 0) {
@@ -55,8 +59,15 @@ class ViewBookmarkedProducts extends Component {
         >
           <View style={gStyle.spacer8} />
           <ScrollView>
-            <ViewCardText title={t('bookmarks.products.card.title')} text={t('bookmarks.products.card.instructionText')} />
-            <ViewButtonGroup buttons={buttons} onPress={this.updateIndex} selectedIndex={selectedIndex} />
+            <ViewCardText
+              title={t('bookmarks.products.card.title')}
+              text={t('bookmarks.products.card.instructionText')}
+            />
+            <ViewButtonGroup
+              buttons={buttons}
+              onPress={this.updateIndex}
+              selectedIndex={selectedIndex}
+            />
             <View>
               {selectedIndex === 0 && filtVaccineProd.length > 0 && (
                 <ViewProductMasters
@@ -97,7 +108,14 @@ const mapStateToProps = (state) => {
 
   // Bookmarks:  (bookmark.key to match storage's)
   selectBookmarks(state).forEach((bookmark) => {
-    const product = productMaster.mapProduct(bookmark, bookmarkKeyPrefix.concat(bookmark.nid + '-' + state.settings.language), state.settings.language, true);
+    const product = productMaster.mapProduct(
+      bookmark,
+      bookmarkKeyPrefix.concat(
+        bookmark.nid.concat('-').concat(state.settings.language)
+      ),
+      state.settings.language,
+      true
+    );
     if (product.type === productType.vaccine) {
       vaccineProducts.push(product);
     } else {
@@ -107,8 +125,12 @@ const mapStateToProps = (state) => {
 
   return {
     settings: state.settings,
-    vaccineProducts: vaccineProducts.sort((a, b) => (a.brandName > b.brandName) ? 1 : -1),
-    treatmentProducts: treatmentProducts.sort((a, b) => (a.brandName > b.brandName) ? 1 : -1),
+    vaccineProducts: vaccineProducts.sort((a, b) =>
+      a.brandName > b.brandName ? 1 : -1
+    ),
+    treatmentProducts: treatmentProducts.sort((a, b) =>
+      a.brandName > b.brandName ? 1 : -1
+    ),
     selectedIndex:
       vaccineProducts.length === 0 && treatmentProducts.length > 0 ? 1 : 0
   };

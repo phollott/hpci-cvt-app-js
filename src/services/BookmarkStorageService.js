@@ -76,9 +76,10 @@ const retrieveBookmarks = async (syncWithProducts) => {
             return p.language === bookmark.language && p.nid === bookmark.nid;
           });
           if (product.length === 1) {
+            bookmarks.push(product[0]);
+            // set consumer info async
             ProductLoadService.setConsumerInformation(product[0]).then(
               (productInfoToSyncWith) => {
-                bookmarks.push(productInfoToSyncWith);
                 // update storage async
                 saveBookmark(productInfoToSyncWith);
               }
