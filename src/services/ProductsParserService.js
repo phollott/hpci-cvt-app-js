@@ -89,6 +89,27 @@ const isProductUpdated = (product) => {
   return isProductResourceChanged;
 };
 
+const getProductLastUpdatedDate = (product) => {
+  const resources = product.resources.filter((res) => {
+    return isProductResourceForConsumers(res);
+  });
+  const maxDate = new Date(
+    Math.max(
+      ...resources.map(
+        (resource) => !isNil(resource.date) && new Date(resource.date)
+      ),
+      ...resources.map(
+        (resource) =>
+          !isNil(resource.updated_date) && new Date(resource.updated_date)
+      )
+    )
+  );
+  const lastUpdatedDate = getDateWithTimezoneOffset(maxDate)
+    .toISOString()
+    .split('T')[0]; // e.g. "2021-04-26"
+  return lastUpdatedDate;
+};
+
 const isProductUnderReview = (product) => {
   return (
     product.status.toLowerCase().includes('under review') ||
@@ -214,6 +235,7 @@ export default {
   getProductDateOfApprovalFormatted,
   isProductNew,
   isProductUpdated,
+  getProductLastUpdatedDate,
   isProductUnderReview,
   isProductResourceForConsumers,
   isProductResourceConsumerInfo,

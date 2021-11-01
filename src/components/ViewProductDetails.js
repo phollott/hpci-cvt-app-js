@@ -131,7 +131,12 @@ class ViewProductDetails extends Component {
   };
 
   render() {
-    const { productMaster, productResourceList, settings } = this.props;
+    const {
+      productMaster,
+      productResourceList,
+      settings,
+      showNewlyModified
+    } = this.props;
     const {
       productMetadata,
       consumerInformation,
@@ -247,7 +252,7 @@ class ViewProductDetails extends Component {
                       icon="comment-question-outline"
                       style={{ marginHorizontal: 0 }}
                     />
-                    {isUpdatedOrNew && (
+                    {showNewlyModified && isUpdatedOrNew && (
                       <Badge
                         size={16}
                         style={[
@@ -300,7 +305,7 @@ class ViewProductDetails extends Component {
                       icon="web"
                       style={{ marginHorizontal: 0 }}
                     />
-                    {isUpdatedOrNew !== '' && (
+                    {showNewlyModified && isUpdatedOrNew !== '' && (
                       <Badge
                         size={16}
                         style={[
@@ -320,7 +325,8 @@ class ViewProductDetails extends Component {
                   <View
                     key={'view-'.concat(productResource.key)}
                     style={
-                      productResource.isNew || productResource.isUpdated
+                      showNewlyModified &&
+                      (productResource.isNew || productResource.isUpdated)
                         ? { backgroundColor: colors.lightGreen }
                         : {}
                     }
@@ -332,9 +338,9 @@ class ViewProductDetails extends Component {
                         <Text>
                           <Text>{productResource.resourceName.trim()}</Text>
                           <View>
-                            { productResource.isNew && !productResource.isUpdated &&
+                            { showNewlyModified && productResource.isNew && !productResource.isUpdated &&
                               <Badge style={[styles.updateBadge, {backgroundColor: colors.green}]}>{t('common.badge.new')}</Badge> }
-                            { productResource.isUpdated &&
+                            { showNewlyModified && productResource.isUpdated &&
                               <Badge style={[styles.updateBadge, {backgroundColor: colors.orange}]}>{t('common.badge.updated')}</Badge> }
                           </View>
                         </Text>
@@ -455,8 +461,8 @@ const mapStateToProps = (state, ownProps) => {
   let consumerInformation;
   let regulatoryAnnouncements;
 
-  // Product Master:
-  const { productMaster } = ownProps.route.params;
+  // Product Master, params:
+  const { productMaster, showNewlyModified } = ownProps.route.params;
 
   // Product Resources:
   const key = productMaster.key.toString();
@@ -496,7 +502,8 @@ const mapStateToProps = (state, ownProps) => {
     consumerInformationResource,
     productMetadata,
     consumerInformation,
-    regulatoryAnnouncements
+    regulatoryAnnouncements,
+    showNewlyModified
   };
 };
 

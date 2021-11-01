@@ -33,12 +33,12 @@ const productType = {
 //   expoPushToken - expoPushToken for device
 //   expoPushNotification-<<notification id>> - pushNotification
 //   language - en or fr
-//   TODO:
-//     product<<nid>>-<<lang>>: viewed
+//   productProps-<<nid>>: productProps
 const bookmarkKeyPrefix = 'bookmark-product';
 const expoPushTokenKeyPrefix = 'expoPushToken';
 const expoPushNotificationKeyPrefix = 'expoPushNotification-';
 const languageKeyPrefix = 'language';
+const productPropsKeyPrefix = 'productProps-';
 
 export {
   cvtApiUrlVaccines,
@@ -53,5 +53,6 @@ export {
   bookmarkKeyPrefix,
   expoPushTokenKeyPrefix,
   expoPushNotificationKeyPrefix,
-  languageKeyPrefix
+  languageKeyPrefix,
+  productPropsKeyPrefix
 };
