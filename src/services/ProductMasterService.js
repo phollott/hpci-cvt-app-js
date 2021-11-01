@@ -20,6 +20,7 @@ const productMaster = (product, id, language) => {
     searchKey: '',
     isNew: false,
     isUpdated: false,
+    lastUpdatedDate: null,
     isBookmark: false,
     productMetadata: [],
     consumerInformation: [],
@@ -40,6 +41,9 @@ const mapProduct = (product, id, language, isBookmark = false) => {
     .toLowerCase();
   prod.isNew = ProductsParserService.isProductNew(prod.approvalDate);
   prod.isUpdated = ProductsParserService.isProductUpdated(product);
+  prod.lastUpdatedDate = ProductsParserService.getProductLastUpdatedDate(
+    product
+  );
   prod.isBookmark = isBookmark;
   return prod;
 };

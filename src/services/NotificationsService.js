@@ -33,7 +33,7 @@ const pushNotification = (notification) => {
 
 // notificationEvent emitted by: handleNotification, deleteNotification, setViewed
 
-const isProductSpecific = (notification) => {
+function isProductSpecific(notification) {
   const { data } = notification;
   let hasNid = false;
   if (
@@ -44,9 +44,9 @@ const isProductSpecific = (notification) => {
     hasNid = true;
   }
   return hasNid;
-};
+}
 
-const getExternalLink = (notification) => {
+function getExternalLink(notification) {
   const { data } = notification;
   let link = '';
   if (
@@ -58,7 +58,7 @@ const getExternalLink = (notification) => {
     link = data.link;
   }
   return link;
-};
+}
 
 async function saveExpoPushNotification(notification) {
   try {

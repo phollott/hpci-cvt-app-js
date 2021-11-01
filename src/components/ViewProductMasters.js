@@ -3,27 +3,57 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Badge, List, Divider } from 'react-native-paper';
 import Icon from './Icon';
 import { colors } from '../constants';
-import { getTimeInMillis } from '../shared/date-fns';
+import { productPropsStorage } from '../services';
+import { getTimeInMillis, getUTCDate } from '../shared/date-fns';
+import { isNil } from '../shared/util';
 
 export default class ViewProductMasters extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      productLastViewed: getTimeInMillis()
+      productLastViewed: getTimeInMillis(),
+      productsProps: []
     };
     this.handleProductOnPress = this.handleProductOnPress.bind(this);
+    this.isNewlyModifiedAndNotViewed = this.isNewlyModifiedAndNotViewed.bind(
+      this
+    );
   }
 
-  componentDidMount() {}
-
-  handleProductOnPress = (productMaster) => {
-    const { navigation } = this.props;
-    const timeInMillis = getTimeInMillis();
-    this.setState({
-      productLastViewed: timeInMillis
+  componentDidMount() {
+    productPropsStorage.retrieveAllProductsProps().then((productsProps) => {
+      this.setState({
+        productsProps
+      });
     });
-    // TODO: update product as viewed (storage and state store), then navigate (and don't show badge if viewed is within last 7 days)
-    navigation.navigate('ProductDetails', { productMaster });
+  }
+
+  handleProductOnPress = async (productMaster) => {
+    const { navigation } = this.props;
+    const { productsProps } = this.state;
+    const allProductProps = productsProps.filter((inProps) => {
+      return inProps.id !== productMaster.nid;
+    });
+    const productProps = await productPropsStorage.setViewed(productMaster.nid);
+    this.setState({
+      productLastViewed: productProps.viewed,
+      productsProps: [...allProductProps, productProps]
+    });
+    const showNewlyModified = this.isNewlyModifiedAndNotViewed(productMaster);
+    navigation.navigate('ProductDetails', { productMaster, showNewlyModified });
+  };
+
+  isNewlyModifiedAndNotViewed = (productMaster) => {
+    const { productsProps } = this.state;
+    const productProps = productsProps.filter((inProps) => {
+      return inProps.id === productMaster.nid;
+    });
+    return (
+      (productMaster.isNew || productMaster.isUpdated) &&
+      (isNil(productProps.viewed) ||
+        productProps.viewed <=
+          getUTCDate(new Date(productMaster.lastUpdatedDate)))
+    );
   };
 
   render() {
@@ -42,7 +72,7 @@ export default class ViewProductMasters extends Component {
           <View
             key={'view-'.concat(productMaster.key)}
             style={
-              productMaster.isNew || productMaster.isUpdated
+              this.isNewlyModifiedAndNotViewed(productMaster)
                 ? { backgroundColor: colors.lightGreen }
                 : {}
             }
@@ -58,7 +88,7 @@ export default class ViewProductMasters extends Component {
                       name={ productMaster.type === 'Vaccine' ? 'syringe' : 'pills' }
                       color={ productMaster.showLink ? colors.darkColor : colors.orange }
                     />
-                    {(productMaster.isNew || productMaster.isUpdated) && (
+                    {this.isNewlyModifiedAndNotViewed(productMaster) && (
                       <Badge
                         size={16}
                         style={[
@@ -92,7 +122,7 @@ export default class ViewProductMasters extends Component {
               }}
               onPress={() => {
                 productMaster.showLink &&
-                this.handleProductOnPress(productMaster)
+                  this.handleProductOnPress(productMaster)
               }}
               right={() => {
                 return productMaster.showLink
