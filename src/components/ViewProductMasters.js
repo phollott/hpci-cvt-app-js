@@ -15,9 +15,7 @@ export default class ViewProductMasters extends Component {
       productsProps: []
     };
     this.handleProductOnPress = this.handleProductOnPress.bind(this);
-    this.isNewlyModifiedAndNotViewed = this.isNewlyModifiedAndNotViewed.bind(
-      this
-    );
+    this.isNewlyModifiedNotViewed = this.isNewlyModifiedNotViewed.bind(this);
   }
 
   componentDidMount() {
@@ -31,6 +29,7 @@ export default class ViewProductMasters extends Component {
   handleProductOnPress = async (productMaster) => {
     const { navigation } = this.props;
     const { productsProps } = this.state;
+    const showNewlyModified = this.isNewlyModifiedNotViewed(productMaster);
     const allProductProps = productsProps.filter((inProps) => {
       return inProps.id !== productMaster.nid;
     });
@@ -39,11 +38,10 @@ export default class ViewProductMasters extends Component {
       productLastViewed: productProps.viewed,
       productsProps: [...allProductProps, productProps]
     });
-    const showNewlyModified = this.isNewlyModifiedAndNotViewed(productMaster);
     navigation.navigate('ProductDetails', { productMaster, showNewlyModified });
   };
 
-  isNewlyModifiedAndNotViewed = (productMaster) => {
+  isNewlyModifiedNotViewed = (productMaster) => {
     const { productsProps } = this.state;
     const productProps = productsProps.filter((inProps) => {
       return inProps.id === productMaster.nid;
@@ -51,7 +49,7 @@ export default class ViewProductMasters extends Component {
     return (
       (productMaster.isNew || productMaster.isUpdated) &&
       (isNil(productProps.viewed) ||
-        productProps.viewed <=
+        getUTCDate(new Date(productProps.viewed)) <=
           getUTCDate(new Date(productMaster.lastUpdatedDate)))
     );
   };
@@ -72,7 +70,7 @@ export default class ViewProductMasters extends Component {
           <View
             key={'view-'.concat(productMaster.key)}
             style={
-              this.isNewlyModifiedAndNotViewed(productMaster)
+              this.isNewlyModifiedNotViewed(productMaster)
                 ? { backgroundColor: colors.lightGreen }
                 : {}
             }
@@ -88,7 +86,7 @@ export default class ViewProductMasters extends Component {
                       name={ productMaster.type === 'Vaccine' ? 'syringe' : 'pills' }
                       color={ productMaster.showLink ? colors.darkColor : colors.orange }
                     />
-                    {this.isNewlyModifiedAndNotViewed(productMaster) && (
+                    {this.isNewlyModifiedNotViewed(productMaster) && (
                       <Badge
                         size={16}
                         style={[
