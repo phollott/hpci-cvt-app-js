@@ -21,24 +21,22 @@ const getTimeInMillis = () => {
 };
 
 const getDateWithTimezoneOffset = (date) => {
-  // expected ISO format: YYYY-MM-DD
   const dt = new Date(date);
   return new Date(dt.getTime() + dt.getTimezoneOffset() * 60000);
 };
 
 const getUTCDate = (date) => {
-  // date: Date expected
+  const dt = new Date(date);
   const dtutc = Date.UTC(
-    date.getUTCFullYear(),
-    date.getUTCMonth(),
-    date.getUTCDate()
+    dt.getUTCFullYear(),
+    dt.getUTCMonth(),
+    dt.getUTCDate()
   );
   return dtutc;
 };
 
 const isDateWithinDaysBefore = (date, days) => {
-  const dt = new Date(date);
-  const dtdif = Math.floor((getTimeInMillis() - getUTCDate(dt)) / MS_PER_DAY);
+  const dtdif = Math.floor((getTimeInMillis() - getUTCDate(date)) / MS_PER_DAY);
   return dtdif <= days;
 };
 
