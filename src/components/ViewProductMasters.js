@@ -49,8 +49,8 @@ export default class ViewProductMasters extends Component {
     return (
       (productMaster.isNew || productMaster.isUpdated) &&
       (isNil(productProps.viewed) ||
-        getUTCDate(new Date(productProps.viewed)) <=
-          getUTCDate(new Date(productMaster.lastUpdatedDate)))
+        getUTCDate(productProps.viewed) <=
+          getUTCDate(productMaster.lastUpdatedDate))
     );
   };
 
