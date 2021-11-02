@@ -3,6 +3,7 @@ import { Platform } from 'react-native';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import { EventRegister } from 'react-native-event-listeners';
+import * as RootNavigation from '../navigation/RootNavigation';
 import StorageService from './StorageService';
 import {
   expoPushNotificationKeyPrefix,
@@ -86,6 +87,7 @@ function handleNotificationReceived(notification) {
 
 function handleNotificationResponseReceived(response) {
   handleNotification(response.notification, NOTIFICATION_RESPONSE_RECEIVED);
+  RootNavigation.navigate('HomeStack', { screen: 'Notifications' });
 }
 
 async function handleNotification(notification, source) {
