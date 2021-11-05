@@ -53,7 +53,9 @@ class App extends React.Component {
     // get expo token, may prompt ios users for permission
     notifications
       .registerForPushNotificationsAsync()
-      .then((token) => notifications.saveExpoPushToken(token));
+      .then((token) =>
+        notifications.registerDeviceToken(token, I18n.getCurrentLocale())
+      );
   }
 
   loadInitialStateAsync = async () => {

@@ -28,9 +28,9 @@ First, make sure you have Expo CLI installed: `npm install -g expo-cli`
 
 Install: `yarn` or `yarn install`
 
-Add .env: see .env.template
+Create .env file: copy contents of .env.template and set variables (create in same location)
 
-Run project locally: `expo start`
+Run project locally: `expo start` or `expo start --tunnel`
 
 ## development on a physical device
 

@@ -11,12 +11,20 @@ const BookmarksScreen = ({ navigation, route }) => {
   let viewBookmarkedProductsKey = language.concat('ViewBookmarkedProducts');
 
   // concat bookmark action so screen rerenders when bookmark is added or cleared
-  if (typeof route.params !== "undefined" && typeof route.params.bookmarkAction !== "undefined") {
-    viewBookmarkedProductsKey = viewBookmarkedProductsKey.concat(route.params.bookmarkAction);
+  if (
+    typeof route.params !== 'undefined' &&
+    typeof route.params.bookmarkAction !== 'undefined'
+  ) {
+    viewBookmarkedProductsKey = viewBookmarkedProductsKey.concat(
+      route.params.bookmarkAction
+    );
   }
 
   return (
-    <ViewBookmarkedProducts navigation={navigation} key={viewBookmarkedProductsKey}/>
+    <ViewBookmarkedProducts
+      navigation={navigation}
+      key={viewBookmarkedProductsKey}
+    />
   );
 };
 

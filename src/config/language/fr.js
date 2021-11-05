@@ -87,11 +87,10 @@ export default {
     pushNotification: {
       card: {
         title: 'Envoyer une notification',
-        instructionText: 'Envoyez une notification à votre appareil à partir de l’application ou de l’outil externe (appuyez, sélectionnez et copiez le \'Expo Push Token\' avant de naviguer vers l’outil externe).'
+        instructionText: 'Envoyez une notification à...'
       },
       button: {
-        sendTitle: 'Envoyer une notification',
-        toolTitle: 'Expo Push Notification Tool'
+        sendTitle: 'Envoyer à soi-même'
       }
     }
   },

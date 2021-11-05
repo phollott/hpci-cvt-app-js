@@ -8,14 +8,21 @@ import Alert from './Alert';
 import Icon from './Icon';
 import { addBookmark, removeBookmark } from '../redux/actions/bookmarkActions';
 import { selectProductsByID } from '../redux/selectors/productSelector';
-import { selectBookmarkExists } from '../redux/selectors/bookmarkSelector';
-import { bookmarkStorage, productLoad } from '../services';
+import {
+  selectBookmarkExists,
+  selectBookmarkIDs
+} from '../redux/selectors/bookmarkSelector';
+import { bookmarkStorage, notifications, productLoad } from '../services';
 import { getTimeInMillis } from '../shared/date-fns';
 
 const BookmarkProduct = ({ navigation, route }) => {
   const state = useSelector((state) => state);
+  const language = useSelector((state) => state.settings.language);
   const isBookmark = useSelector((state) => {
     return selectBookmarkExists(state, route.params.productMaster.nid);
+  });
+  const bookmarkIDs = useSelector((state) => {
+    return selectBookmarkIDs(state);
   });
 
   const dispatch = useDispatch();
@@ -70,7 +77,18 @@ const BookmarkProduct = ({ navigation, route }) => {
                         // save en and fr bookmarks to storage
                         bookmarkStorage
                           .saveProductBookmarks(products)
-                          .then(navStacks(productMaster.nid));
+                          .then(() => {
+                            // dispatch preferences to push notification service
+                            const newBookmarkIds = [
+                              ...new Set(bookmarkIDs),
+                              products[1].nid
+                            ];
+                            notifications.dispatchPreferences(
+                              language,
+                              newBookmarkIds
+                            );
+                            navStacks(productMaster.nid);
+                          });
                       });
                   });
               } else {
@@ -79,10 +97,19 @@ const BookmarkProduct = ({ navigation, route }) => {
                 // remove en and fr bookmarks from storage
                 bookmarkStorage
                   .deleteProductBookmarks(productMaster.nid)
-                  .then(navStacks(productMaster.nid));
+                  .then(() => {
+                    // dispatch preferences to push notification service
+                    notifications.dispatchPreferences(
+                      language,
+                      bookmarkIDs.filter((id) => id !== productMaster.nid)
+                    );
+                    navStacks(productMaster.nid);
+                  });
               }
             } else {
-              throw isBookmark ? 'Unable to remove bookmark.' : 'Unable to create bookmark.';
+              throw isBookmark
+                ? Error('Unable to remove bookmark.')
+                : Error('Unable to create bookmark.');
             }
           } catch (error) {
             if (isBookmark) {
