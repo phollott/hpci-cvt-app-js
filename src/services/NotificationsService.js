@@ -3,12 +3,19 @@ import { Platform } from 'react-native';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import { EventRegister } from 'react-native-event-listeners';
-import * as RootNavigation from '../navigation/RootNavigation';
+import LanguageStorageService from './LanguageStorageService';
 import StorageService from './StorageService';
 import {
+  registerDevice,
+  unregisterDevice,
+  dispatchDevicePreferences
+} from '../api/pushNotificationService';
+import {
   expoPushNotificationKeyPrefix,
-  expoPushTokenKeyPrefix
+  expoPushTokenKeyPrefix,
+  lang
 } from '../constants/constants';
+import * as RootNavigation from '../navigation/RootNavigation';
 import { isNil } from '../shared/util';
 import { getTimeInMillis } from '../shared/date-fns';
 
@@ -23,7 +30,7 @@ const pushNotification = (notification) => {
       id: notification.request.identifier,
       date: notification.date, // in millis
       body: notification.request.content.body, // message
-      data: { ...notification.request.content.data }, // ex: {}, {"nid": 16}, {"nid": [16, 18, 20]}, {"link": "https:..."}, both
+      data: { ...notification.request.content.data }, // ex: {}, {"products": "16"}, {"products": ["16", "18", "20"]}, {"link": "https:..."}, both
       title: notification.request.content.title,
       viewed: null, // in millis
       isRemoved: false
@@ -32,15 +39,24 @@ const pushNotification = (notification) => {
   return {};
 };
 
+const devicePrefs = (language = lang.english, bookmarks = null) => {
+  return {
+    data: {
+      language: language === lang.english ? lang.english : lang.french, // "en" or "fr"
+      bookmarks // ex: null, ["15", "16"]
+    }
+  };
+};
+
 // notificationEvent emitted by: handleNotification, deleteNotification, setViewed
 
 function isProductSpecific(notification) {
   const { data } = notification;
   let hasNid = false;
   if (
-    !isNil(data.nid) &&
-    ((Number.isInteger(data.nid) && data.nid > 0) ||
-      (Array.isArray(data.nid) && notification.data.nid.length > 0))
+    !isNil(data.products) &&
+    (Number.isInteger(parseInt(data.products, 10)) ||
+      (Array.isArray(data.products) && notification.data.products.length > 0))
   ) {
     hasNid = true;
   }
@@ -137,7 +153,6 @@ function registerNotificationHandler() {
   }
 }
 
-// TODO: store token on backend, notification settings?
 async function registerForPushNotificationsAsync() {
   // https://docs.expo.io/push-notifications/push-notifications-setup/
   let token = '';
@@ -176,7 +191,7 @@ async function registerForPushNotificationsAsync() {
 }
 
 async function retrieveExpoPushToken() {
-  let value;
+  let value = '';
   try {
     value = await StorageService.retrieve(expoPushTokenKeyPrefix);
   } catch (error) {
@@ -194,6 +209,42 @@ async function saveExpoPushToken(token) {
     );
   } catch (error) {
     console.log('Unable to save expoPushToken to storage. ', error);
+  }
+}
+
+function getTokenID(token) {
+  // token ID is the text between []
+  return token.match(/\[(.*?)\]/i)[1];
+}
+
+async function registerDeviceToken(token, locale) {
+  try {
+    if (token !== '') {
+      // register
+      const langPref = await LanguageStorageService.retrieveLanguage();
+      const language =
+        !isNil(langPref) &&
+        (langPref === lang.english || langPref === lang.french)
+          ? langPref
+          : locale;
+      registerDevice(getTokenID(token), language);
+      saveExpoPushToken(token);
+    } else {
+      // unregister
+      const storedToken = await retrieveExpoPushToken();
+      if (storedToken !== '') {
+        unregisterDevice(getTokenID(storedToken));
+        saveExpoPushToken('');
+      }
+      // TODO: ensure notifications setting is disabled
+    }
+  } catch (error) {
+    console.log(
+      'Unable to '
+        .concat(token !== '' ? 'register with' : 'unregister from')
+        .concat(' the push notification service. '),
+      error
+    );
   }
 }
 
@@ -265,22 +316,18 @@ async function setViewed(inNotification) {
   return notification;
 }
 
-// can use this function below, OR use Expo's Push Notification Tool-> https://expo.io/notifications
-// TODO: backend - https://docs.expo.io/push-notifications/sending-notifications/
-async function sendExpoPushNotification(message) {
-  // https://docs.expo.io/push-notifications/overview/
+async function dispatchPreferences(language, bookmarks = null) {
   try {
-    fetch('https://exp.host/--/api/v2/push/send', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Accept-encoding': 'gzip, deflate',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(message)
-    });
+    const token = await retrieveExpoPushToken();
+    if (token !== '') {
+      const data = devicePrefs(language, bookmarks);
+      dispatchDevicePreferences(getTokenID(token), data);
+    }
   } catch (error) {
-    console.log('Unable to send Expo Push Notification. ', error);
+    console.log(
+      'Unable to dispatch device preferences to push notification service. ',
+      error
+    );
   }
 }
 
@@ -288,11 +335,11 @@ export default {
   registerNotificationHandler,
   registerForPushNotificationsAsync,
   retrieveExpoPushToken,
-  saveExpoPushToken,
+  registerDeviceToken,
   retrieveNotifications,
   deleteNotification,
   setViewed,
   isProductSpecific,
   getExternalLink,
-  sendExpoPushNotification
+  dispatchPreferences
 };

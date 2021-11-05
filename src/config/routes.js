@@ -1,6 +1,14 @@
-import { cvtApiUrlVaccines, cvtApiUrlNews } from '../constants/constants';
+import {
+  cvtApiUrlVaccines,
+  cvtApiUrlNews,
+  pnsApiUrlDevices,
+  pnsApiUrlNotifications
+} from '../constants/constants';
 
 const vaccineAPIUrl = cvtApiUrlVaccines;
 const newsAPIUrl = cvtApiUrlNews;
 
-export { vaccineAPIUrl, newsAPIUrl };
+const devicesAPIUrl = pnsApiUrlDevices;
+const notificationsAPIUrl = pnsApiUrlNotifications;
+
+export { vaccineAPIUrl, newsAPIUrl, devicesAPIUrl, notificationsAPIUrl };

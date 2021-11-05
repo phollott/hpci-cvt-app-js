@@ -1,16 +1,19 @@
+/* eslint-disable no-console */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { ScrollView, Text, View, Linking } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { Checkbox, TextInput } from 'react-native-paper';
 import { useTheme } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { t } from 'i18n-js';
+import { sendPushNotification } from '../api/pushNotificationService';
 import { gStyle } from '../constants';
 import Alert from '../components/Alert';
 import Touch from '../components/Touch';
 import ViewCardText from '../components/ViewCardText';
 import { addProduct } from '../redux/actions/productActions';
 import { addBookmark } from '../redux/actions/bookmarkActions';
+import { selectBookmarkIDs } from '../redux/selectors/bookmarkSelector';
 import { notifications, productsParser } from '../services';
 import {
   getDate,
@@ -25,30 +28,36 @@ import {
 const PushNotificationScreen = ({ navigation, route }) => {
   const theme = useTheme();
 
-  const [expoPushToken, setExpoPushToken] = useState('');
-
-  useEffect(() => {
-    notifications
-      .retrieveExpoPushToken()
-      .then((token) => setExpoPushToken(token));
-  }, []);
-
   // use hook to get language and set as key so react creates a new component instance when language gets changed
   const language = useSelector((state) => state.settings.language);
   const pushNotificationViewKey = language.concat('PushNotificationView');
 
+  // use hook to get bookmark nids so device and preferences can be dispatched to PNS (dev setup)
+  const bookmarks = useSelector((state) => {
+    return selectBookmarkIDs(state);
+  });
+
+  const [expoPushToken, setExpoPushToken] = useState('');
+
+  useEffect(() => {
+    notifications.retrieveExpoPushToken().then((token) => {
+      setExpoPushToken(token);
+      notifications.dispatchPreferences(language, bookmarks);
+    });
+  }, []);
+
   const [messageText, setMessageText] = React.useState('');
 
   let covid19Products = [];
-  covid19Products.push({ nid: 29, brandName: 'COVISHIELD', checked: false });
-  covid19Products.push({ nid: 28, brandName: 'Vaxzevria', checked: false });
-  covid19Products.push({ nid: 27, brandName: 'Janssen', checked: false });
-  covid19Products.push({ nid: 16, brandName: 'Comirnaty', checked: false });
-  covid19Products.push({ nid: 15, brandName: 'SPIKEVAX', checked: false });
-  covid19Products.push({ nid: 9, brandName: 'Veklury', checked: false });
-  covid19Products.push({ nid: 8, brandName: 'Bamlanivimab', checked: false });
-  covid19Products.push({ nid: 36, brandName: 'Sotrovimab', checked: false });
-  covid19Products.push({ nid: 34, brandName: 'Casirivimab / imdevimab', checked: false });
+  covid19Products.push({ nid: '29', brandName: 'COVISHIELD', checked: false });
+  covid19Products.push({ nid: '28', brandName: 'Vaxzevria', checked: false });
+  covid19Products.push({ nid: '27', brandName: 'Janssen', checked: false });
+  covid19Products.push({ nid: '16', brandName: 'Comirnaty', checked: false });
+  covid19Products.push({ nid: '15', brandName: 'SPIKEVAX', checked: false });
+  covid19Products.push({ nid: '9', brandName: 'Veklury', checked: false });
+  covid19Products.push({ nid: '8', brandName: 'Bamlanivimab', checked: false });
+  covid19Products.push({ nid: '36', brandName: 'Sotrovimab', checked: false });
+  covid19Products.push({ nid: '34', brandName: 'Casirivimab / imdevimab', checked: false });
 
   const [products, setProducts] = React.useState(covid19Products);
 
@@ -247,18 +256,18 @@ const PushNotificationScreen = ({ navigation, route }) => {
                       if (product.checked) {
                         // get en and fr products from testProducts and dispatch
                         const testProduct = testProducts.filter((tp) => {
-                          return tp.nid == product.nid;
+                          return tp.nid === product.nid;
                         });
                         replaceProductWithTestProduct(testProduct);
                         // dispatch if bookmarked
-                        if (bookmarksInStore.some((bm) => { return bm.nid == product.nid })) {
+                        if (bookmarksInStore.some((bm) => { return bm.nid === product.nid })) {
                           replaceBookmarkWithTestProduct([...testProduct]);
                         }
                       }
                     });
                     navStacks();
                   }
-                  await sendPushNotification(
+                  await dispatchPushNotificationToSelf(
                     messageText,
                     products,
                     linkText.toLowerCase()
@@ -277,34 +286,6 @@ const PushNotificationScreen = ({ navigation, route }) => {
             >
               {expoPushToken}
             </Text>
-            <View style={gStyle.spacer16} />
-            <View style={{ width: '100%', justifyContent: 'center' }}>
-              <Touch
-                onPress={() => {
-                  const epntUrl = 'https:expo.io/notifications';
-                  Linking.canOpenURL(epntUrl).then((supported) => {
-                    if (supported) {
-                      Linking.openURL(epntUrl);
-                    }
-                  });
-                }}
-                text={t('home.pushNotification.button.toolTitle')}
-                lIconName="globe"
-              />
-            </View>
-            <View style={gStyle.spacer16} />
-            <View style={{ width: '100%', justifyContent: 'center' }}>
-              <Touch
-                onPress={() => {
-                  const alertText = 'Example Data (JSON) [optional]:\n\n{"nid": 16}\nor\n{"nid": [15,16,9]}\n\n'.concat(
-                    JSON.stringify(covid19Products, ['nid', 'brandName'])
-                  );
-                  Alert(alertText);
-                }}
-                text={t('tab.screen.productsLabel')}
-                lIconName="info"
-              />
-            </View>
           </View>
         </View>
         <View style={gStyle.spacer32} />
@@ -316,7 +297,7 @@ const PushNotificationScreen = ({ navigation, route }) => {
 // can use this function below, or
 // Expo's Push Notification Tool-> https://expo.io/notifications  (data examples: {"nid": 16} or {"nid": [15,16,9]})
 // TODO: replace with backend
-async function sendPushNotification(messageText, products, linkText) {
+async function dispatchPushNotificationToSelf(messageText, products, linkText) {
   notifications.retrieveExpoPushToken().then((expoPushToken) => {
     const nids = [];
     products.forEach((product) => {
@@ -326,16 +307,14 @@ async function sendPushNotification(messageText, products, linkText) {
     });
     const message = {
       to: expoPushToken,
-      sound: 'default',
-      badge: 1,
       title: 'Health Canada • Santé Canada',
       body: messageText,
       data: {
-        nid: nids,
+        products: nids.length > 0 ? nids : null,
         link: linkText
       }
     };
-    notifications.sendExpoPushNotification(message);
+    sendPushNotification(message);
   });
 }
 

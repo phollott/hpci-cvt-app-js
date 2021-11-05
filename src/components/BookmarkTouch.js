@@ -9,15 +9,20 @@ import Icon from './Icon';
 import { removeBookmark } from '../redux/actions/bookmarkActions';
 import {
   selectBookmarkExists,
-  selectBookmarksByID
+  selectBookmarksByID,
+  selectBookmarkIDs
 } from '../redux/selectors/bookmarkSelector';
-import { bookmarkStorage } from '../services';
+import { bookmarkStorage, notifications } from '../services';
 import { getTimeInMillis } from '../shared/date-fns';
 
 const BookmarkTouch = ({ navigation, route }) => {
   const state = useSelector((state) => state);
+  const language = useSelector((state) => state.settings.language);
   const isBookmark = useSelector((state) => {
     return selectBookmarkExists(state, route.params.productMaster.nid);
+  });
+  const bookmarkIDs = useSelector((state) => {
+    return selectBookmarkIDs(state);
   });
 
   const dispatch = useDispatch();
@@ -57,11 +62,20 @@ const BookmarkTouch = ({ navigation, route }) => {
                 // remove en and fr bookmarks from storage
                 bookmarkStorage
                   .deleteProductBookmarks(productMaster.nid)
-                  .then(navStacks());
+                  .then(() => {
+                    // dispatch preferences to push notification service
+                    notifications.dispatchPreferences(
+                      language,
+                      bookmarkIDs.filter((id) => id !== productMaster.nid)
+                    );
+                    navStacks();
+                  });
               }
               // console.log(await storage.retrieveMulti(['bookmark-product'+productMaster.nid+'-en', 'bookmark-product'+productMaster.nid+'-fr']));
             } else {
-              throw isBookmark ? 'Unable to remove bookmark.' : 'Unable to create bookmark.';
+              throw isBookmark
+                ? Error('Unable to remove bookmark.')
+                : Error('Unable to create bookmark.');
             }
           } catch (error) {
             if (isBookmark) {

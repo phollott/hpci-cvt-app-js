@@ -24,3 +24,14 @@ export function selectBookmarkExists(state, nid) {
   const match = (bookmark) => bookmark.nid === nid && selectLanguageText(state);
   return state.bookmarks.some(match);
 }
+
+export function selectBookmarkIDs(state) {
+  const ids = [
+    ...new Set(
+      state.bookmarks.map((bookmark) => {
+        return bookmark.nid;
+      })
+    )
+  ];
+  return ids;
+}

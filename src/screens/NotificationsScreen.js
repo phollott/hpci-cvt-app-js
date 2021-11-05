@@ -130,17 +130,17 @@ const NotificationsScreen = ({ navigation, route }) => {
       fetchedProducts
     );
     let nids = [];
-    if (Number.isInteger(inNid)) {
-      nids.push(inNid);
-    } else {
+    if (Array.isArray(inNid) && inNid.length > 0) {
       nids = [...inNid];
+    } else if (Number.isInteger(parseInt(inNid, 10))) {
+      nids.push(inNid);
     }
     nids.forEach((nid) => {
       const enfrProduct = fetchedProducts.filter((product) => {
-        return nid === parseInt(product.nid, 10);
+        return nid === product.nid;
       });
       const enfrBookmark = retrievedBookmarks.filter((bookmark) => {
-        return nid === parseInt(bookmark.nid, 10);
+        return nid === bookmark.nid;
       });
       // and dispatch
       if (enfrProduct.length === 2) {
@@ -168,7 +168,7 @@ const NotificationsScreen = ({ navigation, route }) => {
     );
     if (isNil(viewed)) {
       if (isProductSpecific && isOnline) {
-        await sync(data.nid);
+        await sync(data.products);
         navStacks();
       }
       notificationsService.setViewed(notification);
