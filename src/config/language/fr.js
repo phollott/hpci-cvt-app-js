@@ -89,8 +89,12 @@ export default {
         title: 'Envoyer une notification',
         instructionText: 'Envoyez une notification à...'
       },
+      linkLabel: 'Ajouter un lien externe',
       button: {
-        sendTitle: 'Envoyer à soi-même'
+        sendTitle: {
+          self: 'Envoyer à soi-même',
+          all: 'Envoyer à tous'
+        }
       }
     }
   },

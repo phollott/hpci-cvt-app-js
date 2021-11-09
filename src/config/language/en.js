@@ -89,8 +89,12 @@ export default {
         title: 'Send Push Notification',
         instructionText: 'Send a notification to...'
       },
+      linkLabel: 'Add external link',
       button: {
-        sendTitle: 'Send to Self'
+        sendTitle: {
+          self: 'Send to Self',
+          all: 'Send to All'
+        }
       }
     }
   },
