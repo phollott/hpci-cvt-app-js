@@ -46,7 +46,11 @@ const PushNotificationScreen = ({ navigation, route }) => {
     });
   }, []);
 
-  const [messageText, setMessageText] = React.useState('');
+  const [titleTextEn, setTitleTextEn] = React.useState('Health Canada');
+  const [messageTextEn, setMessageTextEn] = React.useState('');
+
+  const [titleTextFr, setTitleTextFr] = React.useState('Santé Canada');
+  const [messageTextFr, setMessageTextFr] = React.useState('');
 
   let covid19Products = [];
   covid19Products.push({ nid: '29', brandName: 'COVISHIELD', checked: false });
@@ -187,9 +191,31 @@ const PushNotificationScreen = ({ navigation, route }) => {
           >
             <View style={{ width: '100%' }}>
               <TextInput
-                label="Message"
-                value={messageText}
-                onChangeText={(input) => setMessageText(input)}
+                label="Title - English"
+                value={titleTextEn}
+                onChangeText={(input) => setTitleTextEn(input)}
+              />
+            </View>
+            <View style={{ width: '100%' }}>
+              <TextInput
+                label="Message - English"
+                value={messageTextEn}
+                onChangeText={(input) => setMessageTextEn(input)}
+              />
+            </View>
+            <View style={gStyle.spacer8} />
+            <View style={{ width: '100%' }}>
+              <TextInput
+                label="Titre - Français"
+                value={titleTextFr}
+                onChangeText={(input) => setTitleTextFr(input)}
+              />
+            </View>
+            <View style={{ width: '100%' }}>
+              <TextInput
+                label="Message - Français"
+                value={messageTextFr}
+                onChangeText={(input) => setMessageTextFr(input)}
               />
             </View>
             <View style={gStyle.spacer8} />
@@ -228,7 +254,7 @@ const PushNotificationScreen = ({ navigation, route }) => {
             <View style={gStyle.spacer8} />
             <View style={{ width: '100%' }}>
               <TextInput
-                label="Add external link"
+                label={t('home.pushNotification.linkLabel')}
                 value={linkText}
                 onChangeText={(input) => setLinkText(input)}
               />
@@ -237,8 +263,18 @@ const PushNotificationScreen = ({ navigation, route }) => {
             <View style={{ width: '100%', justifyContent: 'center' }}>
               <Touch
                 onPress={async () => {
-                  if (messageText.length === 0) {
+                  if (
+                    messageTextEn.length === 0 &&
+                    messageTextFr.length === 0
+                  ) {
                     Alert('Please enter a message.');
+                    return;
+                  }
+                  if (
+                    (messageTextEn.length > 0 && titleTextEn.length === 0) ||
+                    (messageTextFr.length > 0 && titleTextFr.length === 0)
+                  ) {
+                    Alert('Please enter a title.');
                     return;
                   }
                   if (
@@ -260,7 +296,71 @@ const PushNotificationScreen = ({ navigation, route }) => {
                         });
                         replaceProductWithTestProduct(testProduct);
                         // dispatch if bookmarked
-                        if (bookmarksInStore.some((bm) => { return bm.nid === product.nid })) {
+                        if (
+                          bookmarksInStore.some((bm) => {
+                            return bm.nid === product.nid;
+                          })
+                        ) {
+                          replaceBookmarkWithTestProduct([...testProduct]);
+                        }
+                      }
+                    });
+                    navStacks();
+                  }
+                  await dispatchPushNotificationToAll(
+                    titleTextEn,
+                    messageTextEn,
+                    titleTextFr,
+                    messageTextFr,
+                    products,
+                    linkText.toLowerCase()
+                  );
+                }}
+                text={t('home.pushNotification.button.sendTitle.all')}
+                lIconName="share"
+              />
+            </View>
+            <View style={{ width: '100%', justifyContent: 'center' }}>
+              <Touch
+                onPress={async () => {
+                  if (
+                    messageTextEn.length === 0 &&
+                    messageTextFr.length === 0
+                  ) {
+                    Alert('Please enter a message.');
+                    return;
+                  }
+                  if (
+                    (messageTextEn.length > 0 && titleTextEn.length === 0) ||
+                    (messageTextFr.length > 0 && titleTextFr.length === 0)
+                  ) {
+                    Alert('Please enter a title.');
+                    return;
+                  }
+                  if (
+                    linkText.length > 0 &&
+                    !(
+                      linkText.toLowerCase().startsWith('https://') ||
+                      linkText.toLowerCase().startsWith('http://')
+                    )
+                  ) {
+                    Alert('Please enter a valid external link.');
+                    return;
+                  }
+                  if (addTestResourceChecked) {
+                    products.forEach((product) => {
+                      if (product.checked) {
+                        // get en and fr products from testProducts and dispatch
+                        const testProduct = testProducts.filter((tp) => {
+                          return tp.nid === product.nid;
+                        });
+                        replaceProductWithTestProduct(testProduct);
+                        // dispatch if bookmarked
+                        if (
+                          bookmarksInStore.some((bm) => {
+                            return bm.nid === product.nid;
+                          })
+                        ) {
                           replaceBookmarkWithTestProduct([...testProduct]);
                         }
                       }
@@ -268,12 +368,15 @@ const PushNotificationScreen = ({ navigation, route }) => {
                     navStacks();
                   }
                   await dispatchPushNotificationToSelf(
-                    messageText,
+                    titleTextEn,
+                    messageTextEn,
+                    titleTextFr,
+                    messageTextFr,
                     products,
                     linkText.toLowerCase()
                   );
                 }}
-                text={t('home.pushNotification.button.sendTitle')}
+                text={t('home.pushNotification.button.sendTitle.self')}
                 lIconName="share"
               />
             </View>
@@ -294,10 +397,54 @@ const PushNotificationScreen = ({ navigation, route }) => {
   );
 };
 
-// can use this function below, or
-// Expo's Push Notification Tool-> https://expo.io/notifications  (data examples: {"nid": 16} or {"nid": [15,16,9]})
-// TODO: replace with backend
-async function dispatchPushNotificationToSelf(messageText, products, linkText) {
+async function dispatchPushNotificationToAll(
+  titleTextEn,
+  messageTextEn,
+  titleTextFr,
+  messageTextFr,
+  products,
+  linkText
+) {
+  const nids = [];
+  products.forEach((product) => {
+    if (product.checked) {
+      nids.push(product.nid);
+    }
+  });
+  const message = [];
+  if (messageTextEn.length > 0) {
+    message.push({
+      to: 'en',
+      title: titleTextEn,
+      body: messageTextEn,
+      data: {
+        products: nids.length > 0 ? nids : null,
+        link: linkText
+      }
+    });
+  }
+  if (messageTextFr.length > 0) {
+    message.push({
+      to: 'fr',
+      title: titleTextFr,
+      body: messageTextFr,
+      data: {
+        products: nids.length > 0 ? nids : null,
+        link: linkText
+      }
+    });
+  }
+  sendPushNotification(message);
+}
+
+async function dispatchPushNotificationToSelf(
+  titleTextEn,
+  messageTextEn,
+  titleTextFr,
+  messageTextFr,
+  products,
+  linkText
+) {
   notifications.retrieveExpoPushToken().then((expoPushToken) => {
     const nids = [];
     products.forEach((product) => {
@@ -305,15 +452,29 @@ async function dispatchPushNotificationToSelf(messageText, products, linkText) {
         nids.push(product.nid);
       }
     });
-    const message = {
-      to: expoPushToken,
-      title: 'Health Canada • Santé Canada',
-      body: messageText,
-      data: {
-        products: nids.length > 0 ? nids : null,
-        link: linkText
-      }
-    };
+    const message = [];
+    if (messageTextEn.length > 0) {
+      message.push({
+        to: expoPushToken,
+        title: titleTextEn,
+        body: messageTextEn,
+        data: {
+          products: nids.length > 0 ? nids : null,
+          link: linkText
+        }
+      });
+    }
+    if (messageTextFr.length > 0) {
+      message.push({
+        to: expoPushToken,
+        title: titleTextFr,
+        body: messageTextFr,
+        data: {
+          products: nids.length > 0 ? nids : null,
+          link: linkText
+        }
+      });
+    }
     sendPushNotification(message);
   });
 }
