@@ -102,8 +102,18 @@ function handleNotificationReceived(notification) {
 }
 
 function handleNotificationResponseReceived(response) {
-  handleNotification(response.notification, NOTIFICATION_RESPONSE_RECEIVED);
-  RootNavigation.navigate('HomeStack', { screen: 'Notifications' });
+  RootNavigation.navigate('HomeStack', {
+    screen: 'Notifications'
+  }).then((isMounted) => {
+    if (isMounted) {
+      setTimeout(() => {
+        handleNotification(
+          response.notification,
+          NOTIFICATION_RESPONSE_RECEIVED
+        );
+      }, 1000);
+    }
+  });
 }
 
 async function handleNotification(notification, source) {
