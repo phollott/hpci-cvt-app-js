@@ -46,11 +46,11 @@ export default class ViewProductMasters extends Component {
     const productProps = productsProps.filter((inProps) => {
       return inProps.id === productMaster.nid;
     });
+    const viewed = productProps.length > 0 ? productProps[0].viewed : null;
     return (
       (productMaster.isNew || productMaster.isUpdated) &&
-      (isNil(productProps.viewed) ||
-        getUTCDate(productProps.viewed) <=
-          getUTCDate(productMaster.lastUpdatedDate))
+      (isNil(viewed) ||
+        getUTCDate(viewed) <= getUTCDate(productMaster.lastUpdatedDate))
     );
   };
 
