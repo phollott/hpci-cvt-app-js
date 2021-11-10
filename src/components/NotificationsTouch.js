@@ -13,6 +13,7 @@ const NotificationsTouch = ({ navigation, route }) => (
     accessibilityTraits="button"
     activeOpacity={gStyle.activeOpacity}
     onPress={() => {
+      navigation.navigate('HomeStack', { screen: 'Home' });
       navigation.navigate('HomeStack', {
         screen: 'Notifications',
         params: {
