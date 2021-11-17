@@ -8,7 +8,8 @@ import StorageService from './StorageService';
 import {
   registerDevice,
   unregisterDevice,
-  dispatchDevicePreferences
+  dispatchDevicePreferences,
+  fetchNotificationsAsync
 } from '../api/pushNotificationService';
 import {
   expoPushNotificationKeyPrefix,
@@ -21,20 +22,35 @@ import { getTimeInMillis } from '../shared/date-fns';
 
 const NOTIFICATION_RECEIVED = 'notificationReceived'; // while app in foreground
 const NOTIFICATION_RESPONSE_RECEIVED = 'notificationResponseReceived'; // while app in foreground, background or closed
-
-const PERSIST_NOTIFICATION_ENABLED = true; // must be true, can disable for testing
+const NOTIFICATION_SERVICE_SYNC = 'notificationServiceSync'; // when language pref changes
 
 const pushNotification = (notification) => {
-  if (notification && notification.request) {
-    return {
-      id: notification.request.identifier,
-      date: notification.date, // in millis
-      body: notification.request.content.body, // message
-      data: { ...notification.request.content.data }, // ex: {}, {"products": "16"}, {"products": ["16", "18", "20"]}, {"link": "https:..."}, both
-      title: notification.request.content.title,
-      viewed: null, // in millis
-      isRemoved: false
-    };
+  if (notification) {
+    if (notification.request) {
+      // expo
+      return {
+        id: notification.request.identifier,
+        date: notification.date, // in millis
+        body: notification.request.content.body, // message
+        data: { ...notification.request.content.data }, // ex: {}, {"products": "16"}, {"products": ["16", "18", "20"]}, {"link": "https:..."}, both
+        title: notification.request.content.title,
+        viewed: null, // in millis
+        isRemoved: false
+      };
+    }
+    if (notification.data) {
+      // pns
+      const createdTime = new Date(notification.created).getTime();
+      return {
+        id: ''.concat(createdTime).concat(Math.random()),
+        date: createdTime, // in millis
+        body: notification.body, // message
+        data: { ...notification.data }, // ex: {}, {"products": "16"}, {"products": ["16", "18", "20"]}, {"link": "https:..."}, both
+        title: notification.title,
+        viewed: createdTime, // in millis
+        isRemoved: false
+      };
+    }
   }
   return {};
 };
@@ -122,13 +138,11 @@ async function handleNotification(notification, source) {
   const pn = pushNotification(notification);
   if (pn && pn.id && pn.body && pn.body.length > 0) {
     // console.log('handleNotification pn: ', pn);
-    if (PERSIST_NOTIFICATION_ENABLED) {
-      saveExpoPushNotification(pn).then((saved) => {
-        if (saved) {
-          EventRegister.emit('notificationEvent', pn);
-        }
-      });
-    }
+    saveExpoPushNotification(pn).then((saved) => {
+      if (saved) {
+        EventRegister.emit('notificationEvent', pn);
+      }
+    });
   }
 }
 
@@ -154,7 +168,7 @@ function registerNotificationHandler() {
     // note: this is supposed to work when app is foregrounded, backgrounded, or closed/killed
     //       ios only opens expo go when app and expo go are closed, so app does not handle notification message
     //         see: https://github.com/expo/expo/tree/master/packages/expo-notifications#handling-incoming-notifications-when-the-app-is-not-in-the-foreground-not-supported-in-expo-go
-    // TODO: backend for notifications, credentials, configure and implement for ios and android without expo go
+    // TODO: configure and implement for ios and android without expo go
     Notifications.addNotificationResponseReceivedListener(
       handleNotificationResponseReceived
     );
@@ -331,11 +345,40 @@ async function dispatchPreferences(language, bookmarks = null) {
     const token = await retrieveExpoPushToken();
     if (token !== '') {
       const data = devicePrefs(language, bookmarks);
-      dispatchDevicePreferences(getTokenID(token), data);
+      await dispatchDevicePreferences(getTokenID(token), data);
     }
   } catch (error) {
     console.log(
       'Unable to dispatch device preferences to push notification service. ',
+      error
+    );
+  }
+}
+
+async function dispatchPreferencesAndSync(language) {
+  try {
+    const token = await retrieveExpoPushToken();
+    if (token !== '') {
+      await dispatchPreferences(language);
+      const storedNotifications = await retrieveNotifications();
+      if (storedNotifications.length > 0) {
+        // fetch latest (in language)
+        const latestNotifications = await fetchNotificationsAsync(
+          getTokenID(token)
+        );
+        // delete all notifications
+        storedNotifications.forEach((notification) => {
+          deleteNotification(notification);
+        });
+        // save fetched notifications
+        latestNotifications.forEach((notification) => {
+          handleNotification(notification, NOTIFICATION_SERVICE_SYNC);
+        });
+      }
+    }
+  } catch (error) {
+    console.log(
+      'Unable to sync after dispatching device preferences to push notification service. ',
       error
     );
   }
@@ -351,5 +394,6 @@ export default {
   setViewed,
   isProductSpecific,
   getExternalLink,
-  dispatchPreferences
+  dispatchPreferences,
+  dispatchPreferencesAndSync
 };

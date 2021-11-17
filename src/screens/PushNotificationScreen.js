@@ -23,8 +23,6 @@ import {
 
 // dev tool
 
-// TODO: if using badges, will need to send empty message with badge count for ios...
-
 const PushNotificationScreen = ({ navigation, route }) => {
   const theme = useTheme();
 

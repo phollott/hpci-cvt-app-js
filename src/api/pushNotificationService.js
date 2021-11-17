@@ -83,11 +83,13 @@ const fetchNotificationsAsync = async (token) => {
       notificationsAPIUrl.concat('/').concat(token),
       requestInit
     );
-    const responseJson = await response.json();
-    if (response.status !== 200) {
-      throw Error(responseJson.message);
+    if (response.status === 200) {
+      return await response.json();
     }
-    return responseJson;
+    if (response.status === 404) {
+      return [];
+    }
+    throw Error('Unexpected response.');
   } catch (error) {
     throw Error(error.message);
   }
