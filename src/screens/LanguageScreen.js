@@ -26,7 +26,7 @@ const LanguageScreen = ({ navigation }) => {
       i18n.locale = value; // t
       setLang(value); // redux
       await languageStorage.saveLanguage(value); // persist
-      notifications.dispatchPreferences(value); // pns
+      notifications.dispatchPreferencesAndSync(value); // pns
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log('Unable to set language preference. ', error);
