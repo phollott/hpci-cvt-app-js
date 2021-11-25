@@ -12,15 +12,6 @@ import Icon from '../components/Icon';
 import Alert from '../components/Alert';
 import RemoveData from '../components/RemoveData';
 
-const NotificationsIcon = () => (
-  <Icon
-    name="bell"
-    solid
-    color={colors.grey}
-    containerStyle={{ minWidth: 26 }}
-  />
-);
-
 const SettingsIcon = () => (
   <Icon name="cog" color={colors.grey} containerStyle={{ minWidth: 26 }} />
 );
@@ -75,10 +66,11 @@ const MenuDrawer = (props) => {
         }}
       />
       <DrawerItem
-        label={t('home.menu.notificationsLabel')}
-        icon={NotificationsIcon}
+        label={t('home.menu.termsAndPrivacyLabel')}
+        icon={TermsIcon}
         onPress={() => {
-          navigation.navigate('Notifications');
+          Alert(t('home.introCard.title'));
+          closeDrawer(navigation);
         }}
       />
       <DrawerItem
@@ -96,8 +88,10 @@ const MenuDrawer = (props) => {
         }}
       />
       <DrawerItem
-        label={t('home.menu.termsAndPrivacyLabel')}
-        icon={TermsIcon}
+        label={t('home.menu.notificationsLabel')}
+        labelStyle={{
+          paddingLeft: 72
+        }}
         onPress={() => {
           Alert(t('home.introCard.title'));
           closeDrawer(navigation);
@@ -128,8 +122,8 @@ const MenuDrawer = (props) => {
           closeDrawer(navigation);
         }}
       />
-      <HorizontalLine />
-      <DrawerItemList {...props} />
+      {1 === 0 && <HorizontalLine />}
+      {1 === 0 && <DrawerItemList {...props} />}
     </DrawerContentScrollView>
   );
 };
