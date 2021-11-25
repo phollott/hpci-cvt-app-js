@@ -40,27 +40,14 @@ export default {
   home: {
     introCard: {
       title: 'Canadian Health Products',
-      meta: 'Your evidence-based, trusted and unbiased information source for health products approved in Canada.',
-      text: 'The information provided is not a substitute for professional advice, diagnosis or treatment. Always consult a medical professional before you take, change or stop using health products.',
-      link: 'See terms of use for more details.'
-    },
-    infoCard: {
-      title: 'Health Product Information for Canadians',
-      currentText: 'This early edition of the Canadian Health Products app includes:',
-      futureText: 'Future editions will include these health products:',
-      products: {
-        covidTitle: 'COVID-19 Vaccines and Treatments',
-        drugsTitle: 'Drugs (Prescription and OTC)',
-        naturalTitle: 'Natural Health Products',
-        devicesTitle: 'Medical Devices',
-        veterinaryTitle: 'Veterinary Medications'
-      }
+      text: 'Health Product Information for Canadians',
+      link: 'Alternative Format'
     },
     menu: {
       notificationsLabel: 'Notifications...',
       settingsLabel: 'Settings',
       languageLabel: 'Language...',
-      privacyLabel: 'Privacy',
+      termsAndPrivacyLabel: 'Terms of Use & Privacy',
       aboutLabel: 'About',
       closeLabel: 'Close',
       toolsLabel: 'Dev Tools',
@@ -69,6 +56,26 @@ export default {
       removeAlert: {
         title: 'Remove Data',
         text: 'Remove settings and bookmarks?'
+      }
+    },
+    about: {
+      introCard: {
+        title: 'About',
+        meta: 'The Canadian Health Products Mobile App is a Government of Canada app powered by live data from Health Canada that provides Canadians with evidence-based, trusted and unbiased information about health products approved for use in Canada.',
+        text: 'The information provided is not a substitute for professional advice, diagnosis or treatment. Always consult a medical professional before you take, change or stop using health products.',
+        link: 'See terms of use for more details.'
+      },
+      infoCard: {
+        title: 'Health Product Information for Canadians',
+        currentText: 'This early edition of the Canadian Health Products app includes:',
+        futureText: 'Future editions will include these health products:',
+        products: {
+          covidTitle: 'COVID-19 Vaccines and Treatments',
+          drugsTitle: 'Drugs (Prescription and OTC)',
+          naturalTitle: 'Natural Health Products',
+          devicesTitle: 'Medical Devices',
+          veterinaryTitle: 'Veterinary Medications'
+        }
       }
     },
     notifications: {

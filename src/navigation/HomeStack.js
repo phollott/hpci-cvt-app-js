@@ -7,6 +7,7 @@ import HeaderTitle from '../components/HeaderTitle';
 import HomeMenu from '../components/HomeMenu';
 import NavigationBack from '../components/NavigationBack';
 import NotificationsTouch from '../components/NotificationsTouch';
+import AboutScreen from '../screens/AboutScreen';
 import LanguageScreen from '../screens/LanguageScreen';
 import NotificationsScreen from '../screens/NotificationsScreen';
 import PushNotificationScreen from '../screens/PushNotificationScreen';
@@ -25,6 +26,20 @@ const HomeStack = () => {
           headerTitleAlign: 'center',
           headerLeft: () => <HomeMenu navigation={navigation} />,
           headerRight: () => <NotificationsTouch navigation={navigation} route={route} />,
+          headerStyle: {
+            backgroundColor: colors.darkColor
+          }
+        })}
+      />
+      <Stack.Screen
+        name="About"
+        component={AboutScreen}
+        options={({ navigation, route }) => ({
+          headerShown: true,
+          headerTitle: () => <HeaderTitle />,
+          headerTitleAlign: 'center',
+          headerLeft: () => <NavigationBack navigation={navigation} route={route} />,
+          headerRight: () => <View style={{ flex: 1 }} />,
           headerStyle: {
             backgroundColor: colors.darkColor
           }

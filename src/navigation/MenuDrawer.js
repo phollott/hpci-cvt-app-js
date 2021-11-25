@@ -13,15 +13,25 @@ import Alert from '../components/Alert';
 import RemoveData from '../components/RemoveData';
 
 const NotificationsIcon = () => (
-  <Icon name="bell" solid color={colors.grey} containerStyle={{ minWidth: 26 }} />
+  <Icon
+    name="bell"
+    solid
+    color={colors.grey}
+    containerStyle={{ minWidth: 26 }}
+  />
 );
 
 const SettingsIcon = () => (
   <Icon name="cog" color={colors.grey} containerStyle={{ minWidth: 26 }} />
 );
 
-const GlobeIcon = () => (
-  <Icon name="globe" color={colors.grey} containerStyle={{ minWidth: 26 }} />
+const TermsIcon = () => (
+  <Icon
+    name="shield-check"
+    type="material-community"
+    color={colors.grey}
+    containerStyle={{ minWidth: 26 }}
+  />
 );
 
 const AboutIcon = () => (
@@ -58,6 +68,13 @@ const MenuDrawer = (props) => {
   return (
     <DrawerContentScrollView {...props}>
       <DrawerItem
+        label={t('home.menu.aboutLabel')}
+        icon={AboutIcon}
+        onPress={() => {
+          navigation.navigate('About');
+        }}
+      />
+      <DrawerItem
         label={t('home.menu.notificationsLabel')}
         icon={NotificationsIcon}
         onPress={() => {
@@ -76,6 +93,14 @@ const MenuDrawer = (props) => {
         }}
         onPress={() => {
           navigation.navigate('Language');
+        }}
+      />
+      <DrawerItem
+        label={t('home.menu.termsAndPrivacyLabel')}
+        icon={TermsIcon}
+        onPress={() => {
+          Alert(t('home.introCard.title'));
+          closeDrawer(navigation);
         }}
       />
       <HorizontalLine />
@@ -104,22 +129,6 @@ const MenuDrawer = (props) => {
         }}
       />
       <HorizontalLine />
-      <DrawerItem
-        label={t('home.menu.privacyLabel')}
-        icon={GlobeIcon}
-        onPress={() => {
-          Alert(t('home.introCard.title'));
-          closeDrawer(navigation);
-        }}
-      />
-      <DrawerItem
-        label={t('home.menu.aboutLabel')}
-        icon={AboutIcon}
-        onPress={() => {
-          Alert(t('home.introCard.title'));
-          closeDrawer(navigation);
-        }}
-      />
       <DrawerItemList {...props} />
     </DrawerContentScrollView>
   );

@@ -1,4 +1,4 @@
-import { Image } from 'react-native';
+import { Image, Linking } from 'react-native';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import { Permissions } from 'expo';
@@ -6,12 +6,8 @@ import { Permissions } from 'expo';
 import preloadFonts from './preloadFonts';
 import preloadImages from './preloadImages';
 
-// cache fonts
-// /////////////////////////////////////////////////////////////////////////////
 const cacheFonts = (fonts) => fonts.map((font) => Font.loadAsync(font));
 
-// cache images
-// /////////////////////////////////////////////////////////////////////////////
 const cacheImages = (images) => {
   return Object.values(images).map((image) => {
     if (typeof image === 'string') {
@@ -23,7 +19,6 @@ const cacheImages = (images) => {
 };
 
 // preload async
-// /////////////////////////////////////////////////////////////////////////////
 const loadAssetsAsync = async () => {
   // preload assets
   const fontAssets = cacheFonts(preloadFonts);
@@ -34,7 +29,6 @@ const loadAssetsAsync = async () => {
 };
 
 // camera permissions
-// /////////////////////////////////////////////////////////////////////////////
 const cameraAccessAsync = async () => {
   // get exisiting camera permissions first
   const { status: existingStatus } = await Permissions.getAsync(
@@ -52,7 +46,6 @@ const cameraAccessAsync = async () => {
 };
 
 // format seconds
-// /////////////////////////////////////////////////////////////////////////////
 const formatTime = (sec) => {
   const padTime = (num, size) => `000${num}`.slice(size * -1);
   const time = parseFloat(sec).toFixed(3);
@@ -62,10 +55,19 @@ const formatTime = (sec) => {
   return `${padTime(minutes, 1)}:${padTime(seconds, 2)}`;
 };
 
+const openURL = (link) => {
+  Linking.canOpenURL(link).then((supported) => {
+    if (supported) {
+      Linking.openURL(link);
+    }
+  });
+};
+
 export default {
   cacheFonts,
   cacheImages,
   loadAssetsAsync,
   cameraAccessAsync,
-  formatTime
+  formatTime,
+  openURL
 };
