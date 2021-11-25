@@ -9,7 +9,7 @@ export default {
     },
     badge: {
       new: 'Nouveau',
-      updated: 'Modifié'
+      updated: 'Mise à jour'
     },
     button: {
       ok: 'OK',
@@ -40,27 +40,14 @@ export default {
   home: {
     introCard: {
       title: 'Produits de santé canadiens',
-      meta: 'Votre source d’information factuelle, fiable et impartiale pour les produits de santé approuvés au Canada.',
-      text: 'Les informations fournies ne remplacent pas les conseils professionnels, un diagnostic ou un traitement. Consultez toujours un professionnel de la santé avant de prendre, de changer ou d’arrêter d’utiliser des produits de santé.',
-      link: 'Voir les conditions d’utilisation pour plus de détails.'
-    },
-    infoCard: {
-      title: 'Information sur les produits de santé pour les Canadiens',
-      currentText: 'Cette première édition de l’application Produits de santé canadiens comprend:',
-      futureText: 'Les prochaines éditions incluront ces produits de santé:',
-      products: {
-        covidTitle: 'Vaccins et traitements pour la COVID-19',
-        drugsTitle: 'Médicaments (ordonnance, vente libre)',
-        naturalTitle: 'Produits de santé naturels',
-        devicesTitle: 'Dispositifs médicaux',
-        veterinaryTitle: 'Médicaments vétérinaires'
-      }
+      text: 'Information sur les produits de santé pour les Canadiens',
+      link: 'Format alternatif'
     },
     menu: {
       notificationsLabel: 'Notifications...',
       settingsLabel: 'Paramètres',
       languageLabel: 'Langue...',
-      privacyLabel: 'Confidentialité',
+      termsAndPrivacyLabel: 'Conditions et confidentialité',
       aboutLabel: 'À propos',
       closeLabel: 'Fermer',
       toolsLabel: 'Outils de développement',
@@ -69,6 +56,26 @@ export default {
       removeAlert: {
         title: 'Supprimer les données',
         text: 'Supprimer les paramètres et les favoris?'
+      }
+    },
+    about: {
+      introCard: {
+        title: 'À propos',
+        meta: 'L’application mobile Produits de Santé Canadiens est une application du gouvernement du Canada alimentée par des données en direct de Santé Canada qui fournit aux Canadiens des informations factuelles, fiables et impartiales sur les produits de santé dont l’utilisation est approuvée au Canada.',
+        text: 'Les informations fournies ne remplacent pas les conseils professionnels, un diagnostic ou un traitement. Consultez toujours un professionnel de la santé avant de prendre, de changer ou d’arrêter d’utiliser des produits de santé.',
+        link: 'Voir les conditions d’utilisation pour plus de détails.'
+      },
+      infoCard: {
+        title: 'Information sur les produits de santé pour les Canadiens',
+        currentText: 'Cette première édition de l’application Produits de santé canadiens comprend:',
+        futureText: 'Les prochaines éditions incluront ces produits de santé:',
+        products: {
+          covidTitle: 'Vaccins et traitements pour la COVID-19',
+          drugsTitle: 'Médicaments (ordonnance, vente libre)',
+          naturalTitle: 'Produits de santé naturels',
+          devicesTitle: 'Dispositifs médicaux',
+          veterinaryTitle: 'Médicaments vétérinaires'
+        }
       }
     },
     notifications: {

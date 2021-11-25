@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { Badge, List, Divider } from 'react-native-paper';
 import { useTheme } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { EventRegister } from 'react-native-event-listeners';
 import { t } from 'i18n-js';
-import { colors, gStyle } from '../constants';
+import { colors, func, gStyle } from '../constants';
 import { lang } from '../constants/constants';
 import Icon from '../components/Icon';
 import ReadMoreText from '../components/ReadMoreText';
@@ -152,14 +152,6 @@ const NotificationsScreen = ({ navigation, route }) => {
     });
   };
 
-  const openURL = (link) => {
-    Linking.canOpenURL(link).then((supported) => {
-      if (supported) {
-        Linking.openURL(link);
-      }
-    });
-  };
-
   const handleNotificationOnPress = async (notification) => {
     const { data, viewed } = notification;
     const externalLink = notificationsService.getExternalLink(notification);
@@ -174,7 +166,7 @@ const NotificationsScreen = ({ navigation, route }) => {
       notificationsService.setViewed(notification);
     }
     if (isOnline && externalLink !== '') {
-      openURL(externalLink);
+      func.openURL(externalLink);
     }
     if (isProductSpecific) {
       if (externalLink === '') {

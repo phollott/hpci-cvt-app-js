@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { View, ScrollView, StyleSheet, Text, Linking } from 'react-native';
+import { View, ScrollView, StyleSheet, Text } from 'react-native';
 import { Badge, Card, List, Divider } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { t } from 'i18n-js';
 import HTML from 'react-native-render-html';
 import Icon from './Icon';
-import { colors, gStyle } from '../constants';
+import { colors, func, gStyle } from '../constants';
 import { bookmarkKeyPrefix } from '../constants/constants';
 import { selectBookmarkByID } from '../redux/selectors/bookmarkSelector';
 import { selectProductByID } from '../redux/selectors/productSelector';
@@ -34,7 +34,6 @@ class ViewProductDetails extends Component {
    * 1. Extract from redux store Product Resource details
    *
    */
-
   componentDidMount() {
     const {
       productMaster,
@@ -71,20 +70,12 @@ class ViewProductDetails extends Component {
     }
   }
 
-  openURL = (link) => {
-    Linking.canOpenURL(link).then((supported) => {
-      if (supported) {
-        Linking.openURL(link);
-      }
-    });
-  };
-
   linkingProductResource = (productResource) => {
     const { settings } = this.props;
     if (productResource.link && settings.isOnline) {
       if (productResource.resourceType === 'external') {
         // console.log('external product resource (show in browser): ' + productResource.link);
-        this.openURL(productResource.link);
+        func.openURL(productResource.link);
       }
     }
     // if there is no link or we have displayed an external link in the browser, return false to short-circuit the logic
@@ -95,7 +86,7 @@ class ViewProductDetails extends Component {
     const { settings } = this.props;
     if (regulatoryAnnouncement.link && settings.isOnline) {
       // console.log('external regulatory announcement (show in browser): ' + regulatoryAnnouncement.link);
-      this.openURL(regulatoryAnnouncement.link);
+      func.openURL(regulatoryAnnouncement.link);
     }
     // if there is no link or we have displayed an external link in the browser, return false to short-circuit the logic
     return false;
@@ -105,7 +96,7 @@ class ViewProductDetails extends Component {
     const { settings } = this.props;
     if (productMaster.productLink && settings.isOnline) {
       // console.log('external portal link (show in browser): ' + productMaster.productLink);
-      this.openURL(productMaster.productLink);
+      func.openURL(productMaster.productLink);
     }
     // if there is no link or we have displayed an external link in the browser, return false to short-circuit the logic
     return false;
