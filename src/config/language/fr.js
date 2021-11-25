@@ -44,11 +44,11 @@ export default {
       link: 'Format alternatif'
     },
     menu: {
-      notificationsLabel: 'Notifications...',
+      aboutLabel: 'À propos',
+      termsAndPrivacyLabel: 'Conditions et confidentialité',
       settingsLabel: 'Paramètres',
       languageLabel: 'Langue...',
-      termsAndPrivacyLabel: 'Conditions et confidentialité',
-      aboutLabel: 'À propos',
+      notificationsLabel: 'Notifications...',
       closeLabel: 'Fermer',
       toolsLabel: 'Outils de développement',
       removeLabel: 'Supprimer les données',
