@@ -45,7 +45,7 @@ export default {
     },
     menu: {
       aboutLabel: 'À propos',
-      termsAndPrivacyLabel: 'Conditions et confidentialité',
+      termsLabel: 'Conditions et confidentialité',
       settingsLabel: 'Paramètres',
       languageLabel: 'Langue...',
       notificationsLabel: 'Notifications...',
@@ -78,6 +78,12 @@ export default {
         }
       }
     },
+    terms: {
+      card: {
+        title: 'Conditions d’utilisation et politique de confidentialité',
+        instructionText: ''
+      }
+    },
     notifications: {
       card: {
         title: 'Notifications',
@@ -89,6 +95,10 @@ export default {
       language: {
         title: 'Modifier la langue',
         touchText: 'Français (Canada)'
+      },
+      notifications: {
+        title: 'Notifications',
+        instructionText: 'Vous recevrez des notifications de Santé Canada lorsque les services de notification de votre appareil sont autorisés pour l’application et activés ci-dessous. Les notifications pour les produits de santé nouveaux ou mis en signet peuvent également être activées ou désactivées.'
       }
     },
     pushNotification: {

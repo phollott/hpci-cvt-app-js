@@ -8,7 +8,9 @@ import HomeMenu from '../components/HomeMenu';
 import NavigationBack from '../components/NavigationBack';
 import NotificationsTouch from '../components/NotificationsTouch';
 import AboutScreen from '../screens/AboutScreen';
+import TermsScreen from '../screens/TermsScreen';
 import LanguageScreen from '../screens/LanguageScreen';
+import NotificationsSettingsScreen from '../screens/NotificationsSettingsScreen';
 import NotificationsScreen from '../screens/NotificationsScreen';
 import PushNotificationScreen from '../screens/PushNotificationScreen';
 
@@ -46,8 +48,36 @@ const HomeStack = () => {
         })}
       />
       <Stack.Screen
+        name="Terms"
+        component={TermsScreen}
+        options={({ navigation, route }) => ({
+          headerShown: true,
+          headerTitle: () => <HeaderTitle />,
+          headerTitleAlign: 'center',
+          headerLeft: () => <NavigationBack navigation={navigation} route={route} />,
+          headerRight: () => <View style={{ flex: 1 }} />,
+          headerStyle: {
+            backgroundColor: colors.darkColor
+          }
+        })}
+      />
+      <Stack.Screen
         name="Language"
         component={LanguageScreen}
+        options={({ navigation, route }) => ({
+          headerShown: true,
+          headerTitle: () => <HeaderTitle />,
+          headerTitleAlign: 'center',
+          headerLeft: () => <NavigationBack navigation={navigation} route={route} />,
+          headerRight: () => <View style={{ flex: 1 }} />,
+          headerStyle: {
+            backgroundColor: colors.darkColor
+          }
+        })}
+      />
+      <Stack.Screen
+        name="NotificationsSettings"
+        component={NotificationsSettingsScreen}
         options={({ navigation, route }) => ({
           headerShown: true,
           headerTitle: () => <HeaderTitle />,

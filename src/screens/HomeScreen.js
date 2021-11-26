@@ -38,9 +38,9 @@ const HomeScreen = ({ navigation }) => {
   };
 
   const fillSpace = () => {
-    // header/footer: 128, card: 316, offset: 24
-    const height = useWindowDimensions().height - 128 - 316 + 24;
-    return height > 0 ? height : 24;
+    // header/footer: 128, card: 316, offset: 20
+    const height = useWindowDimensions().height - 128 - 316 + 20;
+    return height > 0 ? height : 20;
   };
 
   return (
