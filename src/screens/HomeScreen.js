@@ -99,7 +99,8 @@ const HomeScreen = ({ navigation }) => {
               <Text
                 style={{
                   color: colors.darkColor,
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  fontSize: 16
                 }}
               >
                 {t('home.introCard.text')}
