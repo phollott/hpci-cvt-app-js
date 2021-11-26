@@ -9,7 +9,6 @@ import {
 import { t } from 'i18n-js';
 import { colors } from '../constants';
 import Icon from '../components/Icon';
-import Alert from '../components/Alert';
 import RemoveData from '../components/RemoveData';
 
 const SettingsIcon = () => (
@@ -66,11 +65,10 @@ const MenuDrawer = (props) => {
         }}
       />
       <DrawerItem
-        label={t('home.menu.termsAndPrivacyLabel')}
+        label={t('home.menu.termsLabel')}
         icon={TermsIcon}
         onPress={() => {
-          Alert(t('home.introCard.title'));
-          closeDrawer(navigation);
+          navigation.navigate('Terms');
         }}
       />
       <DrawerItem
@@ -93,8 +91,7 @@ const MenuDrawer = (props) => {
           paddingLeft: 72
         }}
         onPress={() => {
-          Alert(t('home.introCard.title'));
-          closeDrawer(navigation);
+          navigation.navigate('NotificationsSettings');
         }}
       />
       <HorizontalLine />

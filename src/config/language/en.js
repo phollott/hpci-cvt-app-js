@@ -45,7 +45,7 @@ export default {
     },
     menu: {
       aboutLabel: 'About',
-      termsAndPrivacyLabel: 'Terms of Use & Privacy',
+      termsLabel: 'Terms of Use & Privacy',
       settingsLabel: 'Settings',
       languageLabel: 'Language...',
       notificationsLabel: 'Notifications...',
@@ -78,6 +78,12 @@ export default {
         }
       }
     },
+    terms: {
+      card: {
+        title: 'Terms of Use and Privacy Policy',
+        instructionText: ''
+      }
+    },
     notifications: {
       card: {
         title: 'Notifications',
@@ -89,6 +95,10 @@ export default {
       language: {
         title: 'Choose Language',
         touchText: 'English (Canada)'
+      },
+      notifications: {
+        title: 'Notifications',
+        instructionText: 'You will receive notifications from Health Canada when your device notification services are allowed for the application and enabled below. Notifications for new or bookmarked health products can also be turned on or off.'
       }
     },
     pushNotification: {
