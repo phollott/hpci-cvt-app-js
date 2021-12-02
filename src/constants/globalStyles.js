@@ -95,6 +95,10 @@ export default {
     height: 32,
     width: '100%'
   },
+  spacer48: {
+    height: 48,
+    width: '100%'
+  },
   spacer64: {
     height: 64,
     width: '100%'
