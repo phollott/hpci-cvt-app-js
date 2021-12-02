@@ -98,7 +98,14 @@ export default {
       },
       notifications: {
         title: 'Notifications',
-        instructionText: 'You will receive notifications from Health Canada when your device notification services are allowed for the application and enabled below. Notifications for new or bookmarked health products can also be turned on or off.'
+        instructionText: 'You will receive notifications from Health Canada when your device notification services are allowed for the application and enabled below. Notifications for new or bookmarked health products can also be turned on or off.',
+        switch: {
+          notificationsLabel: 'Notifications Enabled',
+          newProductsLabel: 'New Health Products',
+          newProductsText: 'Be notified when a new Health Product is approved for use in Canada.',
+          bookmarkedProductsLabel: 'Bookmarked Health Products',
+          bookmarkedProductsText: 'Be notified when information changes for Health Products you have bookmarked.'
+        }
       }
     },
     pushNotification: {

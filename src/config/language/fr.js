@@ -98,7 +98,14 @@ export default {
       },
       notifications: {
         title: 'Notifications',
-        instructionText: 'Vous recevrez des notifications de Santé Canada lorsque les services de notification de votre appareil sont autorisés pour l’application et activés ci-dessous. Les notifications pour les produits de santé nouveaux ou mis en signet peuvent également être activées ou désactivées.'
+        instructionText: 'Vous recevrez des notifications de Santé Canada lorsque les services de notification de votre appareil sont autorisés pour l’application et activés ci-dessous. Les notifications pour les produits de santé nouveaux ou mis en signet peuvent également être activées ou désactivées.',
+        switch: {
+          notificationsLabel: 'Notifications activées',
+          newProductsLabel: 'Nouveaux produits de santé',
+          newProductsText: 'Recevez des notifications lorsqu’un nouveau produit de santé est approuvé pour utilisation au Canada.',
+          bookmarkedProductsLabel: 'Produits de santé mis en signet',
+          bookmarkedProductsText: 'Recevez des notifications lorsque les informations changent pour les produits de santé que vous avez ajoutés à vos favoris.'
+        }
       }
     },
     pushNotification: {
