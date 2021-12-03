@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 import { Switch } from 'react-native-paper';
-import { colors } from '../constants';
+import { colors, device } from '../constants';
 
 export default class ViewSwitch extends Component {
   constructor(props) {
@@ -26,7 +26,9 @@ export default class ViewSwitch extends Component {
           value={value}
           onValueChange={onValueChange}
           color={switchColor}
-          style={switchStyle}
+          style={
+            device.iOS ? switchStyle : [styles.transformSwitch, switchStyle]
+          }
         />
       </View>
     );
@@ -40,8 +42,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '90%'
   },
-  defaultSwitch: {
-    transform: [{ scaleX: 1 }, { scaleY: 1 }]
+  defaultSwitch: {},
+  transformSwitch: {
+    transform: [{ scaleX: 1.4 }, { scaleY: 1.4 }]
   },
   defaultText: {
     color: colors.darkColor,
