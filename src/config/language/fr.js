@@ -86,10 +86,10 @@ export default {
     },
     notifications: {
       card: {
-        title: 'Notifications',
+        title: 'Quoi de neuf?',
         instructionText: ''
       },
-      emptyText: 'Il n’y a actuellement aucun notification à afficher.'
+      emptyText: 'Aucune mises à jours à afficher.'
     },
     settings: {
       language: {
