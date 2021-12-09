@@ -51,8 +51,14 @@ const TermsScreen = ({ navigation }) => {
           title={t('home.terms.card.title')}
           text={t('home.terms.card.instructionText')}
         />
-        <View style={gStyle.spacer16} />
-        <View style={{ width: '100%', justifyContent: 'center' }}>
+        <View style={gStyle.spacer8} />
+        <View
+          style={{
+            width: '100%',
+            justifyContent: 'center',
+            backgroundColor: 'white'
+          }}
+        >
           <List.AccordionGroup>
             <List.Accordion
               id="tou"
