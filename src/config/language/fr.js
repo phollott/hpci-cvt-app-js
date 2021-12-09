@@ -121,7 +121,7 @@ export default {
           },
           7: {
             title: 'Modification and Access',
-            text: 'Health Canada reserves the right to modify or discontinue this App for any reason and without notice.\n' +
+            text: 'Health Canada reserves the right to modify or discontinue this App for any reason and without notice.\n\n' +
               'Health Canada reserves the right to change these Terms of Use at their discretion. Health Canada will make reasonable efforts to notify you of the change. Your use of the App after you have been notified of the material change to the Terms of Use constitutes your agreement to the new terms. Health Canada recommends that you review these Terms of Use from time to time.'
           },
           8: {

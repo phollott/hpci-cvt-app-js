@@ -18,17 +18,17 @@ const NotificationsSettingsScreen = ({ navigation }) => {
   );
 
   const [isNotificationsSwitchOn, setIsNotificationsSwitchOn] = React.useState(
-    false
+    true
   );
 
   const [isNewProductsSwitchOn, setIsNewProductsSwitchOn] = React.useState(
-    false
+    true
   );
 
   const [
     isBookmarkedProductsSwitchOn,
     setIsBookmarkedProductsSwitchOn
-  ] = React.useState(false);
+  ] = React.useState(true);
 
   const onToggleNotificationsSwitch = () => {
     const switchWasOn = isNotificationsSwitchOn;
