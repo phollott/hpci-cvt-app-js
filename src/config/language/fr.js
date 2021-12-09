@@ -89,7 +89,7 @@ export default {
         con: 'Coordonnées'
       },
       tou: {
-        introTextHtml: '<p>Santé Canada gère l’application mobile d’information pour les consommateurs sur les produits de santé (“l’application”). L’application peut être utilisée par les Canadiens pour prendre des décisions saines et éclairées concernant leur santé et l’utilisation de produits de santé.</p><p>Les informations fournies par l’application sont uniquement destinées à des fins éducatives et informatives. Santé Canada ne s’engage pas à fournir des services ou des conseils médicaux et les renseignements fournis ne remplacent pas un avis médical professionnel. Si vous avez un problème médical, veuillez contacter un professionnel de la santé qualifié.</p>',
+        textHtml: '<p>Santé Canada gère l’application mobile d’information pour les consommateurs sur les produits de santé (“l’application”). L’application peut être utilisée par les Canadiens pour prendre des décisions saines et éclairées concernant leur santé et l’utilisation de produits de santé.</p><p>Les informations fournies par l’application sont uniquement destinées à des fins éducatives et informatives. Santé Canada ne s’engage pas à fournir des services ou des conseils médicaux et les renseignements fournis ne remplacent pas un avis médical professionnel. Si vous avez un problème médical, veuillez contacter un professionnel de la santé qualifié.</p>',
         subSection: {
           1: {
             title: 'Acceptation de l’accord',
@@ -100,75 +100,75 @@ export default {
             text: 'L’Application et son contenu sont concédés sous licence “en l’état” et “selon la disponibilité”. Dans toute la mesure permise par la loi, Santé Canada décline expressément toutes les déclarations, garanties, obligations et conditions, qu’elles soient expresses, implicites ou statutaires, y compris les garanties implicites et les conditions implicites de qualité marchande, d’adéquation à un usage particulier et de non-contrefaçon.'
           },
           3: {
-            title: 'Disclaimer',
-            text: 'YOU ACKNOWLEDGE THAT NOTIFICATIONS PROVIDED BY THIS APP ARE PROVIDED TO YOU AS A RESOURCE FOR INFORMATION ONLY.  WHILE HEALTH CANADA WILL MAKE REASONABLE EFFORTS TO MAINTAIN UP TO DATE HEALTH PRODUCT INFORMATION ON THIS APP, YOU UNDERSTAND THAT THE HEALTH PRODUCT INFORMATION CAN CHANGE AND HEALTH CANADA CANNOT GUARANTEE THAT ANY INFORMATION ON ITS APP, ITS SERVERS OR ITS AFFILIATED WEBSITES AND SERVERS IS ACCURATE AND UP TO DATE. IN ADDITION, THE NOTIFICATIONS ARE GENERATED BASED ON SETTINGS THAT YOU INPUT INTO THE APP AND IF YOU INPUT INCORRECT SETTINGS, OR FAIL TO UNDERSTAND HOW THESE SETTINGS WORK, OR IF YOUR DEVICE OR THE APP MALFUNCTIONS, YOU MAY NOT RECEIVE THE NOTIFICATIONS THAT YOU INTENDED. YOU MUST EXERCISE YOUR JUDGEMENT AND CONSULT WITH A QUALIFIED HEALTH PROFESSIONAL AND CAREFULLY EVALUATE THE CONTENT AS HEALTH CANADA WILL NOT BE RESPONSIBLE FOR THE CONSEQUENCES OF ANY DECISIONS OR ACTIONS YOU TAKE BASED ON INFORMATION PROVIDED IN, OR OMITTED FROM, ANY APP CONTENT.\n\n' +
-              'THE CONTENT OF THIS APP IS SUBJECT TO CHANGE. YOU ARE ADVISED TO REVIEW IT REGULARLY. HEALTH CANADA AND ITS DISTRIBUTORS DISCLAIM ALL REPRESENTATIONS, WARRANTIES, OBLIGATIONS AND LIABILITIES, WHETHER EXPRESS OR IMPLIED, TO THE MAXIMUM EXTENT PERMITTED BY LAW, WITH RESPECT TO THIS APP’S AVAILABILITY, FUNCTIONALITY, SERVICES AND CONTENT. HEALTH CANADA AND ITS DISTRIBUTORS ARE NOT LIABLE FOR ANY ERRORS, OMISSIONS, OR MALFUNCTIONS IN THE APP AND ITS CONTENTS.\n\n' +
-              'THE USER UNDERSTANDS AND EXPRESSLY AGREES THAT HEALTH CANADA WILL NOT BE HELD LIABLE UNDER ANY THEORY OF LIABILITY, WHETHER BASED ON BREACH OF CONTRACT OR TORT (INCLUDING NEGLIGENCE), PRODUCT LIABILITY OR OTHERWISE. THE USER WILL BE HELD RESPONSIBLE FOR ANY ACTIONS RESULTING FROM THE MISUSE OF THE APP.\n\n' +
-              'NEITHER HEALTH CANADA NOR THE DISTRIBUTORS WARRANTS THAT ACCESS TO THE APP WILL BE UNINTERRUPTED OR ERROR-FREE AND NEITHER WILL THEY BE RESPONSIBLE FOR YOUR INABILITY TO USE THE APP OR FOR ANY MALFUNCTIONS.\n\n' +
-              'THIS DISCLAIMER EXTENDS TO ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL OR EXEMPLARY DAMAGES THAT MAY BE INCURRED BY THE USER, INCLUDING LOSS OF DATA, WHETHER OR NOT HEALTH CANADA OR ITS REPRESENTATIVES HAVE BEEN ADVISED OR SHOULD HAVE BEEN AWARE OF THE POSSIBILITY OF THOSE DAMAGES ARISING.'
+            title: 'Clause de non-responsabilité',
+            text: 'VOUS RECONNAISSEZ QUE LES NOTIFICATIONS FOURNIES PAR CETTE APPLICATION VOUS SONT FOURNIES COMME RESSOURCE POUR INFORMATION SEULEMENT. BIEN QUE SANTÉ CANADA FAIT DES EFFORTS RAISONNABLES POUR MAINTENIR À JOUR LES INFORMATIONS SUR LES PRODUITS DE SANTÉ SUR CETTE APPLICATION, VOUS COMPRENEZ QUE LES INFORMATIONS SUR LES PRODUITS DE SANTÉ PEUVENT CHANGER ET SANTÉ CANADA NE PEUT GARANTIR QUE TOUTE INFORMATION SUR SON APPLICATION, SES SERVEURS OU SES SITES WEB ET SERVEURS AFFILIÉS SONT EXACTS ET À JOUR. EN OUTRE, LES NOTIFICATIONS SONT GÉNÉRÉES SUR LA BASE DES PARAMÈTRES QUE VOUS SAISISSEZ DANS L’APPLICATION ET SI VOUS SAISISSEZ DES PARAMÈTRES INCORRECTS OU NE COMPRENEZ PAS COMMENT CES PARAMÈTRES FONCTIONNENT, OU SI VOTRE APPAREIL OU L’APPLICATION NE FONCTIONNE PAS, VOUS RISQUEZ DE NE PAS RECEVOIR LES NOTIFICATIONS QUE VOUS VOULEZ . VOUS DEVEZ EXERCER VOTRE JUGEMENT ET CONSULTER UN PROFESSIONNEL DE LA SANTÉ QUALIFIÉ ET ÉVALUER ATTENTIVEMENT LE CONTENU CAR SANTÉ CANADA NE SERA PAS RESPONSABLE DES CONSÉQUENCES DE TOUTE DÉCISIONS OU MESURES QUE VOUS PRENEZ EN FONCTION DES RENSEIGNEMENTS FOURNIS OU OMIS DANS LE CONTENU DE L’APPLI.\n\n' +
+              'LE CONTENU DE CETTE APPLICATION EST SUJET À CHANGER. VOUS ÊTES CONSEILLÉ DE LE REVOIR RÉGULIÈREMENT. SANTÉ CANADA ET SES DISTRIBUTEURS DÉCLINENT TOUTE DÉCLARATION, GARANTIE, OBLIGATION ET RESPONSABILITÉ, EXPRESSES OU IMPLICITES, DANS LA MESURE MAXIMALE AUTORISÉE PAR LA LOI, EN CE QUI CONCERNE LA DISPONIBILITÉ, LA FONCTIONNALITÉ, LES SERVICES ET LE CONTENU DE CETTE APPLICATION. SANTÉ CANADA ET SES DISTRIBUTEURS NE SONT PAS RESPONSABLES DES ERREURS, OMISSIONS OU DÉFAILLANCES DANS L’APPLICATION ET SON CONTENU.\n\n' +
+              'L’UTILISATEUR COMPREND ET ACCEPTE EXPRESSÉMENT QUE SANTÉ CANADA NE SERA TENUE RESPONSABLE D’AUCUNE THÉORIE DE RESPONSABILITÉ, QU’ELLE SOIT BASÉE SUR UNE RUPTURE DE CONTRAT OU UN DÉLIT (Y COMPRIS LA NÉGLIGENCE), LA RESPONSABILITÉ DES PRODUITS OU AUTRE. L’UTILISATEUR SERA TENU RESPONSABLE DE TOUTES ACTIONS RESULTANT D’UNE MAUVAISE UTILISATION DE L’APPLICATION.\n\n' +
+              'NI SANTÉ CANADA NI LES DISTRIBUTEURS NE GARANTISSENT QUE L’ACCÈS À L’APPLICATION SERA ININTERROMPU OU SANS ERREUR ET ILS NE SERONT NI RESPONSABLES DE VOTRE INCAPACITÉ À UTILISER L’APPLICATION OU DE TOUT MAUVAIS FONCTIONNEMENT.\n\n' +
+              'CET AVIS DE NON-RESPONSABILITÉ S’ÉTEND À TOUS DOMMAGES DIRECTS, INDIRECTS, ACCESSOIRES, SPÉCIAUX, CONSÉCUTIFS OU EXEMPLAIRES QUI PEUVENT ÊTRE ENCOURUS PAR L’UTILISATEUR, Y COMPRIS LA PERTE DE DONNÉES, QUE SANTÉ CANADA OU SES REPRÉSENTANTS ONT ÉTÉ AVISÉS OU ONT DOIT AVOIR ÉTÉ CONSCIENTS DE LA CES DOMMAGES SURVENANT.'
           },
           4: {
-            title: 'Indemnity',
-            text: 'You hereby indemnify and hold harmless Her Majesty the Queen in Right of Canada as represented by the Minister of Health, and their officers, employees, agents and contractors, from any and all losses, liabilities, damages, costs or expenses arising out of any claim, action, or proceeding in any way connected to: (i) your use of the App; or your violation of (ii) these Terms of Use or (iii) any third-party right.'
+            title: 'Indemnité',
+            text: 'Par la présente, vous indemnisez et exonérez Sa Majesté la Reine du chef du Canada, représentée par le ministre de la Santé, et leurs dirigeants, employés, agents et entrepreneurs, de toutes pertes, responsabilités, dommages, coûts ou dépenses découlant de toute réclamation , action ou procédure de quelque manière que ce soit liée à : (i) votre utilisation de l’Application ; ou votre violation de (ii) ces conditions d’utilisation ou (iii) de tout droit de tiers.'
           },
           5: {
             title: 'Restrictions',
-            text: 'You shall use this App strictly in accordance with these Terms of Use. You shall not (i) decompile, reverse engineer, disassemble, or attempt to derive the source code from the App; (ii) remove, alter or obscure any proprietary notice (including any notice of copyright or official mark) from any portion of the App; (iii) reproduce, modify, improve, enhance or make derivative works based upon the App; (iv) distribute, license, lease, sell, resell, transfer, publicly display, transmit or otherwise exploit the App; (v) link to, mirror or frame any portion of the App; (vi) attempt to gain unauthorized access to, or impair any aspect of the App or its related systems or network; (vii) use the App for any illegal and unauthorized purpose, and agree to comply with all laws, rules and regulations applicable to your use of the App.'
+            text: 'Vous devez utiliser cette application en stricte conformité avec les présentes conditions d’utilisation. Vous ne devez pas (i) décompiler, faire de l’ingénierie inverse, désassembler ou tenter de dériver le code source de l’Application ; (ii) supprimer, modifier ou masquer tout avis de propriété (y compris tout avis de droit d’auteur ou de marque officielle) de toute partie de l’Application ; (iii) reproduire, modifier, améliorer, améliorer ou créer des œuvres dérivées basées sur l’Application ; (iv) distribuer, concéder sous licence, louer, vendre, revendre, transférer, afficher publiquement, transmettre ou exploiter de toute autre manière l’Application ; (v) créer un lien vers, refléter ou encadrer toute partie de l’application ; (vi) tenter d’obtenir un accès non autorisé ou d’altérer tout aspect de l’Application ou de ses systèmes ou réseaux associés ; (vii) utiliser l’Application à des fins illégales et non autorisées, et acceptez de vous conformer à toutes les lois, règles et réglementations applicables à votre utilisation de l’Application.'
           },
           6: {
-            title: 'Use of Content',
-            text: 'You may copy the App’s content for your own personal use only. You may not alter the App or use it for commercial purposes. If you are interested in Health Product information for any other purpose, consult the Government of Canada’s open data portal.'
+            title: 'Utilisation du contenu',
+            text: 'Vous pouvez copier le contenu de l’Application pour votre usage personnel uniquement. Vous ne pouvez pas modifier l’Application ou l’utiliser à des fins commerciales. Si vous êtes intéressé par l’information sur les produits de santé à d’autres fins, consultez le portail de données ouvertes du gouvernement du Canada.'
           },
           7: {
-            title: 'Modification and Access',
-            text: 'Health Canada reserves the right to modify or discontinue this App for any reason and without notice.\n\n' +
-              'Health Canada reserves the right to change these Terms of Use at their discretion. Health Canada will make reasonable efforts to notify you of the change. Your use of the App after you have been notified of the material change to the Terms of Use constitutes your agreement to the new terms. Health Canada recommends that you review these Terms of Use from time to time.'
+            title: 'Modification et accès',
+            text: 'Santé Canada se réserve le droit de modifier ou d’interrompre cette application pour quelque raison que ce soit et sans préavis.\n\n' +
+              'Santé Canada se réserve le droit de modifier ces conditions d’utilisation à sa discrétion. Santé Canada fera des efforts raisonnables pour vous informer du changement. Votre utilisation de l’Application après avoir été informé du changement important des Conditions d’utilisation constitue votre accord sur les nouvelles conditions. Santé Canada vous recommande de revoir ces conditions d’utilisation de temps à autre.'
           },
           8: {
-            title: 'Software License',
-            text: 'Health Canada grants you a revocable, non-transferable, non-exclusive and limited licence to install and use the App for your personal, non-commercial purposes. You may use this App on a device that you own or control, and as permitted by the Distributor’s Store Terms of Service (Usage Rules).'
+            title: 'Licence de logiciel',
+            text: 'Santé Canada vous accorde une licence révocable, non transférable, non exclusive et limitée pour installer et utiliser l’Application à des fins personnelles et non commerciales. Vous pouvez utiliser cette application sur un appareil que vous possédez ou contrôlez, et conformément aux conditions d’utilisation de la boutique du distributeur (règles d’utilisation).'
           },
           9: {
-            title: 'Ownership',
-            text: 'The App and all rights therein are and shall remain the property of Her Majesty the Queen in Right of Canada as represented by the Minister of Health or the property of Minister of Health’s licensors. Neither these Terms of Use nor your use of the App convey to you any rights: (i) in or related to the App except for the limited licence granted above or ii) to use or reference in any manner Health Canada or its logos, product and service names, trademarks or service marks or those of Health Canada’s licensors.'
+            title: 'La possession',
+            text: 'L’Application et tous les droits y afférents sont et resteront la propriété de Sa Majesté la Reine du chef du Canada, représentée par le ministre de la Santé, ou la propriété des concédants de licence du ministre de la Santé. Ni les présentes conditions d’utilisation ni votre utilisation de l’application ne vous confèrent de droits : (i) dans ou liés à l’application, à l’exception de la licence limitée accordée ci-dessus ou ii) d’utiliser ou de faire référence de quelque manière que ce soit à Santé Canada ou à ses logos, produits et les noms de service, les marques de commerce ou les marques de service ou ceux des concédants de licence de Santé Canada.'
           },
           10: {
-            title: 'Maintenance and Support',
-            text: 'Health Canada may provide periodic updates to the App which may include bug fixes and enhancements. You will be responsible for updating the App as the updates become available. The Distributor will not provide any maintenance or support for this App.'
+            title: 'Entretien et assistance',
+            text: 'Santé Canada peut fournir des mises à jour périodiques de l’application qui peuvent inclure des corrections de bogues et des améliorations. Vous serez responsable de la mise à jour de l’application au fur et à mesure que les mises à jour seront disponibles. Le Distributeur ne fournira aucune maintenance ou assistance pour cette Application.'
           },
           11: {
-            title: 'Forum and laws',
-            text: 'These Terms of Use are governed by the laws in force in the province of Ontario and by the federal laws of Canada, as applicable. You agree that all actions or proceedings arising directly or indirectly out of these Terms of Use or your use of the App shall be litigated in the courts of Ontario or the Federal Court of Canada, located in Ontario, Canada.'
+            title: 'Forum et lois',
+            text: 'Les présentes conditions d’utilisation sont régies par les lois en vigueur dans la province de l’Ontario et par les lois fédérales du Canada, le cas échéant. Vous acceptez que toutes les actions ou procédures découlant directement ou indirectement des présentes Conditions d’utilisation ou de votre utilisation de l’Application soient portées devant les tribunaux de l’Ontario ou la Cour fédérale du Canada, situés en Ontario, Canada.'
           },
           12: {
-            title: 'Third-Party Terms of Agreement',
-            text: 'The App has the functionality to launch and/or interact with third-party applications on your mobile device. Your use of such third-party applications is subject to and must be in compliance with the respective terms and conditions of those applications.'
+            title: 'Conditions d’accord de tiers',
+            text: 'L’application a la fonctionnalité de lancer et/ou d’interagir avec des applications tierces sur votre appareil mobile. Votre utilisation de ces applications tierces est soumise et doit être conforme aux conditions générales respectives de ces applications.'
           },
           13: {
             title: ' ',
-            text: 'Terms of use reviewed: December 3rd, 2021'
+            text: 'Conditions d’utilisation révisées : 3 décembre 2021'
           }
         }
       },
       pri: {
-        textHtml: '<p>Health Canada is committed to providing services and information that respect the privacy of users. This privacy notice summarizes the privacy policy for Health Canada’s mobile applications, including this App.</p>' +
-          '<p>All personal information created, held or collected via this App by Health Canada is protected under the Privacy Act. This means that you will be informed of the purpose for which it is being collected and how to exercise your right of access to that information. The notifications and “Bookmark” function on this App enables the App to provide health product information notifications based on the health products you have bookmarked or are interested in receiving notifications about, on your mobile device. In order to allow this functionality, data will be transmitted to Health Canada for the purposes of identifying the mobile device for which notifications are relevant, using a non-user identifiable token mechanism. No other user identifiable information is transmitted to or stored by Health Canada. If you do accept or no longer want to use the notification function of the App, please disable the notifications function in your device settings.</p>' +
-          '<p>By using this App, you consent to the App collecting the following information from the device you are using: the type of device you are using to access the App, information for use in the App, and your preferred language. This data is collected and used in the provision of Health Production information.</p>' +
-          '<p>If you choose to use the feedback form in the App, the following information is collected: device model, version of App in use and your email address, along with any information you choose to provide in the text input field. The information that you provide is collected in order to respond to your questions and comments. It is also protected under the Privacy Act.</p>' +
-          '<p>Any questions or comments regarding this privacy notice may be directed to Health Canada Access to Information and Privacy Coordinator at:</p>' +
+        textHtml: '<p>Santé Canada s’engage à fournir des services et des informations qui respectent la vie privée des utilisateurs. Cet avis de confidentialité résume la politique de confidentialité des applications mobiles de Santé Canada, y compris cette application.</p>' +
+          '<p>Tous les renseignements personnels créés, détenus ou recueillis via cette application par Santé Canada sont protégés en vertu de la Loi sur la protection des renseignements personnels. Cela signifie que vous serez informé de la finalité pour laquelle elles sont collectées et de la manière d’exercer votre droit d’accès à ces informations. Les notifications et la fonction « Signet » de cette application permettent à l’application de fournir des notifications d’informations sur les produits de santé en fonction des produits de santé que vous avez mis en signet ou pour lesquels vous souhaitez recevoir des notifications sur votre appareil mobile. Afin de permettre cette fonctionnalité, les données seront transmises à Santé Canada dans le but d’identifier l’appareil mobile pour lequel les notifications sont pertinentes, à l’aide d’un mécanisme de jeton non identifiable par l’utilisateur. Aucune autre information identifiable par l’utilisateur n’est transmise ou stockée par Santé Canada. Si vous acceptez ou ne souhaitez plus utiliser la fonction de notification de l’application, veuillez désactiver la fonction de notification dans les paramètres de votre appareil.</p>' +
+          '<p>En utilisant cette application, vous consentez à ce que l’application collecte les informations suivantes à partir de l’appareil que vous utilisez : le type d’appareil que vous utilisez pour accéder à l’application, les informations à utiliser dans l’application et votre langue préférée. Ces données sont collectées et utilisées dans la fourniture d’informations sur la production sanitaire.</p>' +
+          '<p>Si vous choisissez d’utiliser le formulaire de commentaires dans l’Application, les informations suivantes sont collectées : modèle d’appareil, version de l’Application utilisée et votre adresse e-mail, ainsi que toute information que vous choisissez de fournir dans le champ de saisie de texte. Les informations que vous fournissez sont collectées afin de répondre à vos questions et commentaires. Il est également protégé par la Loi sur la protection des renseignements personnels.</p>' +
+          '<p>Toute question ou tout commentaire concernant cet avis de confidentialité peut être adressé au coordonnateur de l’accès à l’information et de la confidentialité de Santé Canada à l’adresse :</p>' +
           '<p>E-mail: atip-aiprp@hc-sc.gc.ca</p>' +
-          '<p>Telephone: 613-954-9165</p>' +
-          '<p>Teletypewriter: 1-800-465-7735 (Service Canada)</p>' +
-          '<p>Mail: Access to Information and Privacy Coordinator</p>' +
-          '<p style="margin-left: 20; margin-top: -16"><br />Health Canada<br />Holland Cross - Tower B<br />1600 Scott Street, 7th Floor, Suite 700<br />Postal Locator: 3107A<br />Ottawa, Ontario K1A 0K9</p>' +
-          '<p>If you are not satisfied with the response to your privacy concern, you may wish to contact the Office of the Privacy Commissioner by e-mail at: info@privcom.gc.ca, by telephone at 1-800-282-1376 or <a href="https://www.priv.gc.ca">visit their website</a>.</p>'
+          '<p>Téléphone: 613-954-9165</p>' +
+          '<p>Téléscripteur: 1-800-465-7735 (Service Canada)</p>' +
+          '<p>Courrier : Coordonnateur de l’accès à l’information et de la protection des renseignements personnels</p>' +
+          '<p style="margin-left: 20; margin-top: -16"><br />Santé Canada<br />Holland Cross - Tour B<br />1600 Rue Scott, 7ème étage, Suite 700<br />Localisateur postal: 3107A<br />Ottawa, Ontario K1A 0K9</p>' +
+          '<p>Si vous n’êtes pas satisfait de la réponse à votre problème de confidentialité, vous pouvez contacter le Commissariat à la protection de la vie privée par courriel à : info@privcom.gc.ca, par téléphone au 1-800-282-1376 ou <a href="https://www.priv.gc.ca">visitez leur site web</a>.</p>'
       },
       con: {
-        textHtml: '<p>Should you have any questions, claims or functionality issues related to the App, please use the Contact Us feature in the App. You may also contact us via any of the following:</p>' +
-          '<p style="margin-left: 20; margin-top: -16"><br />(address)' +
-          '<br />(Tel)' +
-          '<br />(website address)' +
-          '<br />(email address)' +
+        textHtml: '<p>Si vous avez des questions, des réclamations ou des problèmes de fonctionnalité liés à l’application, veuillez utiliser la fonction Contactez-nous dans l’application. Vous pouvez également nous contacter par l’un des moyens suivants :</p>' +
+          '<p style="margin-left: 20; margin-top: -16"><br />(addresse)' +
+          '<br />(tél)' +
+          '<br />(adresse du site Web)' +
+          '<br />(adresse e-mail)' +
           '</p>'
       }
     },

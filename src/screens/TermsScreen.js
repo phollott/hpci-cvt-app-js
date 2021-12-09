@@ -17,7 +17,7 @@ const TermsScreen = ({ navigation }) => {
   const language = useSelector((state) => state.settings.language);
   const termsViewKey = language.concat('TermsView');
 
-  const [termsIntroText, setTermsIntroText] = useState('');
+  const [termsText, setTermsText] = useState('');
   const [termsSubsections, setTermsSubsections] = useState([]);
 
   const [privacyText, setPrivacyText] = useState('');
@@ -25,7 +25,7 @@ const TermsScreen = ({ navigation }) => {
   const [contactInfoText, setContactInfoText] = useState('');
 
   useEffect(() => {
-    setTermsIntroText(t('home.terms.tou.introTextHtml'));
+    setTermsText(t('home.terms.tou.textHtml'));
     setTermsSubsections(getTermsSubsections());
     setPrivacyText(t('home.terms.pri.textHtml'));
     setContactInfoText(t('home.terms.con.textHtml'));
@@ -69,7 +69,7 @@ const TermsScreen = ({ navigation }) => {
               left={() => {}}
             >
               <HTML
-                source={{ html: termsIntroText }}
+                source={{ html: termsText }}
                 containerStyle={{ marginHorizontal: 20 }}
               />
               {termsSubsections.map((subsection, index) => (
@@ -84,12 +84,10 @@ const TermsScreen = ({ navigation }) => {
                     titleStyle={{ fontWeight: 'bold', fontSize: 16 }}
                     titleNumberOfLines={2}
                     description={() => (
-                      <>
-                        <ReadMoreText
-                          text={subsection.subText}
-                          numberOfLines={5}
-                        />
-                      </>
+                      <ReadMoreText
+                        text={subsection.subText}
+                        numberOfLines={5}
+                      />
                     )}
                     onPress={() => {}}
                     right={() => {}}
