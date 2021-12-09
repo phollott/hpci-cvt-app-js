@@ -89,7 +89,7 @@ export default {
         con: 'Contact Information'
       },
       tou: {
-        introTextHtml: '<p>Health Canada maintains the Health Products Consumer Information Mobile App (“the App”). The App can be used by Canadians to make healthy, informed decisions about their health and use of health products.</p><p>The information provided by the App is intended for educational and informational purposes only. Health Canada is not engaged in rendering medical service or advice and the information provided is not a substitute for a professional medical opinion. If you have a medical problem, please contact a qualified health professional.</p>',
+        textHtml: '<p>Health Canada maintains the Health Products Consumer Information Mobile App (“the App”). The App can be used by Canadians to make healthy, informed decisions about their health and use of health products.</p><p>The information provided by the App is intended for educational and informational purposes only. Health Canada is not engaged in rendering medical service or advice and the information provided is not a substitute for a professional medical opinion. If you have a medical problem, please contact a qualified health professional.</p>',
         subSection: {
           1: {
             title: 'Acceptance of Agreement',
@@ -166,7 +166,7 @@ export default {
       con: {
         textHtml: '<p>Should you have any questions, claims or functionality issues related to the App, please use the Contact Us feature in the App. You may also contact us via any of the following:</p>' +
           '<p style="margin-left: 20; margin-top: -16"><br />(address)' +
-          '<br />(Tel)' +
+          '<br />(tel)' +
           '<br />(website address)' +
           '<br />(email address)' +
           '</p>'
