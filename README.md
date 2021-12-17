@@ -73,9 +73,13 @@ Run project locally: `expo start` or `expo start --tunnel`
 
 ## demo and release notes
 
-### version: 0.0.3 (current)
-
 HC CVT App - prototype
+
+### version: 0.0.41 (current)
+
+- upgraded expo sdk from 40 to 41
+
+### version: 0.0.3
 
 - added user preference for en-CA/fr-CA
 - removed react-native-svg
