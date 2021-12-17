@@ -5,8 +5,8 @@
 
 ### Technical Notes
 
-- Expo SDK 40
-- React Native 0.63.2
+- Expo SDK 41
+- React Native 0.63
 - React Navigation v5
 - React Native Paper v4
 - iOS 13 Appearance Support (with [react-native-appearance](https://github.com/expo/react-native-appearance))
