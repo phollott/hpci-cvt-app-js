@@ -105,6 +105,16 @@ const HomeScreen = ({ navigation }) => {
               >
                 {t('home.introCard.text')}
               </Text>
+              <Text
+                style={{
+                  color: colors.darkColor,
+                  fontSize: 12,
+                  marginTop: 8,
+                  textAlign: 'center'
+                }}
+              >
+                v0.0.41
+              </Text>
             </Card.Content>
             <View style={{ height: fillSpace(), width: '100%' }} />
           </Card>
