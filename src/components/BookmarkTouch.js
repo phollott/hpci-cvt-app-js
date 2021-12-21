@@ -18,6 +18,9 @@ import { getTimeInMillis } from '../shared/date-fns';
 const BookmarkTouch = ({ navigation, route }) => {
   const state = useSelector((state) => state);
   const language = useSelector((state) => state.settings.language);
+  const bookmarkedProductsPref = useSelector(
+    (state) => state.settings.notifications.bookmarkedProducts
+  );
   const isBookmark = useSelector((state) => {
     return selectBookmarkExists(state, route.params.productMaster.nid);
   });
@@ -63,11 +66,13 @@ const BookmarkTouch = ({ navigation, route }) => {
                 bookmarkStorage
                   .deleteProductBookmarks(productMaster.nid)
                   .then(() => {
-                    // dispatch preferences to push notification service
-                    notifications.dispatchPreferences(
-                      language,
-                      bookmarkIDs.filter((id) => id !== productMaster.nid)
-                    );
+                    if (bookmarkedProductsPref) {
+                      // dispatch preferences to push notification service
+                      notifications.dispatchPreferences(
+                        language,
+                        bookmarkIDs.filter((id) => id !== productMaster.nid)
+                      );
+                    }
                     navStacks();
                   });
               }

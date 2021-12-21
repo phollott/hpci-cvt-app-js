@@ -5,7 +5,12 @@ const initialState = {
   products: [],
   settings: {
     language: lang.default,
-    isOnline: true
+    isOnline: true,
+    notifications: {
+      enabled: true,
+      newProducts: true,
+      bookmarkedProducts: true
+    }
   }
 };
 

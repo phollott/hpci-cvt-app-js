@@ -193,6 +193,9 @@ export default {
           newProductsText: 'Recevez des notifications lorsqu’un nouveau produit de santé est approuvé pour utilisation au Canada.',
           bookmarkedProductsLabel: 'Produits de santé mis en signet',
           bookmarkedProductsText: 'Recevez des notifications lorsque les informations changent pour les produits de santé que vous avez ajoutés à vos favoris.'
+        },
+        message: {
+          allowNotifications: 'Les notifications ne peuvent pas être activées. Vérifiez que les services de notification de votre appareil sont autorisés pour l’application.'
         }
       }
     },

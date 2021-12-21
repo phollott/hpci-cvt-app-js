@@ -38,11 +38,13 @@ const productType = {
 //   expoPushToken - expoPushToken for device
 //   expoPushNotification-<<notification id>> - pushNotification
 //   language - en or fr
+//   notificationsSettingsKeyPrefix - notificationsSettings
 //   productProps-<<nid>>: productProps
 const bookmarkKeyPrefix = 'bookmark-product';
 const expoPushTokenKeyPrefix = 'expoPushToken';
 const expoPushNotificationKeyPrefix = 'expoPushNotification-';
 const languageKeyPrefix = 'language';
+const notificationsSettingsKeyPrefix = 'notificationsSettings';
 const productPropsKeyPrefix = 'productProps-';
 
 export {
@@ -61,5 +63,6 @@ export {
   expoPushTokenKeyPrefix,
   expoPushNotificationKeyPrefix,
   languageKeyPrefix,
+  notificationsSettingsKeyPrefix,
   productPropsKeyPrefix
 };

@@ -193,6 +193,9 @@ export default {
           newProductsText: 'Be notified when a new Health Product is approved for use in Canada.',
           bookmarkedProductsLabel: 'Bookmarked Health Products',
           bookmarkedProductsText: 'Be notified when information changes for Health Products you have bookmarked.'
+        },
+        message: {
+          allowNotifications: 'Notifications cannot be enabled. Verify your device notification services are allowed for the application.'
         }
       }
     },

@@ -6,6 +6,7 @@ import productMaster from './ProductMasterService';
 import productPropsStorage from './ProductPropsStorageService';
 import productResource from './ProductResourceService';
 import productsParser from './ProductsParserService';
+import settingsStorage from './SettingsStorageService';
 import storage from './StorageService';
 
 export {
@@ -17,5 +18,6 @@ export {
   productPropsStorage,
   productResource,
   productsParser,
+  settingsStorage,
   storage
 };
