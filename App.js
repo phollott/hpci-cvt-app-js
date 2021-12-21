@@ -13,7 +13,8 @@ import {
   bookmarkStorage,
   languageStorage,
   notifications,
-  productLoad
+  productLoad,
+  settingsStorage
 } from './src/services';
 import initialState from './src/redux/store/initialState';
 import rootReducer from './src/redux/store/store';
@@ -78,6 +79,8 @@ class App extends React.Component {
         // user has never selected language (or error), default to device locale (or en if not en or fr)
         initialState.settings.language = I18n.getCurrentLocale();
       }
+
+      initialState.settings.notifications = await settingsStorage.retrieveNotificationsSettings();
     } catch (error) {
       console.log(
         'Unhandled error occured while loading initial state. ',

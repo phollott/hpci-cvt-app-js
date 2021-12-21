@@ -1,10 +1,19 @@
-import { SET_LANGUAGE, SET_IS_ONLINE } from '../actions/actionTypes';
+import {
+  SET_LANGUAGE,
+  SET_IS_ONLINE,
+  SET_NOTIFICATIONS
+} from '../actions/actionTypes';
 import { lang } from '../../constants/constants';
 
 const initialState = {
   settings: {
     language: lang.default,
-    isOnline: true
+    isOnline: true,
+    notifications: {
+      enabled: true,
+      newProducts: true,
+      bookmarkedProducts: true
+    }
   }
 };
 
@@ -19,6 +28,11 @@ const settingsReducer = (state = initialState, action) => {
     case SET_IS_ONLINE: {
       const settingsNode = { ...state };
       settingsNode.isOnline = action.payload.isOnline;
+      return { ...state, ...settingsNode };
+    }
+    case SET_NOTIFICATIONS: {
+      const settingsNode = { ...state };
+      settingsNode.notifications = action.payload.notifications;
       return { ...state, ...settingsNode };
     }
     default:

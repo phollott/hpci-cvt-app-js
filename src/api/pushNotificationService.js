@@ -12,11 +12,12 @@ headers.append('Content-Type', 'application/json');
 headers.append('Pragma', 'no-cache');
 headers.append('Cache-Control', 'no-cache');
 
-const registerDevice = async (token, languagePref) => {
+const registerDevice = async (token, languagePref, data) => {
   try {
     const requestInit = {
       method: 'POST',
-      headers
+      headers,
+      body: JSON.stringify(data)
     };
     const response = await fetch(
       devicesAPIUrl.concat('/').concat(token).concat('.').concat(languagePref),

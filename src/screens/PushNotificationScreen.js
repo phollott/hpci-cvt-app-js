@@ -34,13 +34,19 @@ const PushNotificationScreen = ({ navigation, route }) => {
   const bookmarks = useSelector((state) => {
     return selectBookmarkIDs(state);
   });
+  const bookmarkedProductsPref = useSelector(
+    (state) => state.settings.notifications.bookmarkedProducts
+  );
 
   const [expoPushToken, setExpoPushToken] = useState('');
 
   useEffect(() => {
     notifications.retrieveExpoPushToken().then((token) => {
       setExpoPushToken(token);
-      notifications.dispatchPreferences(language, bookmarks);
+      notifications.dispatchPreferences(
+        language,
+        bookmarkedProductsPref ? bookmarks : []
+      );
     });
   }, []);
 

@@ -4,6 +4,7 @@ import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import { EventRegister } from 'react-native-event-listeners';
 import LanguageStorageService from './LanguageStorageService';
+import SettingsStorageService from './SettingsStorageService';
 import StorageService from './StorageService';
 import {
   registerDevice,
@@ -55,11 +56,16 @@ const pushNotification = (notification) => {
   return {};
 };
 
-const devicePrefs = (language = lang.english, bookmarks = null) => {
+const devicePrefs = (
+  language = lang.english,
+  bookmarks = null,
+  notifications = null
+) => {
   return {
     data: {
       language: language === lang.english ? lang.english : lang.french, // "en" or "fr"
-      bookmarks // ex: null, ["15", "16"]
+      bookmarks, // ex: null, ["15", "16"]
+      notifications // ex: { enabled: true, newProducts: true, bookmarkedProducts: true }
     }
   };
 };
@@ -186,11 +192,18 @@ async function registerForPushNotificationsAsync() {
     } = await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
     if (existingStatus !== 'granted') {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
+      // request permissions if notifications are enabled (e.g. after install or enabled by user)
+      const {
+        enabled
+      } = await SettingsStorageService.retrieveNotificationsSettings();
+      if (enabled) {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
     }
     if (finalStatus !== 'granted') {
       // android users do not get prompted (permissions are enabled by default, so user will need to re-enable)
+      // Note: device will be unregistered from push notification service during registerDeviceToken when token = ''
       console.log('Failed to get push token for push notification!');
       return '';
     }
@@ -241,7 +254,7 @@ function getTokenID(token) {
   return token.match(/\[(.*?)\]/i)[1];
 }
 
-async function registerDeviceToken(token, locale) {
+async function registerDeviceToken(token, locale, bookmarks = null) {
   try {
     if (token !== '') {
       // register
@@ -251,16 +264,19 @@ async function registerDeviceToken(token, locale) {
         (langPref === lang.english || langPref === lang.french)
           ? langPref
           : locale;
-      registerDevice(getTokenID(token), language);
+      const settings = await SettingsStorageService.retrieveNotificationsSettings();
+      const data = devicePrefs(language, bookmarks, settings);
+      registerDevice(getTokenID(token), language, data);
       saveExpoPushToken(token);
     } else {
       // unregister
+      SettingsStorageService.saveDisabledNotificationsSettings();
       const storedToken = await retrieveExpoPushToken();
       if (storedToken !== '') {
+        // e.g. user has disabled
         unregisterDevice(getTokenID(storedToken));
         saveExpoPushToken('');
       }
-      // TODO: ensure notifications setting is disabled
     }
   } catch (error) {
     console.log(
@@ -344,7 +360,8 @@ async function dispatchPreferences(language, bookmarks = null) {
   try {
     const token = await retrieveExpoPushToken();
     if (token !== '') {
-      const data = devicePrefs(language, bookmarks);
+      const settings = await SettingsStorageService.retrieveNotificationsSettings();
+      const data = devicePrefs(language, bookmarks, settings);
       await dispatchDevicePreferences(getTokenID(token), data);
     }
   } catch (error) {

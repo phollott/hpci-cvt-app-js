@@ -1,12 +1,17 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { ScrollView, Text, View } from 'react-native';
+import { Platform, ScrollView, Text, View } from 'react-native';
 import { useTheme } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { t } from 'i18n-js';
+import * as I18n from '../config/i18n';
 import { gStyle } from '../constants';
+import Alert from '../components/Alert';
 import ViewCardText from '../components/ViewCardText';
 import ViewSwitch from '../components/ViewSwitch';
+import { setNotifications } from '../redux/actions/settingsActions';
+import { selectBookmarkIDs } from '../redux/selectors/bookmarkSelector';
+import { notifications, settingsStorage } from '../services';
 
 const NotificationsSettingsScreen = ({ navigation }) => {
   const theme = useTheme();
@@ -17,34 +22,124 @@ const NotificationsSettingsScreen = ({ navigation }) => {
     'NotificationsSettingsView'
   );
 
-  const [isNotificationsSwitchOn, setIsNotificationsSwitchOn] = React.useState(
-    true
+  const bookmarkIDs = useSelector((state) => {
+    return selectBookmarkIDs(state);
+  });
+
+  const notificationsSettings = useSelector(
+    (state) => state.settings.notifications
   );
 
-  const [isNewProductsSwitchOn, setIsNewProductsSwitchOn] = React.useState(
-    true
+  const dispatch = useDispatch();
+  const setNotificationsSettings = (value) => dispatch(setNotifications(value));
+
+  const [expoPushToken, setExpoPushToken] = useState('');
+
+  useEffect(() => {
+    notifications.retrieveExpoPushToken().then((token) => {
+      setExpoPushToken(token);
+      setIsNotificationsSwitchOn(notificationsSettings.enabled);
+      setSubsettingsSwitches(
+        notificationsSettings.newProducts,
+        notificationsSettings.bookmarkedProducts
+      );
+    });
+  }, []);
+
+  const [isNotificationsSwitchOn, setIsNotificationsSwitchOn] = useState(
+    notificationsSettings.enabled
+  );
+
+  const [isNewProductsSwitchOn, setIsNewProductsSwitchOn] = useState(
+    notificationsSettings.newProducts
   );
 
   const [
     isBookmarkedProductsSwitchOn,
     setIsBookmarkedProductsSwitchOn
-  ] = React.useState(true);
+  ] = useState(notificationsSettings.bookmarkedProducts);
 
-  const onToggleNotificationsSwitch = () => {
+  const setSubsettingsSwitches = (
+    newProducts = true,
+    bookmarkedProducts = true
+  ) => {
+    setIsNewProductsSwitchOn(newProducts);
+    setIsBookmarkedProductsSwitchOn(bookmarkedProducts);
+  };
+
+  const { notifications: defaults } = settingsStorage.defaultSettings();
+
+  const onToggleNotificationsSwitch = async () => {
     const switchWasOn = isNotificationsSwitchOn;
     setIsNotificationsSwitchOn(!isNotificationsSwitchOn);
     if (switchWasOn) {
-      setIsNewProductsSwitchOn(false);
-      setIsBookmarkedProductsSwitchOn(false);
+      // switched off, unregister
+      // note: registerDeviceToken will unregister device from push notification service when expoPushToken is ''
+      await notifications.registerDeviceToken('', I18n.getCurrentLocale());
+      setExpoPushToken('');
+      setSubsettingsSwitches(false, false);
+      setNotificationsSettings(settingsStorage.disabledNotificationsSettings());
+    } else {
+      // switched on, register
+      // note: if device notifications for the app are not allowed,
+      //       may prompt ios users for permission, but alert android users to enable device notifications for app
+      await settingsStorage.saveNotificationsSettings(defaults);
+      setSubsettingsSwitches();
+      notifications.registerForPushNotificationsAsync().then((token) => {
+        if (token === '') {
+          setIsNotificationsSwitchOn(false);
+          setSubsettingsSwitches(false, false);
+          if (Platform.OS === 'android') {
+            Alert(t('home.settings.notifications.message.allowNotifications'));
+          }
+        }
+        notifications
+          .registerDeviceToken(token, I18n.getCurrentLocale(), bookmarkIDs)
+          .then(() => {
+            if (token === '') {
+              setNotificationsSettings(
+                settingsStorage.disabledNotificationsSettings()
+              );
+            } else {
+              setNotificationsSettings(defaults);
+            }
+          });
+      });
     }
   };
 
-  const onToggleNewProductsSwitch = () => {
-    setIsNewProductsSwitchOn(!isNewProductsSwitchOn);
+  const saveAndDispatchSettings = async (settings) => {
+    await settingsStorage.saveNotificationsSettings(settings);
+    notifications
+      .dispatchPreferences(
+        language,
+        settings.bookmarkedProducts ? bookmarkIDs : []
+      )
+      .then(() => {
+        setNotificationsSettings(settings);
+      });
   };
 
-  const onToggleBookmarkedProductsSwitch = () => {
+  const onToggleNewProductsSwitch = async () => {
+    const switchWasOn = isNewProductsSwitchOn;
+    setIsNewProductsSwitchOn(!isNewProductsSwitchOn);
+    const settings = {
+      enabled: notificationsSettings.enabled,
+      newProducts: !switchWasOn,
+      bookmarkedProducts: notificationsSettings.bookmarkedProducts
+    };
+    await saveAndDispatchSettings(settings);
+  };
+
+  const onToggleBookmarkedProductsSwitch = async () => {
+    const switchWasOn = isBookmarkedProductsSwitchOn;
     setIsBookmarkedProductsSwitchOn(!isBookmarkedProductsSwitchOn);
+    const settings = {
+      enabled: notificationsSettings.enabled,
+      newProducts: notificationsSettings.newProducts,
+      bookmarkedProducts: !switchWasOn
+    };
+    await saveAndDispatchSettings(settings);
   };
 
   return (
