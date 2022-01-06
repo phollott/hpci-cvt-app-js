@@ -32,6 +32,8 @@ const NotificationsScreen = ({ navigation, route }) => {
   const addFetchedProduct = (products) => dispatch(addProduct(products));
   const addBookmarkProduct = (bookmarks) => dispatch(addBookmark(bookmarks));
 
+  const { messageType } = notificationsService;
+
   const retrieveNotifications = () => {
     notificationsService.retrieveNotifications().then((retrieved) => {
       setNotifications(retrieved.sort(compareDesc));
@@ -232,19 +234,16 @@ const NotificationsScreen = ({ navigation, route }) => {
                           <Icon
                             reverse
                             name={
-                              notificationsService.isProductSpecific(
-                                notification
-                              )
-                                ? 'shield-virus'
-                                : 'envelope-open'
+                              (notification.data.messageType ===
+                                messageType.productUpdate &&
+                                'shield-refresh') ||
+                              (notification.data.messageType ===
+                                messageType.newProduct &&
+                                'shield-plus') ||
+                              'email'
                             }
-                            color={
-                              notificationsService.isProductSpecific(
-                                notification
-                              )
-                                ? colors.darkColor
-                                : colors.darkColor
-                            }
+                            type="material-community"
+                            color={colors.darkColor}
                           />
                           {isNil(notification.viewed) && (
                             <Badge
