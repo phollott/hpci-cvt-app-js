@@ -23,6 +23,8 @@ import {
 
 // dev tool
 
+const msgType = notifications.messageType;
+
 const PushNotificationScreen = ({ navigation, route }) => {
   const theme = useTheme();
 
@@ -66,6 +68,7 @@ const PushNotificationScreen = ({ navigation, route }) => {
   covid19Products.push({ nid: '8', brandName: 'Bamlanivimab', checked: false });
   covid19Products.push({ nid: '36', brandName: 'Sotrovimab', checked: false });
   covid19Products.push({ nid: '34', brandName: 'Casirivimab / imdevimab', checked: false });
+  covid19Products.push({ nid: '-1', brandName: 'New / Nouveau', checked: false });
 
   const [products, setProducts] = React.useState(covid19Products);
 
@@ -409,12 +412,18 @@ async function dispatchPushNotificationToAll(
   products,
   linkText
 ) {
+  let pnMsgType = msgType.general;
   const nids = [];
   products.forEach((product) => {
     if (product.checked) {
       nids.push(product.nid);
     }
   });
+  if (nids.length > 0) {
+    pnMsgType = nids.includes('-1')
+      ? msgType.newProduct
+      : msgType.productUpdate;
+  }
   const message = [];
   if (messageTextEn.length > 0) {
     message.push({
@@ -422,6 +431,7 @@ async function dispatchPushNotificationToAll(
       title: titleTextEn,
       body: messageTextEn,
       data: {
+        messageType: pnMsgType,
         products: nids.length > 0 ? nids : null,
         link: linkText
       }
@@ -433,6 +443,7 @@ async function dispatchPushNotificationToAll(
       title: titleTextFr,
       body: messageTextFr,
       data: {
+        messageType: nids.length > 0 ? msgType.productUpdate : msgType.general,
         products: nids.length > 0 ? nids : null,
         link: linkText
       }
@@ -450,12 +461,18 @@ async function dispatchPushNotificationToSelf(
   linkText
 ) {
   notifications.retrieveExpoPushToken().then((expoPushToken) => {
+    let pnMsgType = msgType.general;
     const nids = [];
     products.forEach((product) => {
       if (product.checked) {
         nids.push(product.nid);
       }
     });
+    if (nids.length > 0) {
+      pnMsgType = nids.includes('-1')
+        ? msgType.newProduct
+        : msgType.productUpdate;
+    }
     const message = [];
     if (messageTextEn.length > 0) {
       message.push({
@@ -463,6 +480,7 @@ async function dispatchPushNotificationToSelf(
         title: titleTextEn,
         body: messageTextEn,
         data: {
+          messageType: pnMsgType,
           products: nids.length > 0 ? nids : null,
           link: linkText
         }
@@ -474,6 +492,7 @@ async function dispatchPushNotificationToSelf(
         title: titleTextFr,
         body: messageTextFr,
         data: {
+          messageType: pnMsgType,
           products: nids.length > 0 ? nids : null,
           link: linkText
         }

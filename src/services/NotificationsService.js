@@ -25,6 +25,8 @@ const NOTIFICATION_RECEIVED = 'notificationReceived'; // while app in foreground
 const NOTIFICATION_RESPONSE_RECEIVED = 'notificationResponseReceived'; // while app in foreground, background or closed
 const NOTIFICATION_SERVICE_SYNC = 'notificationServiceSync'; // when language pref changes
 
+// notificationEvent emitted by: handleNotification, deleteNotification, setViewed
+
 const pushNotification = (notification) => {
   if (notification) {
     if (notification.request) {
@@ -33,7 +35,7 @@ const pushNotification = (notification) => {
         id: notification.request.identifier,
         date: notification.date, // in millis
         body: notification.request.content.body, // message
-        data: { ...notification.request.content.data }, // ex: {}, {"products": "16"}, {"products": ["16", "18", "20"]}, {"link": "https:..."}, both
+        data: { ...notification.request.content.data }, // ex: {} ; {"messageType": "productUpdate", "products": "16"} ; {"messageType": "productUpdate", "products": ["16", "18", "20"]} ; {"messageType": "newProduct"} ; {"link": "https:..."}
         title: notification.request.content.title,
         viewed: null, // in millis
         isRemoved: false
@@ -46,7 +48,7 @@ const pushNotification = (notification) => {
         id: ''.concat(createdTime).concat(Math.random()),
         date: createdTime, // in millis
         body: notification.body, // message
-        data: { ...notification.data }, // ex: {}, {"products": "16"}, {"products": ["16", "18", "20"]}, {"link": "https:..."}, both
+        data: { ...notification.data }, // ex: {}, {"messageType": "productUpdate", "products": "16"} ; {"messageType": "productUpdate", "products": ["16", "18", "20"]} ; {"messageType": "newProduct"} ; {"link": "https:..."}
         title: notification.title,
         viewed: createdTime, // in millis
         isRemoved: false
@@ -70,12 +72,18 @@ const devicePrefs = (
   };
 };
 
-// notificationEvent emitted by: handleNotification, deleteNotification, setViewed
+const messageType = {
+  general: 'general',
+  productUpdate: 'productUpdate',
+  newProduct: 'newProduct'
+};
 
 function isProductSpecific(notification) {
   const { data } = notification;
   let hasNid = false;
   if (
+    (notification.data.messageType === messageType.productUpdate ||
+      notification.data.messageType === messageType.newProduct) &&
     !isNil(data.products) &&
     (Number.isInteger(parseInt(data.products, 10)) ||
       (Array.isArray(data.products) && notification.data.products.length > 0))
@@ -409,6 +417,7 @@ export default {
   retrieveNotifications,
   deleteNotification,
   setViewed,
+  messageType,
   isProductSpecific,
   getExternalLink,
   dispatchPreferences,
