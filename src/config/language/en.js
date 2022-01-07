@@ -46,6 +46,7 @@ export default {
     menu: {
       aboutLabel: 'About',
       termsLabel: 'Terms of Use & Privacy',
+      whatsNewLabel: 'What’s New?',
       settingsLabel: 'Settings',
       languageLabel: 'Language...',
       notificationsLabel: 'Notifications...',

@@ -24,6 +24,15 @@ const TermsIcon = () => (
   />
 );
 
+const BellIcon = () => (
+  <Icon
+    name="bell"
+    solid
+    color={colors.grey}
+    containerStyle={{ minWidth: 26 }}
+  />
+);
+
 const AboutIcon = () => (
   <Icon name="info" color={colors.grey} containerStyle={{ minWidth: 26 }} />
 );
@@ -69,6 +78,13 @@ const MenuDrawer = (props) => {
         icon={TermsIcon}
         onPress={() => {
           navigation.navigate('Terms');
+        }}
+      />
+      <DrawerItem
+        label={t('home.menu.whatsNewLabel')}
+        icon={BellIcon}
+        onPress={() => {
+          navigation.navigate('Notifications');
         }}
       />
       <DrawerItem
