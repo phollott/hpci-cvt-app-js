@@ -443,7 +443,7 @@ async function dispatchPushNotificationToAll(
       title: titleTextFr,
       body: messageTextFr,
       data: {
-        messageType: nids.length > 0 ? msgType.productUpdate : msgType.general,
+        messageType: pnMsgType,
         products: nids.length > 0 ? nids : null,
         link: linkText
       }
