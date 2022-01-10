@@ -364,6 +364,13 @@ async function setViewed(inNotification) {
   return notification;
 }
 
+async function isAnyNotificationNotViewed() {
+  const notifications = await retrieveNotifications();
+  return notifications.some((notification) => {
+    return isNil(notification.viewed) && notification.isRemoved === false;
+  });
+}
+
 async function dispatchPreferences(language, bookmarks = null) {
   try {
     const token = await retrieveExpoPushToken();
@@ -417,6 +424,7 @@ export default {
   retrieveNotifications,
   deleteNotification,
   setViewed,
+  isAnyNotificationNotViewed,
   messageType,
   isProductSpecific,
   getExternalLink,
