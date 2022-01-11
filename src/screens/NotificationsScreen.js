@@ -89,11 +89,7 @@ const NotificationsScreen = ({ navigation, route }) => {
 
   const formatNotificationDate = (timeOfNotification) => {
     let formattedDate = formatDate(
-      new Date(
-        timeOfNotification.toString().indexOf('.') > -1
-          ? Math.round(timeOfNotification * 1000)
-          : timeOfNotification
-      ),
+      notificationsService.notificationDateAsDate(timeOfNotification),
       language
     );
     formattedDate = formattedDate.substring(

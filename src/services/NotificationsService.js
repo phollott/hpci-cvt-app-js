@@ -27,13 +27,17 @@ const NOTIFICATION_SERVICE_SYNC = 'notificationServiceSync'; // when language pr
 
 // notificationEvent emitted by: handleNotification, deleteNotification, setViewed
 
+const notificationDateAsDate = (dt) => {
+  return new Date(dt.toString().indexOf('.') > -1 ? Math.round(dt * 1000) : dt);
+};
+
 const pushNotification = (notification) => {
   if (notification) {
     if (notification.request) {
       // expo
       return {
         id: notification.request.identifier,
-        date: notification.date, // in millis
+        date: notificationDateAsDate(notification.date).getTime(), // in millis
         body: notification.request.content.body, // message
         data: { ...notification.request.content.data }, // ex: {} ; {"messageType": "productUpdate", "products": "16"} ; {"messageType": "productUpdate", "products": ["16", "18", "20"]} ; {"messageType": "newProduct"} ; {"link": "https:..."}
         title: notification.request.content.title,
@@ -426,6 +430,7 @@ export default {
   setViewed,
   isAnyNotificationNotViewed,
   messageType,
+  notificationDateAsDate,
   isProductSpecific,
   getExternalLink,
   dispatchPreferences,
