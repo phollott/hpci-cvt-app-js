@@ -166,7 +166,7 @@ async function handleNotification(notification, source) {
 
 function registerNotificationHandler() {
   try {
-    // https://docs.expo.io/push-notifications/receiving-notifications/
+    // https://docs.expo.dev/push-notifications/receiving-notifications/
 
     // set notification handler for when app is foregrounded
     Notifications.setNotificationHandler({
@@ -196,7 +196,7 @@ function registerNotificationHandler() {
 }
 
 async function registerForPushNotificationsAsync() {
-  // https://docs.expo.io/push-notifications/push-notifications-setup/
+  // https://docs.expo.dev/push-notifications/push-notifications-setup/
   let token = '';
   if (Constants.isDevice) {
     const {
