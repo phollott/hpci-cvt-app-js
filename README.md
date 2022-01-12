@@ -47,7 +47,7 @@ Run project locally: `expo start` or `expo start --tunnel`
   - **android users:** the QR scanner is built within the Expo Client app! 🤗
   - **ios 11 and later:** you can open your camera app to scan the QR code, apple made the Expo folks remove the QR scanner from the app for some reason... 🤔
   - **ios 10 and below:** work around to [get expo running on older iOS devices](https://blog.calebnance.com/expo/getting-expo-to-work-on-older-iphones-with-no-qr-support.html)
-- having issues? check the [installation page](https://docs.expo.io/versions/latest/introduction/installation) for any pitfalls you may have.
+- having issues? check the [installation page](https://docs.expo.dev/get-started/installation/) for any pitfalls you may have.
 
 ## linting
 
