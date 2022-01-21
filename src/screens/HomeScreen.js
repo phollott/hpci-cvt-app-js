@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
   Image,
@@ -8,7 +8,7 @@ import {
   useWindowDimensions
 } from 'react-native';
 import { Card } from 'react-native-paper';
-import { useTheme } from '@react-navigation/native';
+import { useFocusEffect, useTheme } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { t } from 'i18n-js';
 import { colors, func, gStyle, images } from '../constants';
@@ -43,9 +43,24 @@ const HomeScreen = ({ navigation }) => {
     return height > 0 ? height : 32;
   };
 
+  const scrollViewRef = useRef();
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // screen is focused
+      scrollViewRef.current.scrollTo({ y: 0, animated: false });
+      return () => {
+        // screen is unfocused
+      };
+    }, [])
+  );
+
   return (
     <View style={gStyle.container[theme]} key={homeViewKey}>
-      <ScrollView contentContainerStyle={gStyle.contentContainer}>
+      <ScrollView
+        contentContainerStyle={gStyle.contentContainer}
+        ref={scrollViewRef}
+      >
         <View style={{ width: '100%', justifyContent: 'center' }}>
           <Card style={{ borderRadius: 0, marginHorizontal: 0, marginTop: 0 }}>
             <Card.Content style={{ alignItems: 'center' }}>
