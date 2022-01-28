@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import { ScrollView, View } from 'react-native';
+import { RefreshControl, ScrollView, View } from 'react-native';
 import { connect } from 'react-redux';
 import { t } from 'i18n-js';
-import { gStyle } from '../constants';
+import { colors, gStyle } from '../constants';
 import { bookmarkKeyPrefix, productType } from '../constants/constants';
+import { addBookmark } from '../redux/actions/bookmarkActions';
+import { addProduct } from '../redux/actions/productActions';
 import { selectBookmarks } from '../redux/selectors/bookmarkSelector';
-import { productMaster } from '../services';
+import { productMaster, productLoad, bookmarkStorage } from '../services';
+import { wait } from '../shared/util';
 
 // components
 import ViewButtonGroup from './ViewButtonGroup';
@@ -15,6 +18,7 @@ import ViewProductMasters from './ViewProductMasters';
 const internalState = {
   filtVaccineProd: [],
   filtTreatmentProd: [],
+  refreshing: false,
   selectedIndex: 0
 };
 
@@ -22,6 +26,7 @@ class ViewBookmarkedProducts extends Component {
   constructor(props) {
     super(props);
     this.state = internalState;
+    this.onRefresh = this.onRefresh.bind(this);
     this.updateIndex = this.updateIndex.bind(this);
   }
 
@@ -39,6 +44,45 @@ class ViewBookmarkedProducts extends Component {
     });
   }
 
+  onRefresh = async () => {
+    this.setState({ refreshing: true });
+    await this.sync();
+    wait(1000).then(() => {
+      this.setState({ refreshing: false });
+    });
+  };
+
+  sync = async () => {
+    const { dispatch, settings } = this.props;
+    if (settings.isOnline) {
+      // fetch, retrieve, (scrape, store)
+      const fetchedProducts = await productLoad.fetchProducts();
+      if (fetchedProducts.length > 1) {
+        const retrievedBookmarks = await bookmarkStorage.retrieveBookmarks(
+          fetchedProducts
+        );
+        const nids = [
+          ...new Set(fetchedProducts.map((product) => product.nid))
+        ];
+        nids.forEach((nid) => {
+          const enfrProduct = fetchedProducts.filter((product) => {
+            return nid === product.nid;
+          });
+          const enfrBookmark = retrievedBookmarks.filter((bookmark) => {
+            return nid === bookmark.nid;
+          });
+          // and dispatch
+          if (enfrProduct.length === 2) {
+            dispatch(addProduct(enfrProduct));
+          }
+          if (enfrBookmark.length === 2) {
+            dispatch(addBookmark(enfrBookmark));
+          }
+        });
+      }
+    }
+  };
+
   // ButtonGroup selected index is local to this screen, so it should remain in the localstate
   updateIndex(selectedIndex) {
     this.setState({ selectedIndex });
@@ -50,7 +94,12 @@ class ViewBookmarkedProducts extends Component {
       t('bookmarks.products.buttons.right')
     ];
     const { vaccineProducts, treatmentProducts, navigation } = this.props;
-    const { filtVaccineProd, filtTreatmentProd, selectedIndex } = this.state;
+    const {
+      filtVaccineProd,
+      filtTreatmentProd,
+      refreshing,
+      selectedIndex
+    } = this.state;
     if (vaccineProducts.length > 0 || treatmentProducts.length > 0) {
       return (
         <View
@@ -58,7 +107,16 @@ class ViewBookmarkedProducts extends Component {
           contentContainerStyle={gStyle.contentContainer}
         >
           <View style={gStyle.spacer8} />
-          <ScrollView>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={this.onRefresh}
+                colors={[colors.darkColor]}
+                tintColor={colors.darkColor}
+              />
+            }
+          >
             <ViewCardText
               title={t('bookmarks.products.card.title')}
               text={t('bookmarks.products.card.instructionText')}

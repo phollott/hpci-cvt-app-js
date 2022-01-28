@@ -11,22 +11,26 @@ const isObjectEmpty = (obj) => {
   );
 };
 
+const wait = (timeout) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
+
 const waitUntil = async (condf, timeout) => {
   return new Promise((resolve, reject) => {
     const start = getDate();
-    const wait = setInterval(() => {
+    const interval = setInterval(() => {
       if (condf()) {
         // console.log('resolved after', getDate() - start, 'ms');
-        clearInterval(wait);
+        clearInterval(interval);
         resolve();
       } else if (getDate() - start > timeout) {
         // timeout
         // console.log('rejected after', getDate() - start, 'ms');
-        clearInterval(wait);
+        clearInterval(interval);
         reject();
       }
     }, 100);
   });
 };
 
-export { isNil, isObjectEmpty, waitUntil };
+export { isNil, isObjectEmpty, wait, waitUntil };
