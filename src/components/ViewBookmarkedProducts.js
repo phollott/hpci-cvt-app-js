@@ -15,6 +15,8 @@ import ViewButtonGroup from './ViewButtonGroup';
 import ViewCardText from './ViewCardText';
 import ViewProductMasters from './ViewProductMasters';
 
+export const bookmarksScrollViewRef = React.createRef();
+
 const internalState = {
   filtVaccineProd: [],
   filtTreatmentProd: [],
@@ -108,6 +110,7 @@ class ViewBookmarkedProducts extends Component {
         >
           <View style={gStyle.spacer8} />
           <ScrollView
+            ref={bookmarksScrollViewRef}
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}

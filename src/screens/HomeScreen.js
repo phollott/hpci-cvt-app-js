@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Image,
@@ -17,6 +17,8 @@ import {
   covidVaccinePortal,
   portailVaccinCovid
 } from '../constants/constants';
+
+export const homeScrollViewRef = React.createRef();
 
 const HomeScreen = ({ navigation }) => {
   const theme = useTheme();
@@ -43,12 +45,10 @@ const HomeScreen = ({ navigation }) => {
     return height > 0 ? height : 32;
   };
 
-  const scrollViewRef = useRef();
-
   useFocusEffect(
     React.useCallback(() => {
       // screen is focused
-      scrollViewRef.current.scrollTo({ y: 0, animated: false });
+      homeScrollViewRef.current?.scrollTo({ y: 0, animated: false });
       return () => {
         // screen is unfocused
       };
@@ -59,7 +59,7 @@ const HomeScreen = ({ navigation }) => {
     <View style={gStyle.container[theme]} key={homeViewKey}>
       <ScrollView
         contentContainerStyle={gStyle.contentContainer}
-        ref={scrollViewRef}
+        ref={homeScrollViewRef}
       >
         <View style={{ width: '100%', justifyContent: 'center' }}>
           <Card style={{ borderRadius: 0, marginHorizontal: 0, marginTop: 0 }}>
