@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { t } from 'i18n-js';
 import { colors, gStyle } from '../constants';
+import { bookmarksScrollViewRef } from '../components/ViewBookmarkedProducts';
+import { productsScrollViewRef } from '../components/ViewCovid19Products';
+import { homeScrollViewRef } from '../screens/HomeScreen';
 // navigation stacks
 import HomeStack from './HomeStack';
 import ProductsStack from './ProductsStack';
@@ -62,6 +65,7 @@ const TabNavigator = () => {
             navigation.navigate('ProductsStack', { screen: 'Products' });
             navigation.navigate('BookmarksStack', { screen: 'Bookmarks' });
             navigation.navigate('HomeStack', { screen: 'HomeNavigator' });
+            homeScrollViewRef.current?.scrollTo({ y: 0, animated: false });
           }
         })}
         options={{
@@ -79,6 +83,7 @@ const TabNavigator = () => {
             navigation.navigate('HomeStack', { screen: 'HomeNavigator' });
             navigation.navigate('BookmarksStack', { screen: 'Bookmarks' });
             navigation.navigate('ProductsStack', { screen: 'Products' });
+            productsScrollViewRef.current?.scrollTo({ y: 0, animated: false });
           }
         })}
         options={{
@@ -96,6 +101,7 @@ const TabNavigator = () => {
             navigation.navigate('HomeStack', { screen: 'HomeNavigator' });
             navigation.navigate('ProductsStack', { screen: 'Products' });
             navigation.navigate('BookmarksStack', { screen: 'Bookmarks' });
+            bookmarksScrollViewRef.current?.scrollTo({ y: 0, animated: false });
           }
         })}
         options={{

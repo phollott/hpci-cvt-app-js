@@ -16,6 +16,8 @@ import ViewButtonGroup from './ViewButtonGroup';
 import ViewCardText from './ViewCardText';
 import ViewProductMasters from './ViewProductMasters';
 
+export const productsScrollViewRef = React.createRef();
+
 const internalState = {
   filtVaccineProd: [],
   filtTreatmentProd: [],
@@ -129,6 +131,7 @@ class ViewCovid19Products extends Component {
             />
             <View style={gStyle.spacer8} />
             <ScrollView
+              ref={productsScrollViewRef}
               refreshControl={
                 <RefreshControl
                   refreshing={refreshing}
