@@ -17,6 +17,7 @@ import {
   covidVaccinePortal,
   portailVaccinCovid
 } from '../constants/constants';
+import Icon from '../components/Icon';
 
 export const homeScrollViewRef = React.createRef();
 
@@ -74,10 +75,20 @@ const HomeScreen = ({ navigation }) => {
                       color: colors.darkColor,
                       textAlign: 'right',
                       marginTop: -10,
+                      marginRight: -2,
                       textDecorationLine: 'underline'
                     }}
                   >
                     {t('home.introCard.link')}
+                    <Icon
+                      name="open-in-new"
+                      type="material-community"
+                      color={colors.darkColor}
+                      containerStyle={{
+                        paddingLeft: 6,
+                        paddingTop: 6
+                      }}
+                    />
                   </Text>
                 )}
                 {!isOnline && <View style={gStyle.spacer8} />}
