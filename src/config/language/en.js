@@ -41,7 +41,7 @@ export default {
     introCard: {
       title: 'Canadian Health Products',
       text: 'Health Product Information for Canadians',
-      link: 'Alternative Format'
+      link: 'Alternative Format (Portal)'
     },
     menu: {
       aboutLabel: 'About',
@@ -261,8 +261,8 @@ export default {
       reg: 'Regulatory Announcements'
     },
     portalLink: {
-      title: 'Link to COVID-19 Portal',
-      description: 'Go to the COVID-19 Portal for more information about this product.'
+      title: 'COVID-19 Portal',
+      description: 'Access the COVID-19 Portal in browser for more information about this product.'
     },
     emptyText: {
       reg: 'There are no regulatory announcements to display at this time.'

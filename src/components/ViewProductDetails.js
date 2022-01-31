@@ -424,6 +424,7 @@ class ViewProductDetails extends Component {
                 title={t('productDetails.portalLink.title')}
                 titleStyle={{ fontWeight: 'bold' }}
                 description={t('productDetails.portalLink.description')}
+                descriptionNumberOfLines={4}
                 onPress={() => {
                   this.linkingProductPortal(productMaster);
                 }}

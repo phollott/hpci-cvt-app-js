@@ -41,7 +41,7 @@ export default {
     introCard: {
       title: 'Produits de santé canadiens',
       text: 'Information sur les produits de santé pour les Canadiens',
-      link: 'Format alternatif'
+      link: 'Format alternatif (portail)'
     },
     menu: {
       aboutLabel: 'À propos',
@@ -261,8 +261,8 @@ export default {
       reg: 'Nouvelles'
     },
     portalLink: {
-      title: 'Liens vers le Portail COVID-19',
-      description: 'Rendez-vous sur le Portail COVID-19 pour plus d’informations sur ce produit.'
+      title: 'Portail COVID-19',
+      description: 'Accédez au portail COVID-19 dans le navigateur pour plus d’informations sur ce produit.'
     },
     emptyText: {
       reg: 'Il n’y a actuellement aucun nouvelle à afficher.'
