@@ -156,7 +156,11 @@ const loadConsumerInformation = async (resourceLink, language, nid) => {
         .each((i, detail) => {
           const accordionItem = {
             summary: $(detail).find('summary').text(),
-            html: $(detail).find('div').html(),
+            html: $(detail)
+              .find('div')
+              .html()
+              .replace(/<br>\n/gm, '<br />')
+              .replace(/(\r\n|\n|\r)/gm, ' '),
             key: 'cons-'.concat(i)
           };
           consumerInformation.push(accordionItem);
