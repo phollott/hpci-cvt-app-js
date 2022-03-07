@@ -3,6 +3,7 @@ import { Platform } from 'react-native';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import { EventRegister } from 'react-native-event-listeners';
+import BookmarkStorageService from './BookmarkStorageService';
 import LanguageStorageService from './LanguageStorageService';
 import SettingsStorageService from './SettingsStorageService';
 import StorageService from './StorageService';
@@ -266,10 +267,10 @@ function getTokenID(token) {
   return token.match(/\[(.*?)\]/i)[1];
 }
 
-async function registerDeviceToken(token, locale, bookmarks = null) {
+async function registerDeviceToken(token, locale, bookmarkIDs = null) {
   try {
     if (token !== '') {
-      // register
+      // (fully) register device token with the push notification service
       const langPref = await LanguageStorageService.retrieveLanguage();
       const language =
         !isNil(langPref) &&
@@ -277,6 +278,19 @@ async function registerDeviceToken(token, locale, bookmarks = null) {
           ? langPref
           : locale;
       const settings = await SettingsStorageService.retrieveNotificationsSettings();
+      let bookmarks;
+      if (!isNil(bookmarkIDs)) {
+        bookmarks = bookmarkIDs;
+      } else {
+        const { enabled, bookmarkedProducts } = settings;
+        if (enabled && bookmarkedProducts) {
+          const storedBookmarks = await BookmarkStorageService.retrieveBookmarks();
+          const ids = [
+            ...new Set(storedBookmarks.map((bookmark) => bookmark.nid))
+          ];
+          bookmarks = ids;
+        }
+      }
       const data = devicePrefs(language, bookmarks, settings);
       registerDevice(getTokenID(token), language, data);
       saveExpoPushToken(token);

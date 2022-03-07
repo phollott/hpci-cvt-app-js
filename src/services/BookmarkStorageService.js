@@ -57,7 +57,7 @@ const deleteProductBookmarks = async (id) => {
   ]);
 };
 
-const retrieveBookmarks = async (syncWithProducts) => {
+const retrieveBookmarks = async (syncWithProducts = null) => {
   let keys = [];
   let storedBookmarks = [];
   const bookmarks = [];
