@@ -1,8 +1,7 @@
 /* eslint-disable no-console */
 import * as React from 'react';
-import { StatusBar } from 'react-native';
+import { Appearance, StatusBar } from 'react-native';
 import AppLoading from 'expo-app-loading';
-import { Appearance } from 'react-native-appearance';
 import { Provider as ReactProvider } from 'react-redux';
 import { createStore } from 'redux';
 import * as Localization from 'expo-localization';
@@ -43,7 +42,7 @@ class App extends React.Component {
     const colorScheme = Appearance.getColorScheme();
 
     // if light or dark
-    if (colorScheme !== 'no-preference') {
+    if (colorScheme === 'light' || colorScheme === 'dark') {
       this.setState({
         theme: colorScheme
       });
