@@ -5,11 +5,10 @@
 
 ### Technical Notes
 
-- Expo SDK 42
-- React Native 0.63
+- Expo SDK 43
+- React Native 0.64
 - React Navigation v5
 - React Native Paper v4
-- iOS 13 Appearance Support (with [react-native-appearance](https://github.com/expo/react-native-appearance))
 - Preloading/caching local assets
 - Checker for the iOS notch: iPhoneX, iPhoneXs, iPhoneXr, iPhoneXs Max
 
@@ -73,9 +72,13 @@ Run project locally: `expo start` or `expo start --tunnel`
 
 ## demo and release notes
 
-HC CVT App - prototype
+HC CVT App
 
-### version: 0.0.42 (current)
+### version: 0.0.43 (current)
+
+- upgraded expo sdk from 42 to 43
+
+### version: 0.0.42
 
 - upgraded expo sdk from 41 to 42
 
