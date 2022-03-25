@@ -1,8 +1,8 @@
-import { PNS_API_URL_SEND } from 'react-native-dotenv';
+import { ENV, PNS_API_URL_SEND } from 'react-native-dotenv';
 import { devicesAPIUrl, notificationsAPIUrl } from '../config/routes';
 import { isNil } from '../shared/util';
 
-// TODO: ensure dev only, send is only used by Push Notifcations Screen Dev Tool
+// dev only: send is only used by Push Notifcations Screen Dev Tool
 const sendNotificationsAPIUrl = PNS_API_URL_SEND;
 
 // eslint-disable-next-line no-undef
@@ -98,12 +98,16 @@ const fetchNotificationsAsync = async (token) => {
 
 const sendPushNotification = async (message) => {
   try {
-    const requestInit = {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(message)
-    };
-    fetch(sendNotificationsAPIUrl, requestInit);
+    if (ENV === 'DEV') {
+      const requestInit = {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(message)
+      };
+      fetch(sendNotificationsAPIUrl, requestInit);
+    } else {
+      throw Error('Forbidden');
+    }
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log(
