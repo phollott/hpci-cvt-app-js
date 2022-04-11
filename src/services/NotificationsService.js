@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { Platform } from 'react-native';
-import Constants from 'expo-constants';
+import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { EventRegister } from 'react-native-event-listeners';
 import BookmarkStorageService from './BookmarkStorageService';
@@ -199,7 +199,7 @@ function registerNotificationHandler() {
 async function registerForPushNotificationsAsync() {
   // https://docs.expo.dev/push-notifications/push-notifications-setup/
   let token = '';
-  if (Constants.isDevice) {
+  if (Device.isDevice) {
     const {
       status: existingStatus
     } = await Notifications.getPermissionsAsync();
@@ -221,9 +221,10 @@ async function registerForPushNotificationsAsync() {
       return '';
     }
     // expo managed (would need to provide experience ID if bare)
-    // token = (await Notifications.getExpoPushTokenAsync()).data;
-    const experienceId = '@hpci-cvt/hpci-cvt-app-js';
-    token = (await Notifications.getExpoPushTokenAsync(experienceId)).data;
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    // e.g. expo bare:
+    // const experienceId = 'experience ID';
+    // token = (await Notifications.getExpoPushTokenAsync(experienceId)).data;
     // console.log('Received Expo push token: ', token);
   } else {
     console.log('Must use physical device for Push Notifications.');
