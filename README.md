@@ -5,7 +5,7 @@
 
 ### Technical Notes
 
-- Expo SDK 43
+- Expo SDK 44
 - React Native 0.64
 - React Navigation v5
 - React Native Paper v4
@@ -74,7 +74,11 @@ Run project locally: `expo start` or `expo start --tunnel`
 
 HC CVT App
 
-### version: 0.0.43 (current)
+### version: 0.0.44 (current)
+
+- upgraded expo sdk from 43 to 44
+
+### version: 0.0.43
 
 - upgraded expo sdk from 42 to 43
 

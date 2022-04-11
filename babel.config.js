@@ -6,15 +6,18 @@ module.exports = function(api) {
       "babel-preset-expo"
     ],
     "plugins": [
-      ["module:react-native-dotenv", {
-        "moduleName": "react-native-dotenv",
-        "path": ".env",
-        "allowlist": null,
-        "blocklist": null,
-        "safe": false,
-        "allowUndefined": true,
-        "verbose": false
-      }]
+      [
+        "module:react-native-dotenv", {
+          "moduleName": "react-native-dotenv",
+          "path": ".env",
+          "allowlist": null,
+          "blocklist": null,
+          "safe": false,
+          "allowUndefined": true,
+          "verbose": false
+        }
+      ],
+      ["react-native-reanimated/plugin"]
     ]
   };
 };

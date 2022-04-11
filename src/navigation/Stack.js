@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { navigationRef, isReadyRef } from './RootNavigation';
@@ -24,25 +25,27 @@ const MainStack = () => {
   }, []);
 
   return (
-    <NavigationContainer
-      ref={navigationRef}
-      onReady={() => {
-        isReadyRef.current = true;
-      }}
-      theme={appTheme}
-    >
-      <Stack.Navigator
-        headerMode="none"
-        initialRouteName="TabNavigator"
-        mode="modal"
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NavigationContainer
+        ref={navigationRef}
+        onReady={() => {
+          isReadyRef.current = true;
+        }}
+        theme={appTheme}
       >
-        <Stack.Screen
-          name="TabNavigator"
-          component={TabNavigator}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+        <Stack.Navigator
+          headerMode="none"
+          initialRouteName="TabNavigator"
+          mode="modal"
+        >
+          <Stack.Screen
+            name="TabNavigator"
+            component={TabNavigator}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 };
 
