@@ -50,7 +50,7 @@ Run project locally: `expo start` or `expo start --tunnel`
 
 ## linting
 
-- run: `yarn lint` for a list of linting warnings/error in cli
+- run: `npm run lint` or `yarn lint` for a list of linting warnings/error in cli
 - prettier and airbnb config
 - make sure you have prettier package installed:
   - [prettier for atom](https://atom.io/packages/prettier-atom)
@@ -58,7 +58,6 @@ Run project locally: `expo start` or `expo start --tunnel`
 - then make sure to enable these options (packages → prettier):
   - eslint integration
   - stylelint integration
-  - automatic format on save (toggle format on save)
 - be aware of the `.prettierignore` file
 
 ## helpful links
@@ -70,34 +69,65 @@ Run project locally: `expo start` or `expo start --tunnel`
 
 - **ios:** The notch on iPhoneX, iPhoneXs, iPhoneXr, iPhoneXs Max is **30pt** from top
 
-## demo and release notes
+## release notes
 
-HC CVT App
+**HC CVT App - Update 0.0.44.1**
 
-### version: 0.0.44 (current)
+### steps to update local dev env
+````
+# get latest from git
+# point env to target PN service
+# update yarn and check files:
+> npm install -g yarn
+> yarn --checkFiles
+> expo start -c
+>  or
+> npm run clean
+````
 
-- upgraded expo sdk from 43 to 44
+### April 11, 2022; version: 0.0.44
 
-### version: 0.0.43
+- **upgraded expo sdk from 43 to 44**
+  - replaced deprecated expo-constants with expo-device
+- wrapped NavigationContainer with GestureHandlerRootView
+- removed Dev Tools menu when environment is not dev
 
-- upgraded expo sdk from 42 to 43
+### March 23, 2022; version: 0.0.43
 
-### version: 0.0.42
+- **upgraded expo sdk from 42 to 43**
+  - React Native updated from 0.63.2 to 0.64.3
+  - react and react-dom both updated from 16.13.1 to 17.0.1
+  - replaced deprecated Appearance from react-native-appearance with Appearance from react-native
+- included bookmarks when registering device with the PN service
+- fixed image src and newline issues when extracting consumer information from the portal
+- added icon to Home screen
+- made tabs scroll page to top on press, and on homescreen when focussed
+- added RefreshControl for products and bookmarks sync to Products and Bookmarks screens
 
-- upgraded expo sdk from 41 to 42
+### January 12, 2022; version: 0.0.42
 
-### version: 0.0.41
+- **upgraded expo sdk from 41 to 42**
+- fixed date sort order issue on Notifications screen
+- added unread badge to Notifications bell icon on header
+- added What's New? item to drawer
+- added message types for notifications
+- persisted notifications settings and added to state store
 
-- upgraded expo sdk from 40 to 41
+### December 17, 2021; version: 0.0.41
 
-### version: 0.0.3
+- **upgraded expo sdk from 40 to 41**
+  - React Native updated from 0.63 to 0.63.2
+- updated terms screen
 
-- added user preference for en-CA/fr-CA
-- removed react-native-svg
-- upgraded to [React Navigation v5](https://reactnavigation.org/docs/upgrading-from-4.x/)
-- introduced cross platform Material Design UI toolkit [React Native Paper](https://reactnativepaper.com/)
-- TODO: add themes - React Native Paper, React Navigation Theme Support / Example Usage ([themes docs](https://reactnavigation.org/docs/themes))
+### December 9, 2021; version: 0.0.3
 
-### version: 0.0.2
+- **initial development**
+  - added user preference for en-CA/fr-CA
+  - removed react-native-svg
+  - upgraded to [React Navigation v5](https://reactnavigation.org/docs/upgrading-from-4.x/)
+  - introduced cross platform Material Design UI toolkit [React Native Paper](https://reactnativepaper.com/)
 
+### March 10, 2021; version: 0.0.2
+
+- **added starter**
 this starter originally from [expo-multi-screen-starter](https://github.com/calebnance/expo-multi-screen-starter), by Caleb Nance
