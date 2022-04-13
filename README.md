@@ -6,11 +6,12 @@
 ### Technical Notes
 
 - Expo SDK 44
-- React Native 0.64
+- React Native 0.64.3
 - React Navigation v5
 - React Native Paper v4
-- Preloading/caching local assets
-- Checker for the iOS notch: iPhoneX, iPhoneXs, iPhoneXr, iPhoneXs Max
+- React Redux v7
+- Async Storage v1
+- Expo Notifications v0
 
 ## Table of Contents
 
@@ -19,7 +20,7 @@
 - [linting](#linting)
 - [helpful links](#helpful-links)
 - [device learnings](#device-learnings)
-- [demo & release notes](#demo-and-release-notes)
+- [release notes](#release-notes)
 
 ## install
 
@@ -43,8 +44,8 @@ Run project locally: `expo start` or `expo start --tunnel`
   - **Android:** [Google Play](https://play.google.com/store/apps/details?id=host.exp.exponent)
   - **Apple:** [App Store](https://itunes.apple.com/us/app/expo-client/id982107779)
 - scan the QR code generated when this project build started (expo start)
-  - **android users:** the QR scanner is built within the Expo Client app! 🤗
-  - **ios 11 and later:** you can open your camera app to scan the QR code, apple made the Expo folks remove the QR scanner from the app for some reason... 🤔
+  - **android users:** the QR scanner is built within the Expo Client app!
+  - **ios 11 and later:** you can open your camera app to scan the QR code, apple made the Expo folks remove the QR scanner from the app for some reason...
   - **ios 10 and below:** work around to [get expo running on older iOS devices](https://blog.calebnance.com/expo/getting-expo-to-work-on-older-iphones-with-no-qr-support.html)
 - having issues? check the [installation page](https://docs.expo.dev/get-started/installation/) for any pitfalls you may have.
 
@@ -89,7 +90,7 @@ Run project locally: `expo start` or `expo start --tunnel`
 
 - **upgraded expo sdk from 43 to 44**
   - replaced deprecated expo-constants with expo-device
-- wrapped NavigationContainer with GestureHandlerRootView
+  - wrapped NavigationContainer with GestureHandlerRootView
 - removed Dev Tools menu when environment is not dev
 
 ### March 23, 2022; version: 0.0.43
@@ -122,12 +123,12 @@ Run project locally: `expo start` or `expo start --tunnel`
 ### December 9, 2021; version: 0.0.3
 
 - **initial development**
-  - added user preference for en-CA/fr-CA
-  - removed react-native-svg
-  - upgraded to [React Navigation v5](https://reactnavigation.org/docs/upgrading-from-4.x/)
-  - introduced cross platform Material Design UI toolkit [React Native Paper](https://reactnativepaper.com/)
+- added user preference for en-CA/fr-CA
+- removed react-native-svg
+- upgraded to [React Navigation v5](https://reactnavigation.org/docs/upgrading-from-4.x/)
+- introduced cross platform Material Design UI toolkit [React Native Paper](https://reactnativepaper.com/)
 
 ### March 10, 2021; version: 0.0.2
 
 - **added starter**
-this starter originally from [expo-multi-screen-starter](https://github.com/calebnance/expo-multi-screen-starter), by Caleb Nance
+  - this starter originally from [expo-multi-screen-starter](https://github.com/calebnance/expo-multi-screen-starter), by Caleb Nance
