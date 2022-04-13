@@ -78,7 +78,8 @@ Run project locally: `expo start` or `expo start --tunnel`
 ````
 # get latest from git
 # point env to target PN service
-# update yarn and check files:
+# update expo-cli, yarn and check files:
+> npm install -g expo-cli
 > npm install -g yarn
 > yarn --checkFiles
 > expo start -c
