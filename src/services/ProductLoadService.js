@@ -151,7 +151,7 @@ const loadConsumerInformation = async (resourceLink, language, nid) => {
         });
 
       // Extract Accordion data from COVID Portal Consumer Information
-      $('details.span-8')
+      $('details:not(.brdr-0)')
         .parent()
         .each((i, detail) => {
           const accordionItem = {
