@@ -1,6 +1,7 @@
 node_modules/**/*
 .expo/*
 .idea/*
+tunnel/.expo/*
 web-build/*
 .expo-shared/*
 web-build/*
