@@ -20,7 +20,6 @@
       },
       "ios": {
         "image": "default",
-        "buildConfiguration": "release",
         "env": {
           "PLATFORM": "ios"
         }
