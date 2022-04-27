@@ -6,7 +6,7 @@ import {
   DrawerItemList,
   DrawerItem
 } from '@react-navigation/drawer';
-import { ENV } from 'react-native-dotenv';
+import { PNS_ENV } from 'react-native-dotenv';
 import { t } from 'i18n-js';
 import { colors } from '../constants';
 import Icon from '../components/Icon';
@@ -111,10 +111,10 @@ const MenuDrawer = (props) => {
           navigation.navigate('NotificationsSettings');
         }}
       />
-      {ENV === 'DEV' && <HorizontalLine />}
-      {ENV === 'DEV' && <DrawerItem label={t('home.menu.toolsLabel')} icon={ToolIcon} onPress={() => {}} />}
-      {ENV === 'DEV' && <DrawerItem label={t('home.menu.sendNotificationLabel')} labelStyle={{ paddingLeft: 72 }} onPress={() => { navigation.navigate('PushNotification'); }} />}
-      {ENV === 'DEV' && <DrawerItem label={t('home.menu.removeLabel')} labelStyle={{ paddingLeft: 72 }} onPress={() => { RemoveData(props); closeDrawer(navigation); }} />}
+      {PNS_ENV === 'development' && <HorizontalLine />}
+      {PNS_ENV === 'development' && <DrawerItem label={t('home.menu.toolsLabel')} icon={ToolIcon} onPress={() => {}} />}
+      {PNS_ENV === 'development' && <DrawerItem label={t('home.menu.sendNotificationLabel')} labelStyle={{ paddingLeft: 72 }} onPress={() => { navigation.navigate('PushNotification'); }} />}
+      {PNS_ENV === 'development' && <DrawerItem label={t('home.menu.removeLabel')} labelStyle={{ paddingLeft: 72 }} onPress={() => { RemoveData(props); closeDrawer(navigation); }} />}
       {1 === 0 && <HorizontalLine />}
       {1 === 0 && <DrawerItemList {...props} />}
     </DrawerContentScrollView>

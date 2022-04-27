@@ -1,0 +1,42 @@
+name: Expo Publish - pull request
+on: [pull_request]
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🏗 Setup repo
+        uses: actions/checkout@v2
+
+      - name: 🏗 Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+          cache: yarn
+
+      - name: 🏗 Setup Expo
+        uses: expo/expo-github-action@v7
+        with:
+          expo-version: 5.x
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: 🏗 Setup Environment
+        uses: actions/github-script@v4
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+        with:
+          script: |
+            const fs = require('fs');
+            if (!fs.existsSync('.env')) {
+              fs.writeFileSync('.env', process.env.ENV_FILE);
+            }
+
+      - name: 📦 Install dependencies
+        run: yarn install
+
+      - name: 🚀 Publish preview
+        run: expo publish --release-channel=pr-${{ github.event.number }} --non-interactive --target managed
+
+      - name: 💬 Comment preview
+        uses: expo/expo-github-action/preview-comment@v7
+        with:
+          channel: pr-${{ github.event.number }}
