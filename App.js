@@ -1,12 +1,13 @@
 /* eslint-disable no-console */
 import * as React from 'react';
-import { Appearance, StatusBar } from 'react-native';
+import { Appearance } from 'react-native';
 import AppLoading from 'expo-app-loading';
+import { StatusBar } from 'expo-status-bar';
 import { Provider as ReactProvider } from 'react-redux';
 import { createStore } from 'redux';
 import * as Localization from 'expo-localization';
 import * as I18n from './src/config/i18n';
-import { device, func } from './src/constants';
+import { func } from './src/constants';
 import { lang } from './src/constants/constants';
 import {
   bookmarkStorage,
@@ -102,7 +103,7 @@ class App extends React.Component {
 
   render() {
     const { isLoading, theme } = this.state;
-    const iOSStatusType = theme === 'light' ? 'dark-content' : 'light-content';
+    const statusType = theme === 'light' ? 'dark-content' : 'light-content';
 
     if (isLoading) {
       return (
@@ -122,7 +123,7 @@ class App extends React.Component {
     return (
       <ReactProvider store={store}>
         <React.Fragment>
-          <StatusBar barStyle={device.iOS ? iOSStatusType : 'light-content'} />
+          <StatusBar style={statusType} />
           <MainStack
             screenProps={{
               updateTheme: this.updateTheme
