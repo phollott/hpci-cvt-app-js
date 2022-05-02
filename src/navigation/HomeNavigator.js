@@ -24,6 +24,7 @@ const HomeNavigator = () => {
       drawerPosition="left"
       drawerStyle={{
         backgroundColor: colors.lightGrey,
+        paddingTop: 20,
         width: 302
       }}
       drawerContentOptions={{
