@@ -7,6 +7,7 @@ import {
   DrawerItem
 } from '@react-navigation/drawer';
 import { PNS_ENV } from 'react-native-dotenv';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { t } from 'i18n-js';
 import { colors } from '../constants';
 import Icon from '../components/Icon';
@@ -66,58 +67,60 @@ const MenuDrawer = (props) => {
   );
 
   return (
-    <DrawerContentScrollView {...props}>
-      <DrawerItem
-        label={t('home.menu.aboutLabel')}
-        icon={AboutIcon}
-        onPress={() => {
-          navigation.navigate('About');
-        }}
-      />
-      <DrawerItem
-        label={t('home.menu.termsLabel')}
-        icon={TermsIcon}
-        onPress={() => {
-          navigation.navigate('Terms');
-        }}
-      />
-      <DrawerItem
-        label={t('home.menu.whatsNewLabel')}
-        icon={BellIcon}
-        onPress={() => {
-          navigation.navigate('Notifications');
-        }}
-      />
-      <DrawerItem
-        label={t('home.menu.settingsLabel')}
-        icon={SettingsIcon}
-        onPress={() => {}}
-      />
-      <DrawerItem
-        label={t('home.menu.languageLabel')}
-        labelStyle={{
-          paddingLeft: 72
-        }}
-        onPress={() => {
-          navigation.navigate('Language');
-        }}
-      />
-      <DrawerItem
-        label={t('home.menu.notificationsLabel')}
-        labelStyle={{
-          paddingLeft: 72
-        }}
-        onPress={() => {
-          navigation.navigate('NotificationsSettings');
-        }}
-      />
-      {PNS_ENV === 'development' && <HorizontalLine />}
-      {PNS_ENV === 'development' && <DrawerItem label={t('home.menu.toolsLabel')} icon={ToolIcon} onPress={() => {}} />}
-      {PNS_ENV === 'development' && <DrawerItem label={t('home.menu.sendNotificationLabel')} labelStyle={{ paddingLeft: 72 }} onPress={() => { navigation.navigate('PushNotification'); }} />}
-      {PNS_ENV === 'development' && <DrawerItem label={t('home.menu.removeLabel')} labelStyle={{ paddingLeft: 72 }} onPress={() => { RemoveData(props); closeDrawer(navigation); }} />}
-      {1 === 0 && <HorizontalLine />}
-      {1 === 0 && <DrawerItemList {...props} />}
-    </DrawerContentScrollView>
+    <SafeAreaProvider>
+      <DrawerContentScrollView {...props}>
+        <DrawerItem
+          label={t('home.menu.aboutLabel')}
+          icon={AboutIcon}
+          onPress={() => {
+            navigation.navigate('About');
+          }}
+        />
+        <DrawerItem
+          label={t('home.menu.termsLabel')}
+          icon={TermsIcon}
+          onPress={() => {
+            navigation.navigate('Terms');
+          }}
+        />
+        <DrawerItem
+          label={t('home.menu.whatsNewLabel')}
+          icon={BellIcon}
+          onPress={() => {
+            navigation.navigate('Notifications');
+          }}
+        />
+        <DrawerItem
+          label={t('home.menu.settingsLabel')}
+          icon={SettingsIcon}
+          onPress={() => {}}
+        />
+        <DrawerItem
+          label={t('home.menu.languageLabel')}
+          labelStyle={{
+            paddingLeft: 72
+          }}
+          onPress={() => {
+            navigation.navigate('Language');
+          }}
+        />
+        <DrawerItem
+          label={t('home.menu.notificationsLabel')}
+          labelStyle={{
+            paddingLeft: 72
+          }}
+          onPress={() => {
+            navigation.navigate('NotificationsSettings');
+          }}
+        />
+        {PNS_ENV === 'development' && <HorizontalLine />}
+        {PNS_ENV === 'development' && <DrawerItem label={t('home.menu.toolsLabel')} icon={ToolIcon} onPress={() => {}} />}
+        {PNS_ENV === 'development' && <DrawerItem label={t('home.menu.sendNotificationLabel')} labelStyle={{ paddingLeft: 72 }} onPress={() => { navigation.navigate('PushNotification'); }} />}
+        {PNS_ENV === 'development' && <DrawerItem label={t('home.menu.removeLabel')} labelStyle={{ paddingLeft: 72 }} onPress={() => { RemoveData(props); closeDrawer(navigation); }} />}
+        {1 === 0 && <HorizontalLine />}
+        {1 === 0 && <DrawerItemList {...props} />}
+      </DrawerContentScrollView>
+    </SafeAreaProvider>
   );
 };
 

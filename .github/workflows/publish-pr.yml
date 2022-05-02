@@ -22,7 +22,7 @@ jobs:
       - name: 🏗 Setup Environment
         uses: actions/github-script@v4
         env:
-          ENV_FILE: ${{ secrets.ENV_FILE }}
+          ENV_FILE: ${{ secrets.ENV_FILE_HEROKU }}
         with:
           script: |
             const fs = require('fs');
