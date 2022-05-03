@@ -1,4 +1,4 @@
-import { ENV, PNS_API_URL_SEND } from 'react-native-dotenv';
+import { PNS_ENV, PNS_API_URL_SEND } from 'react-native-dotenv';
 import { devicesAPIUrl, notificationsAPIUrl } from '../config/routes';
 import { isNil } from '../shared/util';
 
@@ -98,7 +98,7 @@ const fetchNotificationsAsync = async (token) => {
 
 const sendPushNotification = async (message) => {
   try {
-    if (ENV === 'DEV') {
+    if (PNS_ENV === 'development') {
       const requestInit = {
         method: 'POST',
         headers,

@@ -1,0 +1,91 @@
+{
+  "cli": {
+    "requireCommit": true,
+    "version": ">= 0.51.0"
+  },
+  "build": {
+    "base": {
+      "node": "16.14.2",
+      "yarn": "1.22.18",
+      "developmentClient": false,
+      "env": {
+        "EXAMPLE_ENV": "example value"
+      },
+      "android": {
+        "image": "default",
+        "withoutCredentials": false,
+        "env": {
+          "PLATFORM": "android"
+        }
+      },
+      "ios": {
+        "image": "default",
+        "env": {
+          "PLATFORM": "ios"
+        }
+      }
+    },
+    "development": {
+      "extends": "base",
+      "distribution": "internal",
+      "env": {
+        "APP_ENV": "development"
+      },
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "simulator": false
+      }
+    },
+    "preview": {
+      "extends": "base",
+      "distribution": "internal",
+      "env": {
+        "APP_ENV": "preview"
+      },
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "simulator": false
+      }
+    },
+    "staging": {
+      "extends": "base",
+      "distribution": "store",
+      "env": {
+        "APP_ENV": "staging"
+      },
+      "android": {
+        "buildType": "app-bundle"
+      },
+      "ios": {
+        "simulator": false
+      }
+    },
+    "production": {
+      "extends": "base",
+      "distribution": "store",
+      "env": {
+        "APP_ENV": "production"
+      },
+      "android": {
+        "buildType": "app-bundle"
+      },
+      "ios": {
+        "simulator": false
+      }
+    }
+  },
+  "submit": {
+    "staging": {
+      "android": {},
+      "ios": {}
+    },
+    "production": {
+      "android": {},
+      "ios": {}
+    }
+  }
+}

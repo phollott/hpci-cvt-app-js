@@ -12,6 +12,8 @@
 - React Redux v7
 - Async Storage v1
 - Expo Notifications v0
+- Node: >=16.14.2
+- Yarn: >=1.22.18
 
 ## Table of Contents
 
@@ -24,9 +26,12 @@
 
 ## install
 
-First, make sure you have Expo CLI installed: `npm install -g expo-cli`
+First, make sure you have Expo CLI installed: 
 
-Install: `yarn` or `yarn install`
+Install: 
+
+- `npm install -g expo-cli`
+- `yarn` or `yarn install`
 
 Create .env file: copy contents of .env.template and set variables (create in same location)
 
@@ -35,8 +40,9 @@ Run project locally: `expo start` or `expo start --tunnel`
 ## development on a physical device
 
 - first, your machine and physical device should be on the same wifi connection
-- make sure you have Expo CLI installed globally, if not run:
+- make sure you have Expo CLI and EAS CLI installed globally, if not run:
   - `npm install -g expo-cli`
+  - `npm install -g eas-cli`
 - then configure .env: see .env.template
 - then navigate to this project's directory on your machine and run:
   - `expo start`
@@ -72,20 +78,35 @@ Run project locally: `expo start` or `expo start --tunnel`
 
 ## release notes
 
-**HC CVT App - Update 0.0.44.1**
+**HC CVT App - Update 0.0.44.2**
 
 ### steps to update local dev env
 ````
+# sign in with your expo developer account (i.e. not the expo owner)
+# verify expo login:
+> expo whoami
 # get latest from git
 # point env to target PN service
-# update expo-cli, yarn and check files:
+# update expo-cli:
 > npm install -g expo-cli
+# update eas-cli if running local builds:
+> npm install -g eas-cli
+# if directed, install npm as instructed
+# update yarn and check files:
 > npm install -g yarn
 > yarn --checkFiles
 > expo start -c
 >  or
 > npm run clean
 ````
+
+### May 2, 2022; version: 0.0.44, build 2
+
+- **migrated from Expo classic build to EAS build**
+  - added build profiles (eas.json)
+  - added publish and build workflows (yml)
+  - wrapped MenuDrawer with SafeAreaProvider to resolve padding issue for android
+  - installed expo-status-bar and upgraded expo-updates to resolve status bar issues for android
 
 ### April 11, 2022; version: 0.0.44
 
