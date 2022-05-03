@@ -100,7 +100,7 @@ Run project locally: `expo start` or `expo start --tunnel`
 > npm run clean
 ````
 
-### May 2, 2022; version: 0.0.44, build 2
+### May 3, 2022; version: 0.0.44, build 2
 
 - **migrated from Expo classic build to EAS build**
   - added build profiles (eas.json)
