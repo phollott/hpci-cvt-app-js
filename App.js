@@ -103,7 +103,9 @@ class App extends React.Component {
 
   render() {
     const { isLoading, theme } = this.state;
-    const statusType = theme === 'light' ? 'dark-content' : 'light-content';
+
+    // TODO: light and dark themes
+    const statusType = theme === 'light' ? 'light' : 'light';
 
     if (isLoading) {
       return (
