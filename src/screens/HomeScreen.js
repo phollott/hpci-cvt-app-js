@@ -139,7 +139,7 @@ const HomeScreen = ({ navigation }) => {
                   textAlign: 'center'
                 }}
               >
-                v0.0.44
+                v0.0.45
               </Text>
             </Card.Content>
             <View style={{ height: fillSpace(), width: '100%' }} />
