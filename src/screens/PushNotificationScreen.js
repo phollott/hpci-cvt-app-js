@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView, Text, View } from 'react-native';
+import { PNS_ENV } from 'react-native-dotenv';
 import { Checkbox, TextInput } from 'react-native-paper';
 import { useTheme } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -267,66 +268,68 @@ const PushNotificationScreen = ({ navigation, route }) => {
               />
             </View>
             <View style={gStyle.spacer16} />
-            <View style={{ width: '100%', justifyContent: 'center' }}>
-              <Touch
-                onPress={async () => {
-                  if (
-                    messageTextEn.length === 0 &&
-                    messageTextFr.length === 0
-                  ) {
-                    Alert('Please enter a message.');
-                    return;
-                  }
-                  if (
-                    (messageTextEn.length > 0 && titleTextEn.length === 0) ||
-                    (messageTextFr.length > 0 && titleTextFr.length === 0)
-                  ) {
-                    Alert('Please enter a title.');
-                    return;
-                  }
-                  if (
-                    linkText.length > 0 &&
-                    !(
-                      linkText.toLowerCase().startsWith('https://') ||
-                      linkText.toLowerCase().startsWith('http://')
-                    )
-                  ) {
-                    Alert('Please enter a valid external link.');
-                    return;
-                  }
-                  if (addTestResourceChecked) {
-                    products.forEach((product) => {
-                      if (product.checked) {
-                        // get en and fr products from testProducts and dispatch
-                        const testProduct = testProducts.filter((tp) => {
-                          return tp.nid === product.nid;
-                        });
-                        replaceProductWithTestProduct(testProduct);
-                        // dispatch if bookmarked
-                        if (
-                          bookmarksInStore.some((bm) => {
-                            return bm.nid === product.nid;
-                          })
-                        ) {
-                          replaceBookmarkWithTestProduct([...testProduct]);
+            {PNS_ENV === 'development' && (
+              <View style={{ width: '100%', justifyContent: 'center' }}>
+                <Touch
+                  onPress={async () => {
+                    if (
+                      messageTextEn.length === 0 &&
+                      messageTextFr.length === 0
+                    ) {
+                      Alert('Please enter a message.');
+                      return;
+                    }
+                    if (
+                      (messageTextEn.length > 0 && titleTextEn.length === 0) ||
+                      (messageTextFr.length > 0 && titleTextFr.length === 0)
+                    ) {
+                      Alert('Please enter a title.');
+                      return;
+                    }
+                    if (
+                      linkText.length > 0 &&
+                      !(
+                        linkText.toLowerCase().startsWith('https://') ||
+                        linkText.toLowerCase().startsWith('http://')
+                      )
+                    ) {
+                      Alert('Please enter a valid external link.');
+                      return;
+                    }
+                    if (addTestResourceChecked) {
+                      products.forEach((product) => {
+                        if (product.checked) {
+                          // get en and fr products from testProducts and dispatch
+                          const testProduct = testProducts.filter((tp) => {
+                            return tp.nid === product.nid;
+                          });
+                          replaceProductWithTestProduct(testProduct);
+                          // dispatch if bookmarked
+                          if (
+                            bookmarksInStore.some((bm) => {
+                              return bm.nid === product.nid;
+                            })
+                          ) {
+                            replaceBookmarkWithTestProduct([...testProduct]);
+                          }
                         }
-                      }
-                    });
-                    navStacks();
-                  }
-                  await dispatchPushNotificationToAll(
-                    titleTextEn,
-                    messageTextEn,
-                    titleTextFr,
-                    messageTextFr,
-                    products,
-                    linkText.toLowerCase()
-                  );
-                }}
-                text={t('home.pushNotification.button.sendTitle.all')}
-                lIconName="share"
-              />
-            </View>
+                      });
+                      navStacks();
+                    }
+                    await dispatchPushNotificationToAll(
+                      titleTextEn,
+                      messageTextEn,
+                      titleTextFr,
+                      messageTextFr,
+                      products,
+                      linkText.toLowerCase()
+                    );
+                  }}
+                  text={t('home.pushNotification.button.sendTitle.all')}
+                  lIconName="share"
+                />
+              </View>
+            )}
             <View style={{ width: '100%', justifyContent: 'center' }}>
               <Touch
                 onPress={async () => {

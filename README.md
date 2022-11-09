@@ -5,8 +5,8 @@
 
 ### Technical Notes
 
-- Expo SDK 44
-- React Native 0.64.3
+- Expo SDK 45
+- React Native 0.68.2
 - React Navigation v5
 - React Native Paper v4
 - React Redux v7
@@ -78,7 +78,7 @@ Run project locally: `expo start` or `expo start --tunnel`
 
 ## release notes
 
-**HC CVT App - Update 0.0.44.2**
+**HC CVT App - Update 0.0.45**
 
 ### steps to update local dev env
 ````
@@ -92,13 +92,23 @@ Run project locally: `expo start` or `expo start --tunnel`
 # update eas-cli if running local builds:
 > npm install -g eas-cli
 # if directed, install npm as instructed
-# update yarn and check files:
+# update yarn:
 > npm install -g yarn
+# check files:
 > yarn --checkFiles
+# or remove node_modules and run:
+> yarn install
+# clean on first start:
 > expo start -c
 >  or
 > npm run clean
 ````
+
+### November 9, 2022; version: 0.0.45
+
+- **upgraded expo sdk from 44 to 45**
+  - React Native updated from 0.64.3 to 0.68.2
+  - react and react-dom both updated from 17.0.1 to 17.0.2
 
 ### May 3, 2022; version: 0.0.44, build 2
 
