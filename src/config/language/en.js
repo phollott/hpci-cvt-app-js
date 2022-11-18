@@ -216,7 +216,7 @@ export default {
   },
   products: {
     searchBar: {
-      placeholder: ''
+      placeholder: 'Search Vaccines and Treatments...'
     },
     card: {
       title: 'COVID-19 Health Products',

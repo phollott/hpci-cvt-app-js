@@ -216,7 +216,7 @@ export default {
   },
   products: {
     searchBar: {
-      placeholder: ''
+      placeholder: 'Filtrer les vaccins et traitements...'
     },
     card: {
       title: 'Produits de santé COVID-19',

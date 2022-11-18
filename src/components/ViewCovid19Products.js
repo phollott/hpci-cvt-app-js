@@ -127,6 +127,7 @@ class ViewCovid19Products extends Component {
               placeholder={t('products.searchBar.placeholder')}
               onChangeText={this.updateSearch}
               value={searchText}
+              inputStyle={{ fontSize: 14 }}
               style={{ borderRadius: 0 }}
             />
             <View style={gStyle.spacer8} />
