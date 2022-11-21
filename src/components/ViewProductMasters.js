@@ -5,7 +5,7 @@ import Icon from './Icon';
 import { colors } from '../constants';
 import { productPropsStorage } from '../services';
 import { getTimeInMillis, getUTCDate } from '../shared/date-fns';
-import { isNil } from '../shared/util';
+import { capitalizeFirstChar, isNil } from '../shared/util';
 
 export default class ViewProductMasters extends Component {
   constructor(props) {
@@ -103,17 +103,13 @@ export default class ViewProductMasters extends Component {
               titleNumberOfLines={2}
               description={() => {
                 return (
-                  <Text>
-                    <Text style={{ color: colors.grey }}>
-                      {productMaster.ingredient}
-                    </Text>
-                    {productMaster.note.length > 0 && '\n'}
-                    <Text style={{ color: colors.grey }}>
-                      {productMaster.note}
-                    </Text>
+                  <Text style={{ fontSize: 12 }}>
+                    <Text>{productMaster.ingredient}</Text>
                     {'\n'}
-                    <Text style={{ fontSize: 12 }}>
-                      {productMaster.companyName}
+                    <Text>{productMaster.companyName}</Text>
+                    {productMaster.note.length > 0 && '\n'}
+                    <Text style={{ fontStyle: 'italic' }}>
+                      {capitalizeFirstChar(productMaster.note)}
                     </Text>
                   </Text>
                 );

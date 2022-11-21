@@ -160,6 +160,7 @@ const loadConsumerInformation = async (resourceLink, language, nid) => {
               .find('div')
               .html()
               .replace(/<br>\n/gm, '<br />')
+              .replace(/<p>\s/gm, '<p>')
               .replace(/(\r\n|\n|\r)/gm, ' ')
               // eslint-disable-next-line no-useless-escape
               .replace(/src=\"images\//g, `src=\"${cvtPortal}/info/images/`),

@@ -1,6 +1,10 @@
 /* eslint-disable no-console */
 import { getDate } from './date-fns';
 
+const capitalizeFirstChar = (str) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
 const isNil = (value) => {
   return typeof value === 'undefined' || value === null;
 };
@@ -33,4 +37,4 @@ const waitUntil = async (condf, timeout) => {
   });
 };
 
-export { isNil, isObjectEmpty, wait, waitUntil };
+export { capitalizeFirstChar, isNil, isObjectEmpty, wait, waitUntil };
