@@ -185,6 +185,7 @@ class ViewProductDetails extends Component {
           <List.AccordionGroup>
             <List.Accordion
               id="pri"
+              style={{ backgroundColor: 'white' }}
               title={t('productDetails.accordion.pri')}
               titleStyle={{ fontWeight: 'bold' }}
               titleNumberOfLines={2}
@@ -226,6 +227,7 @@ class ViewProductDetails extends Component {
             <Divider />
             <List.Accordion
               id="pmi"
+              style={{ backgroundColor: 'white' }}
               title={t('productDetails.accordion.pmi')}
               titleStyle={{ fontWeight: 'bold' }}
               titleNumberOfLines={2}
@@ -267,6 +269,7 @@ class ViewProductDetails extends Component {
                     <Divider />
                     <List.Accordion
                       id={accordionItem.key}
+                      style={{ backgroundColor: 'white' }}
                       title={accordionItem.summary}
                       titleNumberOfLines={2}
                       theme={{ colors: { primary: colors.blue } }}
@@ -283,6 +286,7 @@ class ViewProductDetails extends Component {
             <Divider />
             <List.Accordion
               id="add"
+              style={{ backgroundColor: 'white' }}
               title={t('productDetails.accordion.add')}
               titleStyle={{ fontWeight: 'bold' }}
               titleNumberOfLines={2}
@@ -368,6 +372,7 @@ class ViewProductDetails extends Component {
             <Divider />
             <List.Accordion
               id="reg"
+              style={{ backgroundColor: 'white' }}
               title={t('productDetails.accordion.reg')}
               titleStyle={{ fontWeight: 'bold' }}
               titleNumberOfLines={2}

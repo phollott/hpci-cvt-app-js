@@ -62,6 +62,7 @@ const TermsScreen = ({ navigation }) => {
           <List.AccordionGroup>
             <List.Accordion
               id="tou"
+              style={{ backgroundColor: 'white' }}
               title={t('home.terms.accordion.tou')}
               titleStyle={{ fontWeight: 'bold' }}
               titleNumberOfLines={2}
@@ -98,6 +99,7 @@ const TermsScreen = ({ navigation }) => {
             <Divider />
             <List.Accordion
               id="pri"
+              style={{ backgroundColor: 'white' }}
               title={t('home.terms.accordion.pri')}
               titleStyle={{ fontWeight: 'bold' }}
               titleNumberOfLines={2}
@@ -112,6 +114,7 @@ const TermsScreen = ({ navigation }) => {
             <Divider />
             <List.Accordion
               id="con"
+              style={{ backgroundColor: 'white' }}
               title={t('home.terms.accordion.con')}
               titleStyle={{ fontWeight: 'bold' }}
               titleNumberOfLines={2}
