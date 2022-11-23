@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     width: '90%'
   },
   defaultLabel: {
-    color: colors.green,
+    color: colors.blue,
     fontSize: 12,
     fontWeight: 'bold'
   }
