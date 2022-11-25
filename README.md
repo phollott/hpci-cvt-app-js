@@ -35,7 +35,7 @@ Install:
 
 Create .env file: copy contents of .env.template and set variables (create in same location)
 
-Run project locally: `expo start` or `expo start --tunnel`
+Run project locally: `npx expo start` or `npx expo start --tunnel`
 
 ## development on a physical device
 
@@ -45,7 +45,7 @@ Run project locally: `expo start` or `expo start --tunnel`
   - `npm install -g eas-cli`
 - then configure .env: see .env.template
 - then navigate to this project's directory on your machine and run:
-  - `expo start`
+  - `npx expo start`
 - now download the Expo Client app on your preferred physical device:
   - **Android:** [Google Play](https://play.google.com/store/apps/details?id=host.exp.exponent)
   - **Apple:** [App Store](https://itunes.apple.com/us/app/expo-client/id982107779)
@@ -105,7 +105,8 @@ Run project locally: `expo start` or `expo start --tunnel`
 ### November 28, 2022; version: 0.0.46
 
 - **upgraded expo sdk from 45 to 46 (August)**
-  - 
+  - React Native updated from 0.68.2 to 0.69.6
+  - react and react-dom both updated from 17.0.2 to 18.0.0
 
   - See https://blog.expo.dev/expo-sdk-46-c2a1655f63f7, note:
 ````
