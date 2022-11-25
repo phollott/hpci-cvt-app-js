@@ -5,7 +5,7 @@
 
 ### Technical Notes
 
-- Expo SDK 45
+- Expo SDK 46
 - React Native 0.68.2
 - React Navigation v5
 - React Native Paper v4
@@ -35,7 +35,7 @@ Install:
 
 Create .env file: copy contents of .env.template and set variables (create in same location)
 
-Run project locally: `expo start` or `expo start --tunnel`
+Run project locally: `npx expo start` or `npx expo start --tunnel`
 
 ## development on a physical device
 
@@ -45,7 +45,7 @@ Run project locally: `expo start` or `expo start --tunnel`
   - `npm install -g eas-cli`
 - then configure .env: see .env.template
 - then navigate to this project's directory on your machine and run:
-  - `expo start`
+  - `npx expo start`
 - now download the Expo Client app on your preferred physical device:
   - **Android:** [Google Play](https://play.google.com/store/apps/details?id=host.exp.exponent)
   - **Apple:** [App Store](https://itunes.apple.com/us/app/expo-client/id982107779)
@@ -78,9 +78,9 @@ Run project locally: `expo start` or `expo start --tunnel`
 
 ## release notes
 
-**HC CVT App - Update 0.0.45**
+**HC CVT App - Update 0.0.46**
 
-### steps to update local dev env
+### _steps to update local dev env_
 ````
 # sign in with your expo developer account (i.e. not the expo owner)
 # verify expo login:
@@ -99,14 +99,27 @@ Run project locally: `expo start` or `expo start --tunnel`
 # or remove node_modules and run:
 > yarn install
 # clean on first start:
-> expo start -c
->  or
-> npm run clean
+> npx expo start -c
+````
+
+### November 28, 2022; version: 0.0.46
+
+- **upgraded expo sdk from 45 to 46 (August)**
+  - React Native updated from 0.68.2 to 0.69.6
+  - react and react-dom both updated from 17.0.2 to 18.0.0
+
+  - See https://blog.expo.dev/expo-sdk-46-c2a1655f63f7, note:
+````
+- To use the new local CLI: run npx expo or yarn expo in your project directory, eg: npx expo start. The local CLI will automatically be invoked by scripts in your package.json, but otherwise you need to prefix it with npx.
+- If you run expo start in your project, the global CLI will be used.
+- If you run npx expo start, the local CLI will be used.
+- To explicitly invoke the legacy globally installed CLI: use expo-cli instead of expo, eg: expo-cli publish.
+- Global Expo CLI is still required for expo upgrade and expo doctor: these commands haven’t yet been migrated to standalone packages, they are up next. Invoke them with expo-cli upgrade and expo-cli doctor.
 ````
 
 ### November 9, 2022; version: 0.0.45
 
-- **upgraded expo sdk from 44 to 45**
+- **upgraded expo sdk from 44 to 45 (May)**
   - React Native updated from 0.64.3 to 0.68.2
   - react and react-dom both updated from 17.0.1 to 17.0.2
 
@@ -120,7 +133,7 @@ Run project locally: `expo start` or `expo start --tunnel`
 
 ### April 11, 2022; version: 0.0.44
 
-- **upgraded expo sdk from 43 to 44**
+- **upgraded expo sdk from 43 to 44 (Dec)**
   - replaced deprecated expo-constants with expo-device
   - wrapped NavigationContainer with GestureHandlerRootView
 - removed Dev Tools menu when environment is not dev
