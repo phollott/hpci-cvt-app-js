@@ -122,6 +122,7 @@ Run project locally: `npx expo start` or `npx expo start --tunnel`
 - **upgraded expo sdk from 44 to 45 (May)**
   - React Native updated from 0.64.3 to 0.68.2
   - react and react-dom both updated from 17.0.1 to 17.0.2
+- minor accessiblity/usability improvements
 
 ### May 3, 2022; version: 0.0.44, build 2
 
