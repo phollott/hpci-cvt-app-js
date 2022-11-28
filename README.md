@@ -107,7 +107,6 @@ Run project locally: `npx expo start` or `npx expo start --tunnel`
 - **upgraded expo sdk from 45 to 46 (August)**
   - React Native updated from 0.68.2 to 0.69.6
   - react and react-dom both updated from 17.0.2 to 18.0.0
-
   - See https://blog.expo.dev/expo-sdk-46-c2a1655f63f7, note:
 ````
 - To use the new local CLI: run npx expo or yarn expo in your project directory, eg: npx expo start. The local CLI will automatically be invoked by scripts in your package.json, but otherwise you need to prefix it with npx.
@@ -116,6 +115,7 @@ Run project locally: `npx expo start` or `npx expo start --tunnel`
 - To explicitly invoke the legacy globally installed CLI: use expo-cli instead of expo, eg: expo-cli publish.
 - Global Expo CLI is still required for expo upgrade and expo doctor: these commands haven’t yet been migrated to standalone packages, they are up next. Invoke them with expo-cli upgrade and expo-cli doctor.
 ````
+- minor accessiblity/usability improvements
 
 ### November 9, 2022; version: 0.0.45
 

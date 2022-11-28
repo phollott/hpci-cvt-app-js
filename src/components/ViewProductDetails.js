@@ -9,6 +9,7 @@ import { colors, func, gStyle } from '../constants';
 import { bookmarkKeyPrefix } from '../constants/constants';
 import { selectBookmarkByID } from '../redux/selectors/bookmarkSelector';
 import { selectProductByID } from '../redux/selectors/productSelector';
+import { capitalizeFirstChar } from '../shared/util';
 // services
 import {
   productLoad,
@@ -172,7 +173,7 @@ class ViewProductDetails extends Component {
                 />
                 {productMaster.note.length > 0 && (
                   <ViewLabelledText
-                    text={productMaster.note}
+                    text={capitalizeFirstChar(productMaster.note)}
                     label={t('productDetails.card.productNote')}
                   />
                 )}
