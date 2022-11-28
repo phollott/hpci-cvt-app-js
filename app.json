@@ -6,7 +6,11 @@
     "slug": "hpci-cvt-app-js",
     "privacy": "public",
     "version": "0.0.46",
-    "platforms": ["android", "ios", "web"],
+    "platforms": [
+      "android",
+      "ios",
+      "web"
+    ],
     "githubUrl": "https://github.com/phollott/hpci-cvt-app-js",
     "orientation": "default",
     "primaryColor": "#2a2a2a",
@@ -33,6 +37,11 @@
       "bundleIdentifier": "com.hpcicvt.hpcicvtappjs",
       "buildNumber": "0.0.46",
       "supportsTablet": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ce48ba58-c843-47e9-b7a3-03e8eb2d7e0a"
+      }
     }
   }
 }
