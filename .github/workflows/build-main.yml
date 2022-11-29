@@ -1,6 +1,5 @@
 name: EAS Build - main
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
@@ -15,7 +14,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
-          cache: npm
+          cache: yarn
 
       - name: 🏗 Setup Expo and EAS
         uses: expo/expo-github-action@v7
@@ -36,7 +35,7 @@ jobs:
             }
 
       - name: 📦 Install dependencies
-        run: npm ci
+        run: yarn install
 
       - name: 🚀 Build app on EAS
         run: eas build --profile preview --platform all --non-interactive
