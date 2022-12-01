@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
 import * as React from 'react';
 import { Appearance } from 'react-native';
-import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
 import { Provider as ReactProvider } from 'react-redux';
-import { createStore } from 'redux';
+import { legacy_createStore as createStore} from 'redux';
 import * as Localization from 'expo-localization';
+import * as SplashScreen from 'expo-splash-screen';
 import * as I18n from './src/config/i18n';
 import { func } from './src/constants';
 import { lang } from './src/constants/constants';
@@ -38,7 +38,15 @@ class App extends React.Component {
     this.loadResourcesAsync = this.loadResourcesAsync.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    // prevent splash screen from autohiding
+    try {
+      await SplashScreen.preventAutoHideAsync();
+    } catch (error) {
+      console.log('preventAutoHideAsync error: ', error);
+    }
+    this.loadResourcesAsync();
+
     // get system preference
     const colorScheme = Appearance.getColorScheme();
 
@@ -80,7 +88,8 @@ class App extends React.Component {
         initialState.settings.language = I18n.getCurrentLocale();
       }
 
-      initialState.settings.notifications = await settingsStorage.retrieveNotificationsSettings();
+      initialState.settings.notifications =
+        await settingsStorage.retrieveNotificationsSettings();
     } catch (error) {
       console.log(
         'Unhandled error occured while loading initial state. ',
@@ -90,8 +99,11 @@ class App extends React.Component {
   };
 
   loadResourcesAsync = async () => {
-    return this.loadInitialStateAsync().then(() => {
-      return func.loadAssetsAsync;
+    await this.loadInitialStateAsync();
+    await func.loadAssetsAsync();
+
+    this.setState({ isLoading: false }, async () => {
+      await SplashScreen.hideAsync();
     });
   };
 
@@ -108,13 +120,7 @@ class App extends React.Component {
     const statusType = theme === 'light' ? 'light' : 'light';
 
     if (isLoading) {
-      return (
-        <AppLoading
-          onError={console.warn}
-          onFinish={() => this.setState({ isLoading: false })}
-          startAsync={this.loadResourcesAsync}
-        />
-      );
+      return null;
     }
 
     // redux

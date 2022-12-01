@@ -191,8 +191,8 @@ function registerNotificationHandler() {
     Notifications.addNotificationResponseReceivedListener(
       handleNotificationResponseReceived
     );
-  } catch (e) {
-    console.log('Error in registerNotificationHandler: ', e);
+  } catch (error) {
+    console.log('Error in registerNotificationHandler: ', error);
   }
 }
 
