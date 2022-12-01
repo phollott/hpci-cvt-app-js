@@ -107,6 +107,8 @@ Run project locally: `npx expo start` or `npx expo start --tunnel`
 - **upgraded expo sdk from 45 to 46 (August)**
   - React Native updated from 0.68.2 to 0.69.6
   - react and react-dom both updated from 17.0.2 to 18.0.0
+  - removed deprecated expo-app-loading
+  - switched from using redux's createStore to legacy_createStore
   - See https://blog.expo.dev/expo-sdk-46-c2a1655f63f7, note:
 ````
 - To use the new local CLI: run npx expo or yarn expo in your project directory, eg: npx expo start. The local CLI will automatically be invoked by scripts in your package.json, but otherwise you need to prefix it with npx.
