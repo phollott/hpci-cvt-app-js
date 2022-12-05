@@ -23,7 +23,8 @@ const internalState = {
   filtTreatmentProd: [],
   refreshing: false,
   selectedIndex: 0,
-  searchText: ''
+  searchVaccineText: '',
+  searchTreatmentText: ''
 };
 
 class ViewCovid19Products extends Component {
@@ -85,19 +86,30 @@ class ViewCovid19Products extends Component {
   // SearchBar
   updateSearch = (searchText) => {
     const { vaccineProducts, treatmentProducts } = this.props;
-    const searchLowercase = searchText.toLowerCase();
+    const { selectedIndex, searchVaccineText, searchTreatmentText } =
+      this.state;
+    let searchVaccine = '';
+    let searchTreatment = '';
+    if (selectedIndex === 0) {
+      searchVaccine = searchText;
+      searchTreatment = searchTreatmentText;
+    } else if (selectedIndex === 1) {
+      searchVaccine = searchVaccineText;
+      searchTreatment = searchText;
+    }
     const filteredVaccineProducts = vaccineProducts.filter((item) => {
       const itemData = item.searchKey;
-      return itemData.indexOf(searchLowercase) > -1;
+      return itemData.indexOf(searchVaccine.toLowerCase()) > -1;
     });
     const filteredTreatmentProducts = treatmentProducts.filter((item) => {
       const itemData = item.searchKey;
-      return itemData.indexOf(searchLowercase) > -1;
+      return itemData.indexOf(searchTreatment.toLowerCase()) > -1;
     });
     this.setState({
       filtVaccineProd: filteredVaccineProducts,
       filtTreatmentProd: filteredTreatmentProducts,
-      searchText
+      searchVaccineText: searchVaccine,
+      searchTreatmentText: searchTreatment
     });
   };
 
@@ -114,7 +126,8 @@ class ViewCovid19Products extends Component {
       filtTreatmentProd,
       refreshing,
       selectedIndex,
-      searchText
+      searchVaccineText,
+      searchTreatmentText
     } = this.state;
     if (settings.isOnline) {
       return (
@@ -123,13 +136,24 @@ class ViewCovid19Products extends Component {
             style={{ flex: 1 }}
             contentContainerStyle={gStyle.contentContainer}
           >
-            <Searchbar
-              placeholder={t('products.searchBar.placeholder')}
-              onChangeText={this.updateSearch}
-              value={searchText}
-              inputStyle={{ fontSize: 14 }}
-              style={{ borderRadius: 0 }}
-            />
+            {selectedIndex === 0 && (
+              <Searchbar
+                placeholder={t('products.searchBar.placeholder.vaccines')}
+                onChangeText={this.updateSearch}
+                value={searchVaccineText}
+                inputStyle={{ fontSize: 14 }}
+                style={{ borderRadius: 0 }}
+              />
+            )}
+            {selectedIndex === 1 && (
+              <Searchbar
+                placeholder={t('products.searchBar.placeholder.treatments')}
+                onChangeText={this.updateSearch}
+                value={searchTreatmentText}
+                inputStyle={{ fontSize: 14 }}
+                style={{ borderRadius: 0 }}
+              />
+            )}
             <View style={gStyle.spacer8} />
             <ScrollView
               ref={productsScrollViewRef}

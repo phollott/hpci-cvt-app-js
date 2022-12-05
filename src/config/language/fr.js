@@ -216,7 +216,10 @@ export default {
   },
   products: {
     searchBar: {
-      placeholder: 'Filtrer les vaccins et traitements...'
+      placeholder: {
+        vaccines: 'Filtrer les vaccins...',
+        treatments: 'Filtrer les traitements...'
+      }
     },
     card: {
       title: 'Produits de santé COVID-19',
@@ -272,7 +275,10 @@ export default {
     introText: 'Vous n’avez pas ajouté un produit à vos favoris.',
     products: {
       searchBar: {
-        placeholder: ''
+        placeholder: {
+          vaccines: '',
+          treatments: ''
+        }
       },
       card: {
         title: 'Favoris',
