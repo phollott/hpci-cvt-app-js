@@ -216,7 +216,10 @@ export default {
   },
   products: {
     searchBar: {
-      placeholder: 'Search Vaccines and Treatments...'
+      placeholder: {
+        vaccines: 'Search Vaccines...',
+        treatments: 'Search Treatments...'
+      }
     },
     card: {
       title: 'COVID-19 Health Products',
@@ -272,7 +275,10 @@ export default {
     introText: 'You have not bookmarked any product.',
     products: {
       searchBar: {
-        placeholder: ''
+        placeholder: {
+          vaccines: '',
+          treatments: ''
+        }
       },
       card: {
         title: 'Bookmarks',
