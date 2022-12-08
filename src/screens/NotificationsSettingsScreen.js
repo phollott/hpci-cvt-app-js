@@ -54,10 +54,8 @@ const NotificationsSettingsScreen = ({ navigation }) => {
     notificationsSettings.newProducts
   );
 
-  const [
-    isBookmarkedProductsSwitchOn,
-    setIsBookmarkedProductsSwitchOn
-  ] = useState(notificationsSettings.bookmarkedProducts);
+  const [isBookmarkedProductsSwitchOn, setIsBookmarkedProductsSwitchOn] =
+    useState(notificationsSettings.bookmarkedProducts);
 
   const setSubsettingsSwitches = (
     newProducts = true,

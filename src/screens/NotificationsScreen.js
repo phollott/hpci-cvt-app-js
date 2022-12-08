@@ -153,9 +153,8 @@ const NotificationsScreen = ({ navigation, route }) => {
   const handleNotificationOnPress = async (notification) => {
     const { data, viewed } = notification;
     const externalLink = notificationsService.getExternalLink(notification);
-    const isProductSpecific = notificationsService.isProductSpecific(
-      notification
-    );
+    const isProductSpecific =
+      notificationsService.isProductSpecific(notification);
     if (isNil(viewed)) {
       if (isProductSpecific && isOnline) {
         await sync(data.products);

@@ -200,15 +200,13 @@ async function registerForPushNotificationsAsync() {
   // https://docs.expo.dev/push-notifications/push-notifications-setup/
   let token = '';
   if (Device.isDevice) {
-    const {
-      status: existingStatus
-    } = await Notifications.getPermissionsAsync();
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
     if (existingStatus !== 'granted') {
       // request permissions if notifications are enabled (e.g. after install or enabled by user)
-      const {
-        enabled
-      } = await SettingsStorageService.retrieveNotificationsSettings();
+      const { enabled } =
+        await SettingsStorageService.retrieveNotificationsSettings();
       if (enabled) {
         const { status } = await Notifications.requestPermissionsAsync();
         finalStatus = status;
@@ -278,14 +276,16 @@ async function registerDeviceToken(token, locale, bookmarkIDs = null) {
         (langPref === lang.english || langPref === lang.french)
           ? langPref
           : locale;
-      const settings = await SettingsStorageService.retrieveNotificationsSettings();
+      const settings =
+        await SettingsStorageService.retrieveNotificationsSettings();
       let bookmarks;
       if (!isNil(bookmarkIDs)) {
         bookmarks = bookmarkIDs;
       } else {
         const { enabled, bookmarkedProducts } = settings;
         if (enabled && bookmarkedProducts) {
-          const storedBookmarks = await BookmarkStorageService.retrieveBookmarks();
+          const storedBookmarks =
+            await BookmarkStorageService.retrieveBookmarks();
           const ids = [
             ...new Set(storedBookmarks.map((bookmark) => bookmark.nid))
           ];
@@ -394,7 +394,8 @@ async function dispatchPreferences(language, bookmarks = null) {
   try {
     const token = await retrieveExpoPushToken();
     if (token !== '') {
-      const settings = await SettingsStorageService.retrieveNotificationsSettings();
+      const settings =
+        await SettingsStorageService.retrieveNotificationsSettings();
       const data = devicePrefs(language, bookmarks, settings);
       await dispatchDevicePreferences(getTokenID(token), data);
     }

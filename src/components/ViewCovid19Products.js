@@ -141,7 +141,7 @@ class ViewCovid19Products extends Component {
                 placeholder={t('products.searchBar.placeholder.vaccines')}
                 onChangeText={this.updateSearch}
                 value={searchVaccineText}
-                inputStyle={{ fontSize: 14 }}
+                inputStyle={{ fontSize: 16 }}
                 style={{ borderRadius: 0 }}
               />
             )}
@@ -150,7 +150,7 @@ class ViewCovid19Products extends Component {
                 placeholder={t('products.searchBar.placeholder.treatments')}
                 onChangeText={this.updateSearch}
                 value={searchTreatmentText}
-                inputStyle={{ fontSize: 14 }}
+                inputStyle={{ fontSize: 16 }}
                 style={{ borderRadius: 0 }}
               />
             )}
