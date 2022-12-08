@@ -10,10 +10,11 @@ const productMaster = (product, id, language) => {
     type: ProductsParserService.getProductType(product),
     status: product.status,
     approvalDate: ProductsParserService.getProductDateOfApproval(product),
-    approvalDateFormatted: ProductsParserService.getProductDateOfApprovalFormatted(
-      product,
-      language
-    ),
+    approvalDateFormatted:
+      ProductsParserService.getProductDateOfApprovalFormatted(
+        product,
+        language
+      ),
     productLink: ProductsParserService.getProductLink(product),
     note: ProductsParserService.getProductNote(product),
     showLink: false,
@@ -41,9 +42,8 @@ const mapProduct = (product, id, language, isBookmark = false) => {
     .toLowerCase();
   prod.isNew = ProductsParserService.isProductNew(prod.approvalDate);
   prod.isUpdated = ProductsParserService.isProductUpdated(product);
-  prod.lastUpdatedDate = ProductsParserService.getProductLastUpdatedDate(
-    product
-  );
+  prod.lastUpdatedDate =
+    ProductsParserService.getProductLastUpdatedDate(product);
   prod.isBookmark = isBookmark;
   return prod;
 };

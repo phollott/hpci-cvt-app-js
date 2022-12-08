@@ -11,8 +11,13 @@ const ProductsScreen = ({ navigation, route }) => {
   let viewCovid19ProductsKey = language.concat('ViewCovid19Products');
 
   // concat product action so screen rerenders when key changes
-  if (typeof route.params !== "undefined" && typeof route.params.productAction !== "undefined") {
-    viewCovid19ProductsKey = viewCovid19ProductsKey.concat(route.params.productAction);
+  if (
+    typeof route.params !== 'undefined' &&
+    typeof route.params.productAction !== 'undefined'
+  ) {
+    viewCovid19ProductsKey = viewCovid19ProductsKey.concat(
+      route.params.productAction
+    );
   }
 
   return (

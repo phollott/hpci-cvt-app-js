@@ -1,12 +1,14 @@
 import { lang } from '../constants/constants';
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
-const EN_MONTH = 'January_February_March_April_May_June_July_August_September_October_November_December'.split(
-  '_'
-);
-const FR_MONTH = 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_decembre'.split(
-  '_'
-);
+const EN_MONTH =
+  'January_February_March_April_May_June_July_August_September_October_November_December'.split(
+    '_'
+  );
+const FR_MONTH =
+  'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_decembre'.split(
+    '_'
+  );
 
 const compareDesc = (a, b) => {
   return a.date > b.date ? -1 : 1;

@@ -28,7 +28,8 @@ const NotificationsTouch = ({ navigation, route }) => {
     if (show) {
       setShowNewBadge(true);
     } else {
-      const anyNotViewed = await notificationsService.isAnyNotificationNotViewed();
+      const anyNotViewed =
+        await notificationsService.isAnyNotificationNotViewed();
       setShowNewBadge(anyNotViewed);
     }
   };

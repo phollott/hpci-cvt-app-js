@@ -9,10 +9,11 @@ const productResource = (resource, id, language) => {
     audience: resource.audience.toString(),
     resourceName: ProductsParserService.getProductResourceName(resource),
     description: ProductsParserService.getProductResourceDescription(resource),
-    publicationStatus: ProductsParserService.getProductResourcePublicationStatus(
-      resource,
-      language
-    ),
+    publicationStatus:
+      ProductsParserService.getProductResourcePublicationStatus(
+        resource,
+        language
+      ),
     isNew: false,
     isUpdated: false
   };

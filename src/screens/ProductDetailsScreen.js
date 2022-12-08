@@ -11,7 +11,11 @@ const ProductDetailsScreen = ({ navigation, route }) => {
   const viewProductDetailsKey = language.concat('ViewProductDetails');
 
   return (
-    <ViewProductDetails navigation={navigation} route={route} key={viewProductDetailsKey} />
+    <ViewProductDetails
+      navigation={navigation}
+      route={route}
+      key={viewProductDetailsKey}
+    />
   );
 };
 
