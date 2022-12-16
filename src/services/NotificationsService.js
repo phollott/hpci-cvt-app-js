@@ -199,6 +199,16 @@ function registerNotificationHandler() {
 async function registerForPushNotificationsAsync() {
   // https://docs.expo.dev/push-notifications/push-notifications-setup/
   let token = '';
+  // need to specify a channel if android, see expo-notifications documentation,
+  // including https://docs.expo.dev/versions/latest/sdk/notifications/#android-1
+  if (Platform.OS === 'android') {
+    Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C'
+    });
+  }
   if (Device.isDevice) {
     const { status: existingStatus } =
       await Notifications.getPermissionsAsync();
@@ -226,15 +236,6 @@ async function registerForPushNotificationsAsync() {
     // console.log('Received Expo push token: ', token);
   } else {
     console.log('Must use physical device for Push Notifications.');
-  }
-  // need to specify a channel if android, see expo-notifications documentation
-  if (Platform.OS === 'android') {
-    Notifications.setNotificationChannelAsync('default', {
-      name: 'default',
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF231F7C'
-    });
   }
   return token;
 }
