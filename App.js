@@ -59,7 +59,7 @@ class App extends React.Component {
 
     notifications.registerNotificationHandler();
 
-    // get expo token, may prompt ios users for permission
+    // get expo token, may prompt user for permission
     notifications
       .registerForPushNotificationsAsync()
       .then((token) =>

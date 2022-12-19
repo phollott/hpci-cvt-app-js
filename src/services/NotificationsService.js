@@ -202,7 +202,7 @@ async function registerForPushNotificationsAsync() {
   // need to specify a channel if android, see expo-notifications documentation,
   // including https://docs.expo.dev/versions/latest/sdk/notifications/#android-1
   if (Platform.OS === 'android') {
-    Notifications.setNotificationChannelAsync('default', {
+    await Notifications.setNotificationChannelAsync('default', {
       name: 'default',
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
@@ -223,7 +223,6 @@ async function registerForPushNotificationsAsync() {
       }
     }
     if (finalStatus !== 'granted') {
-      // android users do not get prompted (permissions are enabled by default, so user will need to re-enable)
       // Note: device will be unregistered from push notification service during registerDeviceToken when token = ''
       console.log('Failed to get push token for push notification!');
       return '';
