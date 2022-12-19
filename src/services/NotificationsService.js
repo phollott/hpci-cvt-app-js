@@ -223,7 +223,6 @@ async function registerForPushNotificationsAsync() {
       }
     }
     if (finalStatus !== 'granted') {
-      // android users do not get prompted (permissions are enabled by default, so user will need to re-enable)
       // Note: device will be unregistered from push notification service during registerDeviceToken when token = ''
       console.log('Failed to get push token for push notification!');
       return '';
