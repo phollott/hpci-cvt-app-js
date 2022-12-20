@@ -98,7 +98,7 @@ const fetchNotificationsAsync = async (token) => {
 
 const sendPushNotification = async (message) => {
   try {
-    if (PNS_ENV === 'development' || PNS_ENV === 'hresdev') {
+    if (PNS_ENV.toLowerCase().includes('dev')) {
       const requestInit = {
         method: 'POST',
         headers,

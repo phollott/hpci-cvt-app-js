@@ -5,8 +5,8 @@
 
 ### Technical Notes
 
-- Expo SDK 46
-- React Native 0.68.2
+- Expo SDK 47
+- React Native 0.70.5
 - React Navigation v5
 - React Native Paper v4
 - React Redux v7
@@ -78,7 +78,7 @@ Run project locally: `npx expo start` or `npx expo start --tunnel`
 
 ## release notes
 
-**HC CVT App - Update 0.0.46**
+**HC CVT App - Update 0.0.47**
 
 ### _steps to update local dev env_
 ````
@@ -100,7 +100,17 @@ Run project locally: `npx expo start` or `npx expo start --tunnel`
 > yarn install
 # clean on first start:
 > npx expo start -c
+# if using, update Expo Go app on device
+# scan the QR code with Expo Go (Android) or the Camera app (iOS)
 ````
+
+### December 20, 2022; version: 0.0.47
+
+- **upgraded expo sdk from 46 to 47 (November)**
+  - React Native updated from 0.69.6 to 0.70.5
+  - react and react-dom both updated from 18.0.0 to 18.1.0
+  - removed android.useNextNotificationsApi from app.json
+  - See https://blog.expo.dev/expo-sdk-47-a0f6f5c038af
 
 ### November 28, 2022; version: 0.0.46
 
