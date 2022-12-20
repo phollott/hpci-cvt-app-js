@@ -113,10 +113,10 @@ const MenuDrawer = (props) => {
             navigation.navigate('NotificationsSettings');
           }}
         />
-        {(PNS_ENV === 'development' || PNS_ENV === 'hresdev' ) && <HorizontalLine />}
-        {(PNS_ENV === 'development' || PNS_ENV === 'hresdev' ) && <DrawerItem label={t('home.menu.toolsLabel')} icon={ToolIcon} onPress={() => {}} />}
-        {(PNS_ENV === 'development' || PNS_ENV === 'hresdev' ) && <DrawerItem label={t('home.menu.sendNotificationLabel')} labelStyle={{ paddingLeft: 72 }} onPress={() => { navigation.navigate('PushNotification'); }} />}
-        {(PNS_ENV === 'development' || PNS_ENV === 'hresdev' ) && <DrawerItem label={t('home.menu.removeLabel')} labelStyle={{ paddingLeft: 72 }} onPress={() => { RemoveData(props); closeDrawer(navigation); }} />}
+        {PNS_ENV.toLowerCase().includes('dev') && <HorizontalLine />}
+        {PNS_ENV.toLowerCase().includes('dev') && <DrawerItem label={t('home.menu.toolsLabel')} icon={ToolIcon} onPress={() => {}} />}
+        {PNS_ENV.toLowerCase().includes('dev') && <DrawerItem label={t('home.menu.sendNotificationLabel')} labelStyle={{ paddingLeft: 72 }} onPress={() => { navigation.navigate('PushNotification'); }} />}
+        {PNS_ENV.toLowerCase().includes('dev') && <DrawerItem label={t('home.menu.removeLabel')} labelStyle={{ paddingLeft: 72 }} onPress={() => { RemoveData(props); closeDrawer(navigation); }} />}
         {1 === 0 && <HorizontalLine />}
         {1 === 0 && <DrawerItemList {...props} />}
       </DrawerContentScrollView>

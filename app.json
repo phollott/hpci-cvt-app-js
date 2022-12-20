@@ -5,7 +5,7 @@
     "description": "HPCI COVID-19 Vaccine and Treatments App",
     "slug": "hpci-cvt-app-js",
     "privacy": "public",
-    "version": "0.0.46",
+    "version": "0.0.47",
     "platforms": [
       "android",
       "ios",
@@ -29,13 +29,12 @@
     ],
     "android": {
       "package": "com.hpcicvt.hpcicvtappjs",
-      "versionCode": 46,
-      "googleServicesFile": "./google-services.json",
-      "useNextNotificationsApi": true
+      "versionCode": 47,
+      "googleServicesFile": "./google-services.json"
     },
     "ios": {
       "bundleIdentifier": "com.hpcicvt.hpcicvtappjs",
-      "buildNumber": "0.0.46",
+      "buildNumber": "0.0.47",
       "supportsTablet": true
     },
     "extra": {
