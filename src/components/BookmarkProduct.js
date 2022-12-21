@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
@@ -33,7 +34,7 @@ const BookmarkProduct = ({ navigation, route }) => {
   const removeBookmarkProduct = (nid) => dispatch(removeBookmark(nid));
 
   const navStacks = (nid) => {
-    // [mrj] hack: navigation is used to ensure the bookmarks screen is re-rendered after bookmark is added or removed
+    // hack: navigation is used to ensure the bookmarks screen is re-rendered after bookmark is added or removed
     navigation.navigate('BookmarksStack', {
       screen: 'Bookmarks',
       params: {

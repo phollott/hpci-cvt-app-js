@@ -83,8 +83,14 @@ export default class ViewProductMasters extends Component {
                   <>
                     <Icon
                       reverse
-                      name={ productMaster.type === 'Vaccine' ? 'syringe' : 'pills' }
-                      color={ productMaster.showLink ? colors.darkColor : colors.orange }
+                      name={
+                        productMaster.type === 'Vaccine' ? 'syringe' : 'pills'
+                      }
+                      color={
+                        productMaster.showLink
+                          ? colors.darkColor
+                          : colors.orange
+                      }
                     />
                     {this.isNewlyModifiedNotViewed(productMaster) && (
                       <Badge

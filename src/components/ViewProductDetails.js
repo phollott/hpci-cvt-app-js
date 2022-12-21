@@ -123,17 +123,10 @@ class ViewProductDetails extends Component {
   };
 
   render() {
-    const {
-      productMaster,
-      productResourceList,
-      settings,
-      showNewlyModified
-    } = this.props;
-    const {
-      productMetadata,
-      consumerInformation,
-      regulatoryAnnouncements
-    } = this.state;
+    const { productMaster, productResourceList, settings, showNewlyModified } =
+      this.props;
+    const { productMetadata, consumerInformation, regulatoryAnnouncements } =
+      this.state;
     return (
       <>
         <View style={gStyle.spacer8} />
@@ -377,7 +370,7 @@ class ViewProductDetails extends Component {
               title={t('productDetails.accordion.reg')}
               titleStyle={{ fontWeight: 'bold' }}
               titleNumberOfLines={2}
-              theme={{ colors: { primary: colors.blue }}}
+              theme={{ colors: { primary: colors.blue } }}
               left={(props) => (
                 <List.Icon
                   {...props}
@@ -407,7 +400,8 @@ class ViewProductDetails extends Component {
                       );
                     }}
                     right={() => {
-                      return regulatoryAnnouncement.link && settings.isOnline
+                      return regulatoryAnnouncement.link &&
+                        settings.isOnline
                         ? <Icon name='open-in-new' type='material-community' color={colors.darkColor} containerStyle={{ justifyContent: 'flex-start', marginTop: 12, marginRight: 10 }} />
                         : null;
                     }}

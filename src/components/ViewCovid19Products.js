@@ -199,6 +199,7 @@ class ViewCovid19Products extends Component {
           </View>
         </>
       );
+      // eslint-disable-next-line no-else-return
     } else {
       return (
         <>

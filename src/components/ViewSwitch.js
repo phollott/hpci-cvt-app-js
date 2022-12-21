@@ -11,14 +11,8 @@ export default class ViewSwitch extends Component {
   }
 
   render() {
-    const {
-      text,
-      value,
-      onValueChange,
-      switchColor,
-      switchStyle,
-      textStyle
-    } = this.props;
+    const { text, value, onValueChange, switchColor, switchStyle, textStyle } =
+      this.props;
     return (
       <View style={styles.container}>
         <Text style={textStyle}>{text}</Text>

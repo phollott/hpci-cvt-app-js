@@ -1,4 +1,4 @@
-# HC CVT App
+# HPCI CVT App
 
 
 [![made with expo](https://img.shields.io/badge/MADE%20WITH%20EXPO-000.svg?style=for-the-badge&logo=expo&labelColor=4630eb&logoWidth=20)](https://github.com/expo/expo) [![supports iOS and Android](https://img.shields.io/badge/Platforms-Native-4630EB.svg?style=for-the-badge&logo=EXPO&labelColor=000&logoColor=fff)](https://github.com/expo/expo)
@@ -17,14 +17,13 @@
 
 ## Table of Contents
 
-- [install](#install)
-- [development on a physical device](#development-on-a-physical-device)
-- [linting](#linting)
-- [helpful links](#helpful-links)
-- [device learnings](#device-learnings)
-- [release notes](#release-notes)
+- [Install](#install)
+- [Development With a Physical Device](#development-with-a-physical-device)
+- [Linting](#linting)
+- [Device Learnings](#device-learnings)
+- [Release Notes](#release-notes)
 
-## install
+## Install
 
 First, make sure you have Expo CLI installed: 
 
@@ -37,50 +36,42 @@ Create .env file: copy contents of .env.template and set variables (create in sa
 
 Run project locally: `npx expo start` or `npx expo start --tunnel`
 
-## development on a physical device
+## Development With a Physical Device
 
 - first, your machine and physical device should be on the same wifi connection
 - make sure you have Expo CLI and EAS CLI installed globally, if not run:
   - `npm install -g expo-cli`
   - `npm install -g eas-cli`
 - then configure .env: see .env.template
-- then navigate to this project's directory on your machine and run:
+- then navigate to this project's directory on your machine and use the [local CLI](https://blog.expo.dev/the-new-expo-cli-f4250d8e3421) to run:
   - `npx expo start`
 - now download the Expo Client app on your preferred physical device:
   - **Android:** [Google Play](https://play.google.com/store/apps/details?id=host.exp.exponent)
   - **Apple:** [App Store](https://itunes.apple.com/us/app/expo-client/id982107779)
-- scan the QR code generated when this project build started (expo start)
-  - **android users:** the QR scanner is built within the Expo Client app!
-  - **ios 11 and later:** you can open your camera app to scan the QR code, apple made the Expo folks remove the QR scanner from the app for some reason...
-  - **ios 10 and below:** work around to [get expo running on older iOS devices](https://blog.calebnance.com/expo/getting-expo-to-work-on-older-iphones-with-no-qr-support.html)
-- having issues? check the [installation page](https://docs.expo.dev/get-started/installation/) for any pitfalls you may have.
+- scan the QR code generated when this project build started (npx expo start)
+  - **android:** the QR scanner is built within the Expo Client app
+  - **ios 13 and later:** you can open your camera app to scan the QR code
+- having issues? check the [installation page](https://docs.expo.dev/get-started/installation/)
 
-## linting
+## Linting
 
 - run: `npm run lint` or `yarn lint` for a list of linting warnings/error in cli
 - prettier and airbnb config
-- make sure you have prettier package installed:
-  - [prettier for atom](https://atom.io/packages/prettier-atom)
-  - [prettier for vscode](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- make sure you have [prettier for vscode](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) installed
 - then make sure to enable these options (packages → prettier):
   - eslint integration
   - stylelint integration
 - be aware of the `.prettierignore` file
 
-## helpful links
-
-- [using nvm](https://davidwalsh.name/nvm)
-- [setup prettier/eslint within project](https://blog.echobind.com/integrating-prettier-eslint-airbnb-style-guide-in-vscode-47f07b5d7d6a)
-
-## device learnings
+## Device Learnings
 
 - **ios:** The notch on iPhoneX, iPhoneXs, iPhoneXr, iPhoneXs Max is **30pt** from top
 
-## release notes
+## Release Notes
 
-**HC CVT App - Update 0.0.47**
+**HPCI CVT App - Update 0.0.47**
 
-### _steps to update local dev env_
+### _Steps to update local dev env_
 ````
 # sign in with your expo developer account (i.e. not the expo owner)
 # verify expo login:
@@ -104,40 +95,31 @@ Run project locally: `npx expo start` or `npx expo start --tunnel`
 # scan the QR code with Expo Go (Android) or the Camera app (iOS)
 ````
 
-### December 20, 2022; version: 0.0.47
+### December 21, 2022; version: 0.0.47
 
-- **upgraded expo sdk from 46 to 47 (November)**
+- **upgraded to [Expo SDK 47](https://blog.expo.dev/expo-sdk-47-a0f6f5c038af)**
   - React Native updated from 0.69.6 to 0.70.5
   - react and react-dom both updated from 18.0.0 to 18.1.0
   - removed android.useNextNotificationsApi from app.json
-  - See https://blog.expo.dev/expo-sdk-47-a0f6f5c038af
 
 ### November 28, 2022; version: 0.0.46
 
-- **upgraded expo sdk from 45 to 46 (August)**
+- **upgraded to [Expo SDK 46](https://blog.expo.dev/expo-sdk-46-c2a1655f63f7)**
   - React Native updated from 0.68.2 to 0.69.6
   - react and react-dom both updated from 17.0.2 to 18.0.0
   - removed deprecated expo-app-loading
   - switched from using redux's createStore to legacy_createStore
-  - See https://blog.expo.dev/expo-sdk-46-c2a1655f63f7, note:
-````
-- To use the new local CLI: run npx expo or yarn expo in your project directory, eg: npx expo start. The local CLI will automatically be invoked by scripts in your package.json, but otherwise you need to prefix it with npx.
-- If you run expo start in your project, the global CLI will be used.
-- If you run npx expo start, the local CLI will be used.
-- To explicitly invoke the legacy globally installed CLI: use expo-cli instead of expo, eg: expo-cli publish.
-- Global Expo CLI is still required for expo upgrade and expo doctor: these commands haven’t yet been migrated to standalone packages, they are up next. Invoke them with expo-cli upgrade and expo-cli doctor.
-````
 - minor accessiblity/usability improvements
 
 ### November 9, 2022; version: 0.0.45
 
-- **upgraded expo sdk from 44 to 45 (May)**
+- **upgraded to [Expo SDK 45](https://blog.expo.dev/expo-sdk-45-f4e332954a68)**
   - React Native updated from 0.64.3 to 0.68.2
   - react and react-dom both updated from 17.0.1 to 17.0.2
 
 ### May 3, 2022; version: 0.0.44, build 2
 
-- **migrated from Expo classic build to EAS build**
+- **migrated from Expo Classic Build to EAS Build**
   - added build profiles (eas.json)
   - added publish and build workflows (yml)
   - wrapped MenuDrawer with SafeAreaProvider to resolve padding issue for android
@@ -145,14 +127,14 @@ Run project locally: `npx expo start` or `npx expo start --tunnel`
 
 ### April 11, 2022; version: 0.0.44
 
-- **upgraded expo sdk from 43 to 44 (Dec)**
+- **upgraded to [Expo SDK 44](https://blog.expo.dev/expo-sdk-44-4c4b8306584a)**
   - replaced deprecated expo-constants with expo-device
   - wrapped NavigationContainer with GestureHandlerRootView
 - removed Dev Tools menu when environment is not dev
 
 ### March 23, 2022; version: 0.0.43
 
-- **upgraded expo sdk from 42 to 43**
+- **upgraded to [Expo SDK 43](https://blog.expo.dev/expo-sdk-43-aa9b3c7d5541)**
   - React Native updated from 0.63.2 to 0.64.3
   - react and react-dom both updated from 16.13.1 to 17.0.1
   - replaced deprecated Appearance from react-native-appearance with Appearance from react-native
@@ -164,7 +146,7 @@ Run project locally: `npx expo start` or `npx expo start --tunnel`
 
 ### January 12, 2022; version: 0.0.42
 
-- **upgraded expo sdk from 41 to 42**
+- **upgraded to [Expo SDK 42](https://blog.expo.dev/expo-sdk-42-579aee2348b6)**
 - fixed date sort order issue on Notifications screen
 - added unread badge to Notifications bell icon on header
 - added What's New? item to drawer
@@ -173,7 +155,7 @@ Run project locally: `npx expo start` or `npx expo start --tunnel`
 
 ### December 17, 2021; version: 0.0.41
 
-- **upgraded expo sdk from 40 to 41**
+- **upgraded to [Expo SDK 41](https://blog.expo.dev/expo-sdk-41-12cc5232f2ef)**
   - React Native updated from 0.63 to 0.63.2
 - updated terms screen
 
@@ -182,8 +164,8 @@ Run project locally: `npx expo start` or `npx expo start --tunnel`
 - **initial development**
 - added user preference for en-CA/fr-CA
 - removed react-native-svg
-- upgraded to [React Navigation v5](https://reactnavigation.org/docs/upgrading-from-4.x/)
-- introduced cross platform Material Design UI toolkit [React Native Paper](https://reactnativepaper.com/)
+- upgraded to [React Navigation v5](https://reactnavigation.org/docs/upgrading-from-4.x)
+- introduced cross platform Material Design UI toolkit [React Native Paper](https://reactnativepaper.com)
 
 ### March 10, 2021; version: 0.0.2
 

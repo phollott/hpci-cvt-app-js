@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
@@ -32,7 +33,7 @@ const BookmarkTouch = ({ navigation, route }) => {
   const removeBookmarkProduct = (nid) => dispatch(removeBookmark(nid));
 
   const navStacks = () => {
-    // [mrj] hack: navigation is used to ensure screens are re-rendered after bookmark is removed
+    // hack: navigation is used to ensure screens are re-rendered after bookmark is removed
     navigation.navigate('ProductsStack', { screen: 'Products' });
     navigation.navigate('BookmarksStack', {
       screen: 'Bookmarks',
@@ -56,8 +57,12 @@ const BookmarkTouch = ({ navigation, route }) => {
             const products = selectBookmarksByID(state, productMaster.nid);
             if (
               products.length === 2 &&
-              'enfr'.includes(products[0].language.toLowerCase().substring(0, 2)) &&
-              'enfr'.includes(products[1].language.toLowerCase().substring(0, 2))
+              'enfr'.includes(
+                products[0].language.toLowerCase().substring(0, 2)
+              ) &&
+              'enfr'.includes(
+                products[1].language.toLowerCase().substring(0, 2)
+              )
             ) {
               if (isBookmark) {
                 // dispatch removal of en and fr products from state store bookmarks
