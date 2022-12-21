@@ -68,12 +68,21 @@ const PushNotificationScreen = ({ navigation, route }) => {
   covid19Products.push({ nid: '9', brandName: 'Veklury', checked: false });
   covid19Products.push({ nid: '8', brandName: 'Bamlanivimab', checked: false });
   covid19Products.push({ nid: '36', brandName: 'Sotrovimab', checked: false });
-  covid19Products.push({ nid: '34', brandName: 'Casirivimab / imdevimab', checked: false });
-  covid19Products.push({ nid: '-1', brandName: 'New / Nouveau', checked: false });
+  covid19Products.push({
+    nid: '34',
+    brandName: 'Casirivimab / imdevimab',
+    checked: false
+  });
+  covid19Products.push({
+    nid: '-1',
+    brandName: 'New / Nouveau',
+    checked: false
+  });
 
   const [products, setProducts] = React.useState(covid19Products);
 
-  const [addTestResourceChecked, setAddTestResourceChecked] = React.useState(false);
+  const [addTestResourceChecked, setAddTestResourceChecked] =
+    React.useState(false);
 
   const [linkText, setLinkText] = React.useState('');
 
@@ -89,9 +98,13 @@ const PushNotificationScreen = ({ navigation, route }) => {
       ''
         .concat(getDate().getFullYear())
         .concat('-')
-        .concat(formatMonth().length === 2 ? formatMonth() : '0'.concat(formatMonth()))
+        .concat(
+          formatMonth().length === 2 ? formatMonth() : '0'.concat(formatMonth())
+        )
         .concat('-')
-        .concat(formatDate().length === 2 ? formatDate() : '0'.concat(formatDate()))
+        .concat(
+          formatDate().length === 2 ? formatDate() : '0'.concat(formatDate())
+        )
     );
   };
   const bookmarksInStore = useSelector((state) => state.bookmarks);
@@ -104,44 +117,76 @@ const PushNotificationScreen = ({ navigation, route }) => {
   useEffect(() => {
     const productsWithTestProducts = [];
     productsInStore.forEach((product) => {
-      //console.log(product.nid);
+      // console.log(product.nid);
       const testProduct = { ...product };
       const resourcesWithTestResource = [];
       let newTestResource = {};
       product.resources.forEach((resource) => {
         // consummer rds for Va,Sp,Cov,J,Com,B,Ve,So,CI: 77,56,92,106,29,19,8
-        if (['77', '56', '92', '106', '29', '19', '8', '145', '134'].includes(resource.id)) {
+        if (
+          ['77', '56', '92', '106', '29', '19', '8', '145', '134'].includes(
+            resource.id
+          )
+        ) {
           newTestResource = { ...resource };
           newTestResource = JSON.parse(JSON.stringify(newTestResource));
           newTestResource.id = resource.id.concat('000');
-          newTestResource.resource_link.text = 'Regulatory Decision Summary - test';
+          newTestResource.resource_link.text =
+            'Regulatory Decision Summary - test';
           switch (resource.id) {
             case '77': // Vaxzevria:
-              newTestResource.date = resource.date.replace('2021-02-26', formatCurrentDate());
+              newTestResource.date = resource.date.replace(
+                '2021-02-26',
+                formatCurrentDate()
+              );
               break;
             case '56': // SPIKEVAX:
-              newTestResource.date = resource.date.replace('2020-12-23', formatCurrentDate());
+              newTestResource.date = resource.date.replace(
+                '2020-12-23',
+                formatCurrentDate()
+              );
               break;
             case '92': // COVISHIELD:
-              newTestResource.date = resource.date.replace('2021-02-26', formatCurrentDate());
+              newTestResource.date = resource.date.replace(
+                '2021-02-26',
+                formatCurrentDate()
+              );
               break;
             case '106': // Janssen:
-              newTestResource.date = resource.date.replace('2021-03-12', formatCurrentDate());
+              newTestResource.date = resource.date.replace(
+                '2021-03-12',
+                formatCurrentDate()
+              );
               break;
             case '29': // Comirnaty:
-              newTestResource.date = resource.date.replace('2020-12-09', formatCurrentDate());
+              newTestResource.date = resource.date.replace(
+                '2020-12-09',
+                formatCurrentDate()
+              );
               break;
             case '19': // Bamlanivimab:
-              newTestResource.date = resource.date.replace('2020-10-12', formatCurrentDate());
+              newTestResource.date = resource.date.replace(
+                '2020-10-12',
+                formatCurrentDate()
+              );
               break;
             case '8': // Veklury:
-              newTestResource.date = resource.date.replace('2020-07-27', formatCurrentDate());
+              newTestResource.date = resource.date.replace(
+                '2020-07-27',
+                formatCurrentDate()
+              );
               break;
             case '145': // Sotrovimab:
-              newTestResource.date = resource.date.replace('2021-07-30', formatCurrentDate());
+              newTestResource.date = resource.date.replace(
+                '2021-07-30',
+                formatCurrentDate()
+              );
               break;
             case '134': // Casirivimab / imdevimab:
-              newTestResource.date = resource.date.replace('2021-06-09', formatCurrentDate());
+              newTestResource.date = resource.date.replace(
+                '2021-06-09',
+                formatCurrentDate()
+              );
               break;
             default:
               break;
@@ -163,7 +208,7 @@ const PushNotificationScreen = ({ navigation, route }) => {
   const replaceBookmarkWithTestProduct = (enfrTestProduct) =>
     dispatch(addBookmark(enfrTestProduct));
   const navStacks = () => {
-    // [mrj] hack: navigation is used to ensure screens are re-rendered after dispatch (and before pn)
+    // hack: navigation is used to ensure screens are re-rendered after dispatch (and before pn)
     navigation.navigate('ProductsStack', {
       screen: 'Products',
       params: {
@@ -391,7 +436,9 @@ const PushNotificationScreen = ({ navigation, route }) => {
               />
             </View>
             <View style={gStyle.spacer8} />
-            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Expo Push Token</Text>
+            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>
+              Expo Push Token
+            </Text>
             <View style={gStyle.spacer8} />
             <Text
               selectable

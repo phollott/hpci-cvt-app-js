@@ -34,7 +34,7 @@ const LanguageScreen = ({ navigation }) => {
   };
 
   const navStacks = () => {
-    // [mrj] hack: navigation is used to ensure screens are re-rendered after language is changed
+    // hack: navigation is used to ensure screens are re-rendered after language is changed
     navigation.navigate('ProductsStack', { screen: 'Products' });
     navigation.navigate('BookmarksStack', { screen: 'Bookmarks' });
     navigation.navigate('HomeStack', { screen: 'Language' });

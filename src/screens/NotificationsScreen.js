@@ -103,7 +103,7 @@ const NotificationsScreen = ({ navigation, route }) => {
   };
 
   const navStacks = () => {
-    // [mrj] hack: navigation is used to ensure screens are re-rendered after dispatch
+    // hack: navigation is used to ensure screens are re-rendered after dispatch
     navigation.navigate('ProductsStack', {
       screen: 'Products',
       params: {

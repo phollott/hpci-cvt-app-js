@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Appearance } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Provider as ReactProvider } from 'react-redux';
-import { legacy_createStore as createStore} from 'redux';
+import { legacy_createStore as createStore } from 'redux';
 import * as Localization from 'expo-localization';
 import * as SplashScreen from 'expo-splash-screen';
 import * as I18n from './src/config/i18n';

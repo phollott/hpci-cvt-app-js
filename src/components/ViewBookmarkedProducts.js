@@ -96,12 +96,8 @@ class ViewBookmarkedProducts extends Component {
       t('bookmarks.products.buttons.right')
     ];
     const { vaccineProducts, treatmentProducts, navigation } = this.props;
-    const {
-      filtVaccineProd,
-      filtTreatmentProd,
-      refreshing,
-      selectedIndex
-    } = this.state;
+    const { filtVaccineProd, filtTreatmentProd, refreshing, selectedIndex } =
+      this.state;
     if (vaccineProducts.length > 0 || treatmentProducts.length > 0) {
       return (
         <View
@@ -152,6 +148,7 @@ class ViewBookmarkedProducts extends Component {
           </ScrollView>
         </View>
       );
+      // eslint-disable-next-line no-else-return
     } else {
       return (
         <>
@@ -159,7 +156,7 @@ class ViewBookmarkedProducts extends Component {
           <ViewCardText text={t('bookmarks.introText')} />
         </>
       );
-    };
+    }
   }
 }
 
